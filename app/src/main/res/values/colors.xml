@@ -10,8 +10,6 @@
     <color name="greenMainColor">#32bb8f</color>
     <color name="greenMainColorTransparent">#6632bb8f</color>
 
-
-
     <color name="haveAccountColor">#919191</color>
     <color name="inputTextColor">#403d45</color>
 
@@ -20,6 +18,9 @@
     <color name="passwordStrong">#32bb8f</color>
 
     <color name="errorColor">#e33f5e</color>
+
+    <color name="menuActiveColor">#5b676d</color>
+    <color name="menuInactiveColor">#8ba1ac</color>
 
 
 </resources>

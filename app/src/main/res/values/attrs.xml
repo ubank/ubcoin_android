@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="MenuItemStyle">
+        <attr name="MenuItemText" format="string"/>
+        <attr name="MenuItemActiveTextColor" format="color"/>
+        <attr name="MenuItemInactiveTextColor" format="color"/>
+        <attr name="MenuItemActiveIcon" format="reference"/>
+        <attr name="MenuItemInactiveIcon" format="reference"/>
+    </declare-styleable>
+
+</resources>
