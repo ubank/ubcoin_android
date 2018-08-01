@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Ubcoin</string>
+    <string name="header_startup_fragment">LOG IN</string>
+    <string name="sign_up">Sign up</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="log_in">Log in</string>
+    <string name="password_hint">Password</string>
+    <string name="empty">""</string>
+    <string name="weak">Weak</string>
+    <string name="fair">Fair</string>
+    <string name="normal">Normal</string>
+    <string name="strong">Strong</string>
+    <string name="very_strong">Very strong</string>
+    <string name="email_telegram_username">Email/Telegram username</string>
+    <string name="dont_have_account">Don\'t have an account?</string>
+    <string name="sign_up_first_upper">Sign up</string>
+    <string name="user_agreement">User agreement</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_password_text">Forgot your password? No worries.\nJust enter your Email to reset the password.</string>
+    <string name="email">Email</string>
+    <string name="send">send</string>
+    <string name="name">Name</string>
+    <string name="telegram_username">Telegram username</string>
+    <string name="please_verify_email_address">Please verify your Email address</string>
+    <string name="we_sent_a_verification_letter">We sent a verification letter to stand@gmail.com.\nClick the link in the Email to get started!</string>
+    <string name="close">Close</string>
+
+</resources>

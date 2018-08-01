@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="statusBar">#cdcdcd</color>
+
+    <color name="headerTextColor">#403d45</color>
+    <color name="greenMainColor">#32bb8f</color>
+    <color name="greenMainColorTransparent">#6632bb8f</color>
+
+
+
+    <color name="haveAccountColor">#919191</color>
+    <color name="inputTextColor">#403d45</color>
+
+    <color name="passwordWeak">#e33f5e</color>
+    <color name="passwordNormal">#3f98e3</color>
+    <color name="passwordStrong">#32bb8f</color>
+
+    <color name="errorColor">#e33f5e</color>
+
+
+</resources>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/have_account_margin"
+        android:layout_marginStart="@dimen/have_account_margin"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtLoginError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text="Incorrect Email/Telegram username or Password"
+            android:textColor="@color/errorColor"
+            android:visibility="invisible" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/header_margin_start"
+            android:layout_marginTop="@dimen/header_margin_start"
+            android:hint="@string/email_telegram_username"
+            android:inputType="textWebEmailAddress"
+            android:textColorHighlight="@color/haveAccountColor"
+            app:met_floatingLabel="highlight"
+            app:met_textColor="@color/inputTextColor"
+            app:met_textColorHint="@color/haveAccountColor" />
+
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/header_margin_start"
+            android:layout_marginTop="@dimen/header_margin_start"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:textColorHighlight="@color/haveAccountColor"
+            app:met_floatingLabel="highlight"
+            app:met_textColor="@color/inputTextColor"
+            app:met_textColorHint="@color/haveAccountColor" />
+
+        <LinearLayout
+            android:id="@+id/llForgotPassword"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/header_margin_start"
+                android:layout_marginTop="@dimen/header_margin_start"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/forgot_password"
+                android:textColor="@color/greenMainColor" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/llLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/sign_up_size"
+                android:layout_marginEnd="@dimen/sign_up_margin"
+                android:layout_marginStart="@dimen/sign_up_margin"
+                android:background="@drawable/rounded_green_filled_button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/log_in"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/sign_up_text_size" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llDontHaveAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/sign_up_margin"
+            android:layout_marginStart="@dimen/sign_up_margin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginTop="@dimen/have_account_margin"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/dont_have_account"
+                android:textColor="@color/haveAccountColor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="@dimen/have_account_margin"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/sign_up_first_upper"
+                android:textColor="@color/greenMainColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llUserAgreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/sign_up_margin"
+            android:layout_marginStart="@dimen/sign_up_margin"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/user_agreement"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="@dimen/user_agreement_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_next" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/img_logo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/header_size"
+            android:layout_weight="1.5"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/llSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/sign_up_size"
+                    android:layout_marginEnd="@dimen/sign_up_margin"
+                    android:layout_marginStart="@dimen/sign_up_margin"
+                    android:background="@drawable/rounded_green_filled_button" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@string/sign_up"
+                    android:textAllCaps="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sign_up_text_size" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llAlreadyHaveAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/sign_up_margin"
+                android:layout_marginStart="@dimen/sign_up_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/have_account_margin"
+                    android:layout_marginTop="@dimen/have_account_margin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/already_have_an_account"
+                    android:textColor="@color/haveAccountColor" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/have_account_margin"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="@dimen/have_account_margin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/log_in"
+                    android:textColor="@color/greenMainColor"
+                    android:textSize="@dimen/have_account_text_size" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <dimen name="header_size">50dp</dimen>
+    <dimen name="header_size_negative">-50dp</dimen>
+    <dimen name="header_margin_start">16dp</dimen>
+    <dimen name="header_margin_end">37dp</dimen>
+    <dimen name="header_text_size">20sp</dimen>
+    <dimen name="sign_up_text_size">14sp</dimen>
+    <dimen name="sign_up_margin">15dp</dimen>
+    <dimen name="sign_up_size">36dp</dimen>
+    <dimen name="have_account_text_size">16sp</dimen>
+    <dimen name="have_account_margin">24dp</dimen>
+    <dimen name="please_verify_text_size">20sp</dimen>
+    <dimen name="user_agreement_text_size">12sp</dimen>
+</resources>
