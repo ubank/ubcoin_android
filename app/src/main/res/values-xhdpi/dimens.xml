@@ -18,4 +18,7 @@
 
     <dimen name="favorite_fragment_top_margin">15dp</dimen>
     <dimen name="favorite_fragment_text_margin">20dp</dimen>
+    <dimen name="camera_margin">10dp</dimen>
+    <dimen name="camera_end_margin">10dp</dimen>
+    <dimen name="price_top_margin">15dp</dimen>
 </resources>

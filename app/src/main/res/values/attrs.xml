@@ -9,4 +9,11 @@
         <attr name="MenuItemInactiveIcon" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="RatingBarViewStyle">
+        <attr name="RatingIcon" format="reference"/>
+        <attr name="RatingInactiveIcon" format="reference"/>
+        <attr name="RatingInactiveTransparent" format="boolean"/>
+        <attr name="RatingValue" format="integer" />
+    </declare-styleable>
+
 </resources>
