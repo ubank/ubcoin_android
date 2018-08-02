@@ -8,7 +8,8 @@ enum class MenuItems {
     MARKET,
     FAVOURITE,
     SELL,
-    MESSAGE,
-    PROFILE
+    DEALS,
+    PROFILE,
+    SIGN_IN
 
 }

@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_market"
+        android:id="@+id/menuItemMarket"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -18,7 +18,7 @@
 
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_favorite"
+        android:id="@+id/menuItemFavorite"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -30,7 +30,7 @@
 
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_sell"
+        android:id="@+id/menuItemSell"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -42,19 +42,19 @@
 
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_message"
+        android:id="@+id/menuItemDeals"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_message_active"
+        custom:MenuItemActiveIcon="@drawable/ic_deals_active"
         custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_message_inactive"
+        custom:MenuItemInactiveIcon="@drawable/ic_deals_inactive"
         custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_messages" />
+        custom:MenuItemText="@string/menu_label_deals" />
 
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_profile"
+        android:id="@+id/menuItemProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -65,7 +65,7 @@
         custom:MenuItemText="@string/menu_label_profile" />
 
     <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menu_item_sign_in"
+        android:id="@+id/menuItemSignIn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

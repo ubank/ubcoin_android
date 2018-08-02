@@ -3,8 +3,12 @@ package com.ubcoin.model.response
 /**
  * Created by Yuriy Aizenberg
  */
-class User(
-        var bithDate: String,
+data class User(
+        val rating: Float,
+        val reviewsCount: Int,
+        val itemsCount: Int,
+        val avatarUrl: String,
+        var birthDate: String,
         var email: String,
         var id: String,
         var name: String,

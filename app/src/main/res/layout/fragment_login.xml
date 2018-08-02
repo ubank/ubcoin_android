@@ -26,12 +26,15 @@
             android:visibility="invisible" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtLoginEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/email_telegram_username"
+            android:imeOptions="actionNext"
             android:inputType="textWebEmailAddress"
+            android:maxLines="1"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
@@ -39,12 +42,15 @@
 
 
         <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtLoginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/password_hint"
+            android:imeOptions="actionDone"
             android:inputType="textPassword"
+            android:maxLines="1"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
@@ -52,9 +58,9 @@
 
         <LinearLayout
             android:id="@+id/llForgotPassword"
-            android:visibility="invisible"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
 
             <TextView
                 android:layout_width="wrap_content"

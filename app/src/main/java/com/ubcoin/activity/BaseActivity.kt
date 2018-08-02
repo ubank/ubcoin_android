@@ -1,6 +1,7 @@
 package com.ubcoin.activity
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.ubcoin.fragment.IFragmentBehaviorAware
@@ -19,12 +20,18 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(getResourceId())
         fragmentSwitcher = FragmentSwitcher(this)
         supportFragmentManager.addOnBackStackChangedListener {
             if (!supportFragmentManager.fragments.isEmpty()) {
                 supportFragmentManager.fragments.last()?.onResume()
             }
         }
+    }
+
+    override fun getCurrentFragment(): Fragment? {
+        if (supportFragmentManager == null) return null
+        return supportFragmentManager.findFragmentById(getFragmentContainerId())
     }
 
     override fun onDestroy() {
@@ -69,6 +76,7 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
     }
 
     override fun onBackPressed() {
+        if (getCurrentFragment() == null) return
         val iFragmentBehaviorAware = getCurrentFragment() as IFragmentBehaviorAware
         if (!iFragmentBehaviorAware.onBackPressed()) {
             performBack()

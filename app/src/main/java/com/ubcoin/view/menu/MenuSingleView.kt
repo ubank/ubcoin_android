@@ -7,10 +7,9 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
 import com.ubcoin.R
+import kotlinx.android.synthetic.main.view_menu_single_view.view.*
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 /**
@@ -21,8 +20,6 @@ class MenuSingleView : RelativeLayout {
 
     private val index = Indexer.getIndex()
 
-    var txtMenuItem: TextView? = null
-    var imgMenuItem: ImageView? = null
     var isActive: Boolean = false
 
     var activeDrawable: Drawable? = null
@@ -49,8 +46,6 @@ class MenuSingleView : RelativeLayout {
         inflate(context, R.layout.view_menu_single_view, this)
 
         if (attrs == null) return
-        imgMenuItem = findViewById(R.id.imgMenuItem)
-        txtMenuItem = findViewById(R.id.txtMenuItem)
         val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.MenuItemStyle, 0, 0)
 
         val text = attributes.getText(R.styleable.MenuItemStyle_MenuItemText)

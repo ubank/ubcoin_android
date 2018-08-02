@@ -24,9 +24,9 @@ class FragmentSwitcher(private val appCompatActivity: BaseActivity) {
         val fragment = Fragment.instantiate(appCompatActivity, fragmentClass.name)
         fragment.arguments = bundle
         if (!isReplace) {
-            transaction.add(appCompatActivity.getResourceId(), fragment)
+            transaction.add(appCompatActivity.getFragmentContainerId(), fragment)
         } else {
-            transaction.replace(appCompatActivity.getResourceId(), fragment)
+            transaction.replace(appCompatActivity.getFragmentContainerId(), fragment)
         }
         if (addToBackStack) transaction.addToBackStack(null)
         transaction.commitAllowingStateLoss()

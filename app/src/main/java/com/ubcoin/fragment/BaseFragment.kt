@@ -1,7 +1,9 @@
 package com.ubcoin.fragment
 
+import android.app.Activity
 import android.support.v4.app.Fragment
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.switcher.FragmentSwitcher
@@ -15,20 +17,17 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     open fun showHeader(): Boolean = true
 
-    open fun getHeaderText() : Int = NO_HEADER_OBJECT
+    open fun getHeaderText(): Int = NO_HEADER_OBJECT
 
-    open fun getHeaderIcon() : Int = NO_HEADER_OBJECT
+    open fun getHeaderIcon(): Int = NO_HEADER_OBJECT
 
     override fun onResume() {
         super.onResume()
+        hideKeyboard()
         changeActivityHeader(activity as IActivity)
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        super.setUserVisibleHint(isVisibleToUser)
-    }
-
-    fun getSwitcher() : FragmentSwitcher? {
+    fun getSwitcher(): FragmentSwitcher? {
         val activity = activity
         if (activity != null && activity is BaseActivity) return activity.fragmentSwitcher
         return null
@@ -50,15 +49,19 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         if (getHeaderIcon() != NO_HEADER_OBJECT) {
             iActivity.getTopImageView()?.run {
                 setImageResource(getHeaderIcon())
-                setOnClickListener {onIconClick()}
+                setOnClickListener { onIconClick() }
             }
         }
+    }
+
+    fun hideKeyboard() {
+        val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     open fun onIconClick() {
 
     }
-
 
 
 }

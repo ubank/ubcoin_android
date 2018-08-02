@@ -15,4 +15,7 @@
     <dimen name="please_verify_text_size">20sp</dimen>
     <dimen name="user_agreement_text_size">12sp</dimen>
     <dimen name="menu_textsize">12sp</dimen>
+
+    <dimen name="favorite_fragment_top_margin">15dp</dimen>
+    <dimen name="favorite_fragment_text_margin">20dp</dimen>
 </resources>

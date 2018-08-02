@@ -9,7 +9,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
-import com.ubcoin.utils.PasswordChecker
+//import com.ubcoin.utils.PasswordChecker
+import com.ubcoin.utils.checkAsPassword
+import kotlinx.android.synthetic.main.view_password_input.view.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -18,7 +20,6 @@ import com.ubcoin.utils.PasswordChecker
 class PasswordInputExtension : RelativeLayout {
 
     var edtPasswordInputExtension: MaterialEditText? = null
-    var txtPasswordInputExtension: TextView? = null
 
     constructor(context: Context?) : super(context) {
         create()
@@ -35,7 +36,6 @@ class PasswordInputExtension : RelativeLayout {
     private fun create() {
         inflate(context, R.layout.view_password_input, this)
         edtPasswordInputExtension = findViewById(R.id.edtPasswordInputExtension)
-        txtPasswordInputExtension = findViewById(R.id.txtPasswordInputExtension)
         edtPasswordInputExtension?.addTextChangedListener(watch())
     }
 
@@ -45,7 +45,8 @@ class PasswordInputExtension : RelativeLayout {
             val colorResId: Int
             val hintId: Int
 
-            val check = PasswordChecker.check(inputText)
+            val check = inputText.checkAsPassword()
+
             when (check) {
                 -1 -> {
                     colorResId = R.color.inputTextColor
@@ -64,7 +65,7 @@ class PasswordInputExtension : RelativeLayout {
                     hintId = if (check == 3) R.string.strong else R.string.very_strong
                 }
             }
-            txtPasswordInputExtension?.run {
+            txtPasswordInputExtension?.apply {
                 setTextColor(ContextCompat.getColor(context, colorResId))
                 setText(hintId)
             }
@@ -79,7 +80,5 @@ class PasswordInputExtension : RelativeLayout {
 
     }
 
-    fun getInputText(): String {
-        return edtPasswordInputExtension?.text.toString()
-    }
+    fun getInputText() = edtPasswordInputExtension?.text.toString()
 }

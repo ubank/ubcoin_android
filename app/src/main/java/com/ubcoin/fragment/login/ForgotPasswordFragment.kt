@@ -1,8 +1,6 @@
 package com.ubcoin.fragment.login
 
-import android.media.Image
 import android.os.Bundle
-import android.text.BoringLayout
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
@@ -13,6 +11,7 @@ import android.widget.ImageView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.utils.ImeDoneActionHandler
 
 /**
  * Created by Yuriy Aizenberg
@@ -25,6 +24,13 @@ class ForgotPasswordFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_forgot_password, container, false)
         edtForgotEmail = view.findViewById(R.id.edtForgotEmail)
+        edtForgotEmail?.setOnEditorActionListener(object : ImeDoneActionHandler() {
+            override fun onActionCall() {
+                if (isEmailValid()) {
+                    hideKeyboard()
+                }
+            }
+        })
         imgForgotPasswordSend = view.findViewById(R.id.imgForgotSend)
         edtForgotEmail?.addTextChangedListener(getTextChangeListener())
         return view
@@ -39,10 +45,12 @@ class ForgotPasswordFragment : BaseFragment() {
             }
 
             override fun afterTextChanged(p0: Editable?) {
-                changeSendImage(Patterns.EMAIL_ADDRESS.matcher(edtForgotEmail?.text.toString()).matches())
+                changeSendImage(isEmailValid())
             }
         }
     }
+
+    private fun isEmailValid() = Patterns.EMAIL_ADDRESS.matcher(edtForgotEmail?.text.toString()).matches()
 
     private fun changeSendImage(isValid: Boolean) {
         imgForgotPasswordSend?.run {

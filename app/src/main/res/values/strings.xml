@@ -28,7 +28,12 @@
     <string name="menu_label_favorites">Favorites</string>
     <string name="menu_label_sell">Sell</string>
     <string name="menu_label_messages">Messages</string>
+    <string name="menu_label_deals">Deals</string>
     <string name="menu_label_profile">Profile</string>
     <string name="menu_label_signin">Sign in</string>
+
+    <string name="header_favorites">Favorites</string>
+    <string name="no_favorite_items">No favorite items</string>
+    <string name="your_favorite_items_will_be_here">Your favorite items will be here</string>
 
 </resources>

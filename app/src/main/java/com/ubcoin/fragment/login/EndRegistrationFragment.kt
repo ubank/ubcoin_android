@@ -22,13 +22,10 @@ class EndRegistrationFragment : BaseFragment() {
 
     override fun showHeader(): Boolean = true
 
-    override fun getHeaderText(): Int {
-        return R.string.sign_up
-    }
+    override fun getHeaderText(): Int = R.string.sign_up
 
-    override fun getHeaderIcon(): Int {
-        return R.drawable.ic_close
-    }
+
+    override fun getHeaderIcon(): Int = R.drawable.ic_close
 
     override fun onBackPressed(): Boolean {
         performBack()
