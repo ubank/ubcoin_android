@@ -30,5 +30,12 @@
 
     <color name="mainBackground">#f8f8f8</color>
 
+    <array name="progressColors">
+        <item>#326cbb</item>
+        <item>#f4ae28</item>
+        <item>#32bb8f</item>
+        <item>#8722d6</item>
+    </array>
+
 
 </resources>

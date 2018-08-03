@@ -26,7 +26,7 @@ class LoginFragment : BaseFragment() {
         val inflate = inflater.inflate(R.layout.fragment_login, container, false)
         inflate.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
             getSwitcher()?.run {
-                clearBackStack().addTo(StartupFragment::class.java).addTo(SignupFragment::class.java)
+                clearBackStack().addTo(StartupFragment::class.java, false).addTo(SignupFragment::class.java)
             }
         }
         inflate.findViewById<View>(R.id.llLogin).setOnClickListener {

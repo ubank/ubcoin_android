@@ -1,7 +1,10 @@
 package com.ubcoin.network
 
 import com.ubcoin.model.response.User
+import com.ubcoin.model.response.base.MarketListResponse
 import com.ubcoin.network.request.SignIn
+import com.ubcoin.utils.CollectionExtensions
+import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import retrofit2.Response
 
@@ -30,5 +33,19 @@ object DataProvider {
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
+
+    fun getMarketList(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api().marketList(limit, page)
+                .doOnNext {
+                    if (!CollectionExtensions.nullOrEmpty(it.data)) {
+                        for (i in 0..5) {
+                            (it.data as ArrayList).addAll(ArrayList(it.data))
+                        }
+                    }
+                }
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
 
 }

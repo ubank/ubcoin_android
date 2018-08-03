@@ -1,6 +1,5 @@
 package com.ubcoin.model.response.base
 
-import com.ubcoin.model.response.Category
 import com.ubcoin.model.response.MarketItem
 
 /**

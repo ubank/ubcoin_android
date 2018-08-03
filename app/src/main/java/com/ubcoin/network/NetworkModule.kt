@@ -61,14 +61,10 @@ object NetworkModule {
                 if (code == HttpURLConnection.HTTP_OK) {
                     response
                 } else {
-                    val httpRequestException = HttpRequestException()
-                    httpRequestException.error = Gson().fromJson(response.body()!!.string(), Error::class.java)
-                    throw httpRequestException
+                    throw HttpRequestException(null, Gson().fromJson(response.body()!!.string(), Error::class.java))
                 }
             } catch (e: Exception) {
-                val httpRequestException = HttpRequestException()
-                httpRequestException.throwable = e
-                throw httpRequestException
+                throw HttpRequestException(e, null)
             }
 
 

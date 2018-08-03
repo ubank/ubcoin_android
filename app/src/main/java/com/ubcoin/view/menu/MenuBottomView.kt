@@ -12,14 +12,6 @@ import kotlinx.android.synthetic.main.view_bottom_menu.view.*
 class MenuBottomView : LinearLayout {
 
     var menuViewCallback: IMenuViewCallback? = null
-
-    /* var menuItemMarket : MenuSingleView? = null
-     var menuItemFavorite : MenuSingleView? = null
-     var menuItemSell : MenuSingleView? = null
-     var menuItemMessages : MenuSingleView? = null
-     var menuItemProfile : MenuSingleView? = null
-     var menuItemSignIn : MenuSingleView? = null*/
-
     var activeMenuItem: MenuSingleView? = null
 
     constructor(context: Context?) : super(context) {
@@ -62,6 +54,7 @@ class MenuBottomView : LinearLayout {
         if (activeMenuItem == null || !activeMenuItem?.equals(singleView)!!) {
             deactivateCurrent()
             singleView.activate()
+            singleView.shake()
             activeMenuItem = singleView
         }
     }

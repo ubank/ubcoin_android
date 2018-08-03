@@ -22,7 +22,7 @@ class SignupFragment : BaseFragment() {
         view.findViewById<View>(R.id.llSignUp).setOnClickListener { onSignUpClick() }
         view.findViewById<View>(R.id.llAlreadyHaveAccount).setOnClickListener {
             getSwitcher()?.run {
-                clearBackStack().addTo(StartupFragment::class.java).addTo(LoginFragment::class.java)
+                clearBackStack().addTo(StartupFragment::class.java, false).addTo(LoginFragment::class.java)
             }
         }
 

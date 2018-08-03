@@ -65,7 +65,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-        menuBottomView.activateProfile(false)
+        menuBottomView.activateSignIn(false)
         menuBottomView.activate(MenuItems.MARKET)
     }
 

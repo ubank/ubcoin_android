@@ -65,9 +65,11 @@ class RatingBarView : LinearLayout {
                 it?.setImageDrawable(inActiveDrawable)
             } else {
                 if (isTransparentInactive) {
-                    it?.visibility = View.GONE
+                    it?.visibility = View.INVISIBLE
+                    it?.isClickable = false
                 } else {
                     it?.visibility = View.VISIBLE
+                    it?.isClickable = true
                 }
             }
         }

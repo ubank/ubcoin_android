@@ -2,7 +2,9 @@ package com.ubcoin.adapter
 
 import android.content.Context
 import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
@@ -18,7 +20,6 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(private 
             notifyDataSetChanged()
         }
 
-
     fun addData(data: List<T>) {
         val position = this.data.size
         this.data.addAll(data)
@@ -32,6 +33,12 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(private 
             this.data.addAll(position, data)
             notifyItemRangeInserted(position, data.size)
         }
+    }
+
+    fun getItem(position : Int) : T = data[position]
+
+    protected fun inflate(@LayoutRes resId: Int, viewGroup: ViewGroup) : View {
+        return (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(resId, viewGroup, false)
     }
 
     private fun bindTouchListener(view: View, position: Int, data: T) {

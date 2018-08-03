@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import com.ubcoin.R
 import kotlinx.android.synthetic.main.view_menu_single_view.view.*
@@ -88,6 +89,12 @@ class MenuSingleView : RelativeLayout {
         txtMenuItem?.setTextColor(activeTextColor!!)
         imgMenuItem?.setImageDrawable(activeDrawable)
         if (fireCallback) fireCallback()
+    }
+
+    fun shake() {
+        val loadAnimation = AnimationUtils.loadAnimation(context, R.anim.shake_translate_anim)
+        loadAnimation.repeatCount = 2
+        startAnimation(loadAnimation)
     }
 
 

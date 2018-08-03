@@ -3,9 +3,13 @@ package com.ubcoin.fragment
 import android.app.Activity
 import android.support.v4.app.Fragment
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
+import com.ubcoin.network.HttpRequestException
 import com.ubcoin.switcher.FragmentSwitcher
 
 /**
@@ -21,6 +25,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     open fun getHeaderIcon(): Int = NO_HEADER_OBJECT
 
+    private var materialDialog: MaterialDialog? = null
+
     override fun onResume() {
         super.onResume()
         hideKeyboard()
@@ -34,11 +40,28 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     private fun changeActivityHeader(iActivity: IActivity) {
+        val header = iActivity.getHeader()
         if (showHeader()) {
-            iActivity.getHeader()?.visibility = View.VISIBLE
+/*            val alphaAnimation = AlphaAnimation(1f, 0f)
+            alphaAnimation.fillAfter = true
+            alphaAnimation.duration = 300
+            alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationRepeat(p0: Animation?) {
+
+                }
+
+                override fun onAnimationStart(p0: Animation?) {
+                }
+
+                override fun onAnimationEnd(p0: Animation?) {
+                }
+
+            })*/
+            header?.visibility = View.VISIBLE
+//            header?.startAnimation(alphaAnimation)
             changeActivityAttributes(iActivity)
         } else {
-            iActivity.getHeader()?.visibility = View.GONE
+            header?.visibility = View.GONE
         }
     }
 
@@ -63,5 +86,46 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     }
 
+    protected open fun handleException(t: Throwable) {
+        hideSweetAlertDialog()
+        when (t) {
+            is HttpRequestException -> {
+                processHttpRequestException(t)
+            }
+            else -> processThrowable(t)
+        }
+    }
+
+    private fun processHttpRequestException(httpRequestException: HttpRequestException) {
+        if (httpRequestException.isServerError()) {
+            showSweetAlertDialog("Server says", httpRequestException.toServerErrorString())
+        } else {
+            processThrowable(RuntimeException(httpRequestException.throwable))
+        }
+    }
+
+    private fun processThrowable(throwable: Throwable) {
+        showSweetAlertDialog("Ooops. Something goes wrong", "" + throwable.message)
+    }
+
+    private fun hideSweetAlertDialog() {
+        materialDialog?.hide()
+    }
+
+    private fun showSweetAlertDialog(title: String, message: String) {
+        activity?.run {
+            materialDialog = MaterialDialog.Builder(this).title(title).content(message).build()
+            materialDialog?.show()
+        }
+
+    }
+
+    protected fun hideViewQuitelly(vararg v : View?) {
+        v.run {
+            v.forEach {
+                it?.visibility = View.GONE
+            }
+        }
+    }
 
 }
