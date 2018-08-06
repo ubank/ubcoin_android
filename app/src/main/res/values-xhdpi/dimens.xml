@@ -6,6 +6,7 @@
     <dimen name="header_size_negative">-50dp</dimen>
     <dimen name="header_margin_start">16dp</dimen>
     <dimen name="header_margin_end">37dp</dimen>
+    <dimen name="header_margin_summary">53dp</dimen>
     <dimen name="header_text_size">20sp</dimen>
     <dimen name="sign_up_text_size">14sp</dimen>
     <dimen name="sign_up_margin">15dp</dimen>

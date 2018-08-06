@@ -18,14 +18,15 @@ import kotlinx.android.synthetic.main.common_header.*
  * Created by Yuriy Aizenberg
  */
 class MainActivity : BaseActivity() {
+    override fun getTopGradient(): View? = llMainGradient
 
     override fun getResourceId(): Int = R.layout.activity_main
 
     override fun getFragmentContainerId(): Int = R.id.mainContainer
 
-    override fun getHeader(): View? {
-        return findViewById(R.id.mainHeader)
-    }
+    override fun getHeader() = mainHeader
+
+    override fun getFooter() = menuBottomView
 
     override fun getTopImageView(): ImageView = imgHeaderLeft
 

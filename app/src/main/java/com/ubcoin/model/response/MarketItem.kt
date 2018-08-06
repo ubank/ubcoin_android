@@ -1,11 +1,12 @@
 package com.ubcoin.model.response
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Created by Yuriy Aizenberg
  */
-data class MarketItem(
+data class MarketItem (
         val id: String,
         val category: Category,
         val user: User,
@@ -17,4 +18,4 @@ data class MarketItem(
         val status: String,
         val title: String,
         val price: Float
-)
+) : Serializable

@@ -11,7 +11,7 @@ import android.view.ViewGroup
 /**
  * Created by Yuriy Aizenberg
  */
-abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(private val context: Context) : RecyclerView.Adapter<VH>() {
+abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(protected val context: Context) : RecyclerView.Adapter<VH>() {
 
     var recyclerTouchListener: IRecyclerTouchListener<T>? = null
     var data: MutableList<T> = ArrayList()
@@ -41,7 +41,7 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(private 
         return (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(resId, viewGroup, false)
     }
 
-    private fun bindTouchListener(view: View, position: Int, data: T) {
+    protected fun bindTouchListener(view: View, position: Int, data: T) {
         view.setOnClickListener {
             recyclerTouchListener?.onItemClick(data, position)
         }

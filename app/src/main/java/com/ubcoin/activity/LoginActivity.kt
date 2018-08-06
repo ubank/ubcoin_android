@@ -16,6 +16,10 @@ class LoginActivity : BaseActivity() {
         return findViewById(R.id.loginHeader)
     }
 
+    override fun getFooter() = null
+
+    override fun getTopGradient(): View? = null
+
     override fun getTopImageView(): ImageView = imgHeaderLeft
 
     override fun getTopTextView(): TextView = txtHeader

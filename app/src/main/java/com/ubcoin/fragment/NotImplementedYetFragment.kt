@@ -1,9 +1,5 @@
 package com.ubcoin.fragment
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.ubcoin.R
 
 /**
@@ -12,9 +8,5 @@ import com.ubcoin.R
 
 class NotImplementedYetFragment : BaseFragment() {
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_stub, container, false)
-    }
-
+    override fun getLayoutResId() = R.layout.fragment_stub
 }

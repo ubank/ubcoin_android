@@ -2,5 +2,6 @@
 <resources>
     <dimen name="menu_mini_margin">3dp</dimen>
     <dimen name="bottom_menu_height">56dp</dimen>
+    <dimen name="bottom_menu_height_with_gradient">57dp</dimen>
     <dimen name="price_textsize">15sp</dimen>
 </resources>

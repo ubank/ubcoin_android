@@ -20,6 +20,10 @@ interface IActivity {
 
     fun getHeader() : View?
 
+    fun getFooter() : View?
+
+    fun getTopGradient() : View?
+
     fun getTopImageView() : ImageView?
 
     fun getTopTextView() : TextView?

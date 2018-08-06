@@ -1,9 +1,6 @@
 package com.ubcoin.fragment.login
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 
@@ -13,19 +10,19 @@ import com.ubcoin.fragment.BaseFragment
 
 class EndRegistrationFragment : BaseFragment() {
 
+    override fun getLayoutResId() = R.layout.fragment_end_registration
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_end_registration, container, false)
+    override fun onViewInflated(view: View) {
+        super.onViewInflated(view)
         view.findViewById<View>(R.id.llClose).setOnClickListener { performBack() }
-        return view
     }
 
-    override fun showHeader(): Boolean = true
+    override fun showHeader() = true
 
-    override fun getHeaderText(): Int = R.string.sign_up
+    override fun getHeaderText() = R.string.sign_up
 
 
-    override fun getHeaderIcon(): Int = R.drawable.ic_close
+    override fun getHeaderIcon() = R.drawable.ic_close
 
     override fun onBackPressed(): Boolean {
         performBack()

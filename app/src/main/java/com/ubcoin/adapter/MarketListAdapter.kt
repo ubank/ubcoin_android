@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.view.rating.RatingBarView
-import java.util.*
 import kotlin.math.roundToInt
 
 /**
@@ -36,33 +37,30 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.txtImagesCount.text = "0/0"
         } else {
             Picasso.get().load(images[0])
+                    .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
+                    .centerCrop()
+                    .onlyScaleDown()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
                     .error(R.drawable.img_rejected)
                     .placeholder(R.drawable.img_loading_progress)
                     .into(vh.imgMarket)
             vh.txtImagesCount.text = "1/${images.size}"
         }
-//        val rating = item.user.rating.roundToInt()
-        val rating = Random().nextInt(5)
+        val rating = item.user.rating.roundToInt()
         vh.ratingBarView.setRating(rating)
+        bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
 
 
-    class ViewHolder: BaseRecyclerAdapter.VHolder{
+    class ViewHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {
 
-        val imgMarket: ImageView
-        val txtImagesCount : TextView
-        val txtLocationDistance : TextView
-        val txtMarketPrice : TextView
-        val txtMarketProductName : TextView
-        val ratingBarView: RatingBarView
+        val imgMarket: ImageView = findView(R.id.imgMarket)
+        val txtImagesCount : TextView = findView(R.id.txtImagesCount)
+        val txtLocationDistance : TextView = findView(R.id.txtLocationDistance)
+        val txtMarketPrice : TextView = findView(R.id.txtMarketPrice)
+        val txtMarketProductName : TextView = findView(R.id.txtMarketProductName)
+        val ratingBarView: RatingBarView = findView(R.id.ratingBarView)
 
-        constructor(itemView: View) : super(itemView) {
-            imgMarket = findView(R.id.imgMarket)
-            txtImagesCount = findView(R.id.txtImagesCount)
-            txtLocationDistance = findView(R.id.txtLocationDistance)
-            txtMarketPrice = findView(R.id.txtMarketPrice)
-            txtMarketProductName = findView(R.id.txtMarketProductName)
-            ratingBarView = findView(R.id.ratingBarView)
-        }
     }
 }

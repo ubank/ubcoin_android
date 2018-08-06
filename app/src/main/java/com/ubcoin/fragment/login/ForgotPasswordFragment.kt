@@ -1,12 +1,9 @@
 package com.ubcoin.fragment.login
 
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -21,8 +18,10 @@ class ForgotPasswordFragment : BaseFragment() {
     var edtForgotEmail : MaterialEditText? = null
     var imgForgotPasswordSend : ImageView?= null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_forgot_password, container, false)
+    override fun getLayoutResId() = R.layout.fragment_forgot_password
+
+    override fun onViewInflated(view: View) {
+        super.onViewInflated(view)
         edtForgotEmail = view.findViewById(R.id.edtForgotEmail)
         edtForgotEmail?.setOnEditorActionListener(object : ImeDoneActionHandler() {
             override fun onActionCall() {
@@ -33,7 +32,6 @@ class ForgotPasswordFragment : BaseFragment() {
         })
         imgForgotPasswordSend = view.findViewById(R.id.imgForgotSend)
         edtForgotEmail?.addTextChangedListener(getTextChangeListener())
-        return view
     }
 
     private fun getTextChangeListener() : TextWatcher {
@@ -68,17 +66,11 @@ class ForgotPasswordFragment : BaseFragment() {
         //todo
     }
 
-    override fun showHeader(): Boolean {
-        return true
-    }
+    override fun showHeader() = true
 
-    override fun getHeaderText(): Int {
-        return R.string.forgot_password
-    }
+    override fun getHeaderText() = R.string.forgot_password
 
-    override fun getHeaderIcon(): Int {
-        return R.drawable.ic_back
-    }
+    override fun getHeaderIcon()=  R.drawable.ic_back
 
     override fun onIconClick() {
         super.onIconClick()

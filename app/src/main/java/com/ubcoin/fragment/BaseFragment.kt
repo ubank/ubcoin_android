@@ -1,10 +1,13 @@
 package com.ubcoin.fragment
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.activity.BaseActivity
@@ -17,6 +20,8 @@ import com.ubcoin.switcher.FragmentSwitcher
  */
 abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
+    private val AGREEMENT_URL : String = "https://ubcoin.io/user-agreement"
+
     val NO_HEADER_OBJECT = -1
 
     open fun showHeader(): Boolean = true
@@ -27,16 +32,49 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private var materialDialog: MaterialDialog? = null
 
+    abstract fun getLayoutResId() : Int
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(getLayoutResId(), container, false)
+        onViewInflated(view)
+        return view
+    }
+
+    open fun onViewInflated(view: View) {
+
+    }
+
     override fun onResume() {
         super.onResume()
         hideKeyboard()
         changeActivityHeader(activity as IActivity)
+        if (isGradientShow()) {
+            showGradient()
+        } else {
+            hideGradient()
+        }
+
+        if (isFooterShow()) {
+            showFooter()
+        } else {
+            hideFooter()
+        }
     }
 
     fun getSwitcher(): FragmentSwitcher? {
         val activity = activity
         if (activity != null && activity is BaseActivity) return activity.fragmentSwitcher
         return null
+    }
+
+    fun showUserAgreement() {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(AGREEMENT_URL)
+        if (intent.resolveActivity(activity?.packageManager) != null) {
+            startActivity(intent)
+        } else {
+            TODO()
+        }
     }
 
     private fun changeActivityHeader(iActivity: IActivity) {
@@ -63,6 +101,36 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         } else {
             header?.visibility = View.GONE
         }
+    }
+
+    fun hideGradient() {
+        toggleGradient(false, activity as IActivity)
+    }
+
+    fun showGradient() {
+        toggleGradient(true, activity as IActivity)
+    }
+
+    open fun isGradientShow() = true
+
+    private fun toggleGradient(isVisible: Boolean, iActivity: IActivity) {
+        val topGradient = iActivity.getTopGradient()
+        topGradient?.visibility = if (isVisible) View.VISIBLE else View.GONE
+    }
+
+    fun hideFooter() {
+        toggleFooter(false, activity as IActivity)
+    }
+
+    fun showFooter() {
+        toggleFooter(true, activity as IActivity)
+    }
+
+    open fun isFooterShow() = true
+
+    private fun toggleFooter(isVisible: Boolean, iActivity: IActivity) {
+        val footer = iActivity.getFooter()
+        footer?.layoutParams?.height = if (isVisible) ViewGroup.LayoutParams.WRAP_CONTENT else 0
     }
 
     private fun changeActivityAttributes(iActivity: IActivity) {

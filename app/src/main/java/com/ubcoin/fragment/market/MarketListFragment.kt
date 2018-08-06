@@ -1,16 +1,15 @@
 package com.ubcoin.fragment.market
 
-import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import com.ubcoin.R
 import com.ubcoin.adapter.GridItemOffsetDecoration
+import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.MarketListAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.network.DataProvider
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -26,10 +25,12 @@ class MarketListFragment : BaseFragment() {
     private var progressCenter: View? = null
     private var progressBottom: View? = null
     private var marketListAdapter: MarketListAdapter? = null
-    private var currentDisposableLoader : Disposable?= null
+    private var currentDisposableLoader: Disposable? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_market_list, container, false)
+    override fun getLayoutResId() = R.layout.fragment_market_list
+
+    override fun onViewInflated(view: View) {
+        super.onViewInflated(view)
         recyclerView = view.findViewById(R.id.rvMarketList)
 
         progressCenter = view.findViewById(R.id.progressCenter)
@@ -62,7 +63,13 @@ class MarketListFragment : BaseFragment() {
                     handleException(it)
                 })
 
-        return view
+        marketListAdapter?.recyclerTouchListener = object : IRecyclerTouchListener<MarketItem> {
+            override fun onItemClick(data: MarketItem, position: Int) {
+                getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data), true)
+            }
+
+        }
+
     }
 
     private fun cancelCurrentLoading() = currentDisposableLoader?.dispose()
@@ -72,9 +79,5 @@ class MarketListFragment : BaseFragment() {
         super.handleException(t)
     }
 
-    override fun getHeaderText(): Int {
-        return R.string.app_name
-    }
-
-
+    override fun getHeaderText() = R.string.app_name
 }

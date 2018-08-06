@@ -1,10 +1,7 @@
 package com.ubcoin.fragment.login
 
 import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -12,7 +9,6 @@ import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ImeNextActionHandler
-import kotlinx.android.synthetic.main.fragment_login.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -22,21 +18,23 @@ class LoginFragment : BaseFragment() {
     var llForgotPassword: View? = null
     var txtLoginError: TextView? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val inflate = inflater.inflate(R.layout.fragment_login, container, false)
-        inflate.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
+    override fun getLayoutResId() = R.layout.fragment_login
+    
+    override fun onViewInflated(view: View) {
+        super.onViewInflated(view)
+        view.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
             getSwitcher()?.run {
                 clearBackStack().addTo(StartupFragment::class.java, false).addTo(SignupFragment::class.java)
             }
         }
-        inflate.findViewById<View>(R.id.llLogin).setOnClickListener {
+        view.findViewById<View>(R.id.llLogin).setOnClickListener {
             processLogin()
         }
-        llForgotPassword = inflate.findViewById(R.id.llForgotPassword)
-        txtLoginError = inflate.findViewById(R.id.txtLoginError)
+        llForgotPassword = view.findViewById(R.id.llForgotPassword)
+        txtLoginError = view.findViewById(R.id.txtLoginError)
 
-        val edtLoginEmail = inflate.findViewById<MaterialEditText>(R.id.edtLoginEmail)
-        val edtLoginPassword = inflate.findViewById<MaterialEditText>(R.id.edtLoginPassword)
+        val edtLoginEmail = view.findViewById<MaterialEditText>(R.id.edtLoginEmail)
+        val edtLoginPassword = view.findViewById<MaterialEditText>(R.id.edtLoginPassword)
 
         edtLoginEmail?.setOnEditorActionListener(object : ImeNextActionHandler() {
             override fun onActionCall() {
@@ -53,9 +51,11 @@ class LoginFragment : BaseFragment() {
         })
 
         showForgotPasswordView()
-        return inflate
-    }
 
+        view.findViewById<View>(R.id.llUserAgreement).setOnClickListener {  showUserAgreement() }
+
+    }
+    
     private fun showForgotPasswordView() {
         llForgotPassword?.run {
             visibility = View.VISIBLE
@@ -86,17 +86,11 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    override fun showHeader(): Boolean {
-        return true
-    }
+    override fun showHeader() = true
 
-    override fun getHeaderText(): Int {
-        return R.string.log_in
-    }
+    override fun getHeaderText() = R.string.log_in
 
-    override fun getHeaderIcon(): Int {
-        return R.drawable.ic_back
-    }
+    override fun getHeaderIcon() = R.drawable.ic_back
 
     override fun onIconClick() {
         super.onIconClick()
