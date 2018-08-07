@@ -36,19 +36,22 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.imgMarket.setImageResource(R.drawable.stub_image)
             vh.txtImagesCount.text = "0/0"
         } else {
-            Picasso.get().load(images[0])
-                    .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
-                    .centerCrop()
-                    .onlyScaleDown()
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .error(R.drawable.img_rejected)
-                    .placeholder(R.drawable.img_loading_progress)
-                    .into(vh.imgMarket)
-            vh.txtImagesCount.text = "1/${images.size}"
+            images?.let {
+                Picasso.get().load(it[0])
+                        .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
+                        .centerCrop()
+                        .onlyScaleDown()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .error(R.drawable.img_rejected)
+                        .placeholder(R.drawable.loading_progress)
+                        .into(vh.imgMarket)
+                vh.txtImagesCount.text = "1/${it.size}"
+            }
+
         }
-        val rating = item.user.rating.roundToInt()
-        vh.ratingBarView.setRating(rating)
+        val rating = item.user?.rating?.roundToInt()
+        vh.ratingBarView.setRating(rating ?: 0)
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
 

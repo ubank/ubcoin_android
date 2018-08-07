@@ -30,6 +30,12 @@
 
     <color name="mainBackground">#f8f8f8</color>
 
+    <color name="itemDetailsBackground">#f9f9f9</color>
+
+    <color name="sellerProfileNickColor">#de000000</color>
+
+    <color name="sellerProfileGray">#8a000000</color>
+
     <array name="progressColors">
         <item>#326cbb</item>
         <item>#f4ae28</item>

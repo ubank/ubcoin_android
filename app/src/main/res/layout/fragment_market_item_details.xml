@@ -22,21 +22,39 @@
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="Test 123 test"
-            app:titleEnabled="true"
+            app:titleEnabled="false"
             app:toolbarId="@id/toolbar">
 
-            <com.daimajia.slider.library.SliderLayout
-                android:id="@+id/slider"
+            <RelativeLayout
+                android:layout_marginBottom="20dp"
+                android:background="@color/menuActiveColor"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax"
+                android:layout_height="wrap_content">
 
-            <com.daimajia.slider.library.Indicators.PagerIndicator
-                android:id="@+id/custom_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
+                <com.daimajia.slider.library.SliderLayout
+                    android:id="@+id/slider"
+                    android:layout_centerInParent="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+                <com.daimajia.slider.library.Indicators.PagerIndicator
+                    android:layout_centerInParent="true"
+                    android:id="@+id/custom_indicator"
+                    android:layout_width="wrap_content"
+                    style="@style/AndroidImageSlider_Magnifier_Oval_Black"
+                    android:layout_height="match_parent"
+                    android:gravity="center" />
+
+                <FrameLayout
+                    android:layout_marginTop="@dimen/header_size"
+                    android:id="@+id/ghostView"
+                    android:layout_width="match_parent"
+                    android:visibility="gone"
+                    android:layout_height="match_parent" />
+
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -45,7 +63,7 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <include layout="@layout/view_header_market_details_simple"/>
+                <include layout="@layout/view_header_market_details_simple" />
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -56,16 +74,12 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/itemDetailsBackground"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="8dp"
-            android:padding="10dp"
-            android:text="SDNkaj sdnkaj sndkja sndkjas ndkja sndkj andksj nasjkd naskjd naksj dnaksj dnkaj sdnkja sndkja sndkja nd kjasdnkja sndk naskjd naskjd nakjsd nkajs dnkaj sndkja sndkj naskjd nasjd najk sndjkas ndkjn sadkj"
-            android:textSize="28sp" />
+        <include layout="@layout/view_item_details" />
+
     </android.support.v4.widget.NestedScrollView>
 
     <!--    <com.github.clans.fab.FloatingActionButton

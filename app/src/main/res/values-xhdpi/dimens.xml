@@ -24,4 +24,5 @@
     <dimen name="price_top_margin">15dp</dimen>
 
     <dimen name="decoration_grid_offset">5dp</dimen>
+    <dimen name="marginItemDetails">17dp</dimen>
 </resources>

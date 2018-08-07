@@ -6,6 +6,7 @@ import com.ubcoin.network.request.SignIn
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import retrofit2.Response
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by Yuriy Aizenberg
@@ -35,6 +36,7 @@ object DataProvider {
 
     fun getMarketList(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>) : Disposable {
         return networkModule.api().marketList(limit, page)
+                .debounce(100, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

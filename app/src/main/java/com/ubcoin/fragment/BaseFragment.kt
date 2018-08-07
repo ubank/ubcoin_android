@@ -24,13 +24,15 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     val NO_HEADER_OBJECT = -1
 
-    open fun showHeader(): Boolean = true
+    open fun showHeader() = true
 
-    open fun getHeaderText(): Int = NO_HEADER_OBJECT
+    open fun getHeaderText() = NO_HEADER_OBJECT
 
-    open fun getHeaderIcon(): Int = NO_HEADER_OBJECT
+    open fun getHeaderIcon() = NO_HEADER_OBJECT
 
     private var materialDialog: MaterialDialog? = null
+
+    open fun isFirstLineFragment() = false
 
     abstract fun getLayoutResId() : Int
 
@@ -130,7 +132,11 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private fun toggleFooter(isVisible: Boolean, iActivity: IActivity) {
         val footer = iActivity.getFooter()
-        footer?.layoutParams?.height = if (isVisible) ViewGroup.LayoutParams.WRAP_CONTENT else 0
+        footer?.run {
+            post {
+                layoutParams?.height = if (isVisible) ViewGroup.LayoutParams.WRAP_CONTENT else 0
+            }
+        }
     }
 
     private fun changeActivityAttributes(iActivity: IActivity) {

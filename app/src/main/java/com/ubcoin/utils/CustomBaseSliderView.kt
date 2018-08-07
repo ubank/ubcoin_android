@@ -36,7 +36,7 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
         return super.image(res)
     }
 
-    protected fun bindEventAndShow(v: View, targetImageView: ImageView?, disableCacheAndStore: Boolean) {
+    protected fun bindEventAndShow(v: View, targetImageView: ImageView?, disableCacheAndStore: Boolean, height: Int, width: Int) {
         if (!disableCacheAndStore) {
             super.bindEventAndShow(v, targetImageView)
             return
@@ -56,15 +56,12 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
         mLoadListener?.onStart(me)
 
         val p = if (picasso != null) picasso else Picasso.get()
-        var requestCreator: RequestCreator? = null
-        if (url != null) {
-            requestCreator = p.load(mUrl)
-        } else if (mFile != null) {
-            requestCreator = p.load(mFile!!)
-        } else if (mRes != 0) {
-            requestCreator = p.load(mRes)
-        } else {
-            return
+        val requestCreator: RequestCreator?
+        requestCreator = when {
+            url != null -> p.load(mUrl)
+            mFile != null -> p.load(mFile!!)
+            mRes != 0 -> p.load(mRes)
+            else -> return
         }
 
         if (requestCreator == null) {
@@ -85,8 +82,9 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
 
         when (scaleType) {
             BaseSliderView.ScaleType.Fit -> requestCreator.fit()
-            BaseSliderView.ScaleType.CenterCrop -> requestCreator.fit().centerCrop()
-            BaseSliderView.ScaleType.CenterInside -> requestCreator.fit().centerInside()
+            BaseSliderView.ScaleType.FitCenterCrop -> requestCreator.fit().centerCrop()
+            BaseSliderView.ScaleType.CenterCrop -> requestCreator.resize(width, height).onlyScaleDown().centerCrop()
+            BaseSliderView.ScaleType.CenterInside -> requestCreator.resize(width, height).onlyScaleDown().centerInside()
         }
 
         requestCreator.into(targetImageView, object : Callback {

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.ubcoin.R
+import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
@@ -71,8 +72,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        val currentFragment = getCurrentFragment()
-        if (currentFragment != null && currentFragment !is MarketListFragment) {
+        val currentFragment = if (getCurrentFragment() != null) getCurrentFragment() as BaseFragment else null
+        if (currentFragment != null && currentFragment !is MarketListFragment && currentFragment.isFirstLineFragment()) {
             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
             menuBottomView?.activate(MenuItems.MARKET)
         } else {

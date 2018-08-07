@@ -42,7 +42,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
                 .addInterceptor(tokenInterceptor())
                 .addInterceptor(logInterceptor())
-                .connectionSpecs(listOf(createConnectionSpec()))
+                .connectionSpecs(listOf(createConnectionSpec(), ConnectionSpec.CLEARTEXT))
                 .build()
     }
 

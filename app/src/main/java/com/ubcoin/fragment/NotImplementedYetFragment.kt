@@ -6,7 +6,7 @@ import com.ubcoin.R
  * Created by Yuriy Aizenberg
  */
 
-class NotImplementedYetFragment : BaseFragment() {
+class NotImplementedYetFragment : FirstLineFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_stub
 }

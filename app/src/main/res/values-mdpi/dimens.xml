@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_list_image_size">200dp</dimen>
+    <dimen name="map_detail_height">80dp</dimen>
+
+    <dimen name="detailsProfileHeight">83dp</dimen>
+    <dimen name="detailsSubProfileHeight">54dp</dimen>
+    <dimen name="detailsProfileMargin">15dp</dimen>
+    <dimen name="detailsProfileTextSize16">16sp</dimen>
+    <dimen name="detailsProfileMarginSmall">10dp</dimen>
 </resources>

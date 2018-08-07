@@ -5,7 +5,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/llHeaderLeft"
+        android:id="@+id/llHeaderLeftSimple"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
@@ -22,13 +22,13 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/txtHeader"
+        android:id="@+id/txtHeaderSimple"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginEnd="2dp"
-        android:layout_toEndOf="@id/llHeaderLeft"
-        android:layout_toStartOf="@id/llHeaderRight"
+        android:layout_toEndOf="@id/llHeaderLeftSimple"
+        android:layout_toStartOf="@id/llHeaderRightSimple"
         android:ellipsize="end"
         android:fontFamily="@font/roboto_medium"
         android:maxLines="1"
@@ -38,7 +38,7 @@
         android:textSize="@dimen/header_text_size" />
 
     <RelativeLayout
-        android:id="@+id/llHeaderRight"
+        android:id="@+id/llHeaderRightSimple"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true">

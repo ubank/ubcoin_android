@@ -29,12 +29,12 @@ class FragmentSwitcher(private val appCompatActivity: BaseActivity) {
         val fragment = Fragment.instantiate(appCompatActivity, fragmentClass.name)
         fragment.arguments = bundle
         if (!isReplace) {
-            transaction.add(appCompatActivity.getFragmentContainerId(), fragment)
+            transaction.add(appCompatActivity.getFragmentContainerId(), fragment, fragmentClass.name)
         } else {
-            transaction.replace(appCompatActivity.getFragmentContainerId(), fragment)
+            transaction.replace(appCompatActivity.getFragmentContainerId(), fragment, fragmentClass.name)
         }
         if (addToBackStack) transaction.addToBackStack(null)
-        transaction.commitAllowingStateLoss()
+        transaction.commit()
         return this
     }
 
