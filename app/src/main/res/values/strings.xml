@@ -37,5 +37,11 @@
     <string name="your_favorite_items_will_be_here">Your favorite items will be here</string>
     <string name="location_label">Location</string>
     <string name="seller_label">Seller</string>
+    <string name="successfully_confirmed">Successfully confirmed</string>
+    <string name="lets_get_started">Let’s get it started!</string>
+    <string name="code">Code</string>
+    <string name="resend_it">Resend it</string>
+    <string name="didn_t_get_the_email">Didn’t get the email?</string>
+    <string name="confirmation">Confirmation</string>
 
 </resources>

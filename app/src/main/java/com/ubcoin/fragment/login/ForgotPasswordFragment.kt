@@ -9,6 +9,7 @@ import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.utils.ImeDoneActionHandler
+import com.ubcoin.utils.TextWatcherAdatepr
 
 /**
  * Created by Yuriy Aizenberg
@@ -35,14 +36,9 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     private fun getTextChangeListener() : TextWatcher {
-        return object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
+        return object : TextWatcherAdatepr() {
             override fun afterTextChanged(p0: Editable?) {
+                super.afterTextChanged(p0)
                 changeSendImage(isEmailValid())
             }
         }

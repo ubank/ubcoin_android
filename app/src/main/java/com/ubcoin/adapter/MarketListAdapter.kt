@@ -44,7 +44,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .error(R.drawable.img_rejected)
-                        .placeholder(R.drawable.loading_progress)
+//                        .placeholder(R.drawable.loading_progress)
                         .into(vh.imgMarket)
                 vh.txtImagesCount.text = "1/${it.size}"
             }

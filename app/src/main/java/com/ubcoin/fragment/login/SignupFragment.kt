@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.login
 
+import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -55,7 +56,7 @@ class SignupFragment : BaseFragment() {
     }
 
     private fun onSignUpClick() {
-        getSwitcher()?.clearBackStack()?.addTo(EndRegistrationFragment::class.java)
+        getSwitcher()?.addTo(CompleteRegistrationFragment::class.java)
     }
 
     override fun showHeader(): Boolean = true

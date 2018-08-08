@@ -11,5 +11,4 @@ abstract class ImeDoneActionHandler : BaseImeActionHandler() {
         return EditorInfo.IME_ACTION_DONE
     }
 
-
 }

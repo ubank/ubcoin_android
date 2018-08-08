@@ -25,4 +25,9 @@
 
     <dimen name="decoration_grid_offset">5dp</dimen>
     <dimen name="marginItemDetails">17dp</dimen>
+
+    <dimen name="marketInFavoriteHeight">90dp</dimen>
+    <dimen name="marketInFavoriteHeightImage">60dp</dimen>
+    <dimen name="marketInFavoriteMarginDiff">15dp</dimen>
+
 </resources>
