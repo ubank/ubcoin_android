@@ -2,6 +2,7 @@ package com.ubcoin.network
 
 import com.ubcoin.model.response.User
 import com.ubcoin.model.response.base.MarketListResponse
+import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.SignIn
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
@@ -15,7 +16,7 @@ object DataProvider {
 
     private var networkModule : NetworkModule = NetworkModule
 
-    fun login(email: String, password: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+    fun login(email: String, password: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .login(SignIn(email, password))
                 .compose(RxUtils.applyT())

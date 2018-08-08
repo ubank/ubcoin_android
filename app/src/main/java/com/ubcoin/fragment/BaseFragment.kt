@@ -31,6 +31,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     open fun getHeaderIcon() = NO_HEADER_OBJECT
 
     private var materialDialog: MaterialDialog? = null
+    private var progressDialog: MaterialDialog? = null
 
     open fun isFirstLineFragment() = false
 
@@ -164,11 +165,15 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         hideSweetAlertDialog()
         when (t) {
             is HttpRequestException -> {
-                processHttpRequestException(t)
+                if (!handleByChild(t)) {
+                    processHttpRequestException(t)
+                }
             }
             else -> processThrowable(t)
         }
     }
+
+    protected open fun handleByChild(httpRequestException: HttpRequestException) = false
 
     private fun processHttpRequestException(httpRequestException: HttpRequestException) {
         if (httpRequestException.isServerError()) {
@@ -200,6 +205,24 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
                 it?.visibility = View.GONE
             }
         }
+    }
+
+    protected fun showProgressDialog(title: String, message: String) {
+        activity?.run {
+            hideProgressDialog()
+            progressDialog = MaterialDialog.Builder(this)
+                    .title(title)
+                    .content(message)
+                    .progress(true, 0)
+                    .cancelable(false)
+                    .build()
+            progressDialog?.show()
+
+        }
+    }
+
+    protected fun hideProgressDialog() {
+        progressDialog?.hide()
     }
 
 }

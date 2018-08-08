@@ -1,5 +1,6 @@
 package com.ubcoin.network
 
+import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
 import com.ubcoin.model.Error
@@ -21,7 +22,7 @@ import javax.net.ssl.X509TrustManager
 object NetworkModule {
 
     private val AUTH_HEADER = "X-Authentication"
-    private var thePreferences: ThePreferences = ThePreferences()
+    private var thePreferences = ThePreferences()
 
     fun api(): Api {
         return retrofit().create(Api::class.java)
@@ -77,13 +78,22 @@ object NetworkModule {
                 if (code == HttpURLConnection.HTTP_OK) {
                     response
                 } else {
-                    throw HttpRequestException(null, Gson().fromJson(response.body()!!.string(), Error::class.java))
+                    throw HttpRequestException(null, parseResponseForError(response), code)
                 }
             } catch (e: Exception) {
                 throw HttpRequestException(e, null)
             }
 
 
+        }
+    }
+
+    private fun parseResponseForError(response: Response): Error? {
+        return try {
+            Gson().fromJson(response.body()!!.string(), Error::class.java)
+        } catch (e: Exception) {
+            Log.e(javaClass.name, e.message, e)
+            null
         }
     }
 

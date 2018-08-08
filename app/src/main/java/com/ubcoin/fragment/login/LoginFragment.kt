@@ -1,14 +1,25 @@
 package com.ubcoin.fragment.login
 
 import android.content.Intent
+import android.text.Editable
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
+import com.ubcoin.ThePreferences
 import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.model.response.User
+import com.ubcoin.model.response.profile.ProfileCompleteResponse
+import com.ubcoin.network.DataProvider
+import com.ubcoin.network.HttpRequestException
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ImeNextActionHandler
+import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.TextWatcherAdatepr
+import io.reactivex.functions.Consumer
+import java.net.HttpURLConnection
 
 /**
  * Created by Yuriy Aizenberg
@@ -17,9 +28,11 @@ class LoginFragment : BaseFragment() {
 
     var llForgotPassword: View? = null
     var txtLoginError: TextView? = null
+    var edtLoginEmail: MaterialEditText? = null
+    var edtLoginPassword: MaterialEditText? = null
 
     override fun getLayoutResId() = R.layout.fragment_login
-    
+
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
@@ -27,11 +40,17 @@ class LoginFragment : BaseFragment() {
                 clearBackStack().addTo(StartupFragment::class.java, false).addTo(SignupFragment::class.java)
             }
         }
+
+        val imgLogin = view.findViewById<ImageView>(R.id.imgLogin)
+
         view.findViewById<View>(R.id.llLogin).setOnClickListener {
             processLogin()
         }
         llForgotPassword = view.findViewById(R.id.llForgotPassword)
         txtLoginError = view.findViewById(R.id.txtLoginError)
+
+        edtLoginEmail = view.findViewById(R.id.edtLoginEmail)
+        edtLoginPassword = view.findViewById(R.id.edtLoginPassword)
 
         val edtLoginEmail = view.findViewById<MaterialEditText>(R.id.edtLoginEmail)
         val edtLoginPassword = view.findViewById<MaterialEditText>(R.id.edtLoginPassword)
@@ -43,19 +62,38 @@ class LoginFragment : BaseFragment() {
             }
         })
 
-        edtLoginPassword?.setOnEditorActionListener(object: ImeDoneActionHandler() {
+        edtLoginPassword?.setOnEditorActionListener(object : ImeDoneActionHandler() {
             override fun onActionCall() {
                 hideKeyboard()
                 processLogin()
             }
         })
 
+        val textWatcherAdapter = object : TextWatcherAdatepr() {
+            override fun afterTextChanged(p0: Editable?) {
+                txtLoginError?.visibility = View.INVISIBLE
+                imgLogin?.run {
+                    if (isValidData()) {
+                        setImageResource(R.drawable.rounded_green_filled_button)
+                    } else {
+                        setImageResource(R.drawable.rounded_green_filled_transparent_button)
+                    }
+                }
+            }
+        }
+        edtLoginEmail?.addTextChangedListener(textWatcherAdapter)
+        edtLoginPassword?.addTextChangedListener(textWatcherAdapter)
+
         showForgotPasswordView()
 
-        view.findViewById<View>(R.id.llUserAgreement).setOnClickListener {  showUserAgreement() }
+        view.findViewById<View>(R.id.llUserAgreement).setOnClickListener { showUserAgreement() }
 
     }
-    
+
+    private fun isValidData(): Boolean {
+        return !edtLoginEmail?.text.toString().isBlank() && !edtLoginPassword?.text.toString().isBlank()
+    }
+
     private fun showForgotPasswordView() {
         llForgotPassword?.run {
             visibility = View.VISIBLE
@@ -76,8 +114,32 @@ class LoginFragment : BaseFragment() {
 
     private fun processLogin() {
         activity?.run {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            if (isValidData()) {
+                showProgressDialog("Login", "Login")
+                DataProvider.login(edtLoginEmail?.text.toString().trim(), edtLoginPassword?.text.toString().trim(), successConsumer(), Consumer {
+                    hideProgressDialog()
+                    handleException(it)
+                })
+            }
+        }
+    }
+
+
+    override fun handleByChild(httpRequestException: HttpRequestException): Boolean {
+        if (!httpRequestException.isServerError() || httpRequestException.errorCode != HttpURLConnection.HTTP_UNAUTHORIZED) {
+            return super.handleByChild(httpRequestException)
+        }
+        txtLoginError?.visibility = View.VISIBLE
+        return true
+    }
+
+    private fun successConsumer() : Consumer<ProfileCompleteResponse> {
+        return Consumer {
+            hideProgressDialog()
+            ThePreferences().setToken(it.accessToken)
+            ProfileHolder.profile = it.user
+            startActivity(Intent(activity, MainActivity::class.java))
+            activity?.finish()
         }
     }
 

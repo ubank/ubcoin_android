@@ -9,6 +9,7 @@ import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
+import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
 import com.ubcoin.view.menu.MenuItems
 import com.ubcoin.view.menu.MenuSingleView
@@ -67,7 +68,11 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-        menuBottomView.activateSignIn(false)
+        if (ProfileHolder.profile == null) {
+            menuBottomView.activateSignIn(false)
+        } else {
+            menuBottomView.activateProfile(false)
+        }
         menuBottomView.activate(MenuItems.MARKET)
     }
 
