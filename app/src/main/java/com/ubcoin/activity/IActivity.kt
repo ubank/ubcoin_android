@@ -1,5 +1,7 @@
 package com.ubcoin.activity
 
+import android.support.annotation.IdRes
+import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
 import android.view.View
 import android.widget.ImageView
@@ -10,13 +12,17 @@ import android.widget.TextView
  */
 interface IActivity {
 
-    fun getResourceId() : Int
+    @LayoutRes fun getResourceId() : Int
 
-    fun getFragmentContainerId() : Int
+    @IdRes fun getFragmentContainerId() : Int
 
-    fun getCurrentFragment() : Fragment
+    fun getCurrentFragment() : Fragment?
 
     fun getHeader() : View?
+
+    fun getFooter() : View?
+
+    fun getTopGradient() : View?
 
     fun getTopImageView() : ImageView?
 

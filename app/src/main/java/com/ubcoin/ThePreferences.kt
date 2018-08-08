@@ -20,16 +20,11 @@ class ThePreferences {
             private set
     }
 
-    fun getToken(): String? = Companion.instance.getString(KEY_TOKEN, null)
+    fun getToken(): String? = instance.getString(KEY_TOKEN, null)
 
-    fun setToken(token: String?) {
-        instance.edit().putString(KEY_TOKEN, token).apply()
-    }
+    fun setToken(token: String?) = instance.edit().putString(KEY_TOKEN, token).apply()
 
-    fun getCookie(): String? = Companion.instance.getString(KEY_COOKIE, null)
+    fun getCookie(): String? = instance.getString(KEY_COOKIE, null)
 
-    fun setCookie(token: String?) {
-        instance.edit().putString(KEY_COOKIE, token).apply()
-    }
-
+    fun setCookie(token: String?) = instance.edit().putString(KEY_COOKIE, token).apply()
 }

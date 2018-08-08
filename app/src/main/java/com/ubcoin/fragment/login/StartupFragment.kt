@@ -1,9 +1,6 @@
 package com.ubcoin.fragment.login
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 
@@ -12,11 +9,12 @@ import com.ubcoin.fragment.BaseFragment
  */
 class StartupFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.fragment_startup, container, false)
+    override fun getLayoutResId() = R.layout.fragment_startup
+
+    override fun onViewInflated(view: View) {
+        super.onViewInflated(view)
         view.findViewById<View>(R.id.llSignUp).setOnClickListener { startSignUp() }
         view.findViewById<View>(R.id.llAlreadyHaveAccount).setOnClickListener { startLogIn() }
-        return view
     }
 
     private fun startSignUp() {
@@ -28,28 +26,5 @@ class StartupFragment : BaseFragment() {
         switcher?.addTo(LoginFragment::class.java)
     }
 
-    override fun showHeader(): Boolean {
-        return false
-    }
-
-    /*override fun getHeaderIcon(): Int {
-        return R.drawable.ic_back
-    }
-
-    override fun getHeaderText(): Int {
-        return R.string.header_startup_fragment
-    }
-
-    override fun onBackPressed(): Boolean {
-        Toast.makeText(activity, "Back", Toast.LENGTH_SHORT).show()
-        return false
-    }
-
-    override fun onIconClick() {
-        super.onIconClick()
-        Toast.makeText(activity, "Exit!", Toast.LENGTH_SHORT).show()
-        activity?.onBackPressed()
-    }*/
-
-
+    override fun showHeader() = false
 }

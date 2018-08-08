@@ -3,14 +3,16 @@ package com.ubcoin.network
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
 import com.ubcoin.model.Error
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Response
+import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
 /**
@@ -31,16 +33,30 @@ object NetworkModule {
                 .addConverterFactory(NullOrEmptyConvertFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("https://private-anon-c00cbfeb39-ubcoinapi.apiary-mock.com/api/")
+                .baseUrl("https://my.ubcoin.io/")
                 .client(client())
                 .build()
     }
 
-    private fun client(): OkHttpClient {
+    fun client(): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor(tokenInterceptor())
                 .addInterceptor(logInterceptor())
+                .connectionSpecs(listOf(createConnectionSpec(), ConnectionSpec.CLEARTEXT))
                 .build()
+    }
+
+    private fun createConnectionSpec() : ConnectionSpec {
+        return ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_0, TlsVersion.TLS_1_2)
+                .cipherSuites(
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256,
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
+                ).build()
     }
 
     private fun tokenInterceptor(): Interceptor {
@@ -61,14 +77,10 @@ object NetworkModule {
                 if (code == HttpURLConnection.HTTP_OK) {
                     response
                 } else {
-                    val httpRequestException = HttpRequestException()
-                    httpRequestException.error = Gson().fromJson(response.body()!!.string(), Error::class.java)
-                    throw httpRequestException
+                    throw HttpRequestException(null, Gson().fromJson(response.body()!!.string(), Error::class.java))
                 }
             } catch (e: Exception) {
-                val httpRequestException = HttpRequestException()
-                httpRequestException.throwable = e
-                throw httpRequestException
+                throw HttpRequestException(e, null)
             }
 
 

@@ -10,8 +10,6 @@
     <color name="greenMainColor">#32bb8f</color>
     <color name="greenMainColorTransparent">#6632bb8f</color>
 
-
-
     <color name="haveAccountColor">#919191</color>
     <color name="inputTextColor">#403d45</color>
 
@@ -20,6 +18,30 @@
     <color name="passwordStrong">#32bb8f</color>
 
     <color name="errorColor">#e33f5e</color>
+
+    <color name="menuActiveColor">#5b676d</color>
+    <color name="menuInactiveColor">#8ba1ac</color>
+
+    <color name="mainStartGradient">#b5b5b5</color>
+    <color name="mainEndGradient">#f9f9f9</color>
+
+    <color name="mainStartGradientBottom">#ebebeb</color>
+    <color name="mainEndGradientBottom">#f9f9f9</color>
+
+    <color name="mainBackground">#f8f8f8</color>
+
+    <color name="itemDetailsBackground">#f9f9f9</color>
+
+    <color name="sellerProfileNickColor">#de000000</color>
+
+    <color name="sellerProfileGray">#8a000000</color>
+
+    <array name="progressColors">
+        <item>#326cbb</item>
+        <item>#f4ae28</item>
+        <item>#32bb8f</item>
+        <item>#8722d6</item>
+    </array>
 
 
 </resources>

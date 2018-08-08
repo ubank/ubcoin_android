@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/detailsProfileHeight"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:clickable="true"
+    android:focusable="true">
+
+
+    <ImageView
+        android:id="@+id/imgSellerProfile"
+        android:layout_width="@dimen/detailsSubProfileHeight"
+        android:layout_height="@dimen/detailsSubProfileHeight"
+        android:layout_marginStart="@dimen/detailsProfileMargin"
+        android:src="@drawable/img_logo"
+        android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_toEndOf="@id/imgSellerProfile"
+        android:layout_toStartOf="@id/imgNext"
+        android:layout_marginStart="@dimen/detailsProfileMargin"
+        android:layout_marginEnd="@dimen/detailsProfileMarginSmall"
+        android:layout_marginTop="@dimen/detailsProfileMarginSmall"
+        android:layout_marginBottom="@dimen/detailsProfileMarginSmall"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtUserName"
+                android:layout_width="wrap_content"
+                android:textSize="@dimen/detailsProfileTextSize16"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/sellerProfileNickColor"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.ubcoin.view.rating.RatingBarView
+                android:id="@+id/ratingBarView"
+                app:RatingIcon="@drawable/ic_star_mini"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/sellerProfileGray"
+                    android:text="1 active deal"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textSize="12sp"
+                    android:layout_marginStart="32dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/sellerProfileGray"
+                    android:text="4 Reviews"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgNext"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/detailsProfileMarginSmall"
+        android:src="@drawable/ic_next"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

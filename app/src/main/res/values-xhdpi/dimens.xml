@@ -6,6 +6,7 @@
     <dimen name="header_size_negative">-50dp</dimen>
     <dimen name="header_margin_start">16dp</dimen>
     <dimen name="header_margin_end">37dp</dimen>
+    <dimen name="header_margin_summary">53dp</dimen>
     <dimen name="header_text_size">20sp</dimen>
     <dimen name="sign_up_text_size">14sp</dimen>
     <dimen name="sign_up_margin">15dp</dimen>
@@ -14,4 +15,19 @@
     <dimen name="have_account_margin">24dp</dimen>
     <dimen name="please_verify_text_size">20sp</dimen>
     <dimen name="user_agreement_text_size">12sp</dimen>
+    <dimen name="menu_textsize">12sp</dimen>
+
+    <dimen name="favorite_fragment_top_margin">15dp</dimen>
+    <dimen name="favorite_fragment_text_margin">20dp</dimen>
+    <dimen name="camera_margin">10dp</dimen>
+    <dimen name="camera_end_margin">10dp</dimen>
+    <dimen name="price_top_margin">15dp</dimen>
+
+    <dimen name="decoration_grid_offset">5dp</dimen>
+    <dimen name="marginItemDetails">17dp</dimen>
+
+    <dimen name="marketInFavoriteHeight">90dp</dimen>
+    <dimen name="marketInFavoriteHeightImage">60dp</dimen>
+    <dimen name="marketInFavoriteMarginDiff">15dp</dimen>
+
 </resources>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/itemDetailsBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/marginItemDetails"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_medium"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/headerTextColor"
+                android:textSize="@dimen/please_verify_text_size" />
+
+            <LinearLayout
+                android:id="@+id/llItemDetailCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtItemCategor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/camera_margin"
+                    android:layout_marginTop="@dimen/camera_margin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/greenMainColor" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/camera_margin"
+                    android:src="@drawable/ic_next_green_small" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtMarketProductName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/headerTextColor"
+                android:textSize="@dimen/please_verify_text_size" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginItemDetails"
+        android:layout_marginTop="15dp"
+        android:text="@string/location_label"
+        android:textColor="@color/haveAccountColor" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_detail_height">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imgMarket"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/rounded_corners_black_transparent"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/ic_location_white_mini" />
+
+                <TextView
+                    android:id="@+id/txtLocationDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginEnd="@dimen/camera_end_margin"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="1,2 km"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/menu_textsize" />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/marginItemDetails"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMarketProductDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="25dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginTop="22dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:maxLines="4"
+                android:textColor="@color/headerTextColor"
+                android:textSize="@dimen/sign_up_text_size" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_next" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/marginItemDetails"
+        android:layout_marginTop="15dp"
+        android:text="@string/seller_label"
+        android:textColor="@color/haveAccountColor" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <include layout="@layout/view_seller_profile" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:textColor="#e93754"
+        android:text="REPORT POST"
+        android:textSize="14sp"
+        android:layout_marginTop="30dp"
+        android:elevation="2dp"
+        android:translationZ="2dp"
+        android:background="@android:color/white"
+        android:layout_height="wrap_content" />
+
+
+
+</LinearLayout>

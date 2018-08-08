@@ -26,11 +26,15 @@
             android:visibility="invisible" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtSignUpName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/name"
+            android:imeOptions="actionNext"
+            android:lines="1"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
@@ -38,23 +42,15 @@
 
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/header_margin_start"
-            android:layout_marginTop="@dimen/header_margin_start"
-            android:hint="@string/telegram_username"
-            android:textColorHighlight="@color/haveAccountColor"
-            app:met_floatingLabel="highlight"
-            app:met_textColor="@color/inputTextColor"
-            app:met_textColorHint="@color/haveAccountColor" />
-
-        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtSignUpEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/email"
+            android:imeOptions="actionNext"
             android:inputType="textWebEmailAddress"
+            android:lines="1"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
@@ -62,6 +58,7 @@
 
 
         <com.ubcoin.view.PasswordInputExtension
+            android:id="@+id/edtPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
