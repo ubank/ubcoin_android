@@ -17,8 +17,6 @@ class EndRegistrationFragment : BaseFragment() {
         view.findViewById<View>(R.id.llClose).setOnClickListener { performBack() }
     }
 
-    override fun showHeader() = true
-
     override fun getHeaderText() = R.string.sign_up
 
 

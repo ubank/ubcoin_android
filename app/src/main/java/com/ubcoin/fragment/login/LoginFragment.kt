@@ -148,8 +148,6 @@ class LoginFragment : BaseFragment() {
 
     }
 
-    override fun showHeader() = true
-
     override fun getHeaderText() = R.string.log_in
 
     override fun getHeaderIcon() = R.drawable.ic_back

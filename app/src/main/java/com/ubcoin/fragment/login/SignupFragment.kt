@@ -59,8 +59,6 @@ class SignupFragment : BaseFragment() {
         getSwitcher()?.addTo(CompleteRegistrationFragment::class.java)
     }
 
-    override fun showHeader(): Boolean = true
-
     override fun getHeaderIcon()=  R.drawable.ic_back
 
     override fun getHeaderText()= R.string.sign_up

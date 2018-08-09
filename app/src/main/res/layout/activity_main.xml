@@ -1,45 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/mainBackground"
     android:clickable="true"
-    android:focusable="true"
-    android:layout_height="match_parent">
+    android:focusable="true">
 
-    <include layout="@layout/common_header" android:id="@+id/mainHeader"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:id="@+id/llMainGradient"
-        android:layout_width="match_parent"
-        android:background="@drawable/main_gradient"
-        android:layout_alignBottom="@id/mainHeader"
-        android:layout_height="3dp" />
 
     <com.ubcoin.view.menu.MenuBottomView
         android:id="@+id/menuBottomView"
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="@dimen/bottom_menu_height"
+        android:layout_alignParentBottom="true" />
 
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/llMainGradientBottom"
         android:layout_width="match_parent"
-        android:background="@drawable/main_gradient_bottom"
+        android:layout_height="3dp"
         android:layout_above="@id/menuBottomView"
-        android:layout_height="3dp" />
+        android:background="@drawable/main_gradient_bottom"
+        android:orientation="horizontal" />
 
     <FrameLayout
         android:id="@+id/mainContainer"
-        android:layout_above="@id/llMainGradientBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/llMainGradient" />
-
-
+        android:layout_marginBottom="@dimen/bottom_menu_height_with_bottom_gradient"/>
 
 
 </RelativeLayout>

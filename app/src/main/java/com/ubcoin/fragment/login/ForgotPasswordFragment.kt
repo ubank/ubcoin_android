@@ -62,8 +62,6 @@ class ForgotPasswordFragment : BaseFragment() {
         //todo
     }
 
-    override fun showHeader() = true
-
     override fun getHeaderText() = R.string.forgot_password
 
     override fun getHeaderIcon()=  R.drawable.ic_back

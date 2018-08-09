@@ -1,92 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gpb="http://schemas.android.com/apk/res-auto"
-    android:background="@color/mainBackground"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
+    <include layout="@layout/common_header"/>
 
-
-    <LinearLayout
-        android:id="@+id/llNoFavoriteItems"
-        android:visibility="gone"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="285dp"
-        android:layout_marginTop="@dimen/favorite_fragment_top_margin"
-        android:background="@android:color/white"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground"
+        android:clickable="true"
+        android:focusable="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="53dp"
-                android:src="@drawable/img_no_favorite_items" />
-
-        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/llNoFavoriteItems"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="285dp"
+            android:layout_marginTop="@dimen/favorite_fragment_top_margin"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/no_favorite_items"
-                android:textColor="@color/headerTextColor"
-                android:textSize="@dimen/please_verify_text_size" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/img_no_favorite_items" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_favorite_items"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/please_verify_text_size" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/favorite_fragment_text_margin"
-                android:gravity="center"
-                android:text="@string/your_favorite_items_will_be_here"
-                android:textColor="@color/haveAccountColor"
-                android:textSize="@dimen/sign_up_text_size" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+                    android:gravity="center"
+                    android:text="@string/your_favorite_items_will_be_here"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/sign_up_text_size" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvMarketList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="15dp"
+            android:visibility="gone" />
 
-    </LinearLayout>
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            gpb:colors="@array/progressColors"
+            gpb:type="nexus_rotation_cross" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvMarketList"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressBottom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            gpb:colors="@array/progressColors"
+            gpb:type="nexus_rotation_cross" />
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progressCenter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        gpb:colors="@array/progressColors"
-        gpb:type="nexus_rotation_cross" />
+    </RelativeLayout>
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progressBottom"
-        android:visibility="gone"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        gpb:colors="@array/progressColors"
-        gpb:type="nexus_rotation_cross" />
-
-</RelativeLayout>
+</LinearLayout>

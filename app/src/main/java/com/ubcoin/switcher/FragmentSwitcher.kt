@@ -22,10 +22,9 @@ class FragmentSwitcher(private val appCompatActivity: BaseActivity) {
     fun addTo(fragmentClass: Class<out Fragment>, addToBackStack: Boolean, bundle: Bundle?, isReplace: Boolean, withAnimation: Boolean): FragmentSwitcher {
         val supportFragmentManager = appCompatActivity.supportFragmentManager
         val transaction = supportFragmentManager.beginTransaction()
-        /*if (withAnimation) {
-        todo
-            transaction.setCustomAnimations(R.anim.fade_in_animation, R.anim.fade_out_animation, R.anim.fade_in_animation, R.anim.fade_out_animation)
-        }*/
+        if (withAnimation) {
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
+        }
         val fragment = Fragment.instantiate(appCompatActivity, fragmentClass.name)
         fragment.arguments = bundle
         if (!isReplace) {

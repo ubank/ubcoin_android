@@ -3,6 +3,7 @@ package com.ubcoin.activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 //import cn.pedant.SweetAlert.SweetAlertDialog
 import com.ubcoin.fragment.IFragmentBehaviorAware
 import com.ubcoin.model.BaseApplicationModel
@@ -15,8 +16,6 @@ import com.ubcoin.switcher.FragmentSwitcher
 abstract class BaseActivity : AppCompatActivity(), IActivity {
 
     var fragmentSwitcher: FragmentSwitcher? = null
-//    private var progressDialog: SweetAlertDialog? = null
-//    var errorDialog: SweetAlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +26,10 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
                 supportFragmentManager.fragments.last()?.onResume()
             }
         }
+    }
+
+    override fun getContainer(): View {
+        return findViewById(getFragmentContainerId())
     }
 
     override fun getCurrentFragment(): Fragment? {

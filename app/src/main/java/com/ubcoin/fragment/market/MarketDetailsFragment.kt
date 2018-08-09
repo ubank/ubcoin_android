@@ -40,20 +40,12 @@ class MarketDetailsFragment : BaseFragment() {
         }
     }
 
-
-    override fun isGradientShow(): Boolean {
-        super.isGradientShow()
-        return false
-    }
-
     override fun isFooterShow(): Boolean {
         super.isFooterShow()
         return false
     }
 
     override fun getLayoutResId() = R.layout.fragment_market_item_details
-
-    override fun showHeader() = false
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)

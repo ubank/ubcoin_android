@@ -9,22 +9,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.ubcoin.R
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.switcher.FragmentSwitcher
+import com.ubcoin.utils.collapse
+import com.ubcoin.utils.expand
+import kotlinx.android.synthetic.main.common_header.*
 
 /**
  * Created by Yuriy Aizenberg
  */
 abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
-    private val AGREEMENT_URL : String = "https://ubcoin.io/user-agreement"
+    private val AGREEMENT_URL: String = "https://ubcoin.io/user-agreement"
 
     val NO_HEADER_OBJECT = -1
-
-    open fun showHeader() = true
 
     open fun getHeaderText() = NO_HEADER_OBJECT
 
@@ -33,13 +37,26 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     private var materialDialog: MaterialDialog? = null
     private var progressDialog: MaterialDialog? = null
 
+    private var headerIcon: View? = null
+    private var llHeaderImage: View? = null
+    private var txtHeader: TextView? = null
+
     open fun isFirstLineFragment() = false
 
-    abstract fun getLayoutResId() : Int
+    abstract fun getLayoutResId(): Int
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(getLayoutResId(), container, false)
         onViewInflated(view)
+        if (getTopHeaderTextId() != NO_HEADER_OBJECT) {
+            txtHeader = view.findViewById(getTopHeaderTextId())
+        }
+        if (getTopLeftIconId() != NO_HEADER_OBJECT) {
+            headerIcon = view.findViewById(getTopLeftIconId())
+        }
+        if (getTopLeftLayoutId() != NO_HEADER_OBJECT) {
+            llHeaderImage = view.findViewById(getTopLeftLayoutId())
+        }
         return view
     }
 
@@ -47,16 +64,16 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     }
 
+    open fun getTopLeftIconId() = R.id.imgHeaderLeft
+
+    open fun getTopLeftLayoutId() = R.id.llHeaderLeft
+
+    open fun getTopHeaderTextId() = R.id.txtHeader
+
     override fun onResume() {
         super.onResume()
         hideKeyboard()
-        changeActivityHeader(activity as IActivity)
-        if (isGradientShow()) {
-            showGradient()
-        } else {
-            hideGradient()
-        }
-
+        changeActivityAttributes()
         if (isFooterShow()) {
             showFooter()
         } else {
@@ -80,46 +97,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
-    private fun changeActivityHeader(iActivity: IActivity) {
-        val header = iActivity.getHeader()
-        if (showHeader()) {
-/*            val alphaAnimation = AlphaAnimation(1f, 0f)
-            alphaAnimation.fillAfter = true
-            alphaAnimation.duration = 300
-            alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationRepeat(p0: Animation?) {
-
-                }
-
-                override fun onAnimationStart(p0: Animation?) {
-                }
-
-                override fun onAnimationEnd(p0: Animation?) {
-                }
-
-            })*/
-            header?.visibility = View.VISIBLE
-//            header?.startAnimation(alphaAnimation)
-            changeActivityAttributes(iActivity)
-        } else {
-            header?.visibility = View.GONE
-        }
-    }
-
-    fun hideGradient() {
-        toggleGradient(false, activity as IActivity)
-    }
-
-    fun showGradient() {
-        toggleGradient(true, activity as IActivity)
-    }
-
     open fun isGradientShow() = true
 
-    private fun toggleGradient(isVisible: Boolean, iActivity: IActivity) {
-        val topGradient = iActivity.getTopGradient()
-        topGradient?.visibility = if (isVisible) View.VISIBLE else View.GONE
-    }
 
     fun hideFooter() {
         toggleFooter(false, activity as IActivity)
@@ -133,19 +112,29 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private fun toggleFooter(isVisible: Boolean, iActivity: IActivity) {
         val footer = iActivity.getFooter()
+        val container = iActivity.getContainer()
         footer?.run {
-            post {
-                layoutParams?.height = if (isVisible) ViewGroup.LayoutParams.WRAP_CONTENT else 0
+            if (visibility != View.VISIBLE && isVisible) {
+                expand(200)
+                container.postDelayed({
+                    (container.layoutParams as RelativeLayout.LayoutParams).bottomMargin = activity?.resources?.getDimensionPixelSize(R.dimen.bottom_menu_height_with_bottom_gradient) ?: 50
+                }, 200)
+            } else if (visibility == View.VISIBLE && !isVisible) {
+                collapse(200)
+                container.postDelayed({
+                    (container.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
+                }, 200)
             }
+            container.requestLayout()
         }
     }
 
-    private fun changeActivityAttributes(iActivity: IActivity) {
-        if (getHeaderText() != NO_HEADER_OBJECT) {
-            iActivity.getTopTextView()?.text = getString(getHeaderText())
+    private fun changeActivityAttributes() {
+        if (getHeaderText() != NO_HEADER_OBJECT && txtHeader != null) {
+            txtHeader?.text = getString(getHeaderText())
         }
         if (getHeaderIcon() != NO_HEADER_OBJECT) {
-            iActivity.getTopImageView()?.run {
+            imgHeaderLeft?.run {
                 setImageResource(getHeaderIcon())
                 setOnClickListener { onIconClick() }
             }
@@ -199,7 +188,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     }
 
-    protected fun hideViewQuitelly(vararg v : View?) {
+    protected fun hideViewQuitelly(vararg v: View?) {
         v.run {
             v.forEach {
                 it?.visibility = View.GONE

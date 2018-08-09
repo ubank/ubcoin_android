@@ -42,8 +42,6 @@ class CompleteRegistrationFragment : BaseFragment() {
 
     private fun validateInput(materialEditText: MaterialEditText) = !materialEditText.text.toString().isBlank()
 
-    override fun showHeader() = true
-
     override fun getHeaderText() = R.string.confirmation
 
 
