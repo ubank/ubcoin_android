@@ -17,14 +17,14 @@ import retrofit2.http.Query
 interface Api {
 
     @POST("/api/auth")
-    fun login(@Body signIn: SignIn) : Observable<ProfileCompleteResponse>
+    fun login(@Body signIn: SignIn): Observable<ProfileCompleteResponse>
 
     @POST("/api/auth/logout")
-    fun logout() : Observable<Response<Unit>>
+    fun logout(): Observable<Response<Unit>>
 
     @GET("/api/users/me")
-    fun profile() : Observable<User>
+    fun profile(): Observable<User>
 
     @GET("/api/items")
-    fun marketList(@Query("size") limit: Int, @Query("page") page: Int) : Observable<MarketListResponse>
+    fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 }

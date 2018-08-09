@@ -59,10 +59,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
     class ViewHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {
 
         val imgMarket: ImageView = findView(R.id.imgMarket)
-        val txtImagesCount : TextView = findView(R.id.txtImagesCount)
-        val txtLocationDistance : TextView = findView(R.id.txtLocationDistance)
-        val txtMarketPrice : TextView = findView(R.id.txtMarketPrice)
-        val txtMarketProductName : TextView = findView(R.id.txtMarketProductName)
+        val txtImagesCount: TextView = findView(R.id.txtImagesCount)
+        val txtLocationDistance: TextView = findView(R.id.txtLocationDistance)
+        val txtMarketPrice: TextView = findView(R.id.txtMarketPrice)
+        val txtMarketProductName: TextView = findView(R.id.txtMarketProductName)
         val ratingBarView: RatingBarView = findView(R.id.ratingBarView)
 
     }

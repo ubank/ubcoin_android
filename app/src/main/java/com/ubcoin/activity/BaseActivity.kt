@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-//import cn.pedant.SweetAlert.SweetAlertDialog
 import com.ubcoin.fragment.IFragmentBehaviorAware
 import com.ubcoin.model.BaseApplicationModel
 import com.ubcoin.switcher.FragmentSwitcher
@@ -42,30 +41,21 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
         fragmentSwitcher = null
     }
 
+    @Deprecated("Move to fragments")
     open fun showProgress(text: String, header: String) {
         hideDialogs()
-//        progressDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-//        with(progressDialog) {
-//            this!!.setCancelable(false)
-//            this.setTitleText(titleText).setContentText(confirmText).show()
-//        }
     }
 
+    @Deprecated("Move to fragments")
     open fun hideDialogs() {
-//        progressDialog?.dismissWithAnimation()
-//        progressDialog = null
-//        errorDialog?.dismissWithAnimation()
-//        errorDialog = null
     }
 
+    @Deprecated("Move to fragments")
     open fun showError(error: String) {
         hideDialogs()
-//        errorDialog = SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
-//        with(errorDialog) {
-//            this!!.setTitleText("Error").setContentText(error).showCancelButton(true).show()
-//        }
     }
 
+    @Deprecated("Move to fragments")
     open fun processError(baseApplicationModel: BaseApplicationModel<Any>?) {
         hideDialogs()
         if (baseApplicationModel != null) {

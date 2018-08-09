@@ -9,8 +9,7 @@ class HttpRequestException : Throwable {
 
     var throwable: Throwable? = null
     var error: Error? = null
-    var errorCode : Int = -1
-
+    var errorCode: Int = -1
 
 
     constructor(throwable: Throwable?, error: Error?) : this(throwable, error, -1)
@@ -23,9 +22,9 @@ class HttpRequestException : Throwable {
 
     constructor() : super()
 
-    fun isServerError() : Boolean = throwable == null
+    fun isServerError(): Boolean = throwable == null
 
-    fun toServerErrorString() : String {
+    fun toServerErrorString(): String {
         return error!!.toString()
     }
 }

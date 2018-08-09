@@ -21,7 +21,7 @@ class FavoriteListFragment : FirstLineFragment() {
     var llNoFavoriteItems: View? = null
     var progressCenter: View? = null
     var rvMarketList: RecyclerView? = null
-    var favoriteListAdapter : FavoriteListAdapter?= null
+    var favoriteListAdapter: FavoriteListAdapter? = null
 
     override fun getLayoutResId() = R.layout.fragment_favorites
 

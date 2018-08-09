@@ -10,7 +10,6 @@ import com.ubcoin.R
 import com.ubcoin.ThePreferences
 import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.model.response.User
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.HttpRequestException
@@ -133,7 +132,7 @@ class LoginFragment : BaseFragment() {
         return true
     }
 
-    private fun successConsumer() : Consumer<ProfileCompleteResponse> {
+    private fun successConsumer(): Consumer<ProfileCompleteResponse> {
         return Consumer {
             hideProgressDialog()
             ThePreferences().setToken(it.accessToken)

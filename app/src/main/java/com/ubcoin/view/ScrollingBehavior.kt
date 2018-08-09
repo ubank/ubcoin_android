@@ -32,6 +32,4 @@ class ScrollingBehavior : CoordinatorLayout.Behavior<RelativeLayout> {
     }
 
 
-
-
 }

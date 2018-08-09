@@ -5,6 +5,6 @@ package com.ubcoin.fragment
  */
 interface IFragmentBehaviorAware {
 
-    fun onBackPressed() : Boolean = false
+    fun onBackPressed(): Boolean = false
 
 }

@@ -30,7 +30,7 @@ class MarketDetailsFragment : BaseFragment() {
     lateinit var marketItem: MarketItem
     var sliderLayout: SliderLayout? = null
     var pageIndicator: PagerIndicator? = null
-    var header : View?= null
+    var header: View? = null
 
     companion object {
         fun getBundle(marketItem: MarketItem): Bundle {

@@ -10,10 +10,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 
 /**
@@ -47,7 +43,7 @@ object NetworkModule {
                 .build()
     }
 
-    private fun createConnectionSpec() : ConnectionSpec {
+    private fun createConnectionSpec(): ConnectionSpec {
         return ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_0, TlsVersion.TLS_1_2)
                 .cipherSuites(

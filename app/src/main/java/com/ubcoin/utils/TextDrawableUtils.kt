@@ -11,12 +11,12 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
  */
 object TextDrawableUtils {
 
-    fun createTextDrawableRounded(userName: String?, @DimenRes dimen: Int, context: Context) : Drawable {
+    fun createTextDrawableRounded(userName: String?, @DimenRes dimen: Int, context: Context): Drawable {
         return createTextDrawableRounded(userName, context.resources.getDimensionPixelSize(dimen))
     }
 
 
-    fun createTextDrawableRounded(userName: String?, radius: Int) : Drawable {
+    fun createTextDrawableRounded(userName: String?, radius: Int): Drawable {
         val firstSymbol = if (userName != null && !userName.isEmpty()) userName[0].toString().toUpperCase() else "?"
         val color = ColorGenerator.MATERIAL.getColor(firstSymbol)
         return TextDrawable.builder().buildRoundRect(firstSymbol, color, radius)

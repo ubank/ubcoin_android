@@ -7,12 +7,12 @@ import java.io.Serializable
  */
 
 data class Profile(
-    val id: String,
-    val name: String?,
-    val email: String?,
-    val wallet: Wallet?,
-    val rating: Int,
-    val reviewsCount: Int,
-    val itemsCount: Int,
-    val settings: Settings
+        val id: String,
+        val name: String?,
+        val email: String?,
+        val wallet: Wallet?,
+        val rating: Int,
+        val reviewsCount: Int,
+        val itemsCount: Int,
+        val settings: Settings
 ) : Serializable

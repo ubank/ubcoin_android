@@ -16,8 +16,8 @@ import com.ubcoin.utils.TextWatcherAdatepr
  */
 class ForgotPasswordFragment : BaseFragment() {
 
-    var edtForgotEmail : MaterialEditText? = null
-    var imgForgotPasswordSend : ImageView?= null
+    var edtForgotEmail: MaterialEditText? = null
+    var imgForgotPasswordSend: ImageView? = null
 
     override fun getLayoutResId() = R.layout.fragment_forgot_password
 
@@ -35,7 +35,7 @@ class ForgotPasswordFragment : BaseFragment() {
         edtForgotEmail?.addTextChangedListener(getTextChangeListener())
     }
 
-    private fun getTextChangeListener() : TextWatcher {
+    private fun getTextChangeListener(): TextWatcher {
         return object : TextWatcherAdatepr() {
             override fun afterTextChanged(p0: Editable?) {
                 super.afterTextChanged(p0)
@@ -50,7 +50,7 @@ class ForgotPasswordFragment : BaseFragment() {
         imgForgotPasswordSend?.run {
             if (isValid) {
                 setBackgroundResource(R.drawable.rounded_green_filled_button)
-                setOnClickListener {sendEmail()}
+                setOnClickListener { sendEmail() }
             } else {
                 setBackgroundResource(R.drawable.rounded_green_filled_transparent_button)
                 setOnClickListener(null)
@@ -64,7 +64,7 @@ class ForgotPasswordFragment : BaseFragment() {
 
     override fun getHeaderText() = R.string.forgot_password
 
-    override fun getHeaderIcon()=  R.drawable.ic_back
+    override fun getHeaderIcon() = R.drawable.ic_back
 
     override fun onIconClick() {
         super.onIconClick()

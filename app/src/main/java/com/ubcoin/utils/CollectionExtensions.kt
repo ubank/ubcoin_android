@@ -6,7 +6,7 @@ package com.ubcoin.utils
 
 object CollectionExtensions {
 
-    fun nullOrEmpty(list: List<Any>?) : Boolean = list == null || list.isEmpty()
+    fun nullOrEmpty(list: List<Any>?): Boolean = list == null || list.isEmpty()
 
 
 }

@@ -8,7 +8,6 @@ import com.ubcoin.R
 import com.ubcoin.adapter.GridItemOffsetDecoration
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.MarketListAdapter
-import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.network.DataProvider

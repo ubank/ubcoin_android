@@ -60,7 +60,7 @@ class MenuBottomView : LinearLayout {
         }
     }
 
-    private fun resolveMenuItem(menuSingleView: MenuSingleView) : MenuItems {
+    private fun resolveMenuItem(menuSingleView: MenuSingleView): MenuItems {
         return when (menuSingleView) {
             menuItemMarket -> MenuItems.MARKET
             menuItemFavorite -> MenuItems.FAVOURITE

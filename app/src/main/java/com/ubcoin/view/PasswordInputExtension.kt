@@ -1,15 +1,14 @@
 package com.ubcoin.view
 
+//import com.ubcoin.utils.PasswordChecker
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.widget.RelativeLayout
-import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
-//import com.ubcoin.utils.PasswordChecker
 import com.ubcoin.utils.checkAsPassword
 import kotlinx.android.synthetic.main.view_password_input.view.*
 

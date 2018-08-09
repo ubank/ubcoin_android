@@ -43,5 +43,9 @@
     <string name="resend_it">Resend it</string>
     <string name="didn_t_get_the_email">Didn’t get the email?</string>
     <string name="confirmation">Confirmation</string>
+    <string name="no_active_deals">No active deals</string>
+    <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Items you are going to buy or to sell\nwill be here</string>
+    <string name="deals_header">Deals</string>
+    <string name="requires_external_app">Requires external App</string>
 
 </resources>

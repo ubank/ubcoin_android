@@ -12,24 +12,22 @@ import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.RoundedCornersTransform
-import com.ubcoin.view.rating.RatingBarView
-import kotlin.math.roundToInt
 
 /**
  * Created by Yuriy Aizenberg
  */
-class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, FavoriteListAdapter.VHolder>(context) {
+class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, DealsListAdapter.VHolder>(context) {
 
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): VHolder {
-        return VHolder(inflate(R.layout.item_market_in_favorite, p0))
+        return VHolder(inflate(R.layout.item_market_in_deals, p0))
     }
 
     override fun onBindViewHolder(vHolder: VHolder, p1: Int) {
         val item = getItem(p1)
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
-            vHolder.imgFavoriteItemLogo.setImageResource(R.drawable.img_rejected)
+            vHolder.imgDealsItemLogo.setImageResource(R.drawable.img_rejected)
         } else {
             val dimensionPixelSize = context.resources.getDimensionPixelSize(R.dimen.marketInFavoriteHeightImage)
             Picasso.get().load(images!![0])
@@ -40,20 +38,18 @@ class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Fa
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_CACHE)
                     .error(R.drawable.img_rejected)
-                    .into(vHolder.imgFavoriteItemLogo)
+                    .into(vHolder.imgDealsItemLogo)
         }
-        vHolder.txtFavoriteItemName.text = item.title
-        vHolder.txtFavoriteItemPrice.text = (item.price.toString() + " UBC")
-        vHolder.ratingBar.setRating(item.user?.rating?.roundToInt() ?: 0)
+        vHolder.txtDealsItemPrice.text = item.title
+        vHolder.txtDealsItemName.text = (item.price.toString() + " UBC")
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, item)
     }
 
 
     class VHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {
-        val imgFavoriteItemLogo: ImageView = findView(R.id.imgFavoriteItemLogo)
-        val txtFavoriteItemPrice: TextView = findView(R.id.txtFavoriteItemPrice)
-        val txtFavoriteItemName: TextView = findView(R.id.txtFavoriteItemName)
-        val ratingBar: RatingBarView = findView(R.id.ratingBarView)
+        val imgDealsItemLogo: ImageView = findView(R.id.imgDealsItemLogo)
+        val txtDealsItemPrice: TextView = findView(R.id.txtDealsItemPrice)
+        val txtDealsItemName: TextView = findView(R.id.txtDealsItemName)
     }
 
 }

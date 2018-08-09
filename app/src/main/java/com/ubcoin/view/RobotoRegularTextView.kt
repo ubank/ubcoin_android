@@ -14,8 +14,6 @@ class RobotoRegularTextView @JvmOverloads constructor(
 ) : TextView(context, attrs, defStyleAttr) {
 
 
-
-
     override fun onFinishInflate() {
         super.onFinishInflate()
         typeface = ResourcesCompat.getFont(context, R.font.roboto_regular)

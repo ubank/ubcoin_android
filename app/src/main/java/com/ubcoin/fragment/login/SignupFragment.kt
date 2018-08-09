@@ -1,6 +1,5 @@
 package com.ubcoin.fragment.login
 
-import android.text.Editable
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -51,7 +50,7 @@ class SignupFragment : BaseFragment() {
             }
         })
 
-        view.findViewById<View>(R.id.llUserAgreement).setOnClickListener {  showUserAgreement() }
+        view.findViewById<View>(R.id.llUserAgreement).setOnClickListener { showUserAgreement() }
 
     }
 
@@ -59,9 +58,9 @@ class SignupFragment : BaseFragment() {
         getSwitcher()?.addTo(CompleteRegistrationFragment::class.java)
     }
 
-    override fun getHeaderIcon()=  R.drawable.ic_back
+    override fun getHeaderIcon() = R.drawable.ic_back
 
-    override fun getHeaderText()= R.string.sign_up
+    override fun getHeaderText() = R.string.sign_up
 
     override fun onIconClick() {
         super.onIconClick()

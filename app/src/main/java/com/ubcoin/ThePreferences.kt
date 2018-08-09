@@ -7,8 +7,8 @@ import android.content.SharedPreferences
  */
 class ThePreferences {
 
-    private val KEY_TOKEN : String = "TOKEN"
-    private val KEY_COOKIE : String = "COOKIE"
+    private val KEY_TOKEN: String = "TOKEN"
+    private val KEY_COOKIE: String = "COOKIE"
 
     init {
         val theApplication = TheApplication.instance

@@ -1,12 +1,10 @@
 package com.ubcoin.activity
 
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
+import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
 import com.ubcoin.utils.ProfileHolder
@@ -14,7 +12,6 @@ import com.ubcoin.view.menu.IMenuViewCallback
 import com.ubcoin.view.menu.MenuItems
 import com.ubcoin.view.menu.MenuSingleView
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.common_header.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -47,7 +44,7 @@ class MainActivity : BaseActivity() {
                             goStub()
                         }
                         MenuItems.DEALS -> {
-                            goStub()
+                            fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {
                             goStub()

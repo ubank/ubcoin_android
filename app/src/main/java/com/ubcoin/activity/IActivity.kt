@@ -10,14 +10,16 @@ import android.view.View
  */
 interface IActivity {
 
-    @LayoutRes fun getResourceId() : Int
+    @LayoutRes
+    fun getResourceId(): Int
 
-    @IdRes fun getFragmentContainerId() : Int
+    @IdRes
+    fun getFragmentContainerId(): Int
 
-    fun getCurrentFragment() : Fragment?
+    fun getCurrentFragment(): Fragment?
 
-    fun getFooter() : View?
+    fun getFooter(): View?
 
-    fun getContainer() : View
+    fun getContainer(): View
 
 }

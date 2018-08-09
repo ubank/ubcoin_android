@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
