@@ -19,6 +19,7 @@ import com.ubcoin.network.HttpRequestException
 import com.ubcoin.switcher.FragmentSwitcher
 import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
+import com.ubcoin.view.menu.MenuBottomView
 import kotlinx.android.synthetic.main.common_header.*
 
 /**
@@ -113,17 +114,14 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     private fun toggleFooter(isVisible: Boolean, iActivity: IActivity) {
         val footer = iActivity.getFooter()
         val container = iActivity.getContainer()
-        footer?.run {
-            if (visibility != View.VISIBLE && isVisible) {
+        if (footer == null) return
+        (footer as MenuBottomView).run {
+            if (!isExpanded && isVisible) {
                 expand(200)
-                container.postDelayed({
-                    (container.layoutParams as RelativeLayout.LayoutParams).bottomMargin = activity?.resources?.getDimensionPixelSize(R.dimen.bottom_menu_height_with_bottom_gradient) ?: 50
-                }, 200)
-            } else if (visibility == View.VISIBLE && !isVisible) {
+                isExpanded = true
+            } else if (isExpanded && !isVisible) {
                 collapse(200)
-                container.postDelayed({
-                    (container.layoutParams as RelativeLayout.LayoutParams).bottomMargin = 0
-                }, 200)
+                isExpanded = false
             }
             container.requestLayout()
         }

@@ -13,6 +13,7 @@ class MenuBottomView : LinearLayout {
 
     var menuViewCallback: IMenuViewCallback? = null
     var activeMenuItem: MenuSingleView? = null
+    var isExpanded = true
 
     constructor(context: Context?) : super(context) {
         initialize()

@@ -26,7 +26,8 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/bottom_menu_height_with_bottom_gradient"/>
+        android:layout_above="@id/llMainGradientBottom"
+        />
 
 
 </RelativeLayout>

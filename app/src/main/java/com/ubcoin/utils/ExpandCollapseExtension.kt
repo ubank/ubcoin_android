@@ -50,7 +50,8 @@ fun View.collapse(duration: Long) {
 
         override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
             if (interpolatedTime == 1f) {
-                visibility = View.GONE
+                layoutParams.height = 0
+                requestLayout()
             } else {
                 layoutParams.height = initialHeight - (initialHeight * interpolatedTime).toInt()
                 requestLayout()

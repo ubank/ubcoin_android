@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.market
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
@@ -9,7 +10,6 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation
 import com.daimajia.slider.library.Indicators.PagerIndicator
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
@@ -19,7 +19,6 @@ import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.SafetySliderView
 import com.ubcoin.utils.TextDrawableUtils
 import com.ubcoin.view.rating.RatingBarView
-import java.lang.Exception
 
 
 /**
@@ -31,6 +30,7 @@ class MarketDetailsFragment : BaseFragment() {
     lateinit var marketItem: MarketItem
     var sliderLayout: SliderLayout? = null
     var pageIndicator: PagerIndicator? = null
+    var header : View?= null
 
     companion object {
         fun getBundle(marketItem: MarketItem): Bundle {
@@ -47,12 +47,13 @@ class MarketDetailsFragment : BaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_market_item_details
 
+    @Suppress("NestedLambdaShadowedImplicitParameter")
+    @SuppressLint("SetTextI18n")
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
         sliderLayout = view.findViewById(R.id.slider)
         pageIndicator = view.findViewById(R.id.custom_indicator)
-
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
 
         if (!CollectionExtensions.nullOrEmpty(marketItem.images)) {
