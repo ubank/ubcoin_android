@@ -1,5 +1,6 @@
 package com.ubcoin.activity
 
+import android.content.Intent
 import android.os.Bundle
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
@@ -18,6 +19,10 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : BaseActivity() {
 
+    companion object {
+        val REQUEST_CODE = 10001
+    }
+
     override fun getResourceId(): Int = R.layout.activity_main
 
     override fun getFragmentContainerId(): Int = R.id.mainContainer
@@ -28,8 +33,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
-
-        menuBottomView?.menuViewCallback = object : IMenuViewCallback {
+        menuBottomView.setIgnored(MenuItems.SIGN_IN)
+        menuBottomView.menuViewCallback = object : IMenuViewCallback {
             override fun onMenuSelected(menuItems: MenuItems, menuSingleView: MenuSingleView, isAlreadyActivated: Boolean) {
                 if (!isAlreadyActivated) {
                     menuBottomView.activate(menuItems)
@@ -37,7 +42,7 @@ class MainActivity : BaseActivity() {
                         MenuItems.MARKET -> {
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         }
-                        MenuItems.FAVOURITE -> {
+                        MenuItems.FAVORITE -> {
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
@@ -50,18 +55,33 @@ class MainActivity : BaseActivity() {
                             goStub()
                         }
                         MenuItems.SIGN_IN -> {
-                            goStub()
+                            startSignIn()
                         }
                     }
                 }
             }
         }
+        checkProfileLoggedIn()
+        menuBottomView.activate(MenuItems.MARKET)
+    }
+
+    private fun checkProfileLoggedIn() {
         if (ProfileHolder.profile == null) {
             menuBottomView.activateSignIn(false)
         } else {
             menuBottomView.activateProfile(false)
         }
-        menuBottomView.activate(MenuItems.MARKET)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            checkProfileLoggedIn()
+        }
+    }
+
+    private fun startSignIn() {
+        startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE)
     }
 
     override fun onBackPressed() {

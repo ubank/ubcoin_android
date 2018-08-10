@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.login
 
+import android.app.Activity
 import android.content.Intent
 import android.text.Editable
 import android.view.View
@@ -137,8 +138,11 @@ class LoginFragment : BaseFragment() {
             hideProgressDialog()
             ThePreferences().setToken(it.accessToken)
             ProfileHolder.profile = it.user
-            startActivity(Intent(activity, MainActivity::class.java))
-            activity?.finish()
+            activity?.run {
+                setResult(Activity.RESULT_OK)
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
         }
     }
 
