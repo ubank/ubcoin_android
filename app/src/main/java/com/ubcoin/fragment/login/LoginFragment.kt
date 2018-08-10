@@ -125,10 +125,7 @@ class LoginFragment : BaseFragment() {
     }
 
 
-    override fun handleByChild(httpRequestException: HttpRequestException): Boolean {
-        if (!httpRequestException.isServerError() || httpRequestException.errorCode != HttpURLConnection.HTTP_UNAUTHORIZED) {
-            return super.handleByChild(httpRequestException)
-        }
+    override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
         txtLoginError?.visibility = View.VISIBLE
         return true
     }

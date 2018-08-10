@@ -25,6 +25,6 @@ class HttpRequestException : Throwable {
     fun isServerError(): Boolean = throwable == null
 
     fun toServerErrorString(): String {
-        return error!!.toString()
+        return error?.toString() ?: "Unknown"
     }
 }

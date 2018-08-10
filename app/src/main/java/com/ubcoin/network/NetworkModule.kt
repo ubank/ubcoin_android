@@ -4,12 +4,14 @@ import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
 import com.ubcoin.model.Error
+import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
+import kotlin.system.exitProcess
 
 
 /**
@@ -39,6 +41,7 @@ object NetworkModule {
         return OkHttpClient.Builder()
                 .addInterceptor(tokenInterceptor())
                 .addInterceptor(logInterceptor())
+                .addInterceptor(networkHandleInterceptor())
                 .connectionSpecs(listOf(createConnectionSpec(), ConnectionSpec.CLEARTEXT))
                 .build()
     }
@@ -76,6 +79,8 @@ object NetworkModule {
                 } else {
                     throw HttpRequestException(null, parseResponseForError(response), code)
                 }
+            } catch (e: NetworkConnectivityException) {
+                throw e
             } catch (e: Exception) {
                 throw HttpRequestException(e, null)
             }
@@ -97,6 +102,15 @@ object NetworkModule {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return httpLoggingInterceptor
+    }
+
+    private fun networkHandleInterceptor() : Interceptor {
+        return Interceptor { chain ->
+            if (!NetworkConnectivityAwareManager.isNetworkAvailable()) {
+                throw NetworkConnectivityException()
+            }
+            chain.proceed(chain.request())
+        }
     }
 
 

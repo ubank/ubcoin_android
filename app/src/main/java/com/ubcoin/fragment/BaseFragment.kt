@@ -15,24 +15,28 @@ import com.ubcoin.R
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
+import com.ubcoin.network.NetworkConnectivityException
 import com.ubcoin.switcher.FragmentSwitcher
 import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
 import kotlinx.android.synthetic.main.common_header.*
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
+import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 
 /**
  * Created by Yuriy Aizenberg
  */
 abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
-    private val AGREEMENT_URL: String = "https://ubcoin.io/user-agreement"
+    private val agreementUrl: String = "https://ubcoin.io/user-agreement"
+    private val expandCollapseDuration = 200L
 
-    val NO_HEADER_OBJECT = -1
+    val noHeaderObject = -1
 
-    open fun getHeaderText() = NO_HEADER_OBJECT
+    open fun getHeaderText() = noHeaderObject
 
-    open fun getHeaderIcon() = NO_HEADER_OBJECT
+    open fun getHeaderIcon() = noHeaderObject
 
     private var materialDialog: MaterialDialog? = null
     private var progressDialog: MaterialDialog? = null
@@ -48,13 +52,13 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(getLayoutResId(), container, false)
         onViewInflated(view)
-        if (getTopHeaderTextId() != NO_HEADER_OBJECT) {
+        if (getTopHeaderTextId() != noHeaderObject) {
             txtHeader = view.findViewById(getTopHeaderTextId())
         }
-        if (getTopLeftIconId() != NO_HEADER_OBJECT) {
+        if (getTopLeftIconId() != noHeaderObject) {
             headerIcon = view.findViewById(getTopLeftIconId())
         }
-        if (getTopLeftLayoutId() != NO_HEADER_OBJECT) {
+        if (getTopLeftLayoutId() != noHeaderObject) {
             llHeaderImage = view.findViewById(getTopLeftLayoutId())
         }
         return view
@@ -89,7 +93,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     fun showUserAgreement() {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(AGREEMENT_URL)
+        intent.data = Uri.parse(agreementUrl)
         if (intent.resolveActivity(activity?.packageManager) != null) {
             startActivity(intent)
         } else {
@@ -116,10 +120,10 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         if (footer == null) return
         (footer as MenuBottomView).run {
             if (!isExpanded && isVisible) {
-                expand(200)
+                expand(expandCollapseDuration)
                 isExpanded = true
             } else if (isExpanded && !isVisible) {
-                collapse(200)
+                collapse(expandCollapseDuration)
                 isExpanded = false
             }
             container.requestLayout()
@@ -127,10 +131,10 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     private fun changeActivityAttributes() {
-        if (getHeaderText() != NO_HEADER_OBJECT && txtHeader != null) {
+        if (getHeaderText() != noHeaderObject && txtHeader != null) {
             txtHeader?.text = getString(getHeaderText())
         }
-        if (getHeaderIcon() != NO_HEADER_OBJECT) {
+        if (getHeaderIcon() != noHeaderObject) {
             imgHeaderLeft?.run {
                 setImageResource(getHeaderIcon())
                 setOnClickListener { onIconClick() }
@@ -151,13 +155,27 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         hideSweetAlertDialog()
         when (t) {
             is HttpRequestException -> {
+                val errorCode = t.errorCode
+                if (errorCode == HTTP_UNAUTHORIZED || errorCode == HTTP_BAD_REQUEST) {
+                    if (onUnauthorized(t)) return
+                }
                 if (!handleByChild(t)) {
                     processHttpRequestException(t)
                 }
             }
+            is NetworkConnectivityException -> {
+                onNoNetworkException(t)
+            }
             else -> processThrowable(t)
         }
     }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun onNoNetworkException(exception: NetworkConnectivityException) {
+        showSweetAlertDialog("Error", getString(R.string.no_network_error))
+    }
+
+    protected open fun onUnauthorized(httpRequestException: HttpRequestException) = false
 
     protected open fun handleByChild(httpRequestException: HttpRequestException) = false
 
@@ -177,7 +195,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         materialDialog?.hide()
     }
 
-    private fun showSweetAlertDialog(title: String, message: String) {
+    fun showSweetAlertDialog(title: String, message: String) {
         activity?.run {
             materialDialog = MaterialDialog.Builder(this).title(title).content(message).build()
             materialDialog?.show()
@@ -185,7 +203,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     }
 
-    protected fun hideViewQuitelly(vararg v: View?) {
+    protected fun hideViewsQuietly(vararg v: View?) {
         v.run {
             v.forEach {
                 it?.visibility = View.GONE

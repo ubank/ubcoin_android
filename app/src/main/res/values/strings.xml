@@ -47,5 +47,7 @@
     <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Items you are going to buy or to sell\nwill be here</string>
     <string name="deals_header">Deals</string>
     <string name="requires_external_app">Requires external App</string>
+    <string name="confirm">Confirm</string>
+    <string name="no_network_error">Check Internet availability and the correct date and time. After that try again. In case of failure, contact support.</string>
 
 </resources>

@@ -16,4 +16,8 @@
         <attr name="RatingValue" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="PasswordInputExtension">
+        <attr name="PasswordInputHint" format="string" />
+    </declare-styleable>
+
 </resources>

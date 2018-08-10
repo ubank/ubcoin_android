@@ -70,7 +70,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
     }
 
     private fun hideProgress() {
-        hideViewQuitelly(progressCenter)
+        hideViewsQuietly(progressCenter)
     }
 
     override fun handleException(t: Throwable) {

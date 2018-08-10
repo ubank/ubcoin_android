@@ -8,8 +8,11 @@ import android.widget.ImageView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.network.DataProvider
+import com.ubcoin.network.HttpRequestException
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.TextWatcherAdatepr
+import io.reactivex.functions.Consumer
 
 /**
  * Created by Yuriy Aizenberg
@@ -28,6 +31,7 @@ class ForgotPasswordFragment : BaseFragment() {
             override fun onActionCall() {
                 if (isEmailValid()) {
                     hideKeyboard()
+                    sendEmail()
                 }
             }
         })
@@ -59,7 +63,23 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     private fun sendEmail() {
-        //todo
+        showProgressDialog("Wait please", "")
+        DataProvider.sendForgotEmail(edtForgotEmail!!.text!!.toString(), Consumer {
+            hideProgressDialog()
+            getSwitcher()?.addTo(SendForgotPasswordFragment::class.java, SendForgotPasswordFragment.createBundle(edtForgotEmail!!.text!!.toString()), true)
+        }, Consumer {
+            handleException(it)
+        })
+    }
+
+    override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        showSweetAlertDialog("Error", "Email not found")
+        return true
+    }
+
+    override fun handleException(t: Throwable) {
+        hideProgressDialog()
+        super.handleException(t)
     }
 
     override fun getHeaderText() = R.string.forgot_password

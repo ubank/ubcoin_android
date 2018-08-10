@@ -53,7 +53,7 @@ class FavoriteListFragment : FirstLineFragment() {
         progressCenter?.visibility = View.VISIBLE
         DataProvider.getFavoriteList(2, 0,
                 Consumer {
-                    hideViewQuitelly(progressCenter)
+                    hideViewsQuietly(progressCenter)
                     if (CollectionExtensions.nullOrEmpty(it.data)) {
                         rvMarketList?.visibility = View.GONE
                         llNoFavoriteItems?.visibility = View.VISIBLE
@@ -67,7 +67,7 @@ class FavoriteListFragment : FirstLineFragment() {
     }
 
     override fun handleException(t: Throwable) {
-        hideViewQuitelly(progressCenter)
+        hideViewsQuietly(progressCenter)
         super.handleException(t)
     }
 

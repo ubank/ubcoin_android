@@ -56,7 +56,7 @@ class MarketListFragment : FirstLineFragment() {
         cancelCurrentLoading()
         currentDisposableLoader = DataProvider.getMarketList(30, 0,
                 Consumer {
-                    hideViewQuitelly(progressCenter, progressBottom)
+                    hideViewsQuietly(progressCenter, progressBottom)
                     marketListAdapter?.addData(it.data)
                 },
                 Consumer {
@@ -75,7 +75,7 @@ class MarketListFragment : FirstLineFragment() {
     private fun cancelCurrentLoading() = currentDisposableLoader?.dispose()
 
     override fun handleException(t: Throwable) {
-        hideViewQuitelly(progressCenter, progressBottom)
+        hideViewsQuietly(progressCenter, progressBottom)
         super.handleException(t)
     }
 
