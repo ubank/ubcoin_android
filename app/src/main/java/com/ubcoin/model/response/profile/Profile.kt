@@ -13,6 +13,6 @@ data class Profile(
         val wallet: Wallet?,
         val rating: Int,
         val reviewsCount: Int,
-        val itemsCount: Int,
-        val settings: Settings
+        val itemsCount: Int?,
+        val settings: Settings?
 ) : Serializable

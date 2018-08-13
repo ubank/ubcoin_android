@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.HttpURLConnection
 import kotlin.system.exitProcess
 
@@ -17,18 +18,20 @@ import kotlin.system.exitProcess
 /**
  * Created by Yuriy Aizenberg
  */
+private const val AUTH_HEADER = "X-Authentication"
+
 object NetworkModule {
 
-    private val AUTH_HEADER = "X-Authentication"
     private var thePreferences = ThePreferences()
 
     fun api(): Api {
         return retrofit().create(Api::class.java)
     }
 
-
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
+                .validateEagerly(true)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(NullOrEmptyConvertFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -66,6 +69,7 @@ object NetworkModule {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
                     thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
+                    thePreferences.setWVCookie(response.header("set-cookie"))
                     thePreferences.setToken(response.header(AUTH_HEADER))
                 } else {
                     response = it.proceed(it.request().newBuilder()

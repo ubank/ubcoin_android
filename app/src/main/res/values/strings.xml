@@ -49,5 +49,9 @@
     <string name="requires_external_app">Requires external App</string>
     <string name="confirm">Confirm</string>
     <string name="no_network_error">Check Internet availability and the correct date and time. After that try again. In case of failure, contact support.</string>
+    <string name="need_to_logged_in">You need to be logged in</string>
+    <string name="ubc_postfix">UBC</string>
+    <string name="i_want_to_buy">I want to buy</string>
+    <string name="open_with_outer_app_label">Open with</string>
 
 </resources>

@@ -81,6 +81,9 @@ dependencies {
 
     implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
     implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
     /*implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.24.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0'

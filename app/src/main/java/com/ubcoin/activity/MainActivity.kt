@@ -2,25 +2,31 @@ package com.ubcoin.activity
 
 import android.content.Intent
 import android.os.Bundle
+import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
+import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
 import com.ubcoin.view.menu.MenuItems
 import com.ubcoin.view.menu.MenuSingleView
 import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 
 /**
  * Created by Yuriy Aizenberg
  */
+
 class MainActivity : BaseActivity() {
 
     companion object {
         val REQUEST_CODE = 10001
+        val KEY_REFRESH_AFTER_LOGIN = "KRAF"
     }
 
     override fun getResourceId(): Int = R.layout.activity_main
@@ -31,7 +37,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        EventBus.getDefault().register(this)
         fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
         menuBottomView.setIgnored(MenuItems.SIGN_IN)
         menuBottomView.menuViewCallback = object : IMenuViewCallback {
@@ -43,6 +49,10 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         }
                         MenuItems.FAVORITE -> {
+                            if (!ProfileHolder.isAuthorized()) {
+                                showNeedToRegistration()
+                                return
+                            }
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
@@ -65,8 +75,28 @@ class MainActivity : BaseActivity() {
         menuBottomView.activate(MenuItems.MARKET)
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if (intent?.getBooleanExtra(KEY_REFRESH_AFTER_LOGIN, false) == true) {
+            fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
+        }
+    }
+
+    private fun showNeedToRegistration() {
+        MaterialDialog.Builder(this)
+                .title("Error")
+                .content(R.string.need_to_logged_in)
+                .build()
+                .show()
+    }
+
+    override fun onDestroy() {
+        EventBus.getDefault().unregister(this)
+        super.onDestroy()
+    }
+
     private fun checkProfileLoggedIn() {
-        if (ProfileHolder.profile == null) {
+        if (!ProfileHolder.isAuthorized()) {
             menuBottomView.activateSignIn(false)
         } else {
             menuBottomView.activateProfile(false)
@@ -96,5 +126,10 @@ class MainActivity : BaseActivity() {
 
     private fun goStub() {
         fragmentSwitcher?.clearBackStack()?.addTo(NotImplementedYetFragment::class.java)
+    }
+
+    @Subscribe(sticky = true)
+    fun subscribeOnUserEvent(userEventWrapper: UserEventWrapper) {
+        checkProfileLoggedIn()
     }
 }

@@ -58,13 +58,20 @@ object DataProvider {
     }
 
     fun getFavoriteList(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
-        return networkModule.api().marketList(limit, page)
-                .debounce(100, TimeUnit.MILLISECONDS)
+        return networkModule.api().favorites(limit, page)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun getDeals(limit: Int, page: Int, type: BaseDealsChildFragment.Type, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
+    fun getTgLink(itemId: String, onSuccess: Consumer<String>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api()
+                .getTgLink(itemId)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    //TODO
+    fun getDeals(limit: Int, page: Int, type: BaseDealsChildFragment.Type, onSuccess: SilentConsumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().marketList(limit, page)
                 .doOnNext {
                     if (type == BaseDealsChildFragment.Type.BUY) {
@@ -76,5 +83,16 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun favorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+        networkModule.api().favorite(itemId)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun unfavorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+        networkModule.api().unfavorite(itemId)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
 
 }

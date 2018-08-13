@@ -8,10 +8,7 @@ import com.ubcoin.network.request.SendForgotEmail
 import com.ubcoin.network.request.SignIn
 import io.reactivex.Observable
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -35,4 +32,16 @@ interface Api {
 
     @GET("/api/items")
     fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
+
+    @GET("/api/favorites")
+    fun favorites(@Query("size") limit: Int, @Query("page") page: Int) : Observable<MarketListResponse>
+
+    @POST("/api/favorites/{itemId}")
+    fun favorite(@Path("itemId") itemId: String)  : Observable<Response<Unit>>
+
+    @DELETE("/api/favorites/{itemId}")
+    fun unfavorite(@Path("itemId") itemId: String)  : Observable<Response<Unit>>
+
+    @GET("/api/users/tg")
+    fun getTgLink(@Query("itemId") itemId: String) : Observable<String>
 }

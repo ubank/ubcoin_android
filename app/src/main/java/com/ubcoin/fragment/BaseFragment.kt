@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
+import com.ubcoin.ThePreferences
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.NetworkConnectivityException
+import com.ubcoin.network.SilentConsumer
 import com.ubcoin.switcher.FragmentSwitcher
+import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
@@ -43,7 +47,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private var headerIcon: View? = null
     private var llHeaderImage: View? = null
-    private var txtHeader: TextView? = null
+    var txtHeader: TextView? = null
 
     open fun isFirstLineFragment() = false
 
@@ -152,21 +156,31 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     protected open fun handleException(t: Throwable) {
-        hideSweetAlertDialog()
-        when (t) {
-            is HttpRequestException -> {
-                val errorCode = t.errorCode
-                if (errorCode == HTTP_UNAUTHORIZED || errorCode == HTTP_BAD_REQUEST) {
-                    if (onUnauthorized(t)) return
+        try {
+            hideSweetAlertDialog()
+            when (t) {
+                is HttpRequestException -> {
+                    val errorCode = t.errorCode
+                    if (errorCode == HTTP_UNAUTHORIZED || errorCode == HTTP_BAD_REQUEST) {
+                        if (onUnauthorized(t)) return
+                        if (errorCode == HTTP_UNAUTHORIZED) {
+                            ThePreferences().setToken(null)
+                            ThePreferences().clearProfile()
+                            ProfileHolder.user = null
+                            return
+                        }
+                    }
+                    if (!handleByChild(t)) {
+                        processHttpRequestException(t)
+                    }
                 }
-                if (!handleByChild(t)) {
-                    processHttpRequestException(t)
+                is NetworkConnectivityException -> {
+                    onNoNetworkException(t)
                 }
+                else -> processThrowable(t)
             }
-            is NetworkConnectivityException -> {
-                onNoNetworkException(t)
-            }
-            else -> processThrowable(t)
+        } catch (e: Exception) {
+            Log.e(javaClass.name, """${e.message}""", e)
         }
     }
 
@@ -227,6 +241,16 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     protected fun hideProgressDialog() {
         progressDialog?.hide()
+    }
+
+    protected fun showNeedToRegistration() {
+        activity?.run {
+            MaterialDialog.Builder(this)
+                    .title("Error")
+                    .content(R.string.need_to_logged_in)
+                    .build()
+                    .show()
+        }
     }
 
 }

@@ -14,6 +14,7 @@ import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.HttpRequestException
+import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ImeNextActionHandler
 import com.ubcoin.utils.ProfileHolder
@@ -26,10 +27,10 @@ import java.net.HttpURLConnection
  */
 class LoginFragment : BaseFragment() {
 
-    var llForgotPassword: View? = null
-    var txtLoginError: TextView? = null
-    var edtLoginEmail: MaterialEditText? = null
-    var edtLoginPassword: MaterialEditText? = null
+    private lateinit var llForgotPassword: View
+    private lateinit var txtLoginError: TextView
+    private lateinit var edtLoginEmail: MaterialEditText
+    private lateinit var edtLoginPassword: MaterialEditText
 
     override fun getLayoutResId() = R.layout.fragment_login
 
@@ -71,7 +72,7 @@ class LoginFragment : BaseFragment() {
 
         val textWatcherAdapter = object : TextWatcherAdatepr() {
             override fun afterTextChanged(p0: Editable?) {
-                txtLoginError?.visibility = View.INVISIBLE
+                txtLoginError.visibility = View.INVISIBLE
                 imgLogin?.run {
                     if (isValidData()) {
                         setImageResource(R.drawable.rounded_green_filled_button)
@@ -91,18 +92,18 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun isValidData(): Boolean {
-        return !edtLoginEmail?.text.toString().isBlank() && !edtLoginPassword?.text.toString().isBlank()
+        return !edtLoginEmail.text.toString().isBlank() && !edtLoginPassword.text.toString().isBlank()
     }
 
     private fun showForgotPasswordView() {
-        llForgotPassword?.run {
+        llForgotPassword.run {
             visibility = View.VISIBLE
             setOnClickListener { showForgotPasswordFragment() }
         }
     }
 
     private fun toogleErrorView(error: String?) {
-        txtLoginError?.run {
+        txtLoginError.run {
             if (error == null) {
                 visibility = View.INVISIBLE
             } else {
@@ -116,7 +117,7 @@ class LoginFragment : BaseFragment() {
         activity?.run {
             if (isValidData()) {
                 showProgressDialog("Login", "Login")
-                DataProvider.login(edtLoginEmail?.text.toString().trim(), edtLoginPassword?.text.toString().trim(), successConsumer(), Consumer {
+                DataProvider.login(edtLoginEmail?.text.toString().trim(), edtLoginPassword.text.toString().trim(), successConsumer(), Consumer {
                     hideProgressDialog()
                     handleException(it)
                 })
@@ -126,19 +127,23 @@ class LoginFragment : BaseFragment() {
 
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
-        txtLoginError?.visibility = View.VISIBLE
+        txtLoginError.visibility = View.VISIBLE
         return true
     }
 
-    private fun successConsumer(): Consumer<ProfileCompleteResponse> {
-        return Consumer {
-            hideProgressDialog()
-            ThePreferences().setToken(it.accessToken)
-            ProfileHolder.profile = it.user
-            activity?.run {
-                setResult(Activity.RESULT_OK)
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+    private fun successConsumer(): SilentConsumer<ProfileCompleteResponse> {
+        return object : SilentConsumer<ProfileCompleteResponse> {
+            override fun onConsume(t: ProfileCompleteResponse) {
+                hideProgressDialog()
+                ThePreferences().setToken(t.accessToken)
+                ProfileHolder.user = t.user
+                activity?.run {
+                    setResult(Activity.RESULT_OK)
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra(MainActivity.KEY_REFRESH_AFTER_LOGIN, true)
+                    startActivity(intent)
+                    finish()
+                }
             }
         }
     }

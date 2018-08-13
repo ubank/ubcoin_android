@@ -21,15 +21,26 @@ import kotlin.math.roundToInt
 
 class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, MarketListAdapter.ViewHolder>(context) {
 
+    private var ubcPostfix: String? = null
+
+    var favoriteListener: IFavoriteListener?= null
+
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(inflate(R.layout.item_market_in_list, p0))
+    }
+
+    private fun getUbcPostfix() : String? {
+        if (ubcPostfix == null) {
+            ubcPostfix = context.getString(R.string.ubc_postfix)
+        }
+        return ubcPostfix
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(vh: ViewHolder, position: Int) {
         val item = getItem(position)
         vh.txtMarketProductName.text = item.title
-        vh.txtMarketPrice.text = item.price.toString()
+        vh.txtMarketPrice.text = """${item.price.toString()}${getUbcPostfix()}"""
 
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
@@ -52,6 +63,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         }
         val rating = item.user?.rating?.roundToInt()
         vh.ratingBarView.setRating(rating ?: 0)
+        vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
+        vh.llFavoriteContainer.setOnClickListener {
+            favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
+        }
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
 
@@ -64,6 +79,13 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         val txtMarketPrice: TextView = findView(R.id.txtMarketPrice)
         val txtMarketProductName: TextView = findView(R.id.txtMarketProductName)
         val ratingBarView: RatingBarView = findView(R.id.ratingBarView)
+        val llFavoriteContainer: View = findView(R.id.llFavoriteContainer)
+        val imgFavorite: ImageView = findView(R.id.imgFavorite)
 
+    }
+
+
+    interface IFavoriteListener {
+        fun onFavoriteTouch(data: MarketItem, position: Int)
     }
 }

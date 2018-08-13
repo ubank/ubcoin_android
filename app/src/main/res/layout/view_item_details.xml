@@ -197,5 +197,34 @@
         android:layout_height="wrap_content" />
 
 
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/llWantToBuy"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_height="@dimen/sign_up_size"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/rounded_green_filled_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/i_want_to_buy"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sign_up_text_size" />
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

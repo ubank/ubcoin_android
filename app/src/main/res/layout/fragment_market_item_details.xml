@@ -26,33 +26,32 @@
             app:toolbarId="@id/toolbar">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:background="@color/itemDetailsBackground"
-                android:layout_width="match_parent"
-                app:layout_collapseMode="parallax"
-                android:layout_height="wrap_content">
+                app:layout_collapseMode="parallax">
 
                 <com.daimajia.slider.library.SliderLayout
                     android:id="@+id/slider"
-                    android:layout_centerInParent="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    />
+                    android:layout_centerInParent="true" />
 
                 <com.daimajia.slider.library.Indicators.PagerIndicator
-                    android:layout_centerInParent="true"
                     android:id="@+id/custom_indicator"
-                    android:layout_width="wrap_content"
                     style="@style/AndroidImageSlider_Magnifier_Oval_Black"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
                     android:gravity="center" />
 
                 <FrameLayout
-                    android:layout_marginTop="@dimen/header_size"
                     android:id="@+id/ghostView"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/header_size"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -63,7 +62,9 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-                <include layout="@layout/view_header_market_details_simple" android:id="@+id/header" />
+                <include
+                    android:id="@+id/header"
+                    layout="@layout/view_header_market_details_simple" />
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -84,10 +85,17 @@
 
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:src="@drawable/ic_2_fav_b"
+        android:scaleType="center"
+
+        app:backgroundTint="@null"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+
         app:layout_anchor="@id/appBar"
         app:layout_anchorGravity="bottom|end" />
 
