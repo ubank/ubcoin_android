@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.gms.maps.model.LatLng
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
+import com.ubcoin.utils.DistanceUtils
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -68,6 +70,15 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         vh.llFavoriteContainer.setOnClickListener {
             favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
         }
+        val location = item.location
+
+        if (location != null) {
+            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()?:.0, location.longPoint?.toDouble()?: .0)
+            vh.txtLocationDistance.text = DistanceUtils.calculateDistance(itemLocationLatLng, context)
+        } else {
+            vh.txtLocationDistance.text = null
+        }
+
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
 

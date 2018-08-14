@@ -13,6 +13,13 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation
 import com.daimajia.slider.library.Indicators.PagerIndicator
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.TheApplication
@@ -31,12 +38,14 @@ import retrofit2.Response
  * Created by Yuriy Aizenberg
  */
 
-class MarketDetailsFragment : BaseFragment() {
+class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private lateinit var marketItem: MarketItem
     private lateinit var sliderLayout: SliderLayout
     private lateinit var pageIndicator: PagerIndicator
     private lateinit var fab: FloatingActionButton
+    private lateinit var txtLocationDistance: TextView
+    private lateinit var mapView: MapView
     private var idForRemove: String? = null
 
     var header: View? = null
@@ -63,6 +72,7 @@ class MarketDetailsFragment : BaseFragment() {
         marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
         sliderLayout = view.findViewById(R.id.slider)
         pageIndicator = view.findViewById(R.id.custom_indicator)
+        txtLocationDistance = view.findViewById(R.id.txtLocationDistance)
         fab = view.findViewById(R.id.fab)
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
         setFavorite(marketItem.favorite)
@@ -131,8 +141,68 @@ class MarketDetailsFragment : BaseFragment() {
 
         user?.rating?.toInt()?.let { view.findViewById<RatingBarView>(R.id.ratingBarView).setRating(it) }
 
+        val location = marketItem.location
 
+        if (location != null) {
+            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()?:.0, location.longPoint?.toDouble()?: .0)
+            txtLocationDistance.text = DistanceUtils.calculateDistance(itemLocationLatLng, activity!!)
+        } else {
+            txtLocationDistance.text = null
+        }
+
+        mapView = view.findViewById(R.id.mapView)
+        mapView.getMapAsync(this)
     }
+
+    override fun onViewInflated(view: View, savedInstanceState: Bundle?) {
+        super.onViewInflated(view, savedInstanceState)
+        mapView.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
+    private fun processMapClick() {
+        val location = marketItem.location
+        if (location != null) {
+            val latLng = LatLng(
+                    location.latPoint?.toDouble() ?: .0,
+                    location.longPoint?.toDouble() ?: .0)
+            TheApplication.instance.openGeoMap(latLng.latitude, latLng.longitude, location.text)
+        }
+//        TheApplication.instance.openGeoMap()
+    }
+
+    override fun onMapReady(p0: GoogleMap?) {
+        val location = marketItem.location
+        if (location != null) {
+            p0?.run {
+                val latLng = LatLng(
+                        location.latPoint?.toDouble() ?: .0,
+                        location.longPoint?.toDouble() ?: .0)
+                val markerOptions = MarkerOptions().position(latLng)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin))
+                p0.addMarker(markerOptions)
+                p0.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
+                setOnMapClickListener {
+                    processMapClick()
+                }
+            }
+        }
+    }
+
 
     private fun callWantToBuy() {
         if (!ProfileHolder.isAuthorized()) {

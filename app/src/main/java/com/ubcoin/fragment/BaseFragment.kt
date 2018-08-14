@@ -56,6 +56,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(getLayoutResId(), container, false)
         onViewInflated(view)
+        onViewInflated(view, savedInstanceState)
         if (getTopHeaderTextId() != noHeaderObject) {
             txtHeader = view.findViewById(getTopHeaderTextId())
         }
@@ -69,6 +70,10 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     open fun onViewInflated(view: View) {
+
+    }
+
+    open fun onViewInflated(view: View, savedInstanceState: Bundle?) {
 
     }
 

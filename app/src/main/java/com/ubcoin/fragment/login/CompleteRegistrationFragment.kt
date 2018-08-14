@@ -9,6 +9,7 @@ import com.ubcoin.ThePreferences
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.DataProvider
+import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ProfileHolder
@@ -60,6 +61,13 @@ class CompleteRegistrationFragment : BaseFragment() {
         })
     }
 
+    override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        hideProgressDialog()
+        //todo
+        showSweetAlertDialog("Error", "Confirmation code invalid")
+        return true
+    }
+
     private fun validateInput(materialEditText: MaterialEditText) = !materialEditText.text.toString().isBlank()
 
     override fun getHeaderText() = R.string.confirmation
@@ -69,7 +77,8 @@ class CompleteRegistrationFragment : BaseFragment() {
 
     private fun goNext() {
         hideKeyboard()
-        showProgressDialog("Confirmation", "Wait please")
+        //todo
+        // showProgressDialog("Confirmation", "Wait please")
         DataProvider.confirmRegistrationEmail(email,
                 edtCode.text.toString().trim(),
                 object :SilentConsumer<ProfileCompleteResponse> {

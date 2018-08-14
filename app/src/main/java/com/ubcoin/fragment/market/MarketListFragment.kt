@@ -4,6 +4,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.animation.OvershootInterpolator
+import com.google.android.gms.maps.model.LatLng
 import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.adapter.GridItemOffsetDecoration
@@ -18,6 +19,8 @@ import com.ubcoin.utils.ProfileHolder
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
 
 /**
@@ -116,7 +119,23 @@ class MarketListFragment : FirstLineFragment() {
     override fun onResume() {
         super.onResume()
         callItemRemoved()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
     }
+
+    override fun onPause() {
+        super.onPause()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onLatLngEvent(latLng: LatLng) {
+        if (marketListAdapter != null) {
+            marketListAdapter?.notifyDataSetChanged()
+        }
+    }
+
 
     private fun callItemRemoved() {
         val favoriteIdForRemove = TheApplication.instance.favoriteIdForRemove

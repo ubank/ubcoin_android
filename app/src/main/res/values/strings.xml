@@ -54,4 +54,11 @@
     <string name="i_want_to_buy">I want to buy</string>
     <string name="open_with_outer_app_label">Open with</string>
 
+    <string name="API_KEY">AIzaSyBf8cAbZWk6uJIbCHFLc_hWKM2j-bYeqpA</string>
+
+    <string name="distance_unknown">\?</string>
+    <string name="distance_km">km</string>
+    <string name="distance_m">m</string>
+
+
 </resources>

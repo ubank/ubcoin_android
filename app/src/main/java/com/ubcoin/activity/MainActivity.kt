@@ -1,9 +1,20 @@
 package com.ubcoin.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
+import com.crashlytics.android.Crashlytics
+import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
+import com.google.android.gms.maps.model.LatLng
 import com.ubcoin.R
+import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
@@ -17,6 +28,8 @@ import com.ubcoin.view.menu.MenuSingleView
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by Yuriy Aizenberg
@@ -25,9 +38,13 @@ import org.greenrobot.eventbus.Subscribe
 class MainActivity : BaseActivity() {
 
     companion object {
-        val REQUEST_CODE = 10001
-        val KEY_REFRESH_AFTER_LOGIN = "KRAF"
+        const val REQUEST_FINE_LOCATION = 10002
+        const val REQUEST_CODE = 10001
+        const val KEY_REFRESH_AFTER_LOGIN = "KRAF"
     }
+
+
+    private var mLocationRequest: LocationRequest? = null
 
     override fun getResourceId(): Int = R.layout.activity_main
 
@@ -73,6 +90,27 @@ class MainActivity : BaseActivity() {
         }
         checkProfileLoggedIn()
         menuBottomView.activate(MenuItems.MARKET)
+        if (checkPermissions(true)) {
+            startLocationUpdates()
+            getLastLocation()
+        }
+    }
+
+    private fun checkPermissions(requestPermissions: Boolean): Boolean {
+        return if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            true
+        } else {
+            if (requestPermissions) {
+                requestPermissions()
+            }
+            false
+        }
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_FINE_LOCATION)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -107,8 +145,70 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
             checkProfileLoggedIn()
+        } else if (requestCode == REQUEST_FINE_LOCATION) {
+            if (checkPermissions(false)) {
+                startLocationUpdates()
+                getLastLocation()
+            }
         }
     }
+
+    private fun startLocationUpdates() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return
+
+        mLocationRequest = LocationRequest()
+        mLocationRequest?.run {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = TimeUnit.SECONDS.toMillis(5)
+            fastestInterval = TimeUnit.SECONDS.toMillis(5)
+
+            val builder = LocationSettingsRequest.Builder()
+            builder.addLocationRequest(this)
+
+            val locationSettingsRequest = builder.build()
+            val settingsClient = LocationServices.getSettingsClient(applicationContext)
+            settingsClient.checkLocationSettings(locationSettingsRequest)
+
+            getFusedLocationProviderClient(this@MainActivity).requestLocationUpdates(mLocationRequest, object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult?) {
+                    if (locationResult != null) {
+                        TheApplication.instance.currentLocation = LatLng(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
+                        getFusedLocationProviderClient(this@MainActivity).removeLocationUpdates(this)
+                    }
+                }
+            }, Looper.myLooper())
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    fun getLastLocation() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return
+
+        val locationClient = getFusedLocationProviderClient(this)
+
+        locationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        TheApplication.instance.currentLocation = LatLng(location.latitude, location.longitude)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Crashlytics.logException(e)
+                }
+    }
+
 
     private fun startSignIn() {
         startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE)
