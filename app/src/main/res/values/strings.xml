@@ -51,6 +51,7 @@
     <string name="no_network_error">Check Internet availability and the correct date and time. After that try again. In case of failure, contact support.</string>
     <string name="need_to_logged_in">You need to be logged in</string>
     <string name="ubc_postfix">UBC</string>
+    <string name="balance_placeholder">%1$s UBC</string>
     <string name="i_want_to_buy">I want to buy</string>
     <string name="open_with_outer_app_label">Open with</string>
 
@@ -59,6 +60,8 @@
     <string name="distance_unknown">\?</string>
     <string name="distance_km">km</string>
     <string name="distance_m">m</string>
+    <string name="my_balance">My balance</string>
+    <string name="email_already_taken">Email already taken</string>
 
 
 </resources>

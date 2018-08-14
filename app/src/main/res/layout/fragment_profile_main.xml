@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mainBackground"
+        android:orientation="vertical">
+
+        <include layout="@layout/common_header" />
+
+        <RelativeLayout
+            android:id="@+id/llProfileMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/detailsProfileMargin"
+            android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/imgProfilePhoto"
+                android:layout_width="@dimen/detailsSubProfileHeight"
+                android:layout_height="@dimen/detailsSubProfileHeight"
+                android:layout_margin="@dimen/detailsProfileMargin"
+                android:src="@drawable/img_profile_default" />
+
+
+            <TextView
+                android:id="@+id/txtProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/imgProfilePhoto"
+                android:layout_toStartOf="@id/llArrowLayout"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/sellerProfileNickColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+            <LinearLayout
+                android:id="@+id/llArrowLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detailsProfileMargin"
+                    android:src="@drawable/ic_next" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detailsProfileHeightMin"
+
+            android:background="@android:color/white">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@id/llArrowLayout2">
+
+                <LinearLayout
+                    android:id="@+id/llAnchor"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/llAnchor"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/my_balance"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/sign_up_text_size" />
+
+                <TextView
+                    android:id="@+id/txtProfileBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/llAnchor"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/have_account_text_size" />
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llArrowLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detailsProfileMargin"
+                    android:src="@drawable/ic_next" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

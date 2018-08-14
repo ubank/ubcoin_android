@@ -2,10 +2,12 @@ package com.ubcoin.fragment.login
 
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.network.DataProvider
+import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ImeNextActionHandler
@@ -61,6 +63,11 @@ class SignupFragment : BaseFragment() {
 
         view.findViewById<View>(R.id.llUserAgreement).setOnClickListener { showUserAgreement() }
 
+    }
+
+    override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        Toast.makeText(activity, R.string.email_already_taken, Toast.LENGTH_SHORT).show()
+        return true
     }
 
     override fun handleException(t: Throwable) {

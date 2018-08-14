@@ -62,8 +62,8 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun profile(onSuccess: Consumer<User>, onError: Consumer<Throwable>) {
-        networkModule.api().profile()
+    fun profile(onSuccess: Consumer<User>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api().profile()
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

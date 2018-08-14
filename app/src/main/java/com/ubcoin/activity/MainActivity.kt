@@ -17,6 +17,7 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
+import com.ubcoin.fragment.ProfileMainFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
@@ -79,7 +80,11 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {
-                            goStub()
+                            if (!ProfileHolder.isAuthorized()) {
+                                checkProfileLoggedIn()
+                            } else {
+                                fragmentSwitcher?.clearBackStack()?.addTo(ProfileMainFragment::class.java)
+                            }
                         }
                         MenuItems.SIGN_IN -> {
                             startSignIn()
@@ -181,14 +186,6 @@ class MainActivity : BaseActivity() {
             }, Looper.myLooper())
         }
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
     }
 
     fun getLastLocation() {

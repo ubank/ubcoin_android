@@ -1,6 +1,7 @@
 package com.ubcoin.model.response
 
 import com.ubcoin.model.response.profile.Settings
+import com.ubcoin.model.response.profile.Wallet
 import java.io.Serializable
 
 /**
@@ -17,5 +18,6 @@ data class User(
         var name: String?,
         var phone: String?,
         var settings: Settings?,
-        var walletNumber: Long?
+        var walletNumber: Long?,
+        var wallet: Wallet?
 ) : Serializable

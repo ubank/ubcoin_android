@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.crashlytics.android.Crashlytics
 import com.ubcoin.R
 import com.ubcoin.ThePreferences
 import com.ubcoin.activity.BaseActivity
@@ -161,6 +162,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     protected open fun handleException(t: Throwable) {
+        Crashlytics.logException(t)
         try {
             hideSweetAlertDialog()
             when (t) {

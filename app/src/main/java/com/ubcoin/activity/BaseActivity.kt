@@ -22,7 +22,12 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
         fragmentSwitcher = FragmentSwitcher(this)
         supportFragmentManager.addOnBackStackChangedListener {
             if (!supportFragmentManager.fragments.isEmpty()) {
-                supportFragmentManager.fragments.last()?.onResume()
+                val last = supportFragmentManager.fragments.last()
+                if (last != null) {
+                    last.onResume()
+                } else {
+                    supportFragmentManager.fragments[0]?.onResume()
+                }
             }
         }
     }

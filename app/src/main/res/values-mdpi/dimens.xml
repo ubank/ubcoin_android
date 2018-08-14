@@ -4,6 +4,7 @@
     <dimen name="map_detail_height">150dp</dimen>
 
     <dimen name="detailsProfileHeight">83dp</dimen>
+    <dimen name="detailsProfileHeightMin">79dp</dimen>
     <dimen name="detailsSubProfileHeight">54dp</dimen>
     <dimen name="detailsProfileMargin">15dp</dimen>
     <dimen name="detailsProfileTextSize16">16sp</dimen>
