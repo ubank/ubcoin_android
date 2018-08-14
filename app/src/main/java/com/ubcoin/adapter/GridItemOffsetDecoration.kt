@@ -12,7 +12,7 @@ import android.view.View
 
 class GridItemOffsetDecoration : RecyclerView.ItemDecoration {
 
-    val itemOffset : Int
+    private val itemOffset: Int
 
     constructor(itemOffset: Int) : super() {
         this.itemOffset = itemOffset

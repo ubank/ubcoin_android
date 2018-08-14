@@ -14,8 +14,8 @@ import java.lang.Exception
  */
 class ImageSwitcherTarget : Target {
 
-    private val imageSwitcher : ImageSwitcher
-    private val context : Context
+    private val imageSwitcher: ImageSwitcher
+    private val context: Context
 
     constructor(imageSwitcher: ImageSwitcher, context: Context) {
         this.imageSwitcher = imageSwitcher

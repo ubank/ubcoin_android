@@ -6,7 +6,7 @@ package com.ubcoin.view.menu
 enum class MenuItems {
 
     MARKET,
-    FAVOURITE,
+    FAVORITE,
     SELL,
     DEALS,
     PROFILE,

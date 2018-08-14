@@ -8,7 +8,7 @@ import android.widget.TextView
  */
 abstract class BaseImeActionHandler : TextView.OnEditorActionListener {
 
-    abstract fun getActionId() : Int
+    abstract fun getActionId(): Int
 
     abstract fun onActionCall()
 
@@ -19,7 +19,6 @@ abstract class BaseImeActionHandler : TextView.OnEditorActionListener {
         }
         return false
     }
-
 
 
 }

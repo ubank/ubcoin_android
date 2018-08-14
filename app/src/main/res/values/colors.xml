@@ -36,6 +36,9 @@
 
     <color name="sellerProfileGray">#8a000000</color>
 
+    <color name="inactiveTabTextColor">#b3403d45</color>
+    <color name="activeTabTextColor">#403d45</color>
+
     <array name="progressColors">
         <item>#326cbb</item>
         <item>#f4ae28</item>

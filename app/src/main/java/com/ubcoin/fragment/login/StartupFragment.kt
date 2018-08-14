@@ -25,6 +25,4 @@ class StartupFragment : BaseFragment() {
         val switcher = getSwitcher()
         switcher?.addTo(LoginFragment::class.java)
     }
-
-    override fun showHeader() = false
 }

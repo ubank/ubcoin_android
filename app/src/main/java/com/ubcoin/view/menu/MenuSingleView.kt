@@ -106,7 +106,6 @@ class MenuSingleView : RelativeLayout {
     }
 
 
-
     fun toggle() {
         if (isActive) activate() else deactivate()
     }

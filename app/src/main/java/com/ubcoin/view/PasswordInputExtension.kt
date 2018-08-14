@@ -9,7 +9,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
-//import com.ubcoin.utils.PasswordChecker
 import com.ubcoin.utils.checkAsPassword
 import kotlinx.android.synthetic.main.view_password_input.view.*
 
@@ -22,21 +21,29 @@ class PasswordInputExtension : RelativeLayout {
     var edtPasswordInputExtension: MaterialEditText? = null
 
     constructor(context: Context?) : super(context) {
-        create()
+        create(null)
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        create()
+        create(attrs)
     }
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        create()
+        create(attrs)
     }
 
-    private fun create() {
+    private fun create(attrs: AttributeSet?) {
         inflate(context, R.layout.view_password_input, this)
         edtPasswordInputExtension = findViewById(R.id.edtPasswordInputExtension)
         edtPasswordInputExtension?.addTextChangedListener(watch())
+        if (attrs == null) return
+
+        val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.PasswordInputExtension, 0, 0)
+
+        val inputHint = attributes.getString(R.styleable.PasswordInputExtension_PasswordInputHint)
+        edtPasswordInputExtension?.hint = inputHint?: context.resources.getString(R.string.password_hint)
+        attributes.recycle()
+
     }
 
     private fun watch(): TextWatcher = object : TextWatcher {
@@ -81,4 +88,8 @@ class PasswordInputExtension : RelativeLayout {
     }
 
     fun getInputText() = edtPasswordInputExtension?.text.toString()
+
+    fun setImeOptionListener(onEditorActionListener: TextView.OnEditorActionListener) {
+        edtPasswordInputExtension?.setOnEditorActionListener(onEditorActionListener)
+    }
 }

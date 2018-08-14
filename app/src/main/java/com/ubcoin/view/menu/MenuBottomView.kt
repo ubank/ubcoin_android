@@ -13,6 +13,8 @@ class MenuBottomView : LinearLayout {
 
     var menuViewCallback: IMenuViewCallback? = null
     var activeMenuItem: MenuSingleView? = null
+    var isExpanded = true
+    private val ignored = ArrayList<MenuItems>()
 
     constructor(context: Context?) : super(context) {
         initialize()
@@ -24,6 +26,11 @@ class MenuBottomView : LinearLayout {
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize()
+    }
+
+    fun setIgnored(vararg menuItems: MenuItems) {
+        ignored.clear()
+        ignored.addAll(menuItems.asList())
     }
 
     private fun initialize() {
@@ -43,9 +50,14 @@ class MenuBottomView : LinearLayout {
     }
 
     fun activate(menuItem: MenuItems) {
+        activate(menuItem, true)
+    }
+
+    fun activate(menuItem: MenuItems, applyIgnored: Boolean) {
+        if (applyIgnored && ignored.contains(menuItem)) return
         val singleView: MenuSingleView = when (menuItem) {
             MenuItems.MARKET -> menuItemMarket
-            MenuItems.FAVOURITE -> menuItemFavorite
+            MenuItems.FAVORITE -> menuItemFavorite
             MenuItems.SELL -> menuItemSell
             MenuItems.DEALS -> menuItemDeals
             MenuItems.PROFILE -> menuItemProfile
@@ -59,10 +71,10 @@ class MenuBottomView : LinearLayout {
         }
     }
 
-    private fun resolveMenuItem(menuSingleView: MenuSingleView) : MenuItems {
+    private fun resolveMenuItem(menuSingleView: MenuSingleView): MenuItems {
         return when (menuSingleView) {
             menuItemMarket -> MenuItems.MARKET
-            menuItemFavorite -> MenuItems.FAVOURITE
+            menuItemFavorite -> MenuItems.FAVORITE
             menuItemSell -> MenuItems.SELL
             menuItemDeals -> MenuItems.DEALS
             menuItemProfile -> MenuItems.PROFILE

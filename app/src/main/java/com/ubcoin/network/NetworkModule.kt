@@ -1,35 +1,37 @@
 package com.ubcoin.network
 
+import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
 import com.ubcoin.model.Error
+import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.HttpURLConnection
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
+import kotlin.system.exitProcess
 
 
 /**
  * Created by Yuriy Aizenberg
  */
+private const val AUTH_HEADER = "X-Authentication"
+
 object NetworkModule {
 
-    private val AUTH_HEADER = "X-Authentication"
-    private var thePreferences: ThePreferences = ThePreferences()
+    private var thePreferences = ThePreferences()
 
     fun api(): Api {
         return retrofit().create(Api::class.java)
     }
 
-
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
+                .validateEagerly(true)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(NullOrEmptyConvertFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -42,11 +44,12 @@ object NetworkModule {
         return OkHttpClient.Builder()
                 .addInterceptor(tokenInterceptor())
                 .addInterceptor(logInterceptor())
+                .addInterceptor(networkHandleInterceptor())
                 .connectionSpecs(listOf(createConnectionSpec(), ConnectionSpec.CLEARTEXT))
                 .build()
     }
 
-    private fun createConnectionSpec() : ConnectionSpec {
+    private fun createConnectionSpec(): ConnectionSpec {
         return ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_0, TlsVersion.TLS_1_2)
                 .cipherSuites(
@@ -65,8 +68,11 @@ object NetworkModule {
             try {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
-                    thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
-                    thePreferences.setToken(response.header(AUTH_HEADER))
+                    if (response?.code()?: 401 == HttpURLConnection.HTTP_OK) {
+                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
+                        thePreferences.setWVCookie(response.header("set-cookie"))
+                        thePreferences.setToken(response.header(AUTH_HEADER))
+                    }
                 } else {
                     response = it.proceed(it.request().newBuilder()
                             .addHeader("Cookie", thePreferences.getCookie() ?: "")
@@ -77,8 +83,10 @@ object NetworkModule {
                 if (code == HttpURLConnection.HTTP_OK) {
                     response
                 } else {
-                    throw HttpRequestException(null, Gson().fromJson(response.body()!!.string(), Error::class.java))
+                    throw HttpRequestException(null, parseResponseForError(response), code)
                 }
+            } catch (e: NetworkConnectivityException) {
+                throw e
             } catch (e: Exception) {
                 throw HttpRequestException(e, null)
             }
@@ -87,10 +95,28 @@ object NetworkModule {
         }
     }
 
+    private fun parseResponseForError(response: Response): Error? {
+        return try {
+            Gson().fromJson(response.body()!!.string(), Error::class.java)
+        } catch (e: Exception) {
+            Log.e(javaClass.name, e.message, e)
+            null
+        }
+    }
+
     private fun logInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return httpLoggingInterceptor
+    }
+
+    private fun networkHandleInterceptor() : Interceptor {
+        return Interceptor { chain ->
+            if (!NetworkConnectivityAwareManager.isNetworkAvailable()) {
+                throw NetworkConnectivityException()
+            }
+            chain.proceed(chain.request())
+        }
     }
 
 

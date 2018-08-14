@@ -35,9 +35,11 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(protecte
         }
     }
 
-    fun getItem(position : Int) : T = data[position]
+    fun isEmpty(): Boolean = data.isEmpty()
 
-    protected fun inflate(@LayoutRes resId: Int, viewGroup: ViewGroup) : View {
+    fun getItem(position: Int): T = data[position]
+
+    protected fun inflate(@LayoutRes resId: Int, viewGroup: ViewGroup): View {
         return (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater).inflate(resId, viewGroup, false)
     }
 

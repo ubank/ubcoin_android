@@ -17,7 +17,7 @@ object SSLFactory : SSLSocketFactory() {
     private val sslContext = SSLContext.getInstance("TLS")
 
     init {
-        val tm : TrustManager = object : X509TrustManager {
+        val tm: TrustManager = object : X509TrustManager {
             override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
             }
 

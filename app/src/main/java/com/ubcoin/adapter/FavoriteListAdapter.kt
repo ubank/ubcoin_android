@@ -10,7 +10,6 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
-import com.ubcoin.utils.CircleTransformation
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.RoundedCornersTransform
 import com.ubcoin.view.rating.RatingBarView
@@ -30,7 +29,7 @@ class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Fa
         val item = getItem(p1)
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
-            vHolder.imgFavoriteItemLogo.setImageResource(R.drawable.img_rejected)
+            vHolder.imgFavoriteItemLogo.setImageResource(R.drawable.img_photo_placeholder)
         } else {
             val dimensionPixelSize = context.resources.getDimensionPixelSize(R.dimen.marketInFavoriteHeightImage)
             Picasso.get().load(images!![0])
@@ -40,7 +39,8 @@ class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Fa
                     .transform(RoundedCornersTransform())
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .error(R.drawable.img_rejected)
+                    .placeholder(R.drawable.img_photo_placeholder)
+                    .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgFavoriteItemLogo)
         }
         vHolder.txtFavoriteItemName.text = item.title

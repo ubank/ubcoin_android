@@ -8,6 +8,8 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <include layout="@layout/common_header"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -88,11 +90,12 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/imgLogin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sign_up_size"
                 android:layout_marginEnd="@dimen/sign_up_margin"
                 android:layout_marginStart="@dimen/sign_up_margin"
-                android:background="@drawable/rounded_green_filled_button" />
+                android:background="@drawable/rounded_green_filled_transparent_button" />
 
             <TextView
                 android:layout_width="wrap_content"

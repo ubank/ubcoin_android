@@ -5,7 +5,7 @@ package com.ubcoin.model
  */
 open class BaseApplicationModel<T> {
 
-    var error: Error?=null
-    var t: T ?= null
+    var error: Error? = null
+    var t: T? = null
 
 }

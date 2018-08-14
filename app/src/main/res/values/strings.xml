@@ -43,5 +43,22 @@
     <string name="resend_it">Resend it</string>
     <string name="didn_t_get_the_email">Didn’t get the email?</string>
     <string name="confirmation">Confirmation</string>
+    <string name="no_active_deals">No active deals</string>
+    <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Items you are going to buy or to sell\nwill be here</string>
+    <string name="deals_header">Deals</string>
+    <string name="requires_external_app">Requires external App</string>
+    <string name="confirm">Confirm</string>
+    <string name="no_network_error">Check Internet availability and the correct date and time. After that try again. In case of failure, contact support.</string>
+    <string name="need_to_logged_in">You need to be logged in</string>
+    <string name="ubc_postfix">UBC</string>
+    <string name="i_want_to_buy">I want to buy</string>
+    <string name="open_with_outer_app_label">Open with</string>
+
+    <string name="API_KEY">AIzaSyBf8cAbZWk6uJIbCHFLc_hWKM2j-bYeqpA</string>
+
+    <string name="distance_unknown">\?</string>
+    <string name="distance_km">km</string>
+    <string name="distance_m">m</string>
+
 
 </resources>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@android:color/white"
+        android:layout_height="@dimen/header_size">
+
+
+        <RelativeLayout
+            android:id="@+id/llHeaderLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgHeaderLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/header_margin_end"
+                android:layout_marginStart="@dimen/header_margin_start"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_back" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txtHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/llHeaderLeft"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/app_name"
+            android:textColor="@color/headerTextColor"
+            android:textSize="@dimen/header_text_size" />
+    </RelativeLayout>
+
+
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/viewpagertab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:stl_underlineThickness="1dp"
+        android:background="@android:color/white"
+        app:stl_dividerColor="@android:color/transparent"
+        app:stl_distributeEvenly="true"
+        app:stl_indicatorColor="@color/greenMainColor"
+        app:stl_indicatorInterpolation="linear"
+        app:stl_indicatorThickness="3dp"
+        app:stl_defaultTabTextSize="14sp"
+        app:stl_underlineColor="@android:color/transparent"
+        app:stl_defaultTabTextAllCaps="true"
+        app:stl_defaultTabTextColor="@color/selector_page"
+
+        />
+
+   <!-- <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/viewpagertab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:stl_indicatorInterpolation="smart"
+        app:stl_indicatorColor="#32bb8f"
+        app:stl_indicatorThickness="3dp"
+        app:stl_indicatorWidth="auto"
+        app:stl_indicatorCornerRadius="0dp"
+        app:stl_dividerColor="#00000000"
+        app:stl_dividerThickness="1dp"
+        app:stl_defaultTabBackground="@android:color/white"
+        app:stl_defaultTabTextAllCaps="true"
+        app:stl_defaultTabTextColor="#FC000000"
+        app:stl_defaultTabTextSize="14sp"
+        app:stl_defaultTabTextHorizontalPadding="16dp"
+        app:stl_defaultTabTextMinWidth="0dp"
+        app:stl_distributeEvenly="false"
+        app:stl_clickable="true"
+        app:stl_titleOffset="24dp"
+        app:stl_drawDecorationAfterTab="false"
+        />-->
+
+    <LinearLayout
+        android:id="@+id/llMainGradient"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/main_gradient"
+        android:orientation="horizontal" />
+
+</LinearLayout>
