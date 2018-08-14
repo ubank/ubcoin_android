@@ -27,7 +27,7 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Deals
         val item = getItem(p1)
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
-            vHolder.imgDealsItemLogo.setImageResource(R.drawable.img_rejected)
+            vHolder.imgDealsItemLogo.setImageResource(R.drawable.img_photo_placeholder)
         } else {
             val dimensionPixelSize = context.resources.getDimensionPixelSize(R.dimen.marketInFavoriteHeightImage)
             Picasso.get().load(images!![0])
@@ -37,7 +37,8 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Deals
                     .transform(RoundedCornersTransform())
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_CACHE)
-                    .error(R.drawable.img_rejected)
+                    .placeholder(R.drawable.img_photo_placeholder)
+                    .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgDealsItemLogo)
         }
         vHolder.txtDealsItemPrice.text = item.title

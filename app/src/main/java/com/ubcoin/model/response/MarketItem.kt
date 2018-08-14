@@ -1,6 +1,5 @@
 package com.ubcoin.model.response
 
-import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 /**
@@ -11,8 +10,8 @@ data class MarketItem(
         val category: Category?,
         val user: User?,
         val description: String?,
-        @SerializedName("is_favorite")
         val images: List<String>?,
+        val location: Location?,
         val createdDate: String?,
         var favorite: Boolean,
         val status: String?,

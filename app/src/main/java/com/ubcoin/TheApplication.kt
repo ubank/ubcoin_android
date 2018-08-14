@@ -13,9 +13,8 @@ import android.content.pm.PackageManager
 import android.content.Intent
 import android.net.Uri
 import android.support.v4.content.ContextCompat.startActivity
-
-
-
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 
 
 /**
@@ -31,6 +30,7 @@ class TheApplication : Application() {
         instance = this
         val build = Picasso.Builder(this).downloader(OkHttp3Downloader(NetworkModule.client())).build()
         Picasso.setSingletonInstance(build)
+        installCrashlytics()
         val token = ThePreferences().getToken()
         if (token != null) {
             DataProvider.profile(
@@ -45,6 +45,10 @@ class TheApplication : Application() {
                         }
                     })
         }
+    }
+
+    private fun installCrashlytics() {
+        Fabric.with(this, Crashlytics())
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

@@ -114,7 +114,7 @@ class SendForgotPasswordFragment : BaseFragment() {
 
     private fun sendEmail() {
         showProgressDialog("Wait please", "")
-        DataProvider.changeEmail(email, edtCode.text!!.toString(), edtPasswordInput.getInputText(), successConsumer(), Consumer { handleException(it) })
+        DataProvider.forgotChangePassword(email, edtCode.text!!.toString(), edtPasswordInput.getInputText(), successConsumer(), Consumer { handleException(it) })
     }
 
     private fun successConsumer(): SilentConsumer<ProfileCompleteResponse> {

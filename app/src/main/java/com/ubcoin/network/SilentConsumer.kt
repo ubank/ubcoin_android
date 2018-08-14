@@ -1,6 +1,7 @@
 package com.ubcoin.network
 
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import io.reactivex.functions.Consumer
 
 /**
@@ -17,6 +18,7 @@ interface SilentConsumer<T> : Consumer<T> {
             onConsume(t)
         } catch (e: Exception) {
             Log.e(TAG, """ ${e.message}""", e)
+            Crashlytics.logException(SilentException(e))
         }
     }
 

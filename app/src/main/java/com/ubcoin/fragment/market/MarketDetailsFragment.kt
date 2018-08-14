@@ -18,6 +18,7 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.MarketItem
+import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.*
@@ -70,16 +71,17 @@ class MarketDetailsFragment : BaseFragment() {
             requestFavorite(!marketItem.favorite)
         }
 
+        val metrics = DisplayMetrics()
+        activity!!.windowManager.defaultDisplay.getMetrics(metrics)
+
         if (!CollectionExtensions.nullOrEmpty(marketItem.images)) {
-            val metrics = DisplayMetrics()
-            activity!!.windowManager.defaultDisplay.getMetrics(metrics)
             marketItem.images?.forEach {
                 val textSliderView = SafetySliderView(activity!!, 0, metrics.widthPixels)
                 textSliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
                 textSliderView.picasso = Picasso.get()
                 textSliderView.image(it)
                 textSliderView.description(null)
-                textSliderView.error(R.drawable.img_rejected)
+                textSliderView.error(R.drawable.img_photo_placeholder)
                 sliderLayout.addSlider(textSliderView)
             }
             if (marketItem.images?.size == 1) {
@@ -88,7 +90,15 @@ class MarketDetailsFragment : BaseFragment() {
                 ghostView.visibility = View.VISIBLE
                 pageIndicator.visibility = View.GONE
             }
+        } else {
+            pageIndicator.visibility = View.GONE
+            val textSliderView = SafetySliderView(activity!!, 0, metrics.widthPixels)
+            textSliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
+            textSliderView.picasso = Picasso.get()
+            textSliderView.image(R.drawable.img_photo_placeholder)
+            sliderLayout.addSlider(textSliderView)
         }
+
         sliderLayout.run {
             setPresetTransformer(SliderLayout.Transformer.Accordion)
             setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
@@ -106,15 +116,15 @@ class MarketDetailsFragment : BaseFragment() {
         val imageView = view.findViewById<ImageView>(R.id.imgSellerProfile)
         val user = marketItem.user
         val avatarUrl = user?.avatarUrl
-        val createTextDrawableRounded = TextDrawableUtils.createTextDrawableRounded(user?.name, R.dimen.detailsSubProfileHeight, activity!!)
         if (avatarUrl == null) {
-            imageView.setImageDrawable(createTextDrawableRounded)
+            imageView.setImageResource(R.drawable.img_profile_default)
         } else {
-            Picasso.get().load(avatarUrl).error(createTextDrawableRounded)
+            Picasso.get().load(avatarUrl)
                     .resizeDimen(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
                     .centerCrop()
                     .transform(CircleTransformation())
-                    .error(createTextDrawableRounded)
+                    .placeholder(R.drawable.img_profile_default)
+                    .error(R.drawable.img_profile_default)
                     .into(imageView)
         }
         view.findViewById<TextView>(R.id.txtUserName).text = user?.name
@@ -130,11 +140,12 @@ class MarketDetailsFragment : BaseFragment() {
             return
         }
         showProgressDialog("Wait please", "Wait please")
-        DataProvider.getTgLink(marketItem.id, object : SilentConsumer<String> {
-            override fun onConsume(t: String) {
+        DataProvider.getTgLink(marketItem.id, object : SilentConsumer<TgLink> {
+            override fun onConsume(t: TgLink) {
                 hideProgressDialog()
-                if (t.isNotBlank()) {
-                    TheApplication.instance.openTelegramIntent(t)
+                val fullUrl = t.url
+                if (fullUrl?.isNotBlank() == true) {
+                    TheApplication.instance.openTelegramIntent(fullUrl)
                 }
             }
 

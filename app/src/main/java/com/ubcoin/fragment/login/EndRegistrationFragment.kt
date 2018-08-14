@@ -1,7 +1,10 @@
 package com.ubcoin.fragment.login
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
 import com.ubcoin.R
+import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
 
 /**
@@ -33,6 +36,12 @@ class EndRegistrationFragment : BaseFragment() {
     }
 
     private fun performBack() {
-        getSwitcher()?.clearBackStack()?.addTo(StartupFragment::class.java)
+        activity?.run {
+            setResult(Activity.RESULT_OK)
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(MainActivity.KEY_REFRESH_AFTER_LOGIN, true)
+            startActivity(intent)
+            finish()
+        }
     }
 }

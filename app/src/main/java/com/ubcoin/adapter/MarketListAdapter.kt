@@ -44,7 +44,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
 
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
-            vh.imgMarket.setImageResource(R.drawable.stub_image)
+            vh.imgMarket.setImageResource(R.drawable.img_photo_placeholder)
             vh.txtImagesCount.text = "0/0"
         } else {
             images?.let {
@@ -54,7 +54,8 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
                         .onlyScaleDown()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .error(R.drawable.img_rejected)
+                        .placeholder(R.drawable.img_photo_placeholder)
+                        .error(R.drawable.img_photo_placeholder)
 //                        .placeholder(R.drawable.loading_progress)
                         .into(vh.imgMarket)
                 vh.txtImagesCount.text = "1/${it.size}"
