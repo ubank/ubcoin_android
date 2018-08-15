@@ -62,6 +62,13 @@
     <string name="distance_m">m</string>
     <string name="my_balance">My balance</string>
     <string name="email_already_taken">Email already taken</string>
+    <string name="account_settings">Account settings</string>
+    <string name="done">Done</string>
+    <string name="common">Common</string>
+    <string name="log_out">Log out</string>
+    <string name="country">Country</string>
+    <string name="my_reviews">My reviews</string>
+    <string name="language">Language</string>
 
 
 </resources>

@@ -78,7 +78,7 @@ class SignupFragment : BaseFragment() {
     private fun onSignUpClick() {
         if (!isInputValid()) return
         showProgressDialog("Registration", "Wait please")
-        DataProvider.regisration(
+        DataProvider.registrations(
                 getEmail().trim(),
                 edtPasswordInput.getInputText().trim(),
                 edtSignUpName.text.toString().trim(),

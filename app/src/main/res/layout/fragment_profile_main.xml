@@ -64,7 +64,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/detailsProfileHeightMin"
-
             android:background="@android:color/white">
 
 

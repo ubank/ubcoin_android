@@ -81,6 +81,7 @@ object NetworkModule {
                 }
                 val code = response.code()
                 if (code == HttpURLConnection.HTTP_OK) {
+                    checkResponseContentLength(response)
                     response
                 } else {
                     throw HttpRequestException(null, parseResponseForError(response), code)
@@ -90,8 +91,13 @@ object NetworkModule {
             } catch (e: Exception) {
                 throw HttpRequestException(e, null)
             }
+        }
+    }
 
-
+    private fun checkResponseContentLength(response: Response?) {
+        val get = response?.headers()?.get("Content-Length")
+        if (get == null || get.isBlank()) {
+            response?.headers()?.newBuilder()?.add("Content-Length", "0")
         }
     }
 

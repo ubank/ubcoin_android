@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.*
@@ -17,7 +16,7 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
-import com.ubcoin.fragment.ProfileMainFragment
+import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
@@ -122,6 +121,7 @@ class MainActivity : BaseActivity() {
         super.onNewIntent(intent)
         if (intent?.getBooleanExtra(KEY_REFRESH_AFTER_LOGIN, false) == true) {
             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
+            menuBottomView.activate(MenuItems.MARKET)
         }
     }
 

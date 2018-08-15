@@ -26,7 +26,7 @@ object DataProvider {
     }
 
 
-    fun regisration(email: String, password: String, name: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+    fun registrations(email: String, password: String, name: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
         networkModule.api().registration(SignUp(email, password, name))
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
@@ -46,6 +46,12 @@ object DataProvider {
 
     fun forgotChangePassword(email: String, code: String, value: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api().changeForgotPassword(ChangeForgotPassword(email, value, "PASSWORD", code))
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun updateProfileEmailAndName(email: String, userName: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+        networkModule.api().updateProfileEmailAndName(UpdateUserData(userName, email))
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

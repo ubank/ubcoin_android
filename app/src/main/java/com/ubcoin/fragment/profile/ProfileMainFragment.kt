@@ -1,15 +1,15 @@
-package com.ubcoin.fragment
+package com.ubcoin.fragment.profile
 
 import android.support.v4.widget.SwipeRefreshLayout
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.crashlytics.android.Crashlytics
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
-import com.ubcoin.R.drawable.*
+import com.ubcoin.R.drawable.ic_back
+import com.ubcoin.R.drawable.img_photo_placeholder
 import com.ubcoin.R.string.balance_placeholder
+import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -21,10 +21,6 @@ import io.reactivex.disposables.Disposable
  * Created by Yuriy Aizenberg
  */
 class ProfileMainFragment : FirstLineFragment() {
-
-    companion object {
-        private const val TAG = "ProfileMainFragment"
-    }
 
     private lateinit var txtProfileName: TextView
     private lateinit var imgProfilePhoto: ImageView
@@ -44,6 +40,9 @@ class ProfileMainFragment : FirstLineFragment() {
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             updateUserProfileBackground()
+        }
+        view.findViewById<View>(R.id.llProfileMain).setOnClickListener {
+            getSwitcher()?.addTo(ProfileSettingsFragment::class.java)
         }
     }
 

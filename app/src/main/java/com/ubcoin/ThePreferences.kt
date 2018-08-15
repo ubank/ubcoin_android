@@ -3,6 +3,7 @@ package com.ubcoin
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import com.ubcoin.model.TemporaryUser
 import com.ubcoin.model.response.User
 
 /**
@@ -13,6 +14,7 @@ private const val KEY_TOKEN: String = "TOKEN"
 private const val KEY_COOKIE: String = "COOKIE"
 private const val KEY_WV_COOKIE: String = "WV_COOKIE"
 private const val KEY_CURRENT_USER: String = "CURR_USER"
+private const val KEY_CURRENT_USER_PREFS: String = "CURR_USER_PREFS"
 private const val TAG: String = "ThePreferences"
 
 
@@ -40,12 +42,12 @@ class ThePreferences {
 
     fun setWVCookie(token: String?) = instance.edit().putString(KEY_WV_COOKIE, token).apply()
 
-    fun setCurrentUser(user: User)  {
+    fun setCurrentUser(user: User) {
         val stringProfile = Gson().toJson(user)
         instance.edit().putString(KEY_CURRENT_USER, stringProfile).apply()
     }
 
-    fun getCurrentUser() : User? {
+    fun getCurrentUser(): User? {
         val stringUser = instance.getString(KEY_CURRENT_USER, null)
         if (stringUser == null || stringUser.isEmpty()) return null
         return try {
@@ -60,4 +62,29 @@ class ThePreferences {
         instance.edit().putString(KEY_CURRENT_USER, null).apply()
     }
 
+    fun setCurrentPreferences(temporaryUser: TemporaryUser) {
+        instance.edit().putString(KEY_CURRENT_USER_PREFS, Gson().toJson(temporaryUser)).apply()
+    }
+
+    fun getCurrentPreferences(): TemporaryUser {
+        val stringPrefs = instance.getString(KEY_CURRENT_USER_PREFS, null)
+        if (stringPrefs == null || stringPrefs.isEmpty()) {
+            return instantiateCurrentPrefs()
+        }
+        return try {
+            Gson().fromJson(stringPrefs, TemporaryUser::class.java)
+        } catch (e: Exception) {
+            return instantiateCurrentPrefs()
+        }
+    }
+
+    private fun instantiateCurrentPrefs(): TemporaryUser {
+        val temporaryUser = TemporaryUser(null, null, null)
+        setCurrentPreferences(temporaryUser)
+        return temporaryUser
+    }
+
+    fun clearPrefs() {
+        instance.edit().putString(KEY_CURRENT_USER_PREFS, null).apply()
+    }
 }

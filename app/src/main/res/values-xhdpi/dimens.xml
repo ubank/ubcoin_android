@@ -17,6 +17,7 @@
     <dimen name="user_agreement_text_size">12sp</dimen>
     <dimen name="menu_textsize">12sp</dimen>
 
+    <dimen name="logout_button_bottom_margin">23dp</dimen>
     <dimen name="favorite_fragment_top_margin">15dp</dimen>
     <dimen name="favorite_fragment_text_margin">20dp</dimen>
     <dimen name="camera_margin">10dp</dimen>
@@ -29,5 +30,9 @@
     <dimen name="marketInFavoriteHeight">90dp</dimen>
     <dimen name="marketInFavoriteHeightImage">60dp</dimen>
     <dimen name="marketInFavoriteMarginDiff">15dp</dimen>
+
+    <dimen name="profileDetailsItemHeight">75dp</dimen>
+    <dimen name="profileDetailsFlagHeight">18dp</dimen>
+    <dimen name="profileDetailsFlagWidth">25dp</dimen>
 
 </resources>

@@ -29,11 +29,16 @@ interface Api {
     @POST("/api/verification/check")
     fun confirmEmailRegistration(@Body confirmEmailRegistration: ConfirmEmailRegistration) : Observable<ProfileCompleteResponse>
 
+    @EliminatedBody
     @POST("/api/auth/logout")
     fun logout(): Observable<Response<Unit>>
 
     @GET("/api/users/me")
     fun profile(): Observable<User>
+
+    @EliminatedBody
+    @PUT("/api/users")
+    fun updateProfileEmailAndName(@Body updateUserData: UpdateUserData) : Observable<Response<Unit>>
 
     @GET("/api/items")
     fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
