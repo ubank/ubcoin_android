@@ -1,6 +1,7 @@
 package com.ubcoin.network
 
 import io.reactivex.FlowableTransformer
+import io.reactivex.MaybeTransformer
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -16,6 +17,10 @@ object RxUtils {
 
     fun <T> applyT(): ObservableTransformer<T, T> {
         return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
+    }
+
+    fun <T> applyMaybe(): MaybeTransformer<T, T> {
+        return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
     }
 
 }

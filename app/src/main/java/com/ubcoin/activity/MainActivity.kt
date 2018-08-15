@@ -112,9 +112,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun requestPermissions() {
-        ActivityCompat.requestPermissions(this,
+      /*  ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_FINE_LOCATION)
+                REQUEST_FINE_LOCATION)*/
     }
 
     override fun onNewIntent(intent: Intent?) {

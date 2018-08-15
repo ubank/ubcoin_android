@@ -1,10 +1,16 @@
 package com.ubcoin.fragment
 
+import android.Manifest.permission.*
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,15 +25,20 @@ import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.NetworkConnectivityException
-import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.RxUtils
+import com.ubcoin.pub.devrel.easypermissions.EasyPermissions
+import com.ubcoin.pub.devrel.easypermissions.PermissionRequest
 import com.ubcoin.switcher.FragmentSwitcher
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
+import io.reactivex.Maybe
 import kotlinx.android.synthetic.main.common_header.*
+import java.io.File
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
+
 
 /**
  * Created by Yuriy Aizenberg
@@ -49,6 +60,130 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     private var headerIcon: View? = null
     private var llHeaderImage: View? = null
     var txtHeader: TextView? = null
+
+    //Media support here
+    companion object {
+        private const val PERMISSIONS_REQUEST = 30000
+        private const val CAMERA_INTENT = 30001
+        private const val GALLERY_INTENT = 30002
+
+        private var fileName: String? = null
+
+        private val perms = arrayOf(CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
+
+    }
+
+    fun checkPermissions(): Boolean {
+        return EasyPermissions.hasPermissions(activity!!, perms)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, object : EasyPermissions.PermissionCallbacks {
+            override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+                if (checkPermissions()) {
+                    onPermissionsGranted()
+                }
+            }
+
+            override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+            }
+
+            override fun onRequestPermissionsResult(p0: Int, p1: Array<out String>, p2: IntArray) {
+            }
+
+        })
+    }
+
+    fun requestPermissionsInternal() {
+        val build = PermissionRequest.Builder(this, PERMISSIONS_REQUEST, perms).build()
+        EasyPermissions.requestPermissions(build)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PERMISSIONS_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (checkPermissions()) onPermissionsGranted()
+        }
+        if (requestCode == CAMERA_INTENT && resultCode == Activity.RESULT_OK) {
+            val file = File(Environment.getExternalStorageDirectory(), fileName)
+            if (file.exists() && file.canRead()) {
+                onCameraCaptured(file.absolutePath)
+            } else {
+                onCameraFailure()
+            }
+        }
+        if (requestCode == GALLERY_INTENT && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                onGalleryFailure()
+            } else {
+                resolveFilePath(data)
+            }
+        }
+    }
+
+    private fun resolveFilePath(data: Intent) {
+        Maybe.create<String> {
+            try {
+                val pickedImage = data.data
+                val filePath = arrayOf(MediaStore.Images.Media.DATA)
+                val cursor = activity?.contentResolver?.query(pickedImage, filePath, null, null, null)
+                cursor?.moveToFirst()
+                val imagePath = cursor?.getString(cursor.getColumnIndex(filePath[0])) ?: ""
+                cursor?.close()
+                it.onSuccess(imagePath)
+            } catch (e: Exception) {
+                it.onError(e)
+            } finally {
+                it.onComplete()
+            }
+        }
+                .compose(RxUtils.applyMaybe())
+                .subscribe({ onGalleryCaptured(it) }, { onCameraFailure() })
+    }
+
+    open fun onPermissionsGranted() {
+
+    }
+
+    fun startGalleryIntent() {
+        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = "image/*"
+        startActivityForResult(photoPickerIntent, GALLERY_INTENT)
+    }
+
+    fun startCameraIntent() {
+        val packageName = activity!!.applicationContext.packageName
+        val imageName = "$packageName.${System.currentTimeMillis()}.jpg"
+        val file = File(Environment.getExternalStorageDirectory(), imageName)
+        val uri = FileProvider.getUriForFile(activity!!, "$packageName.provider", file)
+        fileName = imageName
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri)
+
+        startActivityForResult(intent, CAMERA_INTENT)
+    }
+
+    open fun onGalleryCaptured(filePath: String) {
+
+    }
+
+    open fun onCameraCaptured(filePath: String) {
+
+    }
+
+    open fun onGalleryFailure() {
+
+    }
+
+    open fun onCameraFailure() {
+
+    }
+
+    private fun checkPermissionInternal(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(activity!!, permission) == PackageManager.PERMISSION_GRANTED
+    }
 
     open fun isFirstLineFragment() = false
 
