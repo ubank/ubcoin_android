@@ -4,17 +4,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.ubcoin.R
+import com.ubcoin.TheApplication
 import com.ubcoin.adapter.DealsListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.DealsListResponse
-import com.ubcoin.model.response.MarketItem
+import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
-import kotlinx.android.synthetic.main.fragment_deals_child.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -62,24 +61,32 @@ abstract class BaseDealsChildFragment : BaseFragment() {
 
         dealsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
             override fun onItemClick(data: DealItemWrapper, position: Int) {
-                showProgressDialog("Wait please", "Wait please")
-                DataProvider.getMarketItemById(data.dealItem.id, object : SilentConsumer<MarketItem> {
-                    override fun onConsume(t: MarketItem) {
-                        hideProgress()
-                        getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(t), true)
-                    }
-                }, object : SilentConsumer<Throwable> {
-                    override fun onConsume(t: Throwable) {
-                        handleException(t)
-                    }
-
-                })
+                requestUrlAndOpenApp(data)
             }
         }
 
         recyclerView.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(linearLayoutManager) {
             override fun onLoadMore() {
                 loadData()
+            }
+
+        })
+    }
+
+    fun requestUrlAndOpenApp(data: DealItemWrapper) {
+        showProgressDialog("Wait please", "Wait please")
+        DataProvider.getTgLink(data.dealItem.id, object : SilentConsumer<TgLink> {
+            override fun onConsume(t: TgLink) {
+                hideProgressDialog()
+                val fullUrl = t.url
+                if (fullUrl?.isNotBlank() == true) {
+                    TheApplication.instance.openTelegramIntent(fullUrl)
+                }
+            }
+
+        }, object : SilentConsumer<Throwable> {
+            override fun onConsume(t: Throwable) {
+                handleException(t)
             }
 
         })

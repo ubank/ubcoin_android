@@ -82,6 +82,10 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)*/
                         }
                         MenuItems.DEALS -> {
+                            if (!ProfileHolder.isAuthorized()) {
+                                showNeedToRegistration()
+                                return
+                            }
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {

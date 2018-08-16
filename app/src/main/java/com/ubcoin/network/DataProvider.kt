@@ -98,19 +98,6 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    //TODO
-    fun getDeals(limit: Int, page: Int, type: BaseDealsChildFragment.Type, onSuccess: SilentConsumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
-        return networkModule.api().marketList(limit, page)
-                .doOnNext {
-                    if (type == BaseDealsChildFragment.Type.BUY) {
-                        (it.data as ArrayList).clear()
-                    }
-                }
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .compose(RxUtils.applyT())
-                .subscribe(onSuccess, onError)
-    }
-
     fun favorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
         networkModule.api().favorite(itemId)
                 .debounce(200, TimeUnit.MILLISECONDS)
