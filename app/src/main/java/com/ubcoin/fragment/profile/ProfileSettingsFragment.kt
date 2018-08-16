@@ -1,8 +1,12 @@
 package com.ubcoin.fragment.profile
 
+import android.support.v4.content.ContextCompat
+import android.view.ContextMenu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.DialogAction
+import com.afollestad.materialdialogs.MaterialDialog
 import com.mukesh.countrypicker.Country
 import com.mukesh.countrypicker.CountryPicker
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -42,6 +46,7 @@ class ProfileSettingsFragment : BaseFragment() {
     private lateinit var llSettingsCountry: View
     private lateinit var edtProfileSettingsCountry: MaterialEditText
     private lateinit var txtProfileSettingsBalance: TextView
+    private var materialDialog: MaterialDialog?= null
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
@@ -66,7 +71,7 @@ class ProfileSettingsFragment : BaseFragment() {
         }
 
         view.findViewById<View>(R.id.btnLogout).setOnClickListener {
-            processLogout()
+            showLogoutConfirm()
         }
 
 
@@ -166,8 +171,24 @@ class ProfileSettingsFragment : BaseFragment() {
         )
     }
 
+    private fun showLogoutConfirm() {
+        materialDialog?.dismiss()
+        materialDialog = MaterialDialog.Builder(activity!!)
+                .title(R.string.log_out)
+                .content(R.string.logout_text)
+                .negativeText(R.string.cancel)
+                .onNegative { dialog, _ -> dialog.dismiss() }
+                .positiveText(R.string.log_out)
+                .positiveColor(ContextCompat.getColor(activity!!, R.color.greenMainColor))
+                .onPositive { dialog, _ ->
+                    dialog.dismiss()
+                    processLogout()
+                }.build()
+        materialDialog!!.show()
+    }
 
     private fun processLogout() {
+
         showProgressDialog("Wait please", "Logout")
         DataProvider.logout(
                 object : SilentConsumer<Response<Unit>> {

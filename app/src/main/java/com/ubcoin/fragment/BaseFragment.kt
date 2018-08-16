@@ -280,10 +280,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
             txtHeader?.text = getString(getHeaderText())
         }
         if (getHeaderIcon() != noHeaderObject) {
-            imgHeaderLeft?.run {
-                setImageResource(getHeaderIcon())
-                setOnClickListener { onIconClick() }
-            }
+            imgHeaderLeft?.setImageResource(getHeaderIcon())
+            llHeaderLeft?.setOnClickListener { onIconClick() }
         }
     }
 

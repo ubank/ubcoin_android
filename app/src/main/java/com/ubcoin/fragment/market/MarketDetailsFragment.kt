@@ -32,6 +32,7 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
 import retrofit2.Response
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 /**
@@ -47,6 +48,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtLocationDistance: TextView
     private lateinit var mapView: MapView
     private var idForRemove: String? = null
+    private val isFavoriteProcessing = AtomicBoolean(false)
 
     var header: View? = null
 
@@ -225,6 +227,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun requestFavorite(favorite: Boolean) {
+        if (isFavoriteProcessing.get()) return
+        isFavoriteProcessing.set(true)
         showProgressDialog("Wait please", "Wait please")
         if (favorite) {
             DataProvider.favorite(marketItem.id, successHandler(), silentConsumer())
@@ -252,6 +256,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                     null
                 }
                 setFavorite(marketItem.favorite)
+                isFavoriteProcessing.set(false)
             }
 
         }
@@ -263,6 +268,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun handleException(t: Throwable) {
+        isFavoriteProcessing.set(false)
         hideProgressDialog()
         super.handleException(t)
     }

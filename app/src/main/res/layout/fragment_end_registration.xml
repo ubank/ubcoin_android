@@ -7,7 +7,7 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/common_header"/>
+    <include layout="@layout/common_header_login"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,17 +40,18 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_regular"
                 android:gravity="center"
-                android:text="@string/please_verify_email_address"
+                android:text="@string/successfully_confirmed"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/please_verify_text_size" />
 
             <TextView
+                android:id="@+id/txtWeSentLatter"
                 android:gravity="center"
                 android:textColor="@color/haveAccountColor"
                 android:layout_marginTop="@dimen/header_margin_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/we_sent_a_verification_letter" />
+                android:text="@string/lets_get_started" />
 
 
         </LinearLayout>

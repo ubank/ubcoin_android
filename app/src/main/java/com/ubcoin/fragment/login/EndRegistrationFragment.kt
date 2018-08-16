@@ -3,9 +3,11 @@ package com.ubcoin.fragment.login
 import android.app.Activity
 import android.content.Intent
 import android.view.View
+import android.widget.TextView
 import com.ubcoin.R
 import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.utils.ProfileHolder
 
 /**
  * Created by Yuriy Aizenberg
@@ -18,6 +20,7 @@ class EndRegistrationFragment : BaseFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llClose).setOnClickListener { performBack() }
+        view.findViewById<TextView>(R.id.txtWeSentLatter).text = getString(R.string.we_sent_a_verification_letter, ProfileHolder.user?.email?:"")
     }
 
     override fun getHeaderText() = R.string.sign_up

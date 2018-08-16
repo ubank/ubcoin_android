@@ -8,7 +8,7 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/common_header"/>
+    <include layout="@layout/common_header_login"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txtWeSentLatter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/have_account_margin"
@@ -35,7 +36,7 @@
             android:layout_marginTop="@dimen/have_account_margin"
             android:hint="@string/code"
             android:maxLines="1"
-            android:inputType="text"
+            android:inputType="number"
             android:imeOptions="actionDone"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"

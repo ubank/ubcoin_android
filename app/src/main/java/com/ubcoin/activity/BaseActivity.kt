@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.IFragmentBehaviorAware
 import com.ubcoin.model.BaseApplicationModel
 import com.ubcoin.switcher.FragmentSwitcher
@@ -21,7 +22,10 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
         setContentView(getResourceId())
         fragmentSwitcher = FragmentSwitcher(this)
         supportFragmentManager.addOnBackStackChangedListener {
-            if (!supportFragmentManager.fragments.isEmpty()) {
+            val findFragmentById = supportFragmentManager.findFragmentById(getFragmentContainerId())
+            if (findFragmentById != null && findFragmentById is BaseFragment) {
+                findFragmentById.onResume()
+            } else if (!supportFragmentManager.fragments.isEmpty()) {
                 val last = supportFragmentManager.fragments.last()
                 if (last != null) {
                     last.onResume()

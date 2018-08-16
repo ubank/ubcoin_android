@@ -8,13 +8,13 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/common_header"/>
+    <include layout="@layout/common_header_login"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/have_account_margin"
-        android:layout_marginStart="@dimen/have_account_margin"
+        android:layout_marginEnd="@dimen/header_margin_start"
+        android:layout_marginStart="@dimen/header_margin_start"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
-            android:text="Incorrect Email/Telegram username or Password"
+            android:text="Incorrect Email or Password"
             android:textColor="@color/errorColor"
             android:visibility="invisible" />
 
@@ -33,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
-            android:hint="@string/email_telegram_username"
+            android:hint="@string/email"
+            android:ellipsize="end"
             android:imeOptions="actionNext"
             android:inputType="textWebEmailAddress"
             android:maxLines="1"
@@ -125,6 +126,7 @@
                 android:layout_marginTop="@dimen/have_account_margin"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/dont_have_account"
+                android:textSize="@dimen/have_account_text_size"
                 android:textColor="@color/haveAccountColor" />
 
             <TextView
@@ -146,6 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/sign_up_margin"
             android:layout_marginStart="@dimen/sign_up_margin"
+            android:layout_marginTop="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -162,7 +165,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/ic_next" />
 
 

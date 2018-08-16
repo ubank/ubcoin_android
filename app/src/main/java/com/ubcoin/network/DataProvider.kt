@@ -2,14 +2,21 @@ package com.ubcoin.network
 
 import com.ubcoin.fragment.deals.BaseDealsChildFragment
 import com.ubcoin.model.response.TgLink
+import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.User
 import com.ubcoin.model.response.base.MarketListResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
+import java.io.File
 import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by Yuriy Aizenberg
@@ -68,7 +75,7 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun profile(onSuccess: Consumer<User>, onError: Consumer<Throwable>) : Disposable {
+    fun profile(onSuccess: Consumer<User>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().profile()
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
@@ -87,7 +94,7 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun getTgLink(itemId: String, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>) : Disposable {
+    fun getTgLink(itemId: String, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .getTgLink(itemId)
                 .compose(RxUtils.applyT())
@@ -109,14 +116,29 @@ object DataProvider {
 
     fun favorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
         networkModule.api().favorite(itemId)
+                .debounce(200, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
     fun unfavorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
         networkModule.api().unfavorite(itemId)
+                .debounce(200, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
+    fun uploadFiles(filePath: ArrayList<String>, onSuccess: Consumer<TgLinks>, onError: Consumer<Throwable>) {
+        val tgLinks = TgLinks()
+        Observable.fromIterable(filePath)
+                .map { t ->
+                    val file = File(t)
+                    val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
+                    val body = MultipartBody.Part.createFormData("image", file.name, reqFile)
+                    tgLinks.tgLinks.add((networkModule.api().uploadImage(body).blockingFirst()))
+                    tgLinks
+                }
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
 }

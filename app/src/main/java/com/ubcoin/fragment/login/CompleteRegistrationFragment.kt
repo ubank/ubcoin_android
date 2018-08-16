@@ -3,6 +3,7 @@ package com.ubcoin.fragment.login
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.ThePreferences
@@ -59,6 +60,7 @@ class CompleteRegistrationFragment : BaseFragment() {
                 }
             }
         })
+        view.findViewById<TextView>(R.id.txtWeSentLatter).text = getString(R.string.we_sent_a_verification_letter, email)
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
@@ -73,7 +75,7 @@ class CompleteRegistrationFragment : BaseFragment() {
     override fun getHeaderText() = R.string.confirmation
 
 
-    override fun getHeaderIcon() = R.drawable.ic_close
+    override fun getHeaderIcon() = R.drawable.ic_back
 
     private fun goNext() {
         hideKeyboard()
@@ -85,6 +87,7 @@ class CompleteRegistrationFragment : BaseFragment() {
                     override fun onConsume(t: ProfileCompleteResponse) {
                         hideProgressDialog()
                         ThePreferences().setToken(t.accessToken)
+                        ThePreferences().setCurrentUser(t.user)
                         ProfileHolder.user = t.user
                         getSwitcher()?.clearBackStack()?.addTo(EndRegistrationFragment::class.java)
                     }
@@ -101,17 +104,9 @@ class CompleteRegistrationFragment : BaseFragment() {
         super.handleException(t)
     }
 
-    override fun onBackPressed(): Boolean {
-        performBack()
-        return true
-    }
-
     override fun onIconClick() {
         super.onIconClick()
-        performBack()
+        activity?.onBackPressed()
     }
 
-    private fun performBack() {
-        getSwitcher()?.clearBackStack()?.addTo(StartupFragment::class.java)
-    }
 }

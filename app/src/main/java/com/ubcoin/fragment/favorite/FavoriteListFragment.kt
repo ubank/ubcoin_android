@@ -118,6 +118,11 @@ class FavoriteListFragment : FirstLineFragment() {
     override fun onResume() {
         super.onResume()
         callItemRemoved()
+        if (favoriteListAdapter != null && favoriteListAdapter?.isEmpty() == false) {
+            if (!rvMarketList.canScrollVertically(1)) {
+                rvMarketList.postDelayed({ rvMarketList.scrollToPosition(favoriteListAdapter!!.itemCount - 1) }, 300L)
+            }
+        }
     }
 
 

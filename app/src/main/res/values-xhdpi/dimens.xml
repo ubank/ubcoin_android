@@ -34,5 +34,6 @@
     <dimen name="profileDetailsItemHeight">75dp</dimen>
     <dimen name="profileDetailsFlagHeight">18dp</dimen>
     <dimen name="profileDetailsFlagWidth">25dp</dimen>
+    <dimen name="profileDetailsMinHeight">65dp</dimen>
 
 </resources>
