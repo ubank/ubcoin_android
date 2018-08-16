@@ -29,6 +29,7 @@
 
     <dimen name="marketInFavoriteHeight">90dp</dimen>
     <dimen name="marketInFavoriteHeightImage">60dp</dimen>
+    <dimen name="marketInFavoriteHeightImageBordered">80dp</dimen>
     <dimen name="marketInFavoriteMarginDiff">15dp</dimen>
 
     <dimen name="profileDetailsItemHeight">75dp</dimen>

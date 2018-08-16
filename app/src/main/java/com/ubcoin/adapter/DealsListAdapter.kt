@@ -9,6 +9,7 @@ import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.ubcoin.R
+import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.RoundedCornersTransform
@@ -16,7 +17,7 @@ import com.ubcoin.utils.RoundedCornersTransform
 /**
  * Created by Yuriy Aizenberg
  */
-class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, DealsListAdapter.VHolder>(context) {
+class DealsListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, DealsListAdapter.VHolder>(context) {
 
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): VHolder {
@@ -24,7 +25,8 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Deals
     }
 
     override fun onBindViewHolder(vHolder: VHolder, p1: Int) {
-        val item = getItem(p1)
+        val itemWrapper = getItem(p1)
+        val item = itemWrapper.dealItem
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
             vHolder.imgDealsItemLogo.setImageResource(R.drawable.img_photo_placeholder)
@@ -43,7 +45,7 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Deals
         }
         vHolder.txtDealsItemPrice.text = item.title
         vHolder.txtDealsItemName.text = (item.price.toString() + " UBC")
-        bindTouchListener(vHolder.itemView, vHolder.adapterPosition, item)
+        bindTouchListener(vHolder.itemView, vHolder.adapterPosition, itemWrapper)
     }
 
 

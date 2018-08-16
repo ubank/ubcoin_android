@@ -60,6 +60,8 @@ class ThePreferences {
 
     fun clearProfile() {
         instance.edit().putString(KEY_CURRENT_USER, null).apply()
+        instance.edit().putString(KEY_TOKEN, null).apply()
+        instance.edit().putString(KEY_WV_COOKIE, null).apply()
     }
 
     fun setCurrentPreferences(temporaryUser: TemporaryUser) {

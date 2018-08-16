@@ -1,8 +1,6 @@
 package com.ubcoin.network
 
-import com.ubcoin.model.response.TgLink
-import com.ubcoin.model.response.User
-import com.ubcoin.model.response.base.MarketListResponse
+import com.ubcoin.model.response.*
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
 import io.reactivex.Observable
@@ -44,6 +42,9 @@ interface Api {
     @GET("/api/items")
     fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 
+    @GET("/api/items/{itemId}")
+    fun marketItem(@Path("itemId") itemId: String) : Observable<MarketItem>
+
     @GET("/api/favorites")
     fun favorites(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 
@@ -59,4 +60,10 @@ interface Api {
     @Multipart
     @POST("/api/images")
     fun uploadImage(@Part file: MultipartBody.Part): Observable<TgLink>
+
+    @GET("/api/purchases/buyer")
+    fun getBuyersItems(@Query("size") limit: Int, @Query("page") page: Int) : Observable<DealsListResponse>
+
+    @GET("/api/purchases/seller")
+    fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int) : Observable<DealsListResponse>
 }

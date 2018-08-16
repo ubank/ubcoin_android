@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_header" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvSellImages"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/marketInFavoriteHeightImageBordered"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/camera_margin"
+        android:layout_marginStart="@dimen/have_account_text_size"
+        android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+        android:text="@string/about"
+        android:textAllCaps="true"
+        android:textColor="@color/haveAccountColor"
+        android:textSize="@dimen/user_agreement_text_size" />
+
+
+</LinearLayout>

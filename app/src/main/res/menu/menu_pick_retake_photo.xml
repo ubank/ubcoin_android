@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/camera" android:title="@string/take_from_camera" android:icon="@drawable/menu_take_from_camera"/>
+    <item android:id="@+id/gallery" android:title="@string/take_from_gallery" android:icon="@drawable/menu_take_from_gallery"/>
+    <item android:id="@+id/delete" android:title="@string/delete_current" android:icon="@drawable/menu_delete_image"/>
+    <group android:id="@+id/cancel_group">
+        <item android:id="@+id/cancel" android:title="@string/cancel" android:icon="@drawable/menu_close_menu"/>
+    </group>
+</menu>

@@ -1,10 +1,7 @@
 package com.ubcoin.network
 
 import com.ubcoin.fragment.deals.BaseDealsChildFragment
-import com.ubcoin.model.response.TgLink
-import com.ubcoin.model.response.TgLinks
-import com.ubcoin.model.response.User
-import com.ubcoin.model.response.base.MarketListResponse
+import com.ubcoin.model.response.*
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
 import io.reactivex.Observable
@@ -138,6 +135,28 @@ object DataProvider {
                     tgLinks.tgLinks.add((networkModule.api().uploadImage(body).blockingFirst()))
                     tgLinks
                 }
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getBuyersItems(limit: Int, page: Int, onSuccess: Consumer<DealsListResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getBuyersItems(limit, page)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+
+    fun getSellerItems(limit: Int, page: Int, onSuccess: Consumer<DealsListResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getSellersItems(limit, page)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getMarketItemById(itemId: String, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .marketItem(itemId)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

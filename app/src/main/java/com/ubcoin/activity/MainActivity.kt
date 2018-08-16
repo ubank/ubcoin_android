@@ -16,10 +16,10 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
-import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
+import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
@@ -74,6 +74,12 @@ class MainActivity : BaseActivity() {
                         }
                         MenuItems.SELL -> {
                             goStub()
+                            /*
+                            if (!ProfileHolder.isAuthorized()) {
+                                showNeedToRegistration()
+                                return
+                            }
+                            fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)*/
                         }
                         MenuItems.DEALS -> {
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)

@@ -21,17 +21,34 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(protecte
         }
 
     fun addData(data: List<T>) {
+        if (data.isEmpty()) return
         val position = this.data.size
         this.data.addAll(data)
         if (position == 0) notifyDataSetChanged() else notifyItemRangeInserted(position, data.size)
     }
 
     fun addData(data: List<T>, position: Int) {
+        if (data.isEmpty()) return
         if (this.data.isEmpty()) {
             addData(data)
         } else {
             this.data.addAll(position, data)
             notifyItemRangeInserted(position, data.size)
+        }
+    }
+
+    fun addData(data: T) {
+        val position = this.data.size
+        this.data.add(data)
+        if (position == 0) notifyDataSetChanged() else notifyItemInserted(this.data.size)
+    }
+
+    fun addData(data: T, position: Int) {
+        if (this.data.isEmpty()) {
+            addData(data)
+        } else {
+            this.data.add(position, data)
+            notifyItemInserted(position)
         }
     }
 
