@@ -30,13 +30,13 @@
         tools:replace="android:icon">
         <activity
             android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustResize|adjustPan"
             android:launchMode="singleTask"
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

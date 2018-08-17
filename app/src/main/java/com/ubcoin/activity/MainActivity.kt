@@ -20,6 +20,7 @@ import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
 import com.ubcoin.fragment.profile.ProfileMainFragment
+import com.ubcoin.fragment.sell.SellFragment
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
@@ -60,7 +61,6 @@ class MainActivity : BaseActivity() {
         menuBottomView.menuViewCallback = object : IMenuViewCallback {
             override fun onMenuSelected(menuItems: MenuItems, menuSingleView: MenuSingleView, isAlreadyActivated: Boolean) {
                 if (!isAlreadyActivated) {
-                    menuBottomView.activate(menuItems)
                     when (menuItems) {
                         MenuItems.MARKET -> {
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
@@ -70,28 +70,32 @@ class MainActivity : BaseActivity() {
                                 showNeedToRegistration()
                                 return
                             }
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
-                            goStub()
-                            /*
-                            if (!ProfileHolder.isAuthorized()) {
+//                            goStub()
+
+                          if (!ProfileHolder.isAuthorized()) {
                                 showNeedToRegistration()
                                 return
                             }
-                            fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)*/
+                            menuBottomView.activate(menuItems)
+                            fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)
                         }
                         MenuItems.DEALS -> {
                             if (!ProfileHolder.isAuthorized()) {
                                 showNeedToRegistration()
                                 return
                             }
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {
                             if (!ProfileHolder.isAuthorized()) {
                                 checkProfileLoggedIn()
                             } else {
+                                menuBottomView.activate(menuItems)
                                 fragmentSwitcher?.clearBackStack()?.addTo(ProfileMainFragment::class.java)
                             }
                         }

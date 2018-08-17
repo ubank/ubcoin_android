@@ -22,12 +22,10 @@
         android:background="@drawable/main_gradient_bottom"
         android:orientation="horizontal" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/mainContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@id/llMainGradientBottom"
-        />
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

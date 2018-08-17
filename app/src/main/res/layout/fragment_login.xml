@@ -130,6 +130,7 @@
                 android:textColor="@color/haveAccountColor" />
 
             <TextView
+                android:id="@+id/txtDontHaveAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/have_account_margin"

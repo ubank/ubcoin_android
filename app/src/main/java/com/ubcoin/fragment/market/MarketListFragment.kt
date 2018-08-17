@@ -22,6 +22,7 @@ import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Created by Yuriy Aizenberg
@@ -39,6 +40,8 @@ class MarketListFragment : FirstLineFragment() {
     private var currentPage = 0
     private var isLoading = false
     private var isEndOfLoading = false
+
+    private val isFavoriteProcessing = AtomicBoolean(false)
 
     override fun getLayoutResId() = R.layout.fragment_market_list
 
@@ -169,6 +172,8 @@ class MarketListFragment : FirstLineFragment() {
     }
 
     private fun processFavorite(marketItem: MarketItem, position: Int, markAsFavorite: Boolean) {
+        if (isFavoriteProcessing.get()) return
+        isFavoriteProcessing.set(true)
         if (markAsFavorite) {
             DataProvider.favorite(marketItem.id, successConsumer(marketItem, position), Consumer { handleException(it) })
         } else {
@@ -185,6 +190,7 @@ class MarketListFragment : FirstLineFragment() {
                 } catch (e: Exception) {
                     marketListAdapter?.notifyDataSetChanged()
                 }
+                isFavoriteProcessing.set(false)
             }
 
         }
@@ -195,6 +201,7 @@ class MarketListFragment : FirstLineFragment() {
     override fun handleException(t: Throwable) {
         hideViewsQuietly(progressCenter, progressBottom)
         isLoading = false
+        isFavoriteProcessing.set(false)
         super.handleException(t)
     }
 

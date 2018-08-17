@@ -51,7 +51,7 @@ class TelegramChannelFragment : BaseFragment() {
         if (Build.VERSION.SDK_INT >= 21) {
             webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             val cookieManager = CookieManager.getInstance()
-            cookieManager.setCookie("set-cookie", ThePreferences().getWVCookie())
+//            cookieManager.setCookie("set-cookie", ThePreferences().getWVCookie())
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
     }

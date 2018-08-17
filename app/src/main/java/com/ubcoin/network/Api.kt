@@ -66,4 +66,9 @@ interface Api {
 
     @GET("/api/purchases/seller")
     fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int) : Observable<DealsListResponse>
+
+    @GET("/api/items/categories")
+    fun getCategories() : Observable<List<Category>>
+
+
 }

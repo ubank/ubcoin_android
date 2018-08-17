@@ -48,6 +48,12 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun sendRegistrationEmail(email: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+        networkModule.api().sendForgotEmail(SendForgotEmail("LOGIN", email))
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun forgotChangePassword(email: String, code: String, value: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api().changeForgotPassword(ChangeForgotPassword(email, value, "PASSWORD", code))
                 .compose(RxUtils.applyT())
@@ -147,4 +153,12 @@ object DataProvider {
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
+
+    fun getCategories(onSuccess: Consumer<List<Category>>, onError: Consumer<Throwable>) {
+        networkModule.api().getCategories()
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+
 }

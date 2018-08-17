@@ -52,7 +52,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginBottom="@dimen/camera_margin"
                 android:layout_marginTop="@dimen/camera_margin"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/didn_t_get_the_email"
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginBottom="@dimen/camera_margin"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="@dimen/camera_margin"
                 android:fontFamily="@font/roboto_regular"

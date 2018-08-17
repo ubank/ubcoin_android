@@ -69,13 +69,13 @@ object NetworkModule {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
                     if (response?.code()?: 401 == HttpURLConnection.HTTP_OK) {
-                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
-                        thePreferences.setWVCookie(response.header("set-cookie"))
+//                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
+//                        thePreferences.setWVCookie(response.header("set-cookie"))
                         thePreferences.setToken(response.header(AUTH_HEADER))
                     }
                 } else {
                     response = it.proceed(it.request().newBuilder()
-                            .addHeader("Cookie", thePreferences.getCookie() ?: "")
+//                            .addHeader("Cookie", thePreferences.getCookie() ?: "")
                             .addHeader(AUTH_HEADER, thePreferences.getToken() ?: "")
                             .build())
                 }

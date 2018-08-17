@@ -36,7 +36,7 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
-        view.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
+        view.findViewById<View>(R.id.txtDontHaveAccount).setOnClickListener {
             getSwitcher()?.run {
                 clearBackStack().addTo(StartupFragment::class.java, false).addTo(SignupFragment::class.java)
             }
@@ -44,7 +44,7 @@ class LoginFragment : BaseFragment() {
 
         val imgLogin = view.findViewById<ImageView>(R.id.imgLogin)
 
-        view.findViewById<View>(R.id.llLogin).setOnClickListener {
+        imgLogin.setOnClickListener {
             processLogin()
         }
         llForgotPassword = view.findViewById(R.id.llForgotPassword)

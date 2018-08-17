@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.login
 
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -24,12 +25,12 @@ class SignupFragment : BaseFragment() {
     lateinit var edtSignUpEmail: MaterialEditText
     lateinit var edtPasswordInput: PasswordInputExtension
 
-    override fun getLayoutResId() = R.layout.fragment_signup
+    override fun getLayoutResId() = R.layout.fragment_signup_copy
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llSignUp).setOnClickListener { onSignUpClick() }
-        view.findViewById<View>(R.id.llAlreadyHaveAccount).setOnClickListener {
+        view.findViewById<View>(R.id.txtAlreadyHaveAccount).setOnClickListener {
             getSwitcher()?.run {
                 clearBackStack().addTo(StartupFragment::class.java, false).addTo(LoginFragment::class.java)
             }
@@ -77,10 +78,15 @@ class SignupFragment : BaseFragment() {
 
     private fun onSignUpClick() {
         if (!isInputValid()) return
+        val mail = getEmail().trim()
+        if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
+            Toast.makeText(activity, "Email invalid", Toast.LENGTH_SHORT).show()
+            return
+        }
         showProgressDialog("Registration", "Wait please")
         DataProvider.registrations(
-                getEmail().trim(),
-                edtPasswordInput.getInputText().trim(),
+                mail,
+                getPassword().trim(),
                 edtSignUpName.text.toString().trim(),
                 onSuccess(),
                 object : SilentConsumer<Throwable> {
@@ -94,10 +100,13 @@ class SignupFragment : BaseFragment() {
     private fun getEmail() = edtSignUpEmail.text.toString()
 
     private fun onSuccess(): Consumer<Response<Unit>> {
-        return object: SilentConsumer<Response<Unit>> {
+        return object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
-                getSwitcher()?.addTo(CompleteRegistrationFragment::class.java, CompleteRegistrationFragment.getBundle(getEmail()), true)
+                getSwitcher()?.addTo(
+                        CompleteRegistrationFragment::class.java,
+                        CompleteRegistrationFragment.getBundle(getEmail(), getPassword(), getUserName()),
+                        true)
             }
 
         }
@@ -105,8 +114,12 @@ class SignupFragment : BaseFragment() {
 
     private fun isInputValid() =
             getEmail().isNotBlank()
-                    && edtPasswordInput.getInputText().isNotBlank()
-                    && edtSignUpName.text.toString().isNotBlank()
+                    && getPassword().isNotBlank()
+                    && getUserName().isNotBlank()
+
+    private fun getUserName() = edtSignUpName.text.toString()
+
+    private fun getPassword() = edtPasswordInput.getInputText()
 
 
     override fun getHeaderIcon() = R.drawable.ic_back

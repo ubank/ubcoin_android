@@ -20,7 +20,7 @@ class EndRegistrationFragment : BaseFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llClose).setOnClickListener { performBack() }
-        view.findViewById<TextView>(R.id.txtWeSentLatter).text = getString(R.string.we_sent_a_verification_letter, ProfileHolder.user?.email?:"")
+//        view.findViewById<TextView>(R.id.txtWeSentLatter).text = getString(R.string.we_sent_a_verification_letter, ProfileHolder.user?.email?:"")
     }
 
     override fun getHeaderText() = R.string.sign_up

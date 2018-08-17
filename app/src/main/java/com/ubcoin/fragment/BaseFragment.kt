@@ -324,6 +324,11 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
+    }
+
     @Suppress("UNUSED_PARAMETER")
     private fun onNoNetworkException(exception: NetworkConnectivityException) {
         showSweetAlertDialog("Error", getString(R.string.no_network_error))
