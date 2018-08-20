@@ -1,9 +1,9 @@
 package com.ubcoin
 
-import android.app.Application
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.maps.model.LatLng
@@ -23,7 +23,7 @@ import org.greenrobot.eventbus.EventBus
  */
 private const val TAG = "TheApplication"
 
-class TheApplication : Application() {
+class TheApplication : MultiDexApplication() {
 
     var favoriteIdForRemove: String? = null
     var currentLocation: LatLng? = null

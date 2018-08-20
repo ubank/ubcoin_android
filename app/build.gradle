@@ -12,8 +12,9 @@ android {
         applicationId "com.ubcoin"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 5
-        versionName "1.0.5"
+        multiDexEnabled true
+        versionCode 6
+        versionName "1.0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -86,6 +87,7 @@ dependencies {
     }
     implementation 'com.github.mukeshsolanki:country-picker-android:1.2.4'
     implementation 'com.cocosw:bottomsheet:1.+@aar'
+    implementation 'com.android.support:multidex:1.0.3'
     /*implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.24.0'
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0'
         implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'

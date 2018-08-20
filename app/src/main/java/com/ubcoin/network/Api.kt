@@ -1,6 +1,7 @@
 package com.ubcoin.network
 
 import com.ubcoin.model.response.*
+import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
 import io.reactivex.Observable
@@ -69,6 +70,12 @@ interface Api {
 
     @GET("/api/items/categories")
     fun getCategories() : Observable<List<Category>>
+
+    @POST("/api/geo/find")
+    fun findLocation(@Body addressBody: AddressBody) : Observable<List<SingleLocation>>
+
+    @POST("/api/items")
+    fun createProduct(@Body createProductRequest: CreateProductRequest) : Observable<IdResponse>
 
 
 }

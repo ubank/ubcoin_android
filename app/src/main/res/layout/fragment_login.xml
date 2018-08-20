@@ -71,7 +71,7 @@
                 android:layout_marginBottom="@dimen/header_margin_start"
                 android:layout_marginTop="@dimen/header_margin_start"
                 android:fontFamily="@font/roboto_regular"
-                android:text="@string/forgot_password"
+                android:text="@string/forgot_password_question"
                 android:textColor="@color/greenMainColor" />
 
         </LinearLayout>

@@ -6,21 +6,29 @@ import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.cocosw.bottomsheet.BottomSheet
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
+import com.ubcoin.model.response.TgLinks
+import com.ubcoin.model.response.base.IdResponse
+import com.ubcoin.network.DataProvider
+import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.utils.SellCreateDataHolder
-import java.math.RoundingMode
-import java.text.NumberFormat
-import java.util.*
 
 /**
  * Created by Yuriy Aizenberg
@@ -31,17 +39,19 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private lateinit var adapter: SellImagesAdapter
     private var bottomSheet: BottomSheet? = null
     private var fromCamera = false
-    private var googleMap: GoogleMap?= null
+    private var googleMap: GoogleMap? = null
     private var currentPrice: Float = 0f
+    private var marker: Marker? = null
 
     private lateinit var mapView: MapView
-    private lateinit var edtSellTitle : MaterialEditText
-    private lateinit var edtSellCategory : MaterialEditText
+    private lateinit var edtSellTitle: MaterialEditText
+    private lateinit var edtSellCategory: MaterialEditText
     private lateinit var edtSellPrice: MaterialEditText
     private lateinit var edtSellDescription: MaterialEditText
     private lateinit var txtSellLocation: TextView
     private lateinit var llSellLocation: View
     private lateinit var btnSellDone: View
+
 
     init {
         (0..4).forEach { datum.add(SellImageModel()) }
@@ -92,6 +102,119 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             }
             true
         }
+
+        llSellLocation.setOnClickListener {
+            getSwitcher()?.addTo(SelectLocationFragment::class.java)
+        }
+
+        btnSellDone.setOnClickListener {
+            val validateDataAndCreateRequest = validateDataAndCreateRequest()
+            if (validateDataAndCreateRequest != null) {
+                hideKeyboard()
+                loadImagesAndCreate(validateDataAndCreateRequest)
+            }
+        }
+    }
+
+    private fun loadImagesAndCreate(createProductRequest: CreateProductRequest) {
+        showProgressDialog("Create product", "Wait please")
+        val imageUrls = ArrayList<String>()
+        datum.forEach {
+            if (it.filePath != null) {
+                imageUrls.add(it.filePath!!)
+            }
+        }
+        if (!imageUrls.isEmpty()) {
+            DataProvider.uploadFiles(imageUrls,
+                    object : SilentConsumer<TgLinks> {
+                        override fun onConsume(t: TgLinks) {
+                            imageUrls.clear()
+                            t.tgLinks.forEach {
+                                if (it.url != null) {
+                                    imageUrls.add(it.url)
+                                }
+                            }
+                            afterImagesLoaded(createProductRequest, imageUrls)
+                        }
+                    },
+                    object : SilentConsumer<Throwable> {
+                        override fun onConsume(t: Throwable) {
+                            handleException(t)
+                        }
+                    })
+        } else {
+            afterImagesLoaded(createProductRequest, imageUrls)
+        }
+    }
+
+    private fun afterImagesLoaded(createProductRequest: CreateProductRequest, images: List<String>) {
+        createProductRequest.images = images
+
+        DataProvider.createProduct(createProductRequest,
+                object : SilentConsumer<IdResponse> {
+                    override fun onConsume(t: IdResponse) {
+                        hideProgressDialog()
+                        Toast.makeText(activity, "Product created", Toast.LENGTH_SHORT).show()
+                        activity?.onBackPressed()
+                    }
+
+                },
+                object : SilentConsumer<Throwable> {
+                    override fun onConsume(t: Throwable) {
+                        handleException(t)
+                    }
+
+                })
+    }
+
+    override fun handleException(t: Throwable) {
+        hideProgressDialog()
+        super.handleException(t)
+    }
+
+    private fun validateDataAndCreateRequest(): CreateProductRequest? {
+        val title = edtSellTitle.text.toString()
+        if (title.isBlank()) {
+            showSweetAlertDialog("Error", getString(R.string.err_title_missing))
+            return null
+        }
+        if (currentPrice <= 0f) {
+            showSweetAlertDialog("Error", getString(R.string.err_price_required))
+            return null
+        }
+
+        val categoryId = SellCreateDataHolder.category?.id
+        if (categoryId == null) {
+            showSweetAlertDialog("Error", getString(R.string.err_category_missing))
+            return null
+        }
+
+        val location = SellCreateDataHolder.location
+        if (location == null || !location.isAddressPresented()) {
+            showSweetAlertDialog("Error", getString(R.string.err_location_missing))
+            return null
+        }
+
+        if (!hasImages()) {
+            showSweetAlertDialog("Error", getString(R.string.err_image_missing))
+            return null
+        }
+
+        return CreateProductRequest(
+                categoryId,
+                title,
+                edtSellDescription.text.toString().trim(),
+                currentPrice.toDouble(),
+                location,
+                true, true, ArrayList()
+        )
+    }
+
+    private fun hasImages(): Boolean {
+        datum.forEach {
+            if (it.hasImage()) return true
+        }
+        return false
     }
 
     override fun onResume() {
@@ -123,7 +246,17 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         if (location == null) {
             txtSellLocation.text = getString(R.string.location_label)
         } else {
+            marker?.remove()
             txtSellLocation.text = location.text
+            if (location.isAddressPresented() && googleMap != null) {
+                val latLng = LatLng(
+                        location.latPoint!!.toDouble(),
+                        location.longPoint!!.toDouble())
+                val markerOptions = MarkerOptions().position(latLng)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin))
+                marker = googleMap!!.addMarker(markerOptions)
+                googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 8f))
+            }
         }
         setCurrentPrice()
     }
@@ -132,7 +265,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         val materialDialog = MaterialDialog.Builder(activity!!)
                 .customView(R.layout.fragment_content_select_price, false)
                 .build()
-        val edtPrice : MaterialEditText = materialDialog.findViewById(R.id.edtPrice) as MaterialEditText
+        val edtPrice: MaterialEditText = materialDialog.findViewById(R.id.edtPrice) as MaterialEditText
 
         materialDialog.findViewById(R.id.btnDialogCancel).setOnClickListener {
             materialDialog.dismiss()
@@ -272,9 +405,10 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
     override fun onMapReady(p0: GoogleMap?) {
         googleMap = p0
+        setupData()
     }
 
-    private fun getFormattedPrice() : String {
+    private fun getFormattedPrice(): String {
         if (currentPrice <= 0f) {
             currentPrice = 0f
             return getString(R.string.balance_placeholder, "0.00")
@@ -284,10 +418,10 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     }
 
     private fun formatPriceWithTwoDigits(): String {
-       /* val formatter = NumberFormat.getInstance(Locale.US)
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        return formatter.format(currentPrice)*/
+        /* val formatter = NumberFormat.getInstance(Locale.US)
+         formatter.maximumFractionDigits = 2
+         formatter.minimumFractionDigits = 2
+         return formatter.format(currentPrice)*/
         return String.format("%.2f", currentPrice)
     }
 

@@ -69,7 +69,7 @@ abstract class BaseActivity : AppCompatActivity(), IActivity {
         hideDialogs()
         if (baseApplicationModel != null) {
             var errors = ""
-            val errorValidations = baseApplicationModel.error?.errorValidations
+            val errorValidations = baseApplicationModel.errorWrapper?.error?.errorValidations
             for (e in errorValidations!!) {
                 errors += e.message + "\n"
             }

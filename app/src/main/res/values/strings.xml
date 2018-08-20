@@ -15,7 +15,8 @@
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="sign_up_first_upper">Sign up</string>
     <string name="user_agreement">User agreement</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password_question">Forgot password?</string>
     <string name="reset_password_text">Forgot your password? No worries.\nJust enter your Email to reset the password.</string>
     <string name="email">Email</string>
     <string name="send">send</string>
@@ -41,6 +42,7 @@
     <string name="resend_it">Resend it</string>
     <string name="didn_t_get_the_email">Didn’t get the email?</string>
     <string name="confirmation">Confirmation</string>
+    <string name="confirmation_code">Confirmation code</string>
     <string name="no_active_deals">No active deals</string>
     <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Items you are going to buy or to sell\nwill be here</string>
     <string name="deals_header">Deals</string>
@@ -89,5 +91,12 @@
     <string name="description">Description</string>
     <string name="sell_price">Sell price</string>
     <string name="select_category">Select category</string>
+    <string name="select_location">Select location</string>
+    <string name="location_dots">Location</string>
+    <string name="err_title_missing">Title is missing</string>
+    <string name="err_price_required">Price required</string>
+    <string name="err_category_missing">Category is missing</string>
+    <string name="err_location_missing">Location is missing</string>
+    <string name="err_image_missing">Image is missing</string>
 
 </resources>

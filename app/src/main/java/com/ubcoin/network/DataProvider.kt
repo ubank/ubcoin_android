@@ -1,7 +1,11 @@
 package com.ubcoin.network
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import com.ubcoin.fragment.deals.BaseDealsChildFragment
 import com.ubcoin.model.response.*
+import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
 import io.reactivex.Observable
@@ -12,6 +16,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import java.io.File
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -157,6 +162,29 @@ object DataProvider {
     fun getCategories(onSuccess: Consumer<List<Category>>, onError: Consumer<Throwable>) {
         networkModule.api().getCategories()
                 .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun findLocation(address: String, onSuccess: Consumer<List<SingleLocation>>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api()
+                .findLocation(AddressBody(address))
+                .compose(RxUtils.applyTSingle())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun findLocationSync(address: String) : List<SingleLocation> {
+        return networkModule.api().findLocation(AddressBody(address)).blockingFirst()
+    }
+
+    fun resolveLocation(context: Context, lat: Double, lon: Double, onSuccess: Consumer<List<Address>>, onError: Consumer<Throwable>) : Disposable {
+        return Observable.just(Geocoder(context, Locale.getDefault()).getFromLocation(lat, lon, 1))
+                .compose(RxUtils.applyTSingle())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<IdResponse>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api().createProduct(createProductRequest)
+                .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
 

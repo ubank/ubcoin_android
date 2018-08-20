@@ -19,6 +19,10 @@ object RxUtils {
         return ObservableTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
     }
 
+    fun <T> applyTSingle(): ObservableTransformer<T, T> {
+        return ObservableTransformer { it.subscribeOn(Schedulers.single()).observeOn(AndroidSchedulers.mainThread()) }
+    }
+
     fun <T> applyMaybe(): MaybeTransformer<T, T> {
         return MaybeTransformer { it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }
     }

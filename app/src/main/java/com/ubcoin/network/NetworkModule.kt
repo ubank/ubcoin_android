@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
 import com.ubcoin.model.Error
+import com.ubcoin.model.ErrorWrapper
 import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
@@ -101,9 +102,9 @@ object NetworkModule {
         }
     }
 
-    private fun parseResponseForError(response: Response): Error? {
+    private fun parseResponseForError(response: Response): ErrorWrapper? {
         return try {
-            Gson().fromJson(response.body()!!.string(), Error::class.java)
+            Gson().fromJson(response.body()!!.string(), ErrorWrapper::class.java)
         } catch (e: Exception) {
             Log.e(javaClass.name, e.message, e)
             null

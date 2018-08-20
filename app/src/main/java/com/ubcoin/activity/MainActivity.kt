@@ -63,6 +63,7 @@ class MainActivity : BaseActivity() {
                 if (!isAlreadyActivated) {
                     when (menuItems) {
                         MenuItems.MARKET -> {
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         }
                         MenuItems.FAVORITE -> {
@@ -74,6 +75,7 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
+//                            menuBottomView.activate(menuItems)
 //                            goStub()
 
                           if (!ProfileHolder.isAuthorized()) {

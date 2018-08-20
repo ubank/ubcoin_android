@@ -3,6 +3,7 @@ package com.ubcoin.fragment.market
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
@@ -31,6 +32,7 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.*
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_market_item_details.*
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -44,7 +46,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var marketItem: MarketItem
     private lateinit var sliderLayout: SliderLayout
     private lateinit var pageIndicator: PagerIndicator
-    private lateinit var fab: FloatingActionButton
+    private lateinit var fabActive: FloatingActionButton
+    private lateinit var fabInactive: FloatingActionButton
     private lateinit var txtLocationDistance: TextView
     private lateinit var mapView: MapView
     private var idForRemove: String? = null
@@ -75,13 +78,14 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         sliderLayout = view.findViewById(R.id.slider)
         pageIndicator = view.findViewById(R.id.custom_indicator)
         txtLocationDistance = view.findViewById(R.id.txtLocationDistance)
-        fab = view.findViewById(R.id.fab)
+        fabActive = view.findViewById(R.id.fabActive)
+        fabInactive = view.findViewById(R.id.fabInactive)
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
         setFavorite(marketItem.favorite)
 
-        fab.setOnClickListener {
+        /*fab.setOnClickListener {
             requestFavorite(!marketItem.favorite)
-        }
+        }*/
 
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
@@ -146,7 +150,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         val location = marketItem.location
 
         if (location != null) {
-            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()?:.0, location.longPoint?.toDouble()?: .0)
+            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()
+                    ?: .0, location.longPoint?.toDouble() ?: .0)
             txtLocationDistance.text = DistanceUtils.calculateDistance(itemLocationLatLng, activity!!)
         } else {
             txtLocationDistance.text = null
@@ -274,7 +279,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun setFavorite(isFavorite: Boolean) {
-        fab.backgroundTintList =
+       /* fab.backgroundTintList =
                 if (isFavorite)
                     ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.greenMainColor))
                 else
@@ -285,9 +290,31 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_white)
                 else
                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_green)
-
         fab.setImageDrawable(drawable)
+        fab.invalidate()*/
 
+
+        if (!isFavorite) {
+            fabActive.show()
+            fabActive.visibility = View.VISIBLE
+            fabActive.setOnClickListener {
+                requestFavorite(!isFavorite)
+            }
+
+            fabInactive.hide()
+            fabInactive.visibility = View.GONE
+            fabInactive.setOnClickListener {  }
+        } else {
+            fabInactive.show()
+            fabInactive.visibility = View.VISIBLE
+            fabInactive.setOnClickListener {
+                requestFavorite(!isFavorite)
+            }
+
+            fabActive.hide()
+            fabActive.visibility = View.GONE
+            fabActive.setOnClickListener {  }
+        }
     }
 
 }
