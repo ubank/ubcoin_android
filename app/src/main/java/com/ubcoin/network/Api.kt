@@ -60,6 +60,9 @@ interface Api {
     @GET("/api/users/tg")
     fun getTgLink(@Query("itemId") itemId: String): Observable<TgLink>
 
+    @GET("/api/users/tg")
+    fun getTgLink(): Observable<TgLink>
+
     @Multipart
     @POST("/api/images")
     fun uploadImage(@Part file: MultipartBody.Part): Observable<TgLink>
@@ -99,4 +102,7 @@ interface Api {
 
     @POST("/api/wallet/withdraw")
     fun withdraw(@Body withdraw: Withdraw) : Observable<WithdrawResponse>
+
+    @POST("/api/items/discuss")
+    fun discuss(@Body request: IdRequest) : Observable<TgLink>
 }

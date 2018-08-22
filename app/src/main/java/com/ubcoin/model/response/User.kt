@@ -19,5 +19,6 @@ data class User(
         var phone: String?,
         var settings: Settings?,
         var walletNumber: Long?,
-        var wallet: Wallet?
+        var wallet: Wallet?,
+        var authorizedInTg: Boolean?
 ) : Serializable

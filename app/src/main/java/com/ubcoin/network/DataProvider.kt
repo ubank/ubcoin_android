@@ -116,6 +116,20 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun discuss(itemId: String, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api()
+                .discuss(IdRequest(itemId))
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getTgLink(onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api()
+                .getTgLink()
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun favorite(itemId: String, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
         networkModule.api().favorite(itemId)
                 .debounce(200, TimeUnit.MILLISECONDS)

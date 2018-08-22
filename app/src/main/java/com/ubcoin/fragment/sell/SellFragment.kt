@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.sell
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -19,15 +20,18 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
+import com.ubcoin.TheApplication
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
+import com.ubcoin.model.response.TgLink
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
+import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
 
@@ -112,9 +116,42 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             val validateDataAndCreateRequest = validateDataAndCreateRequest()
             if (validateDataAndCreateRequest != null) {
                 hideKeyboard()
-                loadImagesAndCreate(validateDataAndCreateRequest)
+                if (validateTgUser()) {
+                    loadImagesAndCreate(validateDataAndCreateRequest)
+                }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (SellCreateDataHolder.hasChanges) {
+            setupData()
+        }
+        mapView.onResume()
+    }
+
+    private val requestCode = 19990
+
+    private fun validateTgUser(): Boolean {
+        val authorizedInTg = ProfileHolder.user!!.authorizedInTg ?: false
+        if (!authorizedInTg) {
+            showProgressDialog("Loading", "Wait please")
+            DataProvider.getTgLink(object : SilentConsumer<TgLink> {
+                override fun onConsume(t: TgLink) {
+                    hideProgressDialog()
+                    ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg?:false
+                    TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                }
+
+            }, object : SilentConsumer<Throwable> {
+                override fun onConsume(t: Throwable) {
+                    hideProgressDialog()
+                    handleException(t)
+                }
+            })
+        }
+        return authorizedInTg
     }
 
     private fun loadImagesAndCreate(createProductRequest: CreateProductRequest) {
@@ -131,9 +168,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                         override fun onConsume(t: TgLinks) {
                             imageUrls.clear()
                             t.tgLinks.forEach {
-                                if (it.url != null) {
-                                    imageUrls.add(it.url)
-                                }
+                                imageUrls.add(it.url)
                             }
                             afterImagesLoaded(createProductRequest, imageUrls)
                         }
@@ -216,14 +251,6 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             if (it.hasImage()) return true
         }
         return false
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (SellCreateDataHolder.hasChanges) {
-            setupData()
-        }
-        mapView.onResume()
     }
 
     override fun onDestroy() {

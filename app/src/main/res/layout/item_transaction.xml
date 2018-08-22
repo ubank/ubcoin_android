@@ -24,6 +24,14 @@
         android:layout_marginEnd="@dimen/header_margin_start"
         android:src="@drawable/ic_next" />
 
+    <ImageView
+        android:id="@+id/imgItemTransactionPending"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_pend"
+        android:layout_toStartOf="@id/txtItemTransactionAmount"
+        android:layout_height="wrap_content" />
+
 
     <TextView
         android:id="@+id/txtItemTransactionAmount"

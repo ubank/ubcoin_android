@@ -197,6 +197,7 @@ class ProfileSettingsFragment : BaseFragment() {
                         ThePreferences().clearProfile()
                         ThePreferences().clearPrefs()
                         ProfileHolder.user = null
+                        ProfileHolder.balance = null
                         //todo refactored
                         getSwitcher()?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         ((activity as IActivity).getFooter() as MenuBottomView).activate(MenuItems.MARKET)

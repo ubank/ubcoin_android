@@ -16,14 +16,8 @@ data class SingleTransaction(
 
 ) : Serializable {
 
-    private fun isSuccess()  = "SUCCESS" == status.toUpperCase()
+    fun isPositive()  = amountUBC > .0
 
-    enum class Status {
-        IN_PROGRESS
-    }
-
-    enum class Type {
-        TRANSFER
-    }
+    fun isPending() = "IN_PROGRESS" == status
 
 }

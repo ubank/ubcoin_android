@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.support.multidex.MultiDexApplication
+import android.support.v4.app.Fragment
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.maps.model.LatLng
@@ -17,7 +18,7 @@ import com.ubcoin.utils.ProfileHolder
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.EventBus
 import android.text.Html
-
+import android.support.v4.content.ContextCompat.startActivity
 
 
 
@@ -36,6 +37,8 @@ class TheApplication : MultiDexApplication() {
                 EventBus.getDefault().post(value)
             }
         }
+
+    var isGoToTelegram = false
 
     override fun onCreate() {
         super.onCreate()
@@ -75,10 +78,18 @@ class TheApplication : MultiDexApplication() {
 
     fun isTelegramAvailable() = isAppAvailable(TELEGRAM_PACKAGE_NAME)
 
-    fun openTelegramIntent(fullUrl: String) {
-        val telegramIntent = Intent(Intent.ACTION_VIEW)
-        telegramIntent.data = Uri.parse(fullUrl)
-        startActivity(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)))
+    fun openTelegramIntent(fullUrl: String, telegramLink: String, fragment: Fragment, requestCode: Int) : Boolean {
+        return if (!isTelegramAvailable()) {
+            val telegramIntent = Intent(Intent.ACTION_VIEW)
+            telegramIntent.data = Uri.parse(fullUrl)
+            fragment.startActivityForResult(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)), requestCode)
+            false
+        } else {
+            val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(Html.fromHtml(telegramLink).toString()))
+            myIntent.setPackage(TELEGRAM_PACKAGE_NAME)
+            fragment.startActivityForResult(Intent.createChooser(myIntent, getString(R.string.open_with_outer_app_label)), requestCode)
+            true
+        }
     }
 
     fun openExternalLink(fullUrl: String) {

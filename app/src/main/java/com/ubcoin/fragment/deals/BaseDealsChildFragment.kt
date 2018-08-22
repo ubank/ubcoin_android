@@ -83,12 +83,12 @@ abstract class BaseDealsChildFragment : BaseFragment() {
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
         showProgressDialog("Wait please", "Wait please")
-        DataProvider.getTgLink(data.dealItem.id, object : SilentConsumer<TgLink> {
+        DataProvider.discuss(data.dealItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
-                if (fullUrl?.isNotBlank() == true) {
-                    TheApplication.instance.openTelegramIntent(fullUrl)
+                if (fullUrl.isNotBlank()) {
+                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BaseDealsChildFragment, 18888)
                 }
             }
 

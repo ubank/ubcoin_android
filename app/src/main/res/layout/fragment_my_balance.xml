@@ -68,7 +68,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
-                            android:src="@drawable/ic_send_white" />
+                            android:src="@drawable/ic_qr" />
 
                         <TextView
                             android:layout_width="wrap_content"

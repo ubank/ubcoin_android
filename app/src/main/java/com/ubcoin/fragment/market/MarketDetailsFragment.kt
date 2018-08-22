@@ -2,6 +2,7 @@ package com.ubcoin.fragment.market
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -341,12 +342,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             return
         }
         showProgressDialog("Wait please", "Wait please")
-        DataProvider.getTgLink(marketItem.id, object : SilentConsumer<TgLink> {
+        DataProvider.discuss(marketItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
-                if (fullUrl?.isNotBlank() == true) {
-                    TheApplication.instance.openTelegramIntent(fullUrl)
+                if (fullUrl.isNotBlank()) {
+                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@MarketDetailsFragment, 17777)
                 }
             }
 
