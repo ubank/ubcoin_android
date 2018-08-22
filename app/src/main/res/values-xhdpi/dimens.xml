@@ -38,5 +38,26 @@
     <dimen name="profileDetailsMinHeight">65dp</dimen>
 
     <dimen name="itemLocationHeight">50dp</dimen>
+    <dimen name="myBalanceContentHeight">135dp</dimen>
+    <dimen name="myBalanceButtonTopMargin">14dp</dimen>
+    <dimen name="myBalanceButtonBottomMargin">12dp</dimen>
+    <dimen name="myBalanceNoTransactionsTopMargin">58dp</dimen>
+    <dimen name="topup_top_margin">29dp</dimen>
+    <dimen name="topupTextMarginEnd">66dp</dimen>
+    <dimen name="topupTextMarginStart">24dp</dimen>
+    <dimen name="topUpQrCodeMargin">8dp</dimen>
+    <dimen name="topUpQrSize">104dp</dimen>
+    <dimen name="topUpHashTextSize">13sp</dimen>
+    <dimen name="topUpHashTopMargin">7dp</dimen>
+    <dimen name="topUpHashBottomMargin">6dp</dimen>
+    <dimen name="topUpContainerBottomPadding">30dp</dimen>
+    <dimen name="topUpContainerMarginTop">25dp</dimen>
+    <dimen name="topUpConainerHeight">126dp</dimen>
+    <dimen name="topUpGreyTextSize">12sp</dimen>
+    <dimen name="topUpAnchorStartMargin">15dp</dimen>
+    <dimen name="topUpAnchorBottomMargin">13dp</dimen>
+
+    <dimen name="infoTopMargin">26dp</dimen>
+    <dimen name="total_amount_top_margin">62dp</dimen>
 
 </resources>

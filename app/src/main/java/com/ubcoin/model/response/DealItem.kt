@@ -7,7 +7,7 @@ data class DealItem(
         val id: String,
         val categoryId: String?,
         val title: String?,
-        val price: Float,
+        val price: Double,
         val description: String?,
         val disableNotifyEmail: Boolean,
         val agreement: Boolean,

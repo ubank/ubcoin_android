@@ -72,7 +72,7 @@ class SellLocationAutocompleteAdapter : ArrayAdapter<SingleLocation> {
 
         override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
             if (p1?.values != null && p1.count > 0) {
-                clear()
+                items.clear()
                 items.addAll(suggestions)
                 notifyDataSetChanged()
             }

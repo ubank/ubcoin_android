@@ -5,6 +5,7 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -29,14 +30,12 @@ class SignupFragment : BaseFragment() {
     lateinit var edtSignUpEmail: MaterialEditText
     lateinit var edtPasswordInput: PasswordInputExtension
 
-    lateinit var llSignUp: View
-    lateinit var imgSignUp: ImageView
+    lateinit var imgSignUp: Button
 
     override fun getLayoutResId() = R.layout.fragment_signup_copy
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
-        llSignUp = view.findViewById(R.id.llSignUp)
         imgSignUp = view.findViewById(R.id.imgSignUp)
 
 //        view.findViewById<View>(R.id.llSignUp).setOnClickListener { onSignUpClick() }
@@ -87,11 +86,11 @@ class SignupFragment : BaseFragment() {
             override fun afterTextChanged(p0: Editable?) {
                 super.afterTextChanged(p0)
                 if (isInputValid()) {
-                    imgSignUp.setBackgroundResource(R.drawable.rounded_green_filled_button)
-                    llSignUp.setOnClickListener { onSignUpClick() }
+                    imgSignUp.setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
+                    imgSignUp.setOnClickListener { onSignUpClick() }
                 } else {
-                    imgSignUp.setBackgroundResource(R.drawable.rounded_green_filled_transparent_button)
-                    llSignUp.setOnClickListener {}
+                    imgSignUp.setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
+                    imgSignUp.setOnClickListener {}
                 }
             }
         }

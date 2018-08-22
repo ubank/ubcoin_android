@@ -54,7 +54,6 @@ class CompleteRegistrationFragment : BaseFragment() {
         userName = arguments?.getString(BUNDLE_NAME) ?: ""
         password = arguments?.getString(BUNDLE_PASSWORD) ?: ""
         val edtCode = view.findViewById<MaterialEditText>(R.id.edtCode)
-        val llSend = view.findViewById<View>(R.id.llSend)
         val imgSend = view.findViewById<View>(R.id.imgSend)
         edtCode.setOnEditorActionListener(object : ImeDoneActionHandler() {
             override fun onActionCall() {
@@ -65,11 +64,11 @@ class CompleteRegistrationFragment : BaseFragment() {
             override fun afterTextChanged(p0: Editable?) {
                 super.afterTextChanged(p0)
                 if (validateInput(edtCode)) {
-                    llSend.setOnClickListener { goNext() }
-                    imgSend.setBackgroundResource(R.drawable.rounded_green_filled_button)
+                    imgSend.setOnClickListener { goNext() }
+                    imgSend.setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
                 } else {
-                    llSend.setOnClickListener(null)
-                    imgSend.setBackgroundResource(R.drawable.rounded_green_filled_transparent_button)
+                    imgSend.setOnClickListener(null)
+                    imgSend.setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
                 }
             }
         })

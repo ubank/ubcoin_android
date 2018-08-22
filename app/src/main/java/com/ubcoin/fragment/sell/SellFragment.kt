@@ -29,6 +29,7 @@ import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.utils.SellCreateDataHolder
+import com.ubcoin.utils.moneyFormat
 
 /**
  * Created by Yuriy Aizenberg
@@ -40,7 +41,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private var bottomSheet: BottomSheet? = null
     private var fromCamera = false
     private var googleMap: GoogleMap? = null
-    private var currentPrice: Float = 0f
+    private var currentPrice: Double = .0
     private var marker: Marker? = null
 
     private lateinit var mapView: MapView
@@ -274,9 +275,9 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         materialDialog.findViewById(R.id.btnDialogDone).setOnClickListener {
             materialDialog.dismiss()
             currentPrice = try {
-                edtPrice.text.toString().toFloat()
+                edtPrice.text.toString().toDouble()
             } catch (e: Exception) {
-                0f
+                .0
             }
             setCurrentPrice()
 
@@ -409,20 +410,15 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     }
 
     private fun getFormattedPrice(): String {
-        if (currentPrice <= 0f) {
-            currentPrice = 0f
+        if (currentPrice <= .0) {
+            currentPrice = .0
             return getString(R.string.balance_placeholder, "0.00")
         }
-        val format = formatPriceWithTwoDigits()
-        return getString(R.string.balance_placeholder, format)
+        return getString(R.string.balance_placeholder, currentPrice.moneyFormat())
     }
 
-    private fun formatPriceWithTwoDigits(): String {
-        /* val formatter = NumberFormat.getInstance(Locale.US)
-         formatter.maximumFractionDigits = 2
-         formatter.minimumFractionDigits = 2
-         return formatter.format(currentPrice)*/
+/*    private fun formatPriceWithTwoDigits(): String {
         return String.format("%.2f", currentPrice)
-    }
+    }*/
 
 }

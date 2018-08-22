@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/mainBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/topup_top_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/topupTextMarginEnd"
+                android:layout_marginStart="@dimen/topupTextMarginStart"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/scan_or_press"
+                android:textColor="@color/activeTabTextColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/topUpQrCodeMargin"
+                android:layout_marginTop="@dimen/topUpQrCodeMargin">
+
+                <ImageView
+                    android:id="@+id/imgTopUpQrCode"
+                    android:layout_width="@dimen/topUpQrSize"
+                    android:layout_height="@dimen/topUpQrSize"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/topUpHashBottomMargin"
+        android:layout_marginEnd="@dimen/camera_margin"
+        android:layout_marginStart="@dimen/favorite_fragment_text_margin"
+        android:layout_marginTop="@dimen/topUpHashTopMargin">
+
+        <TextView
+            android:id="@+id/txtTopUpHash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/imgTopUpCopy"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/activeTabTextColor"
+            android:textSize="@dimen/topUpHashTextSize" />
+
+        <ImageView
+            android:id="@+id/imgTopUpCopy"
+            android:layout_width="@dimen/topUpImageCopySize"
+            android:layout_height="@dimen/topUpImageCopySize"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded_green_filled_button_smallr"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_copy" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/topUpContainerBottomPadding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/favorite_fragment_text_margin"
+            android:layout_marginTop="@dimen/topUpContainerBottomPadding"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/how_to_get_ucb_tokens"
+            android:textColor="@color/activeTabTextColor"
+            android:textSize="@dimen/have_account_text_size" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/topUpConainerHeight"
+            android:layout_marginTop="@dimen/topUpContainerMarginTop">
+
+            <RelativeLayout
+                android:id="@+id/llLinkCossIO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginStart="@dimen/favorite_fragment_text_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/go_to_coss_exchange"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/topUpGreyTextSize" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/img_ex_1" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/anchor"
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="@color/colorTopUpDivider"
+                android:orientation="horizontal" />
+
+            <RelativeLayout
+                android:id="@+id/llLinkERC"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/topUpAnchorBottomMargin"
+                android:layout_marginStart="@dimen/topUpAnchorStartMargin"
+                android:layout_toEndOf="@id/anchor">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/go_to_coss_exchange"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/topUpGreyTextSize" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="5dp"
+                    android:src="@drawable/img_ex_2" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -14,6 +14,7 @@ import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.DistanceUtils
+import com.ubcoin.utils.moneyFormat
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -25,13 +26,13 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
 
     private var ubcPostfix: String? = null
 
-    var favoriteListener: IFavoriteListener?= null
+    var favoriteListener: IFavoriteListener? = null
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(inflate(R.layout.item_market_in_list, p0))
     }
 
-    private fun getUbcPostfix() : String? {
+    private fun getUbcPostfix(): String? {
         if (ubcPostfix == null) {
             ubcPostfix = context.getString(R.string.ubc_postfix)
         }
@@ -42,7 +43,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
     override fun onBindViewHolder(vh: ViewHolder, position: Int) {
         val item = getItem(position)
         vh.txtMarketProductName.text = item.title
-        vh.txtMarketPrice.text = """${item.price.toString()}${getUbcPostfix()}"""
+        vh.txtMarketPrice.text = """${(item.price ?: .0).moneyFormat()} ${getUbcPostfix()}"""
 
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
@@ -53,12 +54,12 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
                 Picasso.get().load(it[0])
                         .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
                         .centerCrop()
-                        .onlyScaleDown()
+//                        .fit()
+//                        .onlyScaleDown()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .placeholder(R.drawable.img_photo_placeholder)
                         .error(R.drawable.img_photo_placeholder)
-//                        .placeholder(R.drawable.loading_progress)
                         .into(vh.imgMarket)
                 vh.txtImagesCount.text = "1/${it.size}"
             }
@@ -73,7 +74,8 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         val location = item.location
 
         if (location != null) {
-            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()?:.0, location.longPoint?.toDouble()?: .0)
+            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()
+                    ?: .0, location.longPoint?.toDouble() ?: .0)
             vh.txtLocationDistance.text = DistanceUtils.calculateDistance(itemLocationLatLng, context)
         } else {
             vh.txtLocationDistance.text = null
@@ -81,6 +83,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
 
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
+
+/*    private fun formatPriceWithTwoDigits(currentPrice: Float): String {
+        return String.format("%.2f", currentPrice)
+    }*/
 
 
     class ViewHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {

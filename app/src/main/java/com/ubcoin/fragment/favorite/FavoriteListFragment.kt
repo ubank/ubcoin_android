@@ -13,6 +13,7 @@ import com.ubcoin.model.response.MarketItem
 import com.ubcoin.network.DataProvider
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
+import com.ubcoin.utils.ProfileHolder
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 
@@ -69,7 +70,14 @@ class FavoriteListFragment : FirstLineFragment() {
             adapter = favoriteListAdapter
         }
 
-        loadData()
+        if (!ProfileHolder.isAuthorized()) {
+            rvMarketList.visibility = View.GONE
+            llNoFavoriteItems.visibility = View.VISIBLE
+        } else {
+            rvMarketList.visibility = View.VISIBLE
+            llNoFavoriteItems.visibility = View.GONE
+            loadData()
+        }
 
     }
 

@@ -67,29 +67,18 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         }
                         MenuItems.FAVORITE -> {
-                            if (!ProfileHolder.isAuthorized()) {
-                                showNeedToRegistration()
-                                return
-                            }
                             menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
-//                            menuBottomView.activate(menuItems)
-//                            goStub()
-
-                          if (!ProfileHolder.isAuthorized()) {
-                                showNeedToRegistration()
+                            if (!ProfileHolder.isAuthorized()) {
+                                startSignIn()
                                 return
                             }
                             menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)
                         }
                         MenuItems.DEALS -> {
-                            if (!ProfileHolder.isAuthorized()) {
-                                showNeedToRegistration()
-                                return
-                            }
                             menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
@@ -128,7 +117,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun requestPermissions() {
-       ActivityCompat.requestPermissions(this,
+        ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_FINE_LOCATION)
     }

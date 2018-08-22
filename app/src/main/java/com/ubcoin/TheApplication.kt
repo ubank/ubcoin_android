@@ -16,6 +16,9 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ProfileHolder
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.EventBus
+import android.text.Html
+
+
 
 
 /**
@@ -78,6 +81,12 @@ class TheApplication : MultiDexApplication() {
         startActivity(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)))
     }
 
+    fun openExternalLink(fullUrl: String) {
+        val telegramIntent = Intent(Intent.ACTION_VIEW)
+        telegramIntent.data = Uri.parse(fullUrl)
+        startActivity(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)))
+    }
+
     fun openGeoMap(lat: Double, lon: Double, text: String) {
         val gmmIntentUri = Uri.parse("""geo:$lat,$lon?q=${Uri.encode(text)}""")
         val intent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -85,6 +94,13 @@ class TheApplication : MultiDexApplication() {
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         }
+    }
+
+    fun openShareIntent(url: String) {
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url)
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_link_chooser)))
     }
 
 

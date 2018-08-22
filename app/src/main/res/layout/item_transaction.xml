@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/header_margin_summary"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtItemTransactionDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/header_margin_start"
+        android:fontFamily="@font/roboto_regular"
+        android:text="11.07.18"
+        android:textColor="@color/activeTabTextColor"
+        android:textSize="@dimen/have_account_text_size" />
+
+    <ImageView
+        android:id="@+id/imgNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/header_margin_start"
+        android:src="@drawable/ic_next" />
+
+
+    <TextView
+        android:id="@+id/txtItemTransactionAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/header_margin_start"
+        android:fontFamily="@font/roboto_regular"
+        android:text="10 000 UBC"
+        android:layout_marginEnd="@dimen/camera_margin"
+        android:layout_toStartOf="@id/imgNext"
+        android:textColor="@color/greenMainColor"
+        android:textSize="@dimen/have_account_text_size" />
+
+</RelativeLayout>

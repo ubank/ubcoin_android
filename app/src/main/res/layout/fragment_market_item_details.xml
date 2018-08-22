@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="false"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="@android:color/transparent"
+            app:statusBarScrim="@android:color/transparent"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -28,8 +29,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@color/itemDetailsBackground"
+                android:background="@android:color/white"
                 app:layout_collapseMode="parallax">
 
                 <com.daimajia.slider.library.SliderLayout
@@ -40,7 +40,8 @@
 
                 <com.daimajia.slider.library.Indicators.PagerIndicator
                     android:id="@+id/custom_indicator"
-                    style="@style/AndroidImageSlider_Magnifier_Oval_Black"
+                    app:selected_color="@android:color/transparent"
+                    app:unselected_color="@android:color/transparent"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"

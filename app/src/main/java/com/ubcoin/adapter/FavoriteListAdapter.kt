@@ -12,6 +12,7 @@ import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.RoundedCornersTransform
+import com.ubcoin.utils.moneyFormat
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -44,7 +45,7 @@ class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Fa
                     .into(vHolder.imgFavoriteItemLogo)
         }
         vHolder.txtFavoriteItemName.text = item.title
-        vHolder.txtFavoriteItemPrice.text = (item.price.toString() + " UBC")
+        vHolder.txtFavoriteItemPrice.text = (item.price ?: .0).moneyFormat() + " UBC"
         vHolder.ratingBar.setRating(item.user?.rating?.roundToInt() ?: 0)
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, item)
     }

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -33,7 +34,7 @@ class SendForgotPasswordFragment : BaseFragment() {
     private lateinit var edtCode: MaterialEditText
     private lateinit var llResendCode : View
     private lateinit var edtPasswordInput : PasswordInputExtension
-    private lateinit var imgForgotConfirm: ImageView
+    private lateinit var imgForgotConfirm: Button
     var email: String = ""
 
     companion object {
@@ -103,10 +104,10 @@ class SendForgotPasswordFragment : BaseFragment() {
     private fun changeSendImage(isValid: Boolean) {
         imgForgotConfirm.run {
             if (isValid) {
-                setBackgroundResource(R.drawable.rounded_green_filled_button)
+                setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
                 setOnClickListener { sendEmail() }
             } else {
-                setBackgroundResource(R.drawable.rounded_green_filled_transparent_button)
+                setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
                 setOnClickListener(null)
             }
         }

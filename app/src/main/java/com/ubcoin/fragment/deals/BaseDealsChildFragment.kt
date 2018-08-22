@@ -14,6 +14,7 @@ import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
+import com.ubcoin.utils.ProfileHolder
 
 /**
  * Created by Yuriy Aizenberg
@@ -56,7 +57,14 @@ abstract class BaseDealsChildFragment : BaseFragment() {
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = dealsListAdapter
 
-        loadData()
+        if (ProfileHolder.isAuthorized()) {
+            llNoDeals.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            loadData()
+        } else {
+            llNoDeals.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        }
 
 
         dealsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {

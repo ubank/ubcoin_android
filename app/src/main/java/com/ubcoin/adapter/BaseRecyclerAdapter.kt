@@ -70,6 +70,11 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(protecte
 
     override fun getItemId(position: Int): Long = position.toLong()
 
+    fun clear() {
+        data.clear()
+        notifyDataSetChanged()
+    }
+
     abstract class VHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun <T : View> findView(@IdRes id: Int) = itemView.findViewById<T>(id)

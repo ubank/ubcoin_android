@@ -10,11 +10,13 @@ import com.ubcoin.R.drawable.ic_back
 import com.ubcoin.R.drawable.img_photo_placeholder
 import com.ubcoin.R.string.balance_placeholder
 import com.ubcoin.fragment.FirstLineFragment
+import com.ubcoin.fragment.transactions.MyBalanceFragment
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.CircleTransformation
 import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.moneyFormat
 import io.reactivex.disposables.Disposable
 
 /**
@@ -43,6 +45,9 @@ class ProfileMainFragment : FirstLineFragment() {
         }
         view.findViewById<View>(R.id.llProfileMain).setOnClickListener {
             getSwitcher()?.addTo(ProfileSettingsFragment::class.java)
+        }
+        view.findViewById<View>(R.id.llProfileBalance).setOnClickListener {
+            getSwitcher()?.addTo(MyBalanceFragment::class.java)
         }
     }
 
@@ -94,7 +99,7 @@ class ProfileMainFragment : FirstLineFragment() {
         txtProfileName.text = user.name
         txtProfileBalance.text = getString(
                 balance_placeholder,
-                user.wallet?.amountUBC?.toString() ?: "0.00")
+                (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat())
 
         val avatarUrl = user.avatarUrl
         if (avatarUrl != null && avatarUrl.isNotBlank()) {

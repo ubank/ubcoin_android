@@ -1,5 +1,7 @@
 package com.ubcoin.network
 
+import com.ubcoin.model.ConversionResponse
+import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -77,5 +79,24 @@ interface Api {
     @POST("/api/items")
     fun createProduct(@Body createProductRequest: CreateProductRequest) : Observable<IdResponse>
 
+    @GET("/api/wallet/balance")
+    fun balance() : Observable<MyBalance>
 
+    @GET("/api/wallet/transactions")
+    fun transactions(@Query("size") limit: Int, @Query("page") page: Int) : Observable<TransactionListResponse>
+
+    @GET("/api/wallet/transactions")
+    fun transaction(@Query("id") id: String) : Observable<TransactionListResponse>
+
+    @GET("/api/wallet/topup")
+    fun topUp(): Observable<TopUp>
+
+    @POST("/api/wallet/convert")
+    fun getConversion(@Body conversionBody: ConversionRequest) : Observable<ConversionResponse>
+
+    @GET("/api/wallet/commission")
+    fun getCommission(@Query("amount") amount: Double) : Observable<Commission>
+
+    @POST("/api/wallet/withdraw")
+    fun withdraw(@Body withdraw: Withdraw) : Observable<WithdrawResponse>
 }

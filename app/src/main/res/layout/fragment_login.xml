@@ -90,23 +90,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <Button
                 android:id="@+id/imgLogin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sign_up_size"
                 android:layout_marginEnd="@dimen/sign_up_margin"
                 android:layout_marginStart="@dimen/sign_up_margin"
-                android:background="@drawable/rounded_green_filled_transparent_button" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/log_in"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:textSize="@dimen/sign_up_text_size"
+                android:background="@drawable/rounded_green_filled_transparent_button_smallr" />
+
 
         </RelativeLayout>
 

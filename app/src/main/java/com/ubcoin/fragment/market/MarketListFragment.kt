@@ -89,8 +89,10 @@ class MarketListFragment : FirstLineFragment() {
             override fun onItemClick(data: MarketItem, position: Int) {
                 getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data), true)
             }
-
         }
+        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
+
     }
 
     private fun loadData() {

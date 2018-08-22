@@ -16,5 +16,6 @@ data class MarketItem(
         var favorite: Boolean,
         val status: String?,
         val title: String?,
-        val price: Float?
+        val price: Double?,
+        val shareUrl: String?
 ) : Serializable

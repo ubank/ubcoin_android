@@ -1,19 +1,25 @@
 package com.ubcoin.fragment.market
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
-import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.MaterialDialog
 import com.daimajia.slider.library.Animations.DescriptionAnimation
 import com.daimajia.slider.library.Indicators.PagerIndicator
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
+import com.daimajia.slider.library.Transformers.BaseTransformer
+import com.daimajia.slider.library.Transformers.DefaultTransformer
+import com.daimajia.slider.library.Transformers.FadeTransformer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -32,7 +38,6 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.*
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_market_item_details.*
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -50,10 +55,21 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var fabInactive: FloatingActionButton
     private lateinit var txtLocationDistance: TextView
     private lateinit var mapView: MapView
+    private lateinit var appBarLayout: AppBarLayout
+    private lateinit var txtDescription : TextView
+    private lateinit var imgDescription  : View
+    private lateinit var llDescription : View
+
+    //Header
+    private lateinit var imgHeaderLeft: ImageView
+    private lateinit var header: View
+    private lateinit var txtHeaderSimple : TextView
+    private lateinit var imgHeaderRight: ImageView
+
     private var idForRemove: String? = null
     private val isFavoriteProcessing = AtomicBoolean(false)
 
-    var header: View? = null
+    private var onGlobalLayoutListener : ViewTreeObserver.OnGlobalLayoutListener ?= null
 
     companion object {
         fun getBundle(marketItem: MarketItem): Bundle {
@@ -75,17 +91,37 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
+
+        imgHeaderLeft = view.findViewById(R.id.imgHeaderLeft)
+        imgHeaderRight = view.findViewById(R.id.imgHeaderRight)
+        header = view.findViewById(R.id.header)
+        txtHeaderSimple = view.findViewById(R.id.txtHeaderSimple)
+
         sliderLayout = view.findViewById(R.id.slider)
+        sliderLayout.setPagerTransformer(false, DefaultTransformer())
         pageIndicator = view.findViewById(R.id.custom_indicator)
         txtLocationDistance = view.findViewById(R.id.txtLocationDistance)
         fabActive = view.findViewById(R.id.fabActive)
         fabInactive = view.findViewById(R.id.fabInactive)
+        appBarLayout = view.findViewById(R.id.appBar)
+        appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout, state: State) {
+                when (state) {
+                    AppBarStateChangeListener.State.EXPANDED -> {
+                        onExpand()
+                    }
+                    AppBarStateChangeListener.State.COLLAPSED -> {
+                        onCollapse()
+                    }
+                    AppBarStateChangeListener.State.IDLE -> {
+                        onExpand()
+                    }
+                }
+            }
+
+        })
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
         setFavorite(marketItem.favorite)
-
-        /*fab.setOnClickListener {
-            requestFavorite(!marketItem.favorite)
-        }*/
 
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
@@ -93,17 +129,22 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         if (!CollectionExtensions.nullOrEmpty(marketItem.images)) {
             marketItem.images?.forEach {
                 val textSliderView = SafetySliderView(activity!!, 0, metrics.widthPixels)
-                textSliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
+//                textSliderView.scaleType = BaseSliderView.ScaleType.CenterCrop
+                textSliderView.scaleType = BaseSliderView.ScaleType.FitCenterCrop
                 textSliderView.picasso = Picasso.get()
                 textSliderView.image(it)
                 textSliderView.description(null)
                 textSliderView.error(R.drawable.img_photo_placeholder)
+                textSliderView.onClickListener = createClickListener(it)
                 sliderLayout.addSlider(textSliderView)
             }
             if (marketItem.images?.size == 1) {
-                val ghostView = view.findViewById<View>(R.id.ghostView)
-                ghostView.setOnClickListener { View.OnClickListener { } }
-                ghostView.visibility = View.VISIBLE
+                sliderLayout.setPagerTransformer(false, object : BaseTransformer() {
+                    override fun onTransform(view: View?, position: Float) {
+
+                    }
+
+                })
                 pageIndicator.visibility = View.GONE
             }
         } else {
@@ -116,7 +157,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         sliderLayout.run {
-            setPresetTransformer(SliderLayout.Transformer.Accordion)
             setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom)
             setCustomAnimation(DescriptionAnimation())
             stopAutoCycle()
@@ -126,7 +166,17 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         view.findViewById<TextView>(R.id.txtItemPrice).text = marketItem.price?.toString() + " UBC"
         view.findViewById<TextView>(R.id.txtItemCategor).text = marketItem.category?.name
         view.findViewById<TextView>(R.id.txtMarketProductName).text = marketItem.title
-        view.findViewById<TextView>(R.id.txtMarketProductDescription).text = marketItem.description
+        val description = marketItem.description
+        txtDescription = view.findViewById(R.id.txtMarketProductDescription)
+        txtDescription.viewTreeObserver.addOnGlobalLayoutListener(getGlobalLayoutListener())
+        txtDescription.text = description
+
+        llDescription = view.findViewById<View>(R.id.llDescription)
+        if (description == null || description.isBlank()) {
+            llDescription.visibility= View.GONE
+        }
+        imgDescription = view.findViewById(R.id.imgDescription)
+
         view.findViewById<View>(R.id.llWantToBuy).setOnClickListener { callWantToBuy() }
 
         val imageView = view.findViewById<ImageView>(R.id.imgSellerProfile)
@@ -159,6 +209,80 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         mapView = view.findViewById(R.id.mapView)
         mapView.getMapAsync(this)
+
+        if (!ProfileHolder.isAuthorized()) {
+            fabInactive.hide()
+            fabActive.hide()
+        }
+
+        view.findViewById<View>(R.id.llHeaderRightSimple).setOnClickListener {
+            val shareUrl = marketItem.shareUrl
+            if (shareUrl != null && !shareUrl.isBlank()) {
+                TheApplication.instance.openShareIntent(shareUrl)
+            }
+        }
+    }
+
+    private fun getGlobalLayoutListener() : ViewTreeObserver.OnGlobalLayoutListener {
+        if (onGlobalLayoutListener == null) {
+            onGlobalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
+                val layout = txtDescription.layout
+                val lineCount = layout?.lineCount ?: 0
+                if (lineCount > 0) {
+                    if (layout.getEllipsisCount(lineCount - 1) > 0) {
+                        showExtendDescription()
+                    } else {
+                        hideExpandDescription()
+                    }
+                    txtDescription.viewTreeObserver.removeOnGlobalLayoutListener { getGlobalLayoutListener() }
+                }
+            }
+        }
+        return onGlobalLayoutListener as ViewTreeObserver.OnGlobalLayoutListener
+    }
+
+    private fun showExtendDescription() {
+        imgDescription.visibility = View.VISIBLE
+        llDescription.setOnClickListener {
+            MaterialDialog.Builder(activity!!)
+                    .content(marketItem.description!!)
+                    .build()
+                    .show()
+        }
+    }
+
+    private fun hideExpandDescription() {
+        imgDescription.visibility = View.GONE
+        llDescription.setOnClickListener {  }
+
+    }
+
+    private fun createClickListener(filePath: String) : SafetySliderView.ClickListener {
+        return object : SafetySliderView.ClickListener(filePath) {
+            override fun onClick(filePath: String) {
+                openFullScreenImage(filePath)
+            }
+
+        }
+    }
+
+    private fun openFullScreenImage(filePath: String) {
+        getSwitcher()?.addTo(FullImageFragment::class.java, FullImageFragment.getBundle(filePath), true)
+    }
+
+    private fun onCollapse() {
+        txtHeaderSimple.setTextColor(Color.BLACK)
+        header.setBackgroundColor(Color.WHITE)
+        imgHeaderRight.setImageResource(R.drawable.ic_share_details_black)
+        imgHeaderLeft.setImageResource(R.drawable.ic_back_details_black)
+    }
+
+    private fun onExpand() {
+        txtHeaderSimple.setTextColor(Color.WHITE)
+        header.setBackgroundColor(Color.parseColor("#62000000"))
+//        header.setBackgroundColor(Color.TRANSPARENT)
+        imgHeaderRight.setImageResource(R.drawable.ic_share_details_white)
+        imgHeaderLeft.setImageResource(R.drawable.ic_back_details_white)
     }
 
     override fun onViewInflated(view: View, savedInstanceState: Bundle?) {
@@ -278,20 +402,21 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         super.handleException(t)
     }
 
+    @SuppressLint("RestrictedApi")
     private fun setFavorite(isFavorite: Boolean) {
-       /* fab.backgroundTintList =
-                if (isFavorite)
-                    ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.greenMainColor))
-                else
-                    ColorStateList.valueOf(ContextCompat.getColor(activity!!, android.R.color.white))
+        /* fab.backgroundTintList =
+                 if (isFavorite)
+                     ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.greenMainColor))
+                 else
+                     ColorStateList.valueOf(ContextCompat.getColor(activity!!, android.R.color.white))
 
-        val drawable =
-                if (isFavorite)
-                    ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_white)
-                else
-                    ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_green)
-        fab.setImageDrawable(drawable)
-        fab.invalidate()*/
+         val drawable =
+                 if (isFavorite)
+                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_white)
+                 else
+                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_green)
+         fab.setImageDrawable(drawable)
+         fab.invalidate()*/
 
 
         if (!isFavorite) {
@@ -303,7 +428,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
             fabInactive.hide()
             fabInactive.visibility = View.GONE
-            fabInactive.setOnClickListener {  }
+            fabInactive.setOnClickListener { }
         } else {
             fabInactive.show()
             fabInactive.visibility = View.VISIBLE
@@ -313,7 +438,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
             fabActive.hide()
             fabActive.visibility = View.GONE
-            fabActive.setOnClickListener {  }
+            fabActive.setOnClickListener { }
         }
     }
 

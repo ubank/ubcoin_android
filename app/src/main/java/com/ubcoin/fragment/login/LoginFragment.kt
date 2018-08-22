@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.text.Editable
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
@@ -42,7 +43,7 @@ class LoginFragment : BaseFragment() {
             }
         }
 
-        val imgLogin = view.findViewById<ImageView>(R.id.imgLogin)
+        val imgLogin = view.findViewById<Button>(R.id.imgLogin)
 
         imgLogin.setOnClickListener {
             processLogin()
@@ -75,9 +76,9 @@ class LoginFragment : BaseFragment() {
                 txtLoginError.visibility = View.INVISIBLE
                 imgLogin?.run {
                     if (isValidData()) {
-                        setImageResource(R.drawable.rounded_green_filled_button)
+                        setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
                     } else {
-                        setImageResource(R.drawable.rounded_green_filled_transparent_button)
+                        setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
                     }
                 }
             }

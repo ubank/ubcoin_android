@@ -13,6 +13,7 @@ import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.RoundedCornersTransform
+import com.ubcoin.utils.moneyFormat
 
 /**
  * Created by Yuriy Aizenberg
@@ -44,7 +45,7 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, 
                     .into(vHolder.imgDealsItemLogo)
         }
         vHolder.txtDealsItemPrice.text = item.title
-        vHolder.txtDealsItemName.text = (item.price.toString() + " UBC")
+        vHolder.txtDealsItemName.text = (item.price.moneyFormat() + " UBC")
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, itemWrapper)
     }
 
