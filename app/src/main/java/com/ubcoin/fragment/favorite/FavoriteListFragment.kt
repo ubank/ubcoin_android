@@ -38,8 +38,6 @@ class FavoriteListFragment : FirstLineFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_favorites
 
-    override fun getHeaderIcon() = R.drawable.ic_back
-
     override fun getHeaderText() = R.string.header_favorites
 
     override fun onViewInflated(view: View) {
@@ -78,6 +76,9 @@ class FavoriteListFragment : FirstLineFragment() {
             llNoFavoriteItems.visibility = View.GONE
             loadData()
         }
+
+        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
 
     }
 
@@ -172,9 +173,5 @@ class FavoriteListFragment : FirstLineFragment() {
         }
     }
 
-    override fun onIconClick() {
-        super.onIconClick()
-        activity?.onBackPressed()
-    }
 
 }

@@ -27,7 +27,6 @@
                     android:id="@+id/imgMarket"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_list_image_size"
-                    android:background="#4c000000"
                     android:src="@drawable/stub_image" />
 
                 <RelativeLayout

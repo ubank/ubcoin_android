@@ -14,6 +14,7 @@ import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.DistanceUtils
+import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.moneyFormat
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
@@ -52,9 +53,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         } else {
             images?.let {
                 Picasso.get().load(it[0])
-                        .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
+//                        .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
+//                        .centerCrop()
+                        .fit()
                         .centerCrop()
-//                        .fit()
 //                        .onlyScaleDown()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
@@ -67,9 +69,15 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         }
         val rating = item.user?.rating?.roundToInt()
         vh.ratingBarView.setRating(rating ?: 0)
-        vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
-        vh.llFavoriteContainer.setOnClickListener {
-            favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
+        if (!ProfileHolder.isAuthorized()) {
+            vh.imgFavorite.visibility = View.GONE
+            vh.llFavoriteContainer.setOnClickListener {  }
+        } else {
+            vh.imgFavorite.visibility = View.VISIBLE
+            vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
+            vh.llFavoriteContainer.setOnClickListener {
+                favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
+            }
         }
         val location = item.location
 

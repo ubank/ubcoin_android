@@ -347,7 +347,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     private fun processThrowable(throwable: Throwable) {
-        showSweetAlertDialog("Ooops. Something goes wrong", "" + throwable.message)
+        Crashlytics.logException(throwable)
+        showSweetAlertDialog(getString(R.string.no_network_error))
     }
 
     private fun hideSweetAlertDialog() {
@@ -357,6 +358,14 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     fun showSweetAlertDialog(title: String, message: String) {
         activity?.run {
             materialDialog = MaterialDialog.Builder(this).title(title).content(message).build()
+            materialDialog?.show()
+        }
+
+    }
+
+    fun showSweetAlertDialog(message: String) {
+        activity?.run {
+            materialDialog = MaterialDialog.Builder(this).content(message).build()
             materialDialog?.show()
         }
 

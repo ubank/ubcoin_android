@@ -29,15 +29,12 @@ class DealsParentFragment : FirstLineFragment() {
         )
         viewPager.adapter = fragmentPagerItemAdapter
         smartTabLayout.setViewPager(viewPager)
+
+        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
     }
 
     override fun getHeaderText() = R.string.deals_header
 
-    override fun getHeaderIcon() = R.drawable.ic_back
-
-    override fun onIconClick() {
-        super.onIconClick()
-        activity?.onBackPressed()
-    }
 
 }

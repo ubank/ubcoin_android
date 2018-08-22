@@ -11,8 +11,6 @@ import com.ubcoin.model.response.User
  */
 
 private const val KEY_TOKEN: String = "TOKEN"
-private const val KEY_COOKIE: String = "COOKIE"
-private const val KEY_WV_COOKIE: String = "WV_COOKIE"
 private const val KEY_CURRENT_USER: String = "CURR_USER"
 private const val KEY_CURRENT_USER_PREFS: String = "CURR_USER_PREFS"
 private const val TAG: String = "ThePreferences"
@@ -34,14 +32,6 @@ class ThePreferences {
 
     fun setToken(token: String?) = instance.edit().putString(KEY_TOKEN, token).apply()
 
-    fun getCookie(): String? = instance.getString(KEY_COOKIE, null)
-
-    fun setCookie(token: String?) = instance.edit().putString(KEY_COOKIE, token).apply()
-
-    fun getWVCookie(): String? = instance.getString(KEY_WV_COOKIE, null)
-
-    fun setWVCookie(token: String?) = instance.edit().putString(KEY_WV_COOKIE, token).apply()
-
     fun setCurrentUser(user: User) {
         val stringProfile = Gson().toJson(user)
         instance.edit().putString(KEY_CURRENT_USER, stringProfile).apply()
@@ -61,7 +51,6 @@ class ThePreferences {
     fun clearProfile() {
         instance.edit().putString(KEY_CURRENT_USER, null).apply()
         instance.edit().putString(KEY_TOKEN, null).apply()
-        instance.edit().putString(KEY_WV_COOKIE, null).apply()
     }
 
     fun setCurrentPreferences(temporaryUser: TemporaryUser) {
