@@ -243,7 +243,7 @@ class MyBalanceFragment : BaseFragment() {
 
     private fun closeDialogAndOpenExternalLink(link: String) {
         TopUpViewManager.dismiss()
-        TheApplication.instance.openExternalLink(link)
+        TheApplication.instance.openExternalLink(activity!!, link)
     }
 
     private fun onSendClick() {

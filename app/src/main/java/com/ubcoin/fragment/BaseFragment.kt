@@ -2,6 +2,7 @@ package com.ubcoin.fragment
 
 import android.Manifest.permission.*
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -16,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
@@ -246,9 +248,6 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
-    open fun isGradientShow() = true
-
-
     fun hideFooter() {
         toggleFooter(false, activity as IActivity)
     }
@@ -288,6 +287,12 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     fun hideKeyboard() {
         val inputMethodManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
+    fun showKeyboard(edtText: EditText, context: Context) {
+        edtText.requestFocus()
+        val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
     }
 
     open fun onIconClick() {

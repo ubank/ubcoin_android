@@ -18,7 +18,7 @@ fun View.expand(duration: Long) {
     measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     val targetHeight = measuredHeight
 
-    layoutParams.height = 1
+    layoutParams.height = 0
     visibility = View.VISIBLE
     val a = object : Animation() {
 
@@ -50,7 +50,7 @@ fun View.collapse(duration: Long) {
 
         override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
             if (interpolatedTime == 1f) {
-                layoutParams.height = 1
+                layoutParams.height = 0
                 requestLayout()
             } else {
                 layoutParams.height = initialHeight - (initialHeight * interpolatedTime).toInt()

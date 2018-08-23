@@ -13,18 +13,9 @@
         android:layout_height="@dimen/bottom_menu_height"
         android:layout_alignParentBottom="true" />
 
-
-    <LinearLayout
-        android:id="@+id/llMainGradientBottom"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_above="@id/menuBottomView"
-        android:background="@drawable/main_gradient_bottom"
-        android:orientation="horizontal" />
-
     <RelativeLayout
         android:id="@+id/mainContainer"
-        android:layout_above="@id/llMainGradientBottom"
+        android:layout_above="@id/menuBottomView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

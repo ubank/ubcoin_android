@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
@@ -312,6 +313,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         if (currentPrice > 0f) {
             edtPrice.setText(currentPrice.toString())
         }
+        materialDialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         materialDialog.show()
     }
 

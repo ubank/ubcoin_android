@@ -4,77 +4,90 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_menu_height"
     android:background="@android:color/white"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemMarket"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_market_active"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_market_inactive"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_market" />
+    <LinearLayout
+        android:id="@+id/llMainGradientBottom"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/main_gradient_bottom"
+        android:orientation="horizontal" />
 
-
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemFavorite"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_favorite_active"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_favorite_inactive"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_favorites" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_menu_height"
+        android:orientation="horizontal">
 
 
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemSell"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_sell"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_sell"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_sell" />
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemMarket"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_market_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_market_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_market" />
 
 
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemDeals"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_deals_active"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_deals_inactive"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_deals" />
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemFavorite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_favorite_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_favorite_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_favorites" />
 
 
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemProfile"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_profile_active"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_profile_inactive"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_profile" />
-
-    <com.ubcoin.view.menu.MenuSingleView
-        android:id="@+id/menuItemSignIn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        custom:MenuItemActiveIcon="@drawable/ic_sign_active"
-        custom:MenuItemActiveTextColor="@color/menuActiveColor"
-        custom:MenuItemInactiveIcon="@drawable/ic_sign_inactive"
-        custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
-        custom:MenuItemText="@string/menu_label_signin" />
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemSell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_sell"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_sell"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_sell" />
 
 
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemDeals"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_deals_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_deals_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_deals" />
+
+
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_profile_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_profile_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_profile" />
+
+        <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemSignIn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_sign_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_sign_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_signin" />
+
+    </LinearLayout>
 </LinearLayout>

@@ -25,7 +25,7 @@ import io.reactivex.disposables.Disposable
 class ProfileMainFragment : FirstLineFragment() {
 
     private lateinit var txtProfileName: TextView
-    private lateinit var imgProfilePhoto: ImageView
+//    private lateinit var imgProfilePhoto: ImageView
     private lateinit var txtProfileBalance: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
@@ -38,7 +38,7 @@ class ProfileMainFragment : FirstLineFragment() {
         super.onViewInflated(view)
         txtProfileBalance = view.findViewById(R.id.txtProfileBalance)
         txtProfileName = view.findViewById(R.id.txtProfileName)
-        imgProfilePhoto = view.findViewById(R.id.imgProfilePhoto)
+//        imgProfilePhoto = view.findViewById(R.id.imgProfilePhoto)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         swipeRefreshLayout.setOnRefreshListener {
             updateUserProfileBackground()
@@ -101,7 +101,7 @@ class ProfileMainFragment : FirstLineFragment() {
                 balance_placeholder,
                 (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat())
 
-        val avatarUrl = user.avatarUrl
+/*        val avatarUrl = user.avatarUrl
         if (avatarUrl != null && avatarUrl.isNotBlank()) {
             Picasso.get()
                     .load(avatarUrl)
@@ -113,7 +113,7 @@ class ProfileMainFragment : FirstLineFragment() {
             Picasso.get().load(R.drawable.img_photo_placeholder)
                     .transform(CircleTransformation())
                     .into(imgProfilePhoto)
-        }
+        }*/
     }
 
     private fun cancelCurrentLoading() {

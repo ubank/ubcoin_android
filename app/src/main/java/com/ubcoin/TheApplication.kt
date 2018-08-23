@@ -1,5 +1,6 @@
 package com.ubcoin
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -92,10 +93,10 @@ class TheApplication : MultiDexApplication() {
         }
     }
 
-    fun openExternalLink(fullUrl: String) {
+    fun openExternalLink(activity: Activity, fullUrl: String) {
         val telegramIntent = Intent(Intent.ACTION_VIEW)
         telegramIntent.data = Uri.parse(fullUrl)
-        startActivity(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)))
+        activity.startActivity(Intent.createChooser(telegramIntent, getString(R.string.open_with_outer_app_label)))
     }
 
     fun openGeoMap(lat: Double, lon: Double, text: String) {

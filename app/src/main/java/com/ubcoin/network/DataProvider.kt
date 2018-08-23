@@ -14,6 +14,7 @@ import com.ubcoin.utils.ProfileHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -21,6 +22,7 @@ import retrofit2.Response
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 
 /**
@@ -146,14 +148,15 @@ object DataProvider {
 
     fun uploadFiles(filePath: ArrayList<String>, onSuccess: Consumer<TgLinks>, onError: Consumer<Throwable>) {
         val tgLinks = TgLinks()
-        Observable.fromIterable(filePath)
-                .map { t ->
-                    val file = File(t)
-                    val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
-                    val body = MultipartBody.Part.createFormData("image", file.name, reqFile)
-                    tgLinks.tgLinks.add((networkModule.api().uploadImage(body).blockingFirst()))
-                    tgLinks
-                }
+        Observable.just(filePath)
+                .doOnNext { it ->
+                    it.forEach {
+                        val file = File(it)
+                        val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
+                        val body = MultipartBody.Part.createFormData("image", file.name, reqFile)
+                        tgLinks.tgLinks.add((networkModule.api().uploadImage(body).blockingFirst()))
+                    }
+                }.map { tgLinks }
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
