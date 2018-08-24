@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="underlineColor">#32bb8f</color>
+
     <color name="statusBar">#cdcdcd</color>
 
     <color name="headerTextColor">#403d45</color>

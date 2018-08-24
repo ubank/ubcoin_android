@@ -17,6 +17,10 @@ public abstract class PermissionHelper<T> {
 
     private T mHost;
 
+    public PermissionHelper(@NonNull T host) {
+        mHost = host;
+    }
+
     @NonNull
     public static PermissionHelper<? extends Activity> newInstance(Activity host) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -39,6 +43,10 @@ public abstract class PermissionHelper<T> {
         return new SupportFragmentPermissionHelper(host);
     }
 
+    // ============================================================================
+    // Public concrete methods
+    // ============================================================================
+
     @NonNull
     public static PermissionHelper<android.app.Fragment> newInstance(android.app.Fragment host) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -46,14 +54,6 @@ public abstract class PermissionHelper<T> {
         }
 
         return new FrameworkFragmentPermissionHelper(host);
-    }
-
-    // ============================================================================
-    // Public concrete methods
-    // ============================================================================
-
-    public PermissionHelper(@NonNull T host) {
-        mHost = host;
     }
 
     private boolean shouldShowRationale(@NonNull String... perms) {

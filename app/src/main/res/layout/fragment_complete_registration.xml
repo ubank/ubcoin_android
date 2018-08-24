@@ -38,6 +38,7 @@
             android:maxLines="1"
             android:inputType="number"
             android:imeOptions="actionDone"
+            app:met_primaryColor="@color/greenMainColor"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"

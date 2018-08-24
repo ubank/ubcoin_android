@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by Yuriy Aizenberg
  */
-data class DealItemWrapper (
+data class DealItemWrapper(
         val id: String,
         val buyerId: String,
         val status: String,

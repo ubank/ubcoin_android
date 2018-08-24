@@ -103,7 +103,7 @@ class MyBalanceFragment : BaseFragment() {
 
     private fun queryBalance() {
         hideProgressDialog()
-        showProgressDialog("Loading", "Wait please")
+        showProgressDialog(R.string.loading, R.string.wait_please_message)
         loadBalance()
     }
 
@@ -187,7 +187,7 @@ class MyBalanceFragment : BaseFragment() {
     }
 
     private fun onTopUpClick() {
-        showProgressDialog("Wait please", "Loading")
+        showProgressDialog(R.string.wait_please_title, R.string.loading)
         DataProvider.topUp(object : SilentConsumer<TopUp> {
             override fun onConsume(t: TopUp) {
                 hideProgressDialog()

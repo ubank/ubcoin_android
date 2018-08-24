@@ -5,7 +5,7 @@ import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
-import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.TopUp
 
@@ -15,7 +15,7 @@ import com.ubcoin.model.response.TopUp
 object TopUpViewManager {
 
     @SuppressLint("StaticFieldLeak")
-    private var dialog: MaterialDialog?= null
+    private var dialog: MaterialDialog? = null
 
     fun show(context: Context, topUp: TopUp, listener: ITopupView?) {
 
@@ -30,7 +30,7 @@ object TopUpViewManager {
             txtHash.text = topUp.ubCoinAddress
 
             val imgQrCode = findViewById(R.id.imgTopUpQrCode) as ImageView
-            Picasso.get().load(topUp.qrURL).into(imgQrCode)
+            GlideApp.with(context).load(topUp.qrURL).into(imgQrCode)
 
             findViewById(R.id.imgTopUpCopy).setOnClickListener {
                 listener?.onAction(ITopupView.Action.COPY)

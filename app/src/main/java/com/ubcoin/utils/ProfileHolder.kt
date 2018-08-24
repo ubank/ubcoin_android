@@ -12,10 +12,10 @@ import org.greenrobot.eventbus.EventBus
 object ProfileHolder {
 
     var user: User? = ThePreferences().getCurrentUser()
-    set(value) {
-        field = value
-        EventBus.getDefault().postSticky(UserEventWrapper(field))
-    }
+        set(value) {
+            field = value
+            EventBus.getDefault().postSticky(UserEventWrapper(field))
+        }
 
     var balance: MyBalance? = null
 

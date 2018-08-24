@@ -23,15 +23,15 @@ class DealsParentFragment : FirstLineFragment() {
         val fragmentPagerItemAdapter = FragmentPagerItemAdapter(
                 childFragmentManager,
                 FragmentPagerItems.with(activity)
-                        .add("To buy", DealsBuyFragment::class.java)
-                        .add("To sell", DealsSellFragment::class.java)
+                        .add(getString(R.string.to_buy), DealsBuyFragment::class.java)
+                        .add(getString(R.string.to_sell), DealsSellFragment::class.java)
                         .create()
         )
         viewPager.adapter = fragmentPagerItemAdapter
         smartTabLayout.setViewPager(viewPager)
 
         view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
-        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
     }
 
     override fun getHeaderText() = R.string.deals_header

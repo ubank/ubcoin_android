@@ -29,6 +29,11 @@
                     android:layout_height="@dimen/default_list_image_size"
                     android:src="@drawable/stub_image" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:background="#3d000000"
+                    android:layout_height="@dimen/default_list_image_size" />
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,6 +85,8 @@
                     </RelativeLayout>
                 </RelativeLayout>
 
+
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -111,6 +118,7 @@
 
 
                 </LinearLayout>
+
 
 
             </RelativeLayout>

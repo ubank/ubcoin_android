@@ -1,16 +1,13 @@
 package com.ubcoin.fragment.market
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
+import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.R.id.webView
-import android.webkit.WebSettings
-import android.os.Build
-import android.webkit.CookieManager
-import com.ubcoin.ThePreferences
 
 
 /**

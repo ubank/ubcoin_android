@@ -2,19 +2,15 @@ package com.ubcoin.fragment.profile
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
-import com.squareup.picasso.Picasso
 import com.ubcoin.R
 import com.ubcoin.R.drawable.ic_back
-import com.ubcoin.R.drawable.img_photo_placeholder
 import com.ubcoin.R.string.balance_placeholder
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.CircleTransformation
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.moneyFormat
 import io.reactivex.disposables.Disposable
@@ -25,7 +21,7 @@ import io.reactivex.disposables.Disposable
 class ProfileMainFragment : FirstLineFragment() {
 
     private lateinit var txtProfileName: TextView
-//    private lateinit var imgProfilePhoto: ImageView
+    //    private lateinit var imgProfilePhoto: ImageView
     private lateinit var txtProfileBalance: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 

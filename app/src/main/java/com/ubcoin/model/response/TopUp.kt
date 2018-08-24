@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by Yuriy Aizenberg
  */
-data class TopUp (
+data class TopUp(
         val ubCoinAddress: String,
         val qrURL: String
 ) : Serializable

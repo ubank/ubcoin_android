@@ -6,7 +6,6 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -81,7 +80,7 @@ class SignupFragment : BaseFragment() {
 
     }
 
-    private fun getTextChangeListener() : TextWatcher {
+    private fun getTextChangeListener(): TextWatcher {
         return object : TextWatcherAdatepr() {
             override fun afterTextChanged(p0: Editable?) {
                 super.afterTextChanged(p0)
@@ -110,10 +109,10 @@ class SignupFragment : BaseFragment() {
         if (!isInputValid()) return
         val mail = getEmail().trim()
         if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
-            Toast.makeText(activity, "Email invalid", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.email_invalid, Toast.LENGTH_SHORT).show()
             return
         }
-        showProgressDialog("Registration", "Wait please")
+        showProgressDialog(R.string.registration, R.string.wait_please_message)
         DataProvider.registrations(
                 mail,
                 getPassword().trim(),

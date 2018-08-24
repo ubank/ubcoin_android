@@ -5,7 +5,6 @@ import android.content.Intent
 import android.text.Editable
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -21,7 +20,6 @@ import com.ubcoin.utils.ImeNextActionHandler
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.TextWatcherAdatepr
 import io.reactivex.functions.Consumer
-import java.net.HttpURLConnection
 
 /**
  * Created by Yuriy Aizenberg
@@ -117,8 +115,8 @@ class LoginFragment : BaseFragment() {
     private fun processLogin() {
         activity?.run {
             if (isValidData()) {
-                showProgressDialog("Login", "Login")
-                DataProvider.login(edtLoginEmail?.text.toString().trim(), edtLoginPassword.text.toString().trim(), successConsumer(), Consumer {
+                showProgressDialog(R.string.login, R.string.login   )
+                DataProvider.login(edtLoginEmail.text.toString().trim(), edtLoginPassword.text.toString().trim(), successConsumer(), Consumer {
                     hideProgressDialog()
                     handleException(it)
                 })

@@ -1,14 +1,18 @@
 package com.ubcoin.fragment.market
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.github.chrisbanes.photoview.PhotoView
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
-import java.lang.Exception
 
 /**
  * Created by Yuriy Aizenberg
@@ -19,7 +23,7 @@ private const val BUNDLE_KEY = "url"
 class FullImageFragment : BaseFragment() {
 
     companion object {
-        fun getBundle(url: String) : Bundle {
+        fun getBundle(url: String): Bundle {
             val args = Bundle()
             args.putString(BUNDLE_KEY, url)
             return args
@@ -29,7 +33,7 @@ class FullImageFragment : BaseFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity!!.onBackPressed() }
-        val imgFullscreen = view.findViewById<ImageView>(R.id.imgFullscreen)
+        val imgFullscreen = view.findViewById<PhotoView>(R.id.imgFullscreen)
         val progressCenter = view.findViewById<View>(R.id.progressCenter)
         val url = arguments?.getString(BUNDLE_KEY, null)
         if (url == null) {
@@ -39,21 +43,24 @@ class FullImageFragment : BaseFragment() {
         progressCenter.visibility = View.VISIBLE
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
-        Picasso.get()
+        GlideApp.with(activity!!)
                 .load(url)
-                .resize(0, metrics.widthPixels)
+                .override(0, metrics.widthPixels)
                 .centerCrop()
-                .into(imgFullscreen, object : Callback {
-                    override fun onSuccess() {
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        showSweetAlertDialog(R.string.error, R.string.unable_to_load_photo)
                         progressCenter.visibility = View.GONE
+                        return false
                     }
 
-                    override fun onError(e: Exception?) {
-                        showSweetAlertDialog("Error", getString(R.string.unable_to_load_photo))
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                         progressCenter.visibility = View.GONE
+                        return false
                     }
 
                 })
+                .into(imgFullscreen)
     }
 
     override fun getLayoutResId() = R.layout.fragment_fullscreen_view

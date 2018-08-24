@@ -1,9 +1,9 @@
 package com.ubcoin.pub.devrel.easypermissions.helper;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
-import android.app.Fragment;
 import android.util.Log;
 
 import com.ubcoin.pub.devrel.easypermissions.RationaleDialogFragment;

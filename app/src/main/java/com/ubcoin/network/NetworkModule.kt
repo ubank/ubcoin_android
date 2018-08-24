@@ -3,7 +3,6 @@ package com.ubcoin.network
 import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
-import com.ubcoin.model.Error
 import com.ubcoin.model.ErrorWrapper
 import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
@@ -13,7 +12,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.HttpURLConnection
-import kotlin.system.exitProcess
 
 
 /**
@@ -69,7 +67,7 @@ object NetworkModule {
             try {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
-                    if (response?.code()?: 401 == HttpURLConnection.HTTP_OK) {
+                    if (response?.code() ?: 401 == HttpURLConnection.HTTP_OK) {
 //                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
 //                        thePreferences.setWVCookie(response.header("set-cookie"))
                         thePreferences.setToken(response.header(AUTH_HEADER))
@@ -117,7 +115,7 @@ object NetworkModule {
         return httpLoggingInterceptor
     }
 
-    private fun networkHandleInterceptor() : Interceptor {
+    private fun networkHandleInterceptor(): Interceptor {
         return Interceptor { chain ->
             if (!NetworkConnectivityAwareManager.isNetworkAvailable()) {
                 throw NetworkConnectivityException()

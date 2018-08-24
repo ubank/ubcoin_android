@@ -132,7 +132,7 @@ class MainActivity : BaseActivity() {
 
     private fun showNeedToRegistration() {
         MaterialDialog.Builder(this)
-                .title("Error")
+                .title(getString(R.string.error))
                 .content(R.string.need_to_logged_in)
                 .build()
                 .show()

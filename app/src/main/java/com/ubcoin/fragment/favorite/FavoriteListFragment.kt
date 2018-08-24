@@ -33,7 +33,7 @@ class FavoriteListFragment : FirstLineFragment() {
 
     private var isLoading = false
     private var isEndOfLoading = false
-    private var currentDisposable : Disposable? = null
+    private var currentDisposable: Disposable? = null
     private var currentPage = 0
 
     override fun getLayoutResId() = R.layout.fragment_favorites
@@ -78,7 +78,7 @@ class FavoriteListFragment : FirstLineFragment() {
         }
 
         view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
-        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
 
     }
 

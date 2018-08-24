@@ -33,6 +33,7 @@
             android:layout_marginTop="@dimen/have_account_margin"
             android:hint="@string/email"
             android:maxLines="1"
+            app:met_primaryColor="@color/greenMainColor"
             android:imeOptions="actionDone"
             android:inputType="textWebEmailAddress"
             android:textColorHighlight="@color/haveAccountColor"

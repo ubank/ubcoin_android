@@ -3,9 +3,7 @@ package com.ubcoin.network
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import com.ubcoin.TheApplication
 import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -14,7 +12,6 @@ import com.ubcoin.utils.ProfileHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -22,7 +19,6 @@ import retrofit2.Response
 import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 /**
@@ -189,86 +185,84 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun findLocation(address: String, onSuccess: Consumer<List<SingleLocation>>, onError: Consumer<Throwable>) : Disposable {
+    fun findLocation(address: String, onSuccess: Consumer<List<SingleLocation>>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .findLocation(AddressBody(address))
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
 
-    fun findLocationSync(address: String) : List<SingleLocation> {
+    fun findLocationSync(address: String): List<SingleLocation> {
         return networkModule.api().findLocation(AddressBody(address)).blockingFirst()
     }
 
-    fun resolveLocation(context: Context, lat: Double, lon: Double, onSuccess: Consumer<List<Address>>, onError: Consumer<Throwable>) : Disposable {
+    fun resolveLocation(context: Context, lat: Double, lon: Double, onSuccess: Consumer<List<Address>>, onError: Consumer<Throwable>): Disposable {
         return Observable.just(Geocoder(context, Locale.getDefault()).getFromLocation(lat, lon, 1))
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
 
-    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<IdResponse>, onError: Consumer<Throwable>) : Disposable {
+    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<IdResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().createProduct(createProductRequest)
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
 
-    fun balance(onSuccess: Consumer<MyBalance>, onError: Consumer<Throwable>) : Disposable {
+    fun balance(onSuccess: Consumer<MyBalance>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().balance()
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
 
-    fun transactions(limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>) : Disposable {
+    fun transactions(limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .transactions(limit, page)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun transaction(id: String, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>) : Disposable {
+    fun transaction(id: String, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .transaction(id)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun topUp(onSuccess: Consumer<TopUp>, onError: Consumer<Throwable>) : Disposable {
+    fun topUp(onSuccess: Consumer<TopUp>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .topUp()
                 .compose(RxUtils.applyT())
-                .subscribe(onSuccess , onError)
+                .subscribe(onSuccess, onError)
     }
 
-    fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>) : Disposable {
+    fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .getConversion(conversionRequest)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun getConversionFromUBC(amount: String, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>) : Disposable {
-        return getConversion(ConversionRequest("UBC","USD", amount), onSuccess, onError)
+    fun getConversionFromUBC(amount: String, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
+        return getConversion(ConversionRequest("UBC", "USD", amount), onSuccess, onError)
     }
 
-    fun getConversionFromUSD(amount: String, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>) : Disposable {
-        return getConversion(ConversionRequest("USD","UBC", amount), onSuccess, onError)
+    fun getConversionFromUSD(amount: String, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
+        return getConversion(ConversionRequest("USD", "UBC", amount), onSuccess, onError)
     }
 
 
-    fun getCommission(amount: Double, onSuccess: Consumer<Commission>, onError: Consumer<Throwable>) : Disposable {
+    fun getCommission(amount: Double, onSuccess: Consumer<Commission>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .getCommission(amount)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun withdraw(amount: Double, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>) : Disposable {
+    fun withdraw(amount: Double, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().withdraw(Withdraw(address, amount))
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
-
-
 
 
 }

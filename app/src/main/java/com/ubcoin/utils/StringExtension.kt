@@ -6,7 +6,6 @@ import android.content.Context
 import com.nulabinc.zxcvbn.Zxcvbn
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,7 +16,7 @@ import java.util.*
 fun String.checkAsPassword(): Int = if (isEmpty()) -1 else Zxcvbn().measure(this).score
 
 
-fun String.toDate() : Date? {
+fun String.toDate(): Date? {
     return try {
         SimpleDateFormat("yyyyMMdd'T'HHmmssZ", Locale.getDefault()).parse(this)
     } catch (e: Exception) {
@@ -25,7 +24,7 @@ fun String.toDate() : Date? {
     }
 }
 
-fun Date.toTransactionDate() : String {
+fun Date.toTransactionDate(): String {
     return SimpleDateFormat("dd.MM.yy", Locale.getDefault()).format(this)
 }
 
@@ -35,11 +34,11 @@ fun String.copyToClipBoard(context: Context, label: String) {
     clipboardManager.primaryClip = clipData
 }
 
-fun Float.moneyFormat() : String {
+fun Float.moneyFormat(): String {
     return this.toDouble().moneyFormat()
 }
 
-fun Double.moneyFormat() : String {
+fun Double.moneyFormat(): String {
     val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
     formatSymbols.decimalSeparator = '.'
     formatSymbols.groupingSeparator = ' '
@@ -56,11 +55,11 @@ fun Double.moneyFormat() : String {
     return format
 }
 
-fun String.moneyFormat() : String {
+fun String.moneyFormat(): String {
     return this.toDouble().moneyFormat()
 }
 
-fun Double.bigMoneyFormat() : String {
+fun Double.bigMoneyFormat(): String {
     val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
     formatSymbols.decimalSeparator = '.'
     formatSymbols.groupingSeparator = ' '

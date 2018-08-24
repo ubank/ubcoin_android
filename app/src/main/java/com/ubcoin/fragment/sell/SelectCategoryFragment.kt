@@ -22,8 +22,8 @@ private const val BUNDLE_KEY = "bundle_key_id"
 class SelectCategoryFragment : BaseFragment() {
 
     private lateinit var progressCenter: View
-    private var selectCategoryAdapter: SelectCategoryAdapter?= null
-    private var selectedCategory: Category?= null
+    private var selectCategoryAdapter: SelectCategoryAdapter? = null
+    private var selectedCategory: Category? = null
 
     companion object {
         fun createBundle(id: String?): Bundle {

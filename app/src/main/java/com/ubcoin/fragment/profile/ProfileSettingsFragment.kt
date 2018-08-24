@@ -1,27 +1,23 @@
 package com.ubcoin.fragment.profile
 
 import android.support.v4.content.ContextCompat
-import android.view.ContextMenu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.mukesh.countrypicker.Country
 import com.mukesh.countrypicker.CountryPicker
 import com.rengwuxian.materialedittext.MaterialEditText
-import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.ThePreferences
 import com.ubcoin.activity.IActivity
-import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.MarketListFragment
 import com.ubcoin.model.TemporaryUser
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.CircleTransformation
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.MenuBottomView
@@ -46,7 +42,7 @@ class ProfileSettingsFragment : BaseFragment() {
     private lateinit var llSettingsCountry: View
     private lateinit var edtProfileSettingsCountry: MaterialEditText
     private lateinit var txtProfileSettingsBalance: TextView
-    private var materialDialog: MaterialDialog?= null
+    private var materialDialog: MaterialDialog? = null
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
@@ -124,10 +120,9 @@ class ProfileSettingsFragment : BaseFragment() {
         if (avatarUrl == null || avatarUrl.isBlank()) {
             imgProfilePhoto.setImageResource(R.drawable.img_profile_default)
         } else {
-            Picasso.get().load(avatarUrl)
-                    .resizeDimen(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
+            GlideApp.with(activity!!).load(avatarUrl)
+                    .override(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
                     .centerCrop()
-                    .transform(CircleTransformation())
                     .placeholder(R.drawable.img_profile_default)
                     .error(R.drawable.img_profile_default)
                     .into(imgProfilePhoto)
@@ -151,7 +146,7 @@ class ProfileSettingsFragment : BaseFragment() {
     }
 
     private fun onDoneClick() {
-        showProgressDialog("Wait please", "Updating profile")
+        showProgressDialog(R.string.wait_please_title, R.string.updating_profile_process)
         val userName = edtSettingsName.text.toString().trim()
         DataProvider.updateProfileEmailAndName(user.email!!, userName,
                 object : SilentConsumer<Response<Unit>> {
@@ -189,7 +184,7 @@ class ProfileSettingsFragment : BaseFragment() {
 
     private fun processLogout() {
 
-        showProgressDialog("Wait please", "Logout")
+        showProgressDialog(R.string.wait_please_title, R.string.logout)
         DataProvider.logout(
                 object : SilentConsumer<Response<Unit>> {
                     override fun onConsume(t: Response<Unit>) {

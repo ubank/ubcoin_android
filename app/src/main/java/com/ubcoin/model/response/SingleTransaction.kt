@@ -16,7 +16,7 @@ data class SingleTransaction(
 
 ) : Serializable {
 
-    fun isPositive()  = amountUBC > .0
+    fun isPositive() = amountUBC > .0
 
     fun isPending() = "IN_PROGRESS" == status
 

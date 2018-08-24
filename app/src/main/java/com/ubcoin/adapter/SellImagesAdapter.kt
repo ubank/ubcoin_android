@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.SellImageModel
 import java.io.File
@@ -20,12 +20,13 @@ class SellImagesAdapter(context: Context) : BaseRecyclerAdapter<SellImageModel, 
     override fun onBindViewHolder(vh: SellImageVH, position: Int) {
         val item = getItem(position)
         if (item.hasImage()) {
-            Picasso.get()
+            vh.imgSellImage.scaleType = ImageView.ScaleType.CENTER_CROP
+            GlideApp.with(context)
                     .load(File(item.filePath))
-                    .fit()
                     .centerCrop()
                     .into(vh.imgSellImage)
         } else {
+            vh.imgSellImage.scaleType = ImageView.ScaleType.CENTER_INSIDE
             vh.imgSellImage.setImageDrawable(null)
             vh.imgSellImage.setImageResource(R.drawable.ic_cam_green)
         }
@@ -35,11 +36,11 @@ class SellImagesAdapter(context: Context) : BaseRecyclerAdapter<SellImageModel, 
 
 
     class SellImageVH(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {
-        val imgSellImage : ImageView = findView(R.id.imgSellImage)
+        val imgSellImage: ImageView = findView(R.id.imgSellImage)
     }
 
-    fun findFirstEmptyContainerPosition() : Int {
-        for((index, element) in data.withIndex()) {
+    fun findFirstEmptyContainerPosition(): Int {
+        for ((index, element) in data.withIndex()) {
             if (!element.hasImage()) return index
         }
         return -1

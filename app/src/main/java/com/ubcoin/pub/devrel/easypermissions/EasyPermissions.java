@@ -17,9 +17,7 @@ package com.ubcoin.pub.devrel.easypermissions;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -37,33 +35,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.jvm.JvmStatic;
-
 
 /**
  * Utility to request and check System permissions for apps targeting Android M (API &gt;= 23).
  */
 public class EasyPermissions {
-
-    /**
-     * Callback interface to receive the results of {@code EasyPermissions.requestPermissions()}
-     * calls.
-     */
-    public interface PermissionCallbacks extends ActivityCompat.OnRequestPermissionsResultCallback {
-
-        void onPermissionsGranted(int requestCode, @NonNull List<String> perms);
-
-        void onPermissionsDenied(int requestCode, @NonNull List<String> perms);
-    }
-
-    /**
-     * Callback interface to receive button clicked events of the rationale dialog
-     */
-    public interface RationaleCallbacks {
-        void onRationaleAccepted(int requestCode);
-
-        void onRationaleDenied(int requestCode);
-    }
 
     private static final String TAG = "EasyPermissions";
 
@@ -293,7 +269,7 @@ public class EasyPermissions {
     /**
      * Check if at least one permission in the list of denied permissions has been permanently
      * denied (user clicked "Never ask again").
-     *
+     * <p>
      * <b>Note</b>: Due to a limitation in the information provided by the Android
      * framework permissions API, this method only works after the permission
      * has been denied and your app has received the onPermissionsDenied callback.
@@ -462,5 +438,25 @@ public class EasyPermissions {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    /**
+     * Callback interface to receive the results of {@code EasyPermissions.requestPermissions()}
+     * calls.
+     */
+    public interface PermissionCallbacks extends ActivityCompat.OnRequestPermissionsResultCallback {
+
+        void onPermissionsGranted(int requestCode, @NonNull List<String> perms);
+
+        void onPermissionsDenied(int requestCode, @NonNull List<String> perms);
+    }
+
+    /**
+     * Callback interface to receive button clicked events of the rationale dialog
+     */
+    public interface RationaleCallbacks {
+        void onRationaleAccepted(int requestCode);
+
+        void onRationaleDenied(int requestCode);
     }
 }

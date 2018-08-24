@@ -1,7 +1,6 @@
 package com.ubcoin.network
 
 import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -46,7 +45,7 @@ interface Api {
     fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 
     @GET("/api/items/{itemId}")
-    fun marketItem(@Path("itemId") itemId: String) : Observable<MarketItem>
+    fun marketItem(@Path("itemId") itemId: String): Observable<MarketItem>
 
     @GET("/api/favorites")
     fun favorites(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
@@ -68,41 +67,41 @@ interface Api {
     fun uploadImage(@Part file: MultipartBody.Part): Observable<TgLink>
 
     @GET("/api/purchases/buyer")
-    fun getBuyersItems(@Query("size") limit: Int, @Query("page") page: Int) : Observable<DealsListResponse>
+    fun getBuyersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<DealsListResponse>
 
     @GET("/api/purchases/seller")
-    fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int) : Observable<DealsListResponse>
+    fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<DealsListResponse>
 
     @GET("/api/items/categories")
-    fun getCategories() : Observable<List<Category>>
+    fun getCategories(): Observable<List<Category>>
 
     @POST("/api/geo/find")
-    fun findLocation(@Body addressBody: AddressBody) : Observable<List<SingleLocation>>
+    fun findLocation(@Body addressBody: AddressBody): Observable<List<SingleLocation>>
 
     @POST("/api/items")
-    fun createProduct(@Body createProductRequest: CreateProductRequest) : Observable<IdResponse>
+    fun createProduct(@Body createProductRequest: CreateProductRequest): Observable<IdResponse>
 
     @GET("/api/wallet/balance")
-    fun balance() : Observable<MyBalance>
+    fun balance(): Observable<MyBalance>
 
     @GET("/api/wallet/transactions")
-    fun transactions(@Query("size") limit: Int, @Query("page") page: Int) : Observable<TransactionListResponse>
+    fun transactions(@Query("size") limit: Int, @Query("page") page: Int): Observable<TransactionListResponse>
 
     @GET("/api/wallet/transactions")
-    fun transaction(@Query("id") id: String) : Observable<TransactionListResponse>
+    fun transaction(@Query("id") id: String): Observable<TransactionListResponse>
 
     @GET("/api/wallet/topup")
     fun topUp(): Observable<TopUp>
 
     @POST("/api/wallet/convert")
-    fun getConversion(@Body conversionBody: ConversionRequest) : Observable<ConversionResponse>
+    fun getConversion(@Body conversionBody: ConversionRequest): Observable<ConversionResponse>
 
     @GET("/api/wallet/commission")
-    fun getCommission(@Query("amount") amount: Double) : Observable<Commission>
+    fun getCommission(@Query("amount") amount: Double): Observable<Commission>
 
     @POST("/api/wallet/withdraw")
-    fun withdraw(@Body withdraw: Withdraw) : Observable<WithdrawResponse>
+    fun withdraw(@Body withdraw: Withdraw): Observable<WithdrawResponse>
 
     @POST("/api/items/discuss")
-    fun discuss(@Body request: IdRequest) : Observable<TgLink>
+    fun discuss(@Body request: IdRequest): Observable<TgLink>
 }

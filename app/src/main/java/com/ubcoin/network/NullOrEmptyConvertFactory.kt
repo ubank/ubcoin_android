@@ -20,7 +20,7 @@ class NullOrEmptyConvertFactory : Converter.Factory() {
         }
     }
 
-    private fun hasEliminatedAnnotation(annotations: Array<Annotation>?) : Boolean {
+    private fun hasEliminatedAnnotation(annotations: Array<Annotation>?): Boolean {
         annotations?.forEach {
             if (it.annotationClass == EliminatedBody::class) return true
         }

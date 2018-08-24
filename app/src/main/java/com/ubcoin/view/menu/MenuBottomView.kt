@@ -66,7 +66,7 @@ class MenuBottomView : LinearLayout {
         if (activeMenuItem == null || !activeMenuItem?.equals(singleView)!!) {
             deactivateCurrent()
             singleView.activate()
-            singleView.shake()
+//            singleView.shake()
             activeMenuItem = singleView
         }
     }

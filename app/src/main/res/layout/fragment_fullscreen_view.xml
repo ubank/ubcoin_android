@@ -10,7 +10,7 @@
 
     <include layout="@layout/view_header_fullscreen_image" android:id="@+id/header"/>
 
-    <ImageView
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imgFullscreen"
         android:layout_below="@id/header"
         android:layout_width="match_parent"

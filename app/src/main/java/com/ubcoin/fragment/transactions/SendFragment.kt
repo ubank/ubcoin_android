@@ -1,6 +1,5 @@
 package com.ubcoin.fragment.transactions
 
-import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
 import android.view.View
 import android.widget.Button

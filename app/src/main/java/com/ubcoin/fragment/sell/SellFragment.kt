@@ -1,9 +1,10 @@
 package com.ubcoin.fragment.sell
 
-import android.content.Intent
+import android.location.Address
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Display
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -11,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.cocosw.bottomsheet.BottomSheet
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -20,12 +22,14 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.rengwuxian.materialedittext.MaterialEditText
+import com.ubcoin.ILocationChangeCallback
 import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
+import com.ubcoin.model.response.Location
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.base.IdResponse
@@ -35,11 +39,17 @@ import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
+import io.fabric.sdk.android.services.common.Crash
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by Yuriy Aizenberg
  */
-class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>, OnMapReadyCallback {
+class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>, OnMapReadyCallback, ILocationChangeCallback {
+
+    private val requestCode = 19990
+    private var disposable: Disposable?= null
+
 
     private val datum = ArrayList<SellImageModel>()
     private lateinit var adapter: SellImagesAdapter
@@ -124,24 +134,80 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         }
     }
 
+    override fun onLatLngChanged(latLng: LatLng) {
+        TheApplication.instance.unregisterLatLngCallback(this)
+        fetchCurrentLocationAddress(latLng)
+    }
+
+
     override fun onResume() {
         super.onResume()
+        val location = SellCreateDataHolder.location
+        if (location == null) {
+            val currentLocation = TheApplication.instance.currentLocation
+            if (currentLocation == null) {
+                TheApplication.instance.registerLatLngCallback(this)
+            } else {
+                fetchCurrentLocationAddress(currentLocation)
+            }
+        }
         if (SellCreateDataHolder.hasChanges) {
             setupData()
         }
         mapView.onResume()
     }
 
-    private val requestCode = 19990
+    private fun fetchCurrentLocationAddress(currentLocation: LatLng) {
+        disposable?.dispose()
+        activity?.run {
+            disposable = DataProvider.resolveLocation(this,
+                    currentLocation.latitude,
+                    currentLocation.longitude,
+                    object : SilentConsumer<List<Address>> {
+                        override fun onConsume(t: List<Address>) {
+                            onLocationResolved(t, currentLocation)
+                        }
+
+                    }, object : SilentConsumer<Throwable> {
+                override fun onConsume(t: Throwable) {
+                    Crashlytics.logException(t)
+                }
+
+            })
+        }
+    }
+
+    private fun onLocationResolved(t: List<Address>, latLng: LatLng) {
+        if (SellCreateDataHolder.location != null) return
+
+        if (!t.isEmpty()) {
+            val address = t[0]
+            val addressBuilder = StringBuilder()
+            (0..address.maxAddressLineIndex).forEach {
+                addressBuilder.append(address.getAddressLine(it))
+                if (it < address.maxAddressLineIndex) {
+                    addressBuilder.append(",")
+                }
+            }
+            SellCreateDataHolder.location = Location(addressBuilder.toString(), latLng.latitude.toString(), latLng.longitude.toString())
+            setupData()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        TheApplication.instance.unregisterLatLngCallback(this)
+        disposable?.dispose()
+    }
 
     private fun validateTgUser(): Boolean {
         val authorizedInTg = ProfileHolder.user!!.authorizedInTg ?: false
         if (!authorizedInTg) {
-            showProgressDialog("Loading", "Wait please")
+            showProgressDialog(R.string.loading, R.string.wait_please_message)
             DataProvider.getTgLink(object : SilentConsumer<TgLink> {
                 override fun onConsume(t: TgLink) {
                     hideProgressDialog()
-                    ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg?:false
+                    ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg ?: false
                     TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
                 }
 
@@ -156,7 +222,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     }
 
     private fun loadImagesAndCreate(createProductRequest: CreateProductRequest) {
-        showProgressDialog("Create product", "Wait please")
+        showProgressDialog(R.string.create_product_progress, R.string.wait_please_message)
         val imageUrls = ArrayList<String>()
         datum.forEach {
             if (it.filePath != null) {
@@ -191,7 +257,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 object : SilentConsumer<IdResponse> {
                     override fun onConsume(t: IdResponse) {
                         hideProgressDialog()
-                        Toast.makeText(activity, "Product created", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, R.string.product_created_success, Toast.LENGTH_SHORT).show()
                         activity?.onBackPressed()
                     }
 
@@ -212,28 +278,28 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private fun validateDataAndCreateRequest(): CreateProductRequest? {
         val title = edtSellTitle.text.toString()
         if (title.isBlank()) {
-            showSweetAlertDialog("Error", getString(R.string.err_title_missing))
+            showSweetAlertDialog(R.string.error, R.string.err_title_missing)
             return null
         }
         if (currentPrice <= 0f) {
-            showSweetAlertDialog("Error", getString(R.string.err_price_required))
+            showSweetAlertDialog(R.string.error, R.string.err_price_required)
             return null
         }
 
         val categoryId = SellCreateDataHolder.category?.id
         if (categoryId == null) {
-            showSweetAlertDialog("Error", getString(R.string.err_category_missing))
+            showSweetAlertDialog(R.string.error, R.string.err_category_missing)
             return null
         }
 
         val location = SellCreateDataHolder.location
         if (location == null || !location.isAddressPresented()) {
-            showSweetAlertDialog("Error", getString(R.string.err_location_missing))
+            showSweetAlertDialog(R.string.error, R.string.err_location_missing)
             return null
         }
 
         if (!hasImages()) {
-            showSweetAlertDialog("Error", getString(R.string.err_image_missing))
+            showSweetAlertDialog(R.string.error, R.string.err_image_missing)
             return null
         }
 
@@ -241,7 +307,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 categoryId,
                 title,
                 edtSellDescription.text.toString().trim(),
-                currentPrice.toDouble(),
+                currentPrice,
                 location,
                 true, true, ArrayList()
         )
@@ -395,7 +461,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     }
 
     private fun onFailureCapturing() {
-        showSweetAlertDialog("Error", "Unable to take photo")
+        showSweetAlertDialog(R.string.error, R.string.err_unable_take_photo)
     }
 
     override fun onPermissionsGranted() {

@@ -49,7 +49,7 @@ public class RationaleDialogFragment extends DialogFragment {
             if (getParentFragment() instanceof EasyPermissions.PermissionCallbacks) {
                 mPermissionCallbacks = (EasyPermissions.PermissionCallbacks) getParentFragment();
             }
-            if (getParentFragment() instanceof EasyPermissions.RationaleCallbacks){
+            if (getParentFragment() instanceof EasyPermissions.RationaleCallbacks) {
                 mRationaleCallbacks = (EasyPermissions.RationaleCallbacks) getParentFragment();
             }
 

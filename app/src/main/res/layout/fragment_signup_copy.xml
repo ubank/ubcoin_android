@@ -31,6 +31,7 @@
             android:id="@+id/edtSignUpName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:met_primaryColor="@color/greenMainColor"
             android:inputType="text"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
@@ -46,6 +47,7 @@
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtSignUpEmail"
             android:layout_width="match_parent"
+            app:met_primaryColor="@color/greenMainColor"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"

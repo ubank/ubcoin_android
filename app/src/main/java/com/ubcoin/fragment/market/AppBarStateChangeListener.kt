@@ -3,7 +3,6 @@ package com.ubcoin.fragment.market
 import android.support.design.widget.AppBarLayout
 
 
-
 /**
  * Created by Yuriy Aizenberg
  */

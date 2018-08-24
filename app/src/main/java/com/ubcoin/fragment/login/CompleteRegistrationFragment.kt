@@ -33,7 +33,7 @@ class CompleteRegistrationFragment : BaseFragment() {
     private lateinit var email: String
     private lateinit var userName: String
     private lateinit var password: String
-    private lateinit var llResendCode : View
+    private lateinit var llResendCode: View
 
     companion object {
         fun getBundle(email: String, userName: String, password: String): Bundle {
@@ -79,12 +79,12 @@ class CompleteRegistrationFragment : BaseFragment() {
     }
 
     private fun resendCode() {
-        showProgressDialog("Wait please", "")
+        showProgressDialog(R.string.wait_please_title, R.string.empty)
         DataProvider.registrations(email, password, userName, object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
                 activity?.run {
-                    Toast.makeText(activity, "An email has been successfully sent", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, R.string.email_successfully_sent, Toast.LENGTH_SHORT).show()
                 }
             }
         }, Consumer { handleException(it) })
@@ -94,7 +94,7 @@ class CompleteRegistrationFragment : BaseFragment() {
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
         hideProgressDialog()
         //todo
-        showSweetAlertDialog("Error", "Confirmation code invalid")
+        showSweetAlertDialog(R.string.error, R.string.confirmation_code_invalid)
         return true
     }
 
@@ -108,10 +108,10 @@ class CompleteRegistrationFragment : BaseFragment() {
     private fun goNext() {
         hideKeyboard()
         //todo
-        showProgressDialog("Confirmation", "Wait please")
+        showProgressDialog(R.string.confirmation, R.string.wait_please_message)
         DataProvider.confirmRegistrationEmail(email,
                 edtCode.text.toString().trim(),
-                object :SilentConsumer<ProfileCompleteResponse> {
+                object : SilentConsumer<ProfileCompleteResponse> {
                     override fun onConsume(t: ProfileCompleteResponse) {
                         hideProgressDialog()
                         ThePreferences().setToken(t.accessToken)

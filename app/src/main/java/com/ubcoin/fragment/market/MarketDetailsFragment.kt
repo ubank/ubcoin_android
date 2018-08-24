@@ -1,8 +1,6 @@
 package com.ubcoin.fragment.market
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -14,13 +12,13 @@ import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.daimajia.slider.library.Animations.DescriptionAnimation
 import com.daimajia.slider.library.Indicators.PagerIndicator
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
 import com.daimajia.slider.library.Transformers.BaseTransformer
 import com.daimajia.slider.library.Transformers.DefaultTransformer
-import com.daimajia.slider.library.Transformers.FadeTransformer
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -29,6 +27,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
@@ -36,7 +35,10 @@ import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.*
+import com.ubcoin.utils.CollectionExtensions
+import com.ubcoin.utils.DistanceUtils
+import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.SafetySliderView
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
 import retrofit2.Response
@@ -57,20 +59,20 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtLocationDistance: TextView
     private lateinit var mapView: MapView
     private lateinit var appBarLayout: AppBarLayout
-    private lateinit var txtDescription : TextView
-    private lateinit var imgDescription  : View
-    private lateinit var llDescription : View
+    private lateinit var txtDescription: TextView
+    private lateinit var imgDescription: View
+    private lateinit var llDescription: View
 
     //Header
     private lateinit var imgHeaderLeft: ImageView
     private lateinit var header: View
-    private lateinit var txtHeaderSimple : TextView
+    private lateinit var txtHeaderSimple: TextView
     private lateinit var imgHeaderRight: ImageView
 
     private var idForRemove: String? = null
     private val isFavoriteProcessing = AtomicBoolean(false)
 
-    private var onGlobalLayoutListener : ViewTreeObserver.OnGlobalLayoutListener ?= null
+    private var onGlobalLayoutListener: ViewTreeObserver.OnGlobalLayoutListener? = null
 
     companion object {
         fun getBundle(marketItem: MarketItem): Bundle {
@@ -174,7 +176,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         llDescription = view.findViewById<View>(R.id.llDescription)
         if (description == null || description.isBlank()) {
-            llDescription.visibility= View.GONE
+            llDescription.visibility = View.GONE
         }
         imgDescription = view.findViewById(R.id.imgDescription)
 
@@ -186,10 +188,10 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         if (avatarUrl == null) {
             imageView.setImageResource(R.drawable.img_profile_default)
         } else {
-            Picasso.get().load(avatarUrl)
-                    .resizeDimen(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
-                    .centerCrop()
-                    .transform(CircleTransformation())
+            GlideApp.with(activity!!).load(avatarUrl)
+                    .override(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
+                    .centerInside()
+                    .transform(RoundedCorners(context!!.resources.getDimensionPixelSize(R.dimen.detailsSubProfileHeight)))
                     .placeholder(R.drawable.img_profile_default)
                     .error(R.drawable.img_profile_default)
                     .into(imageView)
@@ -219,12 +221,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         view.findViewById<View>(R.id.llHeaderRightSimple).setOnClickListener {
             val shareUrl = marketItem.shareUrl
             if (shareUrl != null && !shareUrl.isBlank()) {
-                TheApplication.instance.openShareIntent(shareUrl)
+                TheApplication.instance.openShareIntent(shareUrl, activity!!)
             }
         }
     }
 
-    private fun getGlobalLayoutListener() : ViewTreeObserver.OnGlobalLayoutListener {
+    private fun getGlobalLayoutListener(): ViewTreeObserver.OnGlobalLayoutListener {
         if (onGlobalLayoutListener == null) {
             onGlobalLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
                 val layout = txtDescription.layout
@@ -254,11 +256,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun hideExpandDescription() {
         imgDescription.visibility = View.GONE
-        llDescription.setOnClickListener {  }
+        llDescription.setOnClickListener { }
 
     }
 
-    private fun createClickListener(filePath: String) : SafetySliderView.ClickListener {
+    private fun createClickListener(filePath: String): SafetySliderView.ClickListener {
         return object : SafetySliderView.ClickListener(filePath) {
             override fun onClick(filePath: String) {
                 openFullScreenImage(filePath)
@@ -341,7 +343,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             showNeedToRegistration()
             return
         }
-        showProgressDialog("Wait please", "Wait please")
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
         DataProvider.discuss(marketItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
@@ -359,7 +361,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private fun requestFavorite(favorite: Boolean) {
         if (isFavoriteProcessing.get()) return
         isFavoriteProcessing.set(true)
-        showProgressDialog("Wait please", "Wait please")
+        showProgressDialog(R.string.wait_please_title,R.string.wait_please_message)
         if (favorite) {
             DataProvider.favorite(marketItem.id, successHandler(), silentConsumer())
         } else {

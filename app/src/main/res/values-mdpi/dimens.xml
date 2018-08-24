@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_list_image_size">200dp</dimen>
+    <dimen name="default_list_image_size">165dp</dimen>
+    <dimen name="default_list_image_size_width">265dp</dimen>
     <dimen name="map_detail_height">150dp</dimen>
 
     <dimen name="detailsProfileHeight">83dp</dimen>

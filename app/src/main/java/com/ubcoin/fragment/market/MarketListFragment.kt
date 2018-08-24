@@ -91,7 +91,7 @@ class MarketListFragment : FirstLineFragment() {
             }
         }
         view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
-        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener {  }
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
 
     }
 

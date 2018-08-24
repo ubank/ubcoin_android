@@ -5,7 +5,7 @@ import java.io.Serializable
 /**
  * Created by Yuriy Aizenberg
  */
-data class Withdraw (
+data class Withdraw(
         val externalAddress: String,
         val amountUBC: Double
 

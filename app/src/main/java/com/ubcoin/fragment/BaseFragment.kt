@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
@@ -336,7 +337,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     @Suppress("UNUSED_PARAMETER")
     private fun onNoNetworkException(exception: NetworkConnectivityException) {
-        showSweetAlertDialog("Error", getString(R.string.no_network_error))
+        showSweetAlertDialog(getString(R.string.error), getString(R.string.no_network_error))
     }
 
     protected open fun onUnauthorized(httpRequestException: HttpRequestException) = false
@@ -345,7 +346,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private fun processHttpRequestException(httpRequestException: HttpRequestException) {
         if (httpRequestException.isServerError()) {
-            showSweetAlertDialog("Server says", httpRequestException.toServerErrorString())
+            showSweetAlertDialog(getString(R.string.server_says_error_title), httpRequestException.toServerErrorString())
         } else {
             processThrowable(RuntimeException(httpRequestException.throwable))
         }
@@ -384,6 +385,14 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
+    fun showSweetAlertDialog(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        showSweetAlertDialog(getString(titleRes), getString(messageRes))
+    }
+
+    protected fun showProgressDialog(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        showProgressDialog(getString(titleRes), getString(messageRes))
+    }
+
     protected fun showProgressDialog(title: String, message: String) {
         activity?.run {
             hideProgressDialog()
@@ -405,7 +414,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     protected fun showNeedToRegistration() {
         activity?.run {
             MaterialDialog.Builder(this)
-                    .title("Error")
+                    .title(getString(R.string.title))
                     .content(R.string.need_to_logged_in)
                     .build()
                     .show()

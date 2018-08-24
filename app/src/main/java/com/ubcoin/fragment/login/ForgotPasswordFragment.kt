@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
@@ -66,7 +65,7 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     private fun sendEmail() {
-        showProgressDialog("Wait please", "")
+        showProgressDialog(R.string.wait_please_title, R.string.empty)
         DataProvider.sendForgotEmail(edtForgotEmail.text!!.toString(), object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
@@ -78,7 +77,7 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
-        showSweetAlertDialog("Error", "Email not found")
+        showSweetAlertDialog(R.string.error, R.string.email_not_found)
         return true
     }
 

@@ -82,7 +82,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
     }
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
-        showProgressDialog("Wait please", "Wait please")
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
         DataProvider.discuss(data.dealItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()

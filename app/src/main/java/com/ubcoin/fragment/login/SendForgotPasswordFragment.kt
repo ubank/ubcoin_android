@@ -7,7 +7,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -32,13 +31,13 @@ import retrofit2.Response
 class SendForgotPasswordFragment : BaseFragment() {
 
     private lateinit var edtCode: MaterialEditText
-    private lateinit var llResendCode : View
-    private lateinit var edtPasswordInput : PasswordInputExtension
+    private lateinit var llResendCode: View
+    private lateinit var edtPasswordInput: PasswordInputExtension
     private lateinit var imgForgotConfirm: Button
     var email: String = ""
 
     companion object {
-        fun createBundle(email: String):  Bundle {
+        fun createBundle(email: String): Bundle {
             val args = Bundle()
             args.putString("email", email)
             return args
@@ -77,12 +76,12 @@ class SendForgotPasswordFragment : BaseFragment() {
     }
 
     private fun resendCode() {
-        showProgressDialog("Wait please", "")
+        showProgressDialog(R.string.wait_please_title, R.string.empty)
         DataProvider.sendForgotEmail(email, object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
                 activity?.run {
-                    Toast.makeText(activity, "Success", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, R.string.sucess, Toast.LENGTH_SHORT).show()
                 }
             }
         }, Consumer { handleException(it) })
@@ -97,7 +96,7 @@ class SendForgotPasswordFragment : BaseFragment() {
         }
     }
 
-    private fun isDataInputValid() : Boolean {
+    private fun isDataInputValid(): Boolean {
         return edtCode.text!!.isNotBlank() && edtPasswordInput.getInputText().isNotBlank()
     }
 
@@ -114,7 +113,7 @@ class SendForgotPasswordFragment : BaseFragment() {
     }
 
     private fun sendEmail() {
-        showProgressDialog("Wait please", "")
+        showProgressDialog(R.string.wait_please_title, R.string.empty)
         DataProvider.forgotChangePassword(email, edtCode.text!!.toString(), edtPasswordInput.getInputText(), successConsumer(), Consumer { handleException(it) })
     }
 
@@ -135,7 +134,7 @@ class SendForgotPasswordFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
-        showSweetAlertDialog("Error", "Invalid code")
+        showSweetAlertDialog(R.string.error, R.string.invlid_code)
         return true
     }
 

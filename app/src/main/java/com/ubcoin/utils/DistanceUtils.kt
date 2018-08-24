@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 
 object DistanceUtils {
 
-    fun calculateDistance(lat: Double?, lon: Double?, context: Context) : String {
+    fun calculateDistance(lat: Double?, lon: Double?, context: Context): String {
         val currentLocation = TheApplication.instance.currentLocation
         if (lat == null || lon == null || currentLocation == null) {
             return noLocationDefined(context)
@@ -40,7 +40,7 @@ object DistanceUtils {
     private fun noLocationDefined(context: Context) =
             """${getString(R.string.distance_unknown, context)} ${getString(R.string.distance_km, context)}"""
 
-    fun calculateDistance(latLng: LatLng?, context: Context) : String {
+    fun calculateDistance(latLng: LatLng?, context: Context): String {
         if (latLng == null) return noLocationDefined(context)
         return calculateDistance(latLng.latitude, latLng.longitude, context)
     }

@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.maps.model.LatLng
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
@@ -52,14 +50,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.txtImagesCount.text = "0/0"
         } else {
             images?.let {
-                Picasso.get().load(it[0])
-//                        .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
-//                        .centerCrop()
-                        .fit()
+                GlideApp.with(context)
+                        .load(it[0])
                         .centerCrop()
-//                        .onlyScaleDown()
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .skipMemoryCache(true)
                         .placeholder(R.drawable.img_photo_placeholder)
                         .error(R.drawable.img_photo_placeholder)
                         .into(vh.imgMarket)
@@ -71,7 +65,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         vh.ratingBarView.setRating(rating ?: 0)
         if (!ProfileHolder.isAuthorized()) {
             vh.imgFavorite.visibility = View.GONE
-            vh.llFavoriteContainer.setOnClickListener {  }
+            vh.llFavoriteContainer.setOnClickListener { }
         } else {
             vh.imgFavorite.visibility = View.VISIBLE
             vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)

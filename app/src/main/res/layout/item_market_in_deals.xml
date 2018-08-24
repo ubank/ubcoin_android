@@ -10,6 +10,7 @@
         android:layout_width="@dimen/marketInFavoriteHeightImage"
         android:layout_height="@dimen/marketInFavoriteHeightImage"
         android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
         android:layout_marginStart="15dp" />
 
     <LinearLayout

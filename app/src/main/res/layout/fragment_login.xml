@@ -39,6 +39,7 @@
             android:inputType="textWebEmailAddress"
             android:maxLines="1"
             android:textColorHighlight="@color/haveAccountColor"
+            app:met_primaryColor="@color/greenMainColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
             app:met_textColorHint="@color/haveAccountColor" />
@@ -55,6 +56,7 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:textColorHighlight="@color/haveAccountColor"
+            app:met_primaryColor="@color/greenMainColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
             app:met_textColorHint="@color/haveAccountColor" />

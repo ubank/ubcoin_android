@@ -8,4 +8,4 @@ import java.io.Serializable
 data class MyBalance(
         val effectiveAmount: Double,
         val amountOnHold: Double
-): Serializable
+) : Serializable

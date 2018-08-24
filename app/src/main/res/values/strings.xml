@@ -124,5 +124,27 @@
 
     <string name="info_label">Info</string>
     <string name="transaction_amount_with_pats">(USD %1$s)</string>
+    <string name="error">Error</string>
+    <string name="server_says_error_title">Server says</string>
+    <string name="wait_please_title">Wait please</string>
+    <string name="wait_please_message">Wait please</string>
+    <string name="to_buy">To buy</string>
+    <string name="to_sell">To sell</string>
+    <string name="email_successfully_sent">An email has been successfully sent</string>
+    <string name="confirmation_code_invalid">Confirmation code invalid</string>
+    <string name="email_not_found">Email not found</string>
+    <string name="login">Login</string>
+    <string name="sucess">Success</string>
+    <string name="invlid_code">Invalid code</string>
+    <string name="email_invalid">Email invalid</string>
+    <string name="registration">Registration</string>
+    <string name="updating_profile_process">Updating profile</string>
+    <string name="logout">Logout</string>
+    <string name="loading">Loading</string>
+    <string name="create_product_progress">Create product</string>
+    <string name="product_created_success">Product created</string>
+    <string name="err_unable_take_photo">Unable to take photo</string>
+    <string name="withdraw_progress">Withdraw</string>
+    <string name="withdraw_sucess">Withdraw success</string>
 
 </resources>

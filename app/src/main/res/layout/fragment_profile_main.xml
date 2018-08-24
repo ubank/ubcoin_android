@@ -27,6 +27,7 @@
                 android:layout_width="@dimen/detailsSubProfileHeight"
                 android:layout_height="@dimen/detailsSubProfileHeight"
                 android:visibility="gone"
+                android:scaleType="centerCrop"
                 android:layout_margin="@dimen/detailsProfileMargin"
                 android:src="@drawable/img_profile_default" />
 

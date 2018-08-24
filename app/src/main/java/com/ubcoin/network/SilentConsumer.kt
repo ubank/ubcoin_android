@@ -8,7 +8,7 @@ import io.reactivex.functions.Consumer
  * Created by Yuriy Aizenberg
  */
 
-const val TAG : String = "Silent Consumer"
+const val TAG: String = "Silent Consumer"
 
 interface SilentConsumer<T> : Consumer<T> {
 

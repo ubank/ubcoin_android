@@ -7,6 +7,6 @@ import java.io.Serializable
  */
 class Wallet(
         val number: Long?,
-        val amountUBC: Long?,
-        val amountOnHold: Long?
+        val amountUBC: Double?,
+        val amountOnHold: Double?
 ) : Serializable

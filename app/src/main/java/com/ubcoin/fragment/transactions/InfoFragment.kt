@@ -12,8 +12,6 @@ import com.ubcoin.network.DataProvider
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.bigMoneyFormat
-import com.ubcoin.utils.moneyFormat
-import okhttp3.HttpUrl
 import org.greenrobot.eventbus.EventBus
 import java.net.HttpURLConnection
 
@@ -28,7 +26,7 @@ private const val ADDRESS = "address"
 class InfoFragment : BaseFragment() {
 
     companion object {
-        fun createBundle(amount: Double, commission: Double, conversion: Double, address: String) : Bundle {
+        fun createBundle(amount: Double, commission: Double, conversion: Double, address: String): Bundle {
             val args = Bundle()
             args.putString(ADDRESS, address)
             args.putDouble(AMOUNT, amount)
@@ -60,15 +58,15 @@ class InfoFragment : BaseFragment() {
     }
 
     private fun performSend(address: String, amount: Double) {
-        showProgressDialog("Wait please", "Withdraw")
+        showProgressDialog(R.string.wait_please_title, R.string.withdraw_progress)
         DataProvider.withdraw(amount, address, object : SilentConsumer<WithdrawResponse> {
             override fun onConsume(t: WithdrawResponse) {
                 hideProgressDialog()
                 if (!t.isSuccess()) {
-                    showSweetAlertDialog("Error", t.message)
+                    showSweetAlertDialog(getString(R.string.error), t.message)
                 } else {
                     activity?.run {
-                        Toast.makeText(this, "Withdraw success", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.withdraw_sucess, Toast.LENGTH_SHORT).show()
                         EventBus.getDefault().post(UpdateTransactionMessage())
                         onBackPressed()
                         onBackPressed()
@@ -91,7 +89,7 @@ class InfoFragment : BaseFragment() {
 
     override fun handleByChild(httpRequestException: HttpRequestException): Boolean {
         if (httpRequestException.isServerError() && httpRequestException.errorCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-            Toast.makeText(activity, "Withdraw success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, R.string.withdraw_sucess, Toast.LENGTH_SHORT).show()
             EventBus.getDefault().post(UpdateTransactionMessage())
             activity?.onBackPressed()
             activity?.onBackPressed()

@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 data class Location(var text: String, var latPoint: String?, var longPoint: String?) : Serializable {
 
-    fun isAddressPresented() : Boolean {
+    fun isAddressPresented(): Boolean {
         return latPoint != null && longPoint != null
     }
 

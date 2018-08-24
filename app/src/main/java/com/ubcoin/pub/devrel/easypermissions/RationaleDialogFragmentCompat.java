@@ -59,7 +59,7 @@ public class RationaleDialogFragmentCompat extends AppCompatDialogFragment {
             if (getParentFragment() instanceof EasyPermissions.PermissionCallbacks) {
                 mPermissionCallbacks = (EasyPermissions.PermissionCallbacks) getParentFragment();
             }
-            if (getParentFragment() instanceof EasyPermissions.RationaleCallbacks){
+            if (getParentFragment() instanceof EasyPermissions.RationaleCallbacks) {
                 mRationaleCallbacks = (EasyPermissions.RationaleCallbacks) getParentFragment();
             }
         }
