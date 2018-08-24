@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
@@ -30,15 +29,14 @@ import com.squareup.picasso.Picasso
 import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.TheApplication
+import com.ubcoin.ThePreferences
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.CollectionExtensions
-import com.ubcoin.utils.DistanceUtils
-import com.ubcoin.utils.ProfileHolder
-import com.ubcoin.utils.SafetySliderView
+import com.ubcoin.utils.*
+import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
 import retrofit2.Response
@@ -166,7 +164,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         view.findViewById<TextView>(R.id.txtHeaderSimple).text = marketItem.title
-        view.findViewById<TextView>(R.id.txtItemPrice).text = marketItem.price?.toString() + " UBC"
+        view.findViewById<TextView>(R.id.txtItemPrice).text = (marketItem.price
+                ?: .0).moneyFormat() + " UBC"
         view.findViewById<TextView>(R.id.txtItemCategor).text = marketItem.category?.name
         view.findViewById<TextView>(R.id.txtMarketProductName).text = marketItem.title
         val description = marketItem.description
@@ -180,7 +179,25 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
         imgDescription = view.findViewById(R.id.imgDescription)
 
-        view.findViewById<View>(R.id.llWantToBuy).setOnClickListener { callWantToBuy() }
+        view.findViewById<View>(R.id.llWantToBuy).setOnClickListener {
+            if (!ProfileHolder.isAuthorized()) {
+                showNeedToRegistration()
+            } else {
+                val thePreferences = ThePreferences()
+                if (thePreferences.shouldShowThDialog()) {
+                    OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
+                        override fun onPositiveClick(materialDialog: MaterialDialog) {
+                            materialDialog.dismiss()
+                            thePreferences.disableTgDialog()
+                            callWantToBuy()
+                        }
+                    })
+                } else {
+                    callWantToBuy()
+                }
+            }
+
+        }
 
         val imageView = view.findViewById<ImageView>(R.id.imgSellerProfile)
         val user = marketItem.user
@@ -339,10 +356,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
 
     private fun callWantToBuy() {
-        if (!ProfileHolder.isAuthorized()) {
-            showNeedToRegistration()
-            return
-        }
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
         DataProvider.discuss(marketItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
@@ -361,7 +374,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private fun requestFavorite(favorite: Boolean) {
         if (isFavoriteProcessing.get()) return
         isFavoriteProcessing.set(true)
-        showProgressDialog(R.string.wait_please_title,R.string.wait_please_message)
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
         if (favorite) {
             DataProvider.favorite(marketItem.id, successHandler(), silentConsumer())
         } else {

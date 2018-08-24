@@ -3,8 +3,10 @@ package com.ubcoin.fragment.deals
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
 import com.ubcoin.TheApplication
+import com.ubcoin.ThePreferences
 import com.ubcoin.adapter.DealsListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
@@ -15,6 +17,7 @@ import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.view.OpenTelegramDialogManager
 
 /**
  * Created by Yuriy Aizenberg
@@ -69,7 +72,18 @@ abstract class BaseDealsChildFragment : BaseFragment() {
 
         dealsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
             override fun onItemClick(data: DealItemWrapper, position: Int) {
-                requestUrlAndOpenApp(data)
+                val thePreferences = ThePreferences()
+                if (thePreferences.shouldShowThDialog()) {
+                    OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
+                        override fun onPositiveClick(materialDialog: MaterialDialog) {
+                            materialDialog.dismiss()
+                            thePreferences.disableTgDialog()
+                            requestUrlAndOpenApp(data)
+                        }
+                    })
+                } else {
+                    requestUrlAndOpenApp(data)
+                }
             }
         }
 

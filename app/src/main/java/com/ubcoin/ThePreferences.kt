@@ -13,6 +13,7 @@ import com.ubcoin.model.response.User
 private const val KEY_TOKEN: String = "TOKEN"
 private const val KEY_CURRENT_USER: String = "CURR_USER"
 private const val KEY_CURRENT_USER_PREFS: String = "CURR_USER_PREFS"
+private const val KEY_SHOULD_OPEN_TH_DIALOG: String = "SHOW_TG_DIALOG"
 private const val TAG: String = "ThePreferences"
 
 
@@ -67,6 +68,12 @@ class ThePreferences {
         } catch (e: Exception) {
             return instantiateCurrentPrefs()
         }
+    }
+
+    fun shouldShowThDialog() = instance.getBoolean(KEY_SHOULD_OPEN_TH_DIALOG, true)
+
+    fun disableTgDialog() {
+        instance.edit().putBoolean(KEY_SHOULD_OPEN_TH_DIALOG, false).apply()
     }
 
     private fun instantiateCurrentPrefs(): TemporaryUser {

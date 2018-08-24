@@ -1,6 +1,7 @@
 package com.ubcoin.adapter
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -20,9 +21,11 @@ class SelectCategoryAdapter(context: Context) : BaseRecyclerAdapter<Category, Se
         val item = getItem(position)
         vh.txtItemCategory.text = item.name
         if (selectedCategoryId != null && selectedCategoryId == item.id) {
-            vh.imgItemCategory.setImageResource(R.drawable.ic_done_black)
+            vh.imgItemCategory.setImageResource(R.drawable.ic_check_green)
+            vh.txtItemCategory.setTextColor(ContextCompat.getColor(context, R.color.greenMainColor))
             selectedItemPosition = vh.adapterPosition
         } else {
+            vh.txtItemCategory.setTextColor(ContextCompat.getColor(context, R.color.headerTextColor))
             vh.imgItemCategory.setImageDrawable(null)
         }
         bindTouchListener(vh.itemView, vh.adapterPosition, item)

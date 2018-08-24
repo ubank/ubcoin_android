@@ -53,7 +53,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         setupLocation()
 
-        sellLocationAutocompleteAdapter = SellLocationAutocompleteAdapter(activity, R.layout.item_location_item)
+        sellLocationAutocompleteAdapter = SellLocationAutocompleteAdapter(activity!!, R.layout.item_location_item)
         edtSelectLocation.setAdapter(sellLocationAutocompleteAdapter)
         mapView.getMapAsync(this)
         mapView.onCreate(savedInstanceState)

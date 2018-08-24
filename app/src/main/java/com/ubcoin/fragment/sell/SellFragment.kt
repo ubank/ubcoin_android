@@ -25,6 +25,7 @@ import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.ILocationChangeCallback
 import com.ubcoin.R
 import com.ubcoin.TheApplication
+import com.ubcoin.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
@@ -39,6 +40,7 @@ import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
+import com.ubcoin.view.OpenTelegramDialogManager
 import io.fabric.sdk.android.services.common.Crash
 import io.reactivex.disposables.Disposable
 
@@ -208,7 +210,20 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 override fun onConsume(t: TgLink) {
                     hideProgressDialog()
                     ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg ?: false
-                    TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                    val preferences = ThePreferences()
+                    if (preferences.shouldShowThDialog()) {
+                        activity?.run {
+                            OpenTelegramDialogManager.showDialog(this, object : OpenTelegramDialogManager.ITelegramDialogCallback {
+                                override fun onPositiveClick(materialDialog: MaterialDialog) {
+                                    materialDialog.dismiss()
+                                    preferences.disableTgDialog()
+                                    TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                                }
+                            })
+                        }
+                    } else {
+                        TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                    }
                 }
 
             }, object : SilentConsumer<Throwable> {

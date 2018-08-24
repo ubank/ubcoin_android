@@ -147,4 +147,7 @@
     <string name="withdraw_progress">Withdraw</string>
     <string name="withdraw_sucess">Withdraw success</string>
 
+    <string name="open_telegram_text">Ubcoin Market is going to open a Telegram bot. This is necessary to buy or sell smth. Please create a Telegram account if you don’t have one.</string>
+    <string name="open">Open</string>
+
 </resources>

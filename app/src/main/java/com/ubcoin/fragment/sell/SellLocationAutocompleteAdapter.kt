@@ -14,15 +14,10 @@ import com.ubcoin.network.DataProvider
 /**
  * Created by Yuriy Aizenberg
  */
-class SellLocationAutocompleteAdapter : ArrayAdapter<SingleLocation> {
+class SellLocationAutocompleteAdapter(context: Context, private val resource: Int) : ArrayAdapter<SingleLocation>(context, resource) {
 
-    private val resource: Int
     val items: ArrayList<SingleLocation> = ArrayList()
     private val suggestions: ArrayList<SingleLocation> = ArrayList()
-
-    constructor(context: Context?, resource: Int) : super(context, resource) {
-        this.resource = resource
-    }
 
     override fun getCount() = items.size
 
