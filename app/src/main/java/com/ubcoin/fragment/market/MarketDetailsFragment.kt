@@ -299,8 +299,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun onExpand() {
         txtHeaderSimple.setTextColor(Color.WHITE)
-        header.setBackgroundColor(Color.parseColor("#62000000"))
-//        header.setBackgroundColor(Color.TRANSPARENT)
+//        header.setBackgroundColor(Color.parseColor("#62000000"))
+        header.setBackgroundColor(Color.TRANSPARENT)
         imgHeaderRight.setImageResource(R.drawable.ic_share_details_white)
         imgHeaderLeft.setImageResource(R.drawable.ic_back_details_white)
     }

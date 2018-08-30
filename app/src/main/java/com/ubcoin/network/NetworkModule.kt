@@ -109,6 +109,14 @@ object NetworkModule {
         }
     }
 
+    /* val error = Error()
+                val fromJson = Gson().fromJson(responseBody, AlternativeServerError::class.java)
+                error.errorValidations = ArrayList()
+                val errorValidation = ErrorValidation()
+                errorValidation.message = fromJson.message
+                (error.errorValidations as ArrayList).add(errorValidation)
+                errorWrapper.error = error*/
+
     private fun logInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

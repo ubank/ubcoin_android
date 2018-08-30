@@ -54,6 +54,11 @@
                     android:layout_marginTop="@dimen/header_size"
                     android:visibility="gone" />
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/gradient_item_overlap"
+                    android:layout_height="match_parent" />
+
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar

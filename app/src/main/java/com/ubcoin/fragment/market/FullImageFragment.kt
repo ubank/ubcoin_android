@@ -45,8 +45,9 @@ class FullImageFragment : BaseFragment() {
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
         GlideApp.with(activity!!)
                 .load(url)
-                .override(0, metrics.widthPixels)
-                .centerCrop()
+                .fitCenter()
+//                .override(0, metrics.widthPixels)
+//                .centerCrop()
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                         showSweetAlertDialog(R.string.error, R.string.unable_to_load_photo)

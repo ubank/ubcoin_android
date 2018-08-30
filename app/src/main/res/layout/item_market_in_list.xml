@@ -31,7 +31,7 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:background="#3d000000"
+                    android:background="@drawable/gradient_item_overlap"
                     android:layout_height="@dimen/default_list_image_size" />
 
                 <RelativeLayout

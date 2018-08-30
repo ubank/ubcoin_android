@@ -47,6 +47,9 @@
     <color name="inputBorderColor">#d4d4d4</color>
     <color name="to_usd_convert_color">#979797</color>
 
+    <color name="overlapStartGradient">#66000000</color>
+    <color name="overlapEndGradient">#19000000</color>
+
     <array name="progressColors">
         <item>#326cbb</item>
         <item>#f4ae28</item>
