@@ -92,6 +92,7 @@ class CompleteRegistrationFragment : BaseFragment() {
 
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         hideProgressDialog()
         //todo
         showSweetAlertDialog(R.string.error, R.string.confirmation_code_invalid)

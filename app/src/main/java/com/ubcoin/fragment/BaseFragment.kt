@@ -340,7 +340,13 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         showSweetAlertDialog(getString(R.string.error), getString(R.string.no_network_error))
     }
 
-    protected open fun onUnauthorized(httpRequestException: HttpRequestException) = false
+    protected open fun onUnauthorized(httpRequestException: HttpRequestException) : Boolean {
+        ThePreferences().clearProfile()
+        ThePreferences().clearPrefs()
+        ProfileHolder.user = null
+        ProfileHolder.balance = null
+        return false;
+    }
 
     protected open fun handleByChild(httpRequestException: HttpRequestException) = false
 

@@ -126,6 +126,7 @@ class LoginFragment : BaseFragment() {
 
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         txtLoginError.visibility = View.VISIBLE
         return true
     }

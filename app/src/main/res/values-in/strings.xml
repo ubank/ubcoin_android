@@ -146,4 +146,19 @@
     <string name="open_telegram_text">Pasar Ubcoin akan membuka bot Telegram. Ini diperlukan untuk membeli atau menjual. Harap buat akun Telegram jika Anda tidak memilikinya.</string>
     <string name="open">Buka</string>
 
+    <string name="str_status_check">Silahkan tunggu, pencatatan anda akan muncul di pasar setelah tepat setelah proses moderasi.</string>
+
+    <string name="str_status_blocked1">Pencatatan diblokir untuk beberapa alasan. Silakan baca </string>
+    <string name="str_status_blockedClickable">Syarat dan Ketentuan </string>
+    <string name="str_status_blocked2">kami dan sunting pencatatan Anda.</string>
+
+    <string name="str_active_buyers">Active buyers</string>
+    <string name="str_others">Others</string>
+    <string name="str_item_status_active">Active</string>
+    <string name="str_item_status_deactivated">Deactivated</string>
+    <string name="str_item_status_sold">Sold</string>
+    <string name="str_item_status_blocked">Blocked</string>
+    <string name="str_item_status_reserved">Reserved</string>
+    <string name="str_item_status_check">In moderation</string>
+
 </resources>

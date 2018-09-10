@@ -50,6 +50,12 @@
     <color name="overlapStartGradient">#66000000</color>
     <color name="overlapEndGradient">#19000000</color>
 
+    <color name="itemStatusCheck">#ea9121</color>
+    <color name="itemStatusCheckTransparent">#33ea9121</color>
+
+    <color name="itemStatusBlock">#e93754</color>
+    <color name="itemStatusBlockTransparent">#33e93754</color>
+
     <array name="progressColors">
         <item>#326cbb</item>
         <item>#f4ae28</item>

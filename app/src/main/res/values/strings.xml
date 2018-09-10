@@ -150,4 +150,18 @@
     <string name="open_telegram_text">Ubcoin Market is going to open a Telegram bot. This is necessary to buy or sell smth. Please create a Telegram account if you don’t have one.</string>
     <string name="open">Open</string>
 
+    <string name="str_status_check">Please wait, your listing will appear on the Market right after moderation process.</string>
+    <string name="str_status_blocked1">Listing was blocked for some reason. Please read our </string>
+    <string name="str_status_blockedClickable">Terms and conditions </string>
+    <string name="str_status_blocked2">and edit your listing.</string>
+    <string name="str_active_buyers">Active buyers</string>
+    <string name="str_others">Others</string>
+
+    <string name="str_item_status_active">Active</string>
+    <string name="str_item_status_deactivated">Deactivated</string>
+    <string name="str_item_status_sold">Sold</string>
+    <string name="str_item_status_blocked">Blocked</string>
+    <string name="str_item_status_reserved">Reserved</string>
+    <string name="str_item_status_check">In moderation</string>
+
 </resources>

@@ -29,8 +29,10 @@ import com.ubcoin.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
+import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.SellImageModel
 import com.ubcoin.model.response.Location
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.base.IdResponse
@@ -269,11 +271,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         createProductRequest.images = images
 
         DataProvider.createProduct(createProductRequest,
-                object : SilentConsumer<IdResponse> {
-                    override fun onConsume(t: IdResponse) {
+                object : SilentConsumer<MarketItem> {
+                    override fun onConsume(t: MarketItem) {
                         hideProgressDialog()
-                        Toast.makeText(activity, R.string.product_created_success, Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(activity, R.string.product_created_success, Toast.LENGTH_SHORT).show()
                         activity?.onBackPressed()
+                        getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(t), false)
                     }
 
                 },

@@ -107,6 +107,7 @@ class MarketListFragment : FirstLineFragment() {
         cancelCurrentLoading()
         isLoading = true
         currentDisposableLoader = DataProvider.getMarketList(LIMIT, currentPage,
+                TheApplication.instance.currentLatitude(), TheApplication.instance.currentLongitude(),
                 Consumer {
                     if (it.data.size < LIMIT) {
                         isEndOfLoading = true

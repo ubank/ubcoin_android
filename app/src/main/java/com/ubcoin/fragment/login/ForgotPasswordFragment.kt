@@ -77,6 +77,7 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         showSweetAlertDialog(R.string.error, R.string.email_not_found)
         return true
     }

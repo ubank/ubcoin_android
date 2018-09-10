@@ -45,6 +45,22 @@ class TheApplication : MultiDexApplication() {
 
     var isGoToTelegram = false
 
+    fun currentLatitude(): Double? {
+        return if (currentLocation == null) {
+            null
+        } else {
+            currentLocation!!.latitude
+        }
+    }
+
+    fun currentLongitude(): Double? {
+        return if (currentLocation == null) {
+            null
+        } else {
+            currentLocation!!.longitude
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         instance = this

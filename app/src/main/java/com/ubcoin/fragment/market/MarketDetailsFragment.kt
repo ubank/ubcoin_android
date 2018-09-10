@@ -5,6 +5,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.content.ContextCompat
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
@@ -32,6 +38,7 @@ import com.ubcoin.TheApplication
 import com.ubcoin.ThePreferences
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.MarketItem
+import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -39,6 +46,7 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.fragment_stub.view.*
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -60,12 +68,18 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtDescription: TextView
     private lateinit var imgDescription: View
     private lateinit var llDescription: View
+    private lateinit var wantToBuyContainer: View
 
     //Header
     private lateinit var imgHeaderLeft: ImageView
     private lateinit var header: View
     private lateinit var txtHeaderSimple: TextView
     private lateinit var imgHeaderRight: ImageView
+
+    //Status
+    private lateinit var llMarketItemStatus: View
+    private lateinit var imgMarketItemStatus: ImageView
+    private lateinit var txtMarketItemStatus: TextView
 
     private var idForRemove: String? = null
     private val isFavoriteProcessing = AtomicBoolean(false)
@@ -97,6 +111,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         imgHeaderRight = view.findViewById(R.id.imgHeaderRight)
         header = view.findViewById(R.id.header)
         txtHeaderSimple = view.findViewById(R.id.txtHeaderSimple)
+
+        wantToBuyContainer = view.findViewById(R.id.wantToBuyContainer)
+
+        llMarketItemStatus = view.findViewById(R.id.llMarketItemStatus)
+        txtMarketItemStatus = view.findViewById(R.id.txtMarketItemStatus)
+        imgMarketItemStatus = view.findViewById(R.id.imgMarketItemStatus)
 
         sliderLayout = view.findViewById(R.id.slider)
         sliderLayout.setPagerTransformer(false, DefaultTransformer())
@@ -239,6 +259,56 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             val shareUrl = marketItem.shareUrl
             if (shareUrl != null && !shareUrl.isBlank()) {
                 TheApplication.instance.openShareIntent(shareUrl, activity!!)
+            }
+        }
+
+        if (marketItem.isOwner()) {
+            wantToBuyContainer.visibility = View.GONE
+            checkMarketItemStatus()
+        } else {
+            wantToBuyContainer.visibility = View.VISIBLE
+        }
+    }
+
+    private fun checkMarketItemStatus() {
+        if (marketItem.status != null) {
+            when (marketItem.status) {
+                MarketItemStatus.CHECK, MarketItemStatus.CHECKING -> {
+                    llMarketItemStatus.visibility = View.VISIBLE
+                    llMarketItemStatus.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.itemStatusCheckTransparent))
+
+                    txtMarketItemStatus.text = getString(marketItem.status!!.description)
+                    txtMarketItemStatus.setTextColor(ContextCompat.getColor(activity!!, R.color.itemStatusCheck))
+
+                    imgMarketItemStatus.setImageResource(R.drawable.ic_market_item_moderation)
+                }
+                MarketItemStatus.BLOCKED -> {
+                    llMarketItemStatus.visibility = View.VISIBLE
+                    llMarketItemStatus.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.itemStatusBlockTransparent))
+                    txtMarketItemStatus.setTextColor(ContextCompat.getColor(activity!!, R.color.itemStatusBlock))
+                    imgMarketItemStatus.setImageResource(R.drawable.ic_market_item_blocked)
+
+                    val firstPartString = getString(R.string.str_status_blocked1)
+                    val clickablePart = getString(R.string.str_status_blockedClickable)
+                    val secondPartString = getString(R.string.str_status_blocked2)
+
+
+
+                    val spannableString = SpannableString(firstPartString + clickablePart + secondPartString)
+                    val clickableSpan = object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            showUserAgreement()
+                        }
+                    }
+
+                    spannableString.setSpan(clickableSpan, firstPartString.length - 1, firstPartString.length + clickablePart.length - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    txtMarketItemStatus.movementMethod = LinkMovementMethod.getInstance()
+                    txtMarketItemStatus.text = spannableString
+
+                }
+                else -> {
+                    llMarketItemStatus.visibility = View.GONE
+                }
             }
         }
     }

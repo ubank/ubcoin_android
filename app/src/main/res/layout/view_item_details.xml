@@ -7,6 +7,38 @@
     android:focusable="true"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/llMarketItemStatus"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:background="@color/itemStatusCheckTransparent">
+
+        <ImageView
+            android:id="@+id/imgMarketItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:src="@drawable/ic_market_item_moderation" />
+
+        <TextView
+            android:id="@+id/txtMarketItemStatus"
+            android:layout_toEndOf="@id/imgMarketItemStatus"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="22dp"
+            android:layout_centerVertical="true"
+            android:textSize="12sp"
+            android:layout_marginBottom="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/str_status_check"
+            android:textColor="@color/itemStatusCheck" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,16 +48,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/marginItemDetails"
             android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginEnd="@dimen/marginItemDetails"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtItemPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
                 android:layout_marginTop="25dp"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/headerTextColor"
                 android:textSize="@dimen/please_verify_text_size" />
 
@@ -33,16 +65,16 @@
                 android:id="@+id/llItemDetailCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txtItemCategor"
                     android:layout_width="wrap_content"
-                    android:gravity="center_vertical"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
                     android:textColor="@color/greenMainColor" />
 
                 <ImageView
@@ -57,8 +89,8 @@
                 android:id="@+id/txtMarketProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/headerTextColor"
                 android:textSize="@dimen/please_verify_text_size" />
@@ -71,8 +103,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/marginItemDetails"
         android:layout_marginTop="15dp"
-        android:textAllCaps="true"
         android:text="@string/location_label"
+        android:textAllCaps="true"
         android:textColor="@color/haveAccountColor" />
 
 
@@ -95,8 +127,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/imgMarket"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/rounded_corners_black_transparent"
                 android:gravity="center_vertical">
 
@@ -110,10 +142,10 @@
                     android:id="@+id/txtLocationDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginEnd="@dimen/camera_end_margin"
                     android:layout_marginStart="3dp"
                     android:layout_marginTop="3dp"
+                    android:layout_marginEnd="@dimen/camera_end_margin"
+                    android:layout_marginBottom="3dp"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/menu_textsize" />
@@ -145,9 +177,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="25dp"
-                android:layout_marginEnd="38dp"
                 android:layout_marginTop="22dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="25dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/roboto_regular"
                 android:maxLines="4"
@@ -186,30 +218,30 @@
 
 
     <RelativeLayout
-        android:layout_marginTop="20dp"
-        android:background="@android:color/white"
+        android:id="@+id/wantToBuyContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white">
 
         <Button
             android:id="@+id/llWantToBuy"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_green_filled_button_smallr"
+            android:elevation="2dp"
             android:fontFamily="@font/roboto_medium"
             android:text="@string/connect_to_seller"
             android:textColor="@android:color/white"
             android:textSize="@dimen/sign_up_text_size"
-            android:elevation="2dp"
-            android:translationZ="2dp"
-            android:background="@drawable/rounded_green_filled_button_smallr"
-            android:layout_height="wrap_content" />
+            android:translationZ="2dp" />
 
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

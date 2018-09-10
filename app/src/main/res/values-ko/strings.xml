@@ -146,4 +146,19 @@
     <string name="open_telegram_text">Ubcoin은 곧 자동화 텔레그램방을 개설할 것입니다. 이를 통해 구매 판매를 하셔야 하니 텔레그램 계정을 만들어 주세요.</string>
     <string name="open">열람</string>
 
+    <string name="str_status_check">잠시만 기다려주세요. 확인작업 후 물건이 등록됩니다.</string>
+
+    <string name="str_status_blocked1">물건등록이 어떠한 사유로 반려되었습니다.Listing </string>
+    <string name="str_status_blockedClickable">이용약관 </string>
+    <string name="str_status_blocked2">을 읽으시고 다시 신청해주세요.</string>
+
+    <string name="str_active_buyers">Active buyers</string>
+    <string name="str_others">Others</string>
+    <string name="str_item_status_active">Active</string>
+    <string name="str_item_status_deactivated">Deactivated</string>
+    <string name="str_item_status_sold">Sold</string>
+    <string name="str_item_status_blocked">Blocked</string>
+    <string name="str_item_status_reserved">Reserved</string>
+    <string name="str_item_status_check">In moderation</string>
+
 </resources>

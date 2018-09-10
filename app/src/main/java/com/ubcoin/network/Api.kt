@@ -42,7 +42,16 @@ interface Api {
     fun updateProfileEmailAndName(@Body updateUserData: UpdateUserData): Observable<Response<Unit>>
 
     @GET("/api/items")
-    fun marketList(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
+    fun marketList(
+            @Query("size") limit: Int,
+            @Query("page") page: Int): Observable<MarketListResponse>
+
+    @GET("/api/items")
+    fun marketList(
+            @Query("size") limit: Int,
+            @Query("page") page: Int,
+            @Query("latPoint") latPoint: Double,
+            @Query("longPoint") longPoint: Double): Observable<MarketListResponse>
 
     @GET("/api/items/{itemId}")
     fun marketItem(@Path("itemId") itemId: String): Observable<MarketItem>

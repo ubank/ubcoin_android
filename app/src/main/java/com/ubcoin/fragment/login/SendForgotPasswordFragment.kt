@@ -134,6 +134,7 @@ class SendForgotPasswordFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         showSweetAlertDialog(R.string.error, R.string.invlid_code)
         return true
     }

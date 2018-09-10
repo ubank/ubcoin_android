@@ -96,6 +96,7 @@ class SignupFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         Toast.makeText(activity, R.string.email_already_taken, Toast.LENGTH_SHORT).show()
         return true
     }

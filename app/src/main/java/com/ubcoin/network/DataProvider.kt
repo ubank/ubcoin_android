@@ -3,6 +3,7 @@ package com.ubcoin.network
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.support.annotation.IdRes
 import com.ubcoin.model.ConversionResponse
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
@@ -12,6 +13,7 @@ import com.ubcoin.utils.ProfileHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.functions.Function
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -94,8 +96,14 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun getMarketList(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
-        return networkModule.api().marketList(limit, page)
+    fun getMarketList(limit: Int, page: Int, latPoint: Double?, longPoint: Double?, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
+        val marketList =
+                if (latPoint != null && longPoint != null) {
+                    networkModule.api().marketList(limit, page, latPoint, longPoint)
+                } else {
+                    networkModule.api().marketList(limit, page)
+                }
+        return marketList
                 .debounce(100, TimeUnit.MILLISECONDS)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
@@ -202,8 +210,9 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<IdResponse>, onError: Consumer<Throwable>): Disposable {
+    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().createProduct(createProductRequest)
+                .map { t -> networkModule.api().marketItem(t.id).blockingFirst() }
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }
