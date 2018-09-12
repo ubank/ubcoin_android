@@ -4,7 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
 import android.view.View
-import android.widget.ImageView
+import android.widget.Button
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
@@ -22,7 +22,7 @@ import retrofit2.Response
 class ForgotPasswordFragment : BaseFragment() {
 
     private lateinit var edtForgotEmail: MaterialEditText
-    private lateinit var imgForgotPasswordSend: ImageView
+    private lateinit var imgForgotPasswordSend: Button
 
     override fun getLayoutResId() = R.layout.fragment_forgot_password
 
@@ -55,17 +55,17 @@ class ForgotPasswordFragment : BaseFragment() {
     private fun changeSendImage(isValid: Boolean) {
         imgForgotPasswordSend.run {
             if (isValid) {
-                setBackgroundResource(R.drawable.rounded_green_filled_button)
+                setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
                 setOnClickListener { sendEmail() }
             } else {
-                setBackgroundResource(R.drawable.rounded_green_filled_transparent_button)
+                setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
                 setOnClickListener(null)
             }
         }
     }
 
     private fun sendEmail() {
-        showProgressDialog("Wait please", "")
+        showProgressDialog(R.string.wait_please_title, R.string.empty)
         DataProvider.sendForgotEmail(edtForgotEmail.text!!.toString(), object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
@@ -77,7 +77,8 @@ class ForgotPasswordFragment : BaseFragment() {
     }
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
-        showSweetAlertDialog("Error", "Email not found")
+        super.onUnauthorized(httpRequestException)
+        showSweetAlertDialog(R.string.error, R.string.email_not_found)
         return true
     }
 

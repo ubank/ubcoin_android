@@ -1,5 +1,7 @@
 package com.ubcoin.model.response
 
+import com.ubcoin.model.Purchase
+import com.ubcoin.utils.ProfileHolder
 import java.io.Serializable
 
 /**
@@ -14,7 +16,21 @@ data class MarketItem(
         val location: Location?,
         val createdDate: String?,
         var favorite: Boolean,
-        val status: String?,
+        val status: MarketItemStatus?,
         val title: String?,
-        val price: Float?
-) : Serializable
+        val price: Double?,
+        val shareUrl: String?,
+        val priceInCurrency: Double?,
+        val currency: String?,
+        val purchases: List<Purchase>
+) : MarketItemMarker {
+
+    fun isOwner() : Boolean {
+        return ProfileHolder.isAuthorized() && ProfileHolder.user!!.id.equals(user?.id)
+    }
+
+    fun isPriceInCurrencyPresented() : Boolean {
+        return priceInCurrency != null && currency != null
+    }
+
+}

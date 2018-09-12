@@ -7,13 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.maps.model.LatLng
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
-import com.ubcoin.utils.CollectionExtensions
-import com.ubcoin.utils.DistanceUtils
+import com.ubcoin.utils.*
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -25,24 +22,29 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
 
     private var ubcPostfix: String? = null
 
-    var favoriteListener: IFavoriteListener?= null
+    var favoriteListener: IFavoriteListener? = null
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         return ViewHolder(inflate(R.layout.item_market_in_list, p0))
     }
 
-    private fun getUbcPostfix() : String? {
+    private fun getUbcPostfix(): String? {
         if (ubcPostfix == null) {
             ubcPostfix = context.getString(R.string.ubc_postfix)
         }
         return ubcPostfix
     }
 
+    private fun getPriceInCurrency(marketItem: MarketItem): String? {
+        if (!marketItem.isPriceInCurrencyPresented()) return null
+        return "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + " " + marketItem.currency
+    }
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(vh: ViewHolder, position: Int) {
         val item = getItem(position)
         vh.txtMarketProductName.text = item.title
-        vh.txtMarketPrice.text = """${item.price.toString()}${getUbcPostfix()}"""
+        vh.txtMarketPrice.text = """${(item.price ?: .0).moneyFormat()} ${getUbcPostfix()}"""
 
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
@@ -50,15 +52,12 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.txtImagesCount.text = "0/0"
         } else {
             images?.let {
-                Picasso.get().load(it[0])
-                        .resize(context.resources.getDimensionPixelSize(R.dimen.default_list_image_size), 0)
+                GlideApp.with(context)
+                        .load(it[0])
                         .centerCrop()
-                        .onlyScaleDown()
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .skipMemoryCache(true)
                         .placeholder(R.drawable.img_photo_placeholder)
                         .error(R.drawable.img_photo_placeholder)
-//                        .placeholder(R.drawable.loading_progress)
                         .into(vh.imgMarket)
                 vh.txtImagesCount.text = "1/${it.size}"
             }
@@ -66,18 +65,27 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         }
         val rating = item.user?.rating?.roundToInt()
         vh.ratingBarView.setRating(rating ?: 0)
-        vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
-        vh.llFavoriteContainer.setOnClickListener {
-            favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
+        if (!ProfileHolder.isAuthorized()) {
+            vh.imgFavorite.visibility = View.GONE
+            vh.llFavoriteContainer.setOnClickListener { }
+        } else {
+            vh.imgFavorite.visibility = View.VISIBLE
+            vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
+            vh.llFavoriteContainer.setOnClickListener {
+                favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
+            }
         }
         val location = item.location
 
         if (location != null) {
-            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()?:.0, location.longPoint?.toDouble()?: .0)
+            val itemLocationLatLng = LatLng(location.latPoint?.toDouble()
+                    ?: .0, location.longPoint?.toDouble() ?: .0)
             vh.txtLocationDistance.text = DistanceUtils.calculateDistance(itemLocationLatLng, context)
         } else {
             vh.txtLocationDistance.text = null
         }
+
+        vh.txtPriceInCurrency.text = getPriceInCurrency(item)
 
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
@@ -93,6 +101,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         val ratingBarView: RatingBarView = findView(R.id.ratingBarView)
         val llFavoriteContainer: View = findView(R.id.llFavoriteContainer)
         val imgFavorite: ImageView = findView(R.id.imgFavorite)
+        val txtPriceInCurrency: TextView = findView(R.id.txtPriceInCurrency)
 
     }
 

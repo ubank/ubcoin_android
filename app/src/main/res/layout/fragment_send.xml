@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/common_header" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginTop="@dimen/camera_margin"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/price_top_margin"
+            android:layout_marginStart="@dimen/price_top_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/price_top_margin"
+                android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/send_ubc_to_any_erc_20_compatible_wallet"
+                android:textColor="@color/activeTabTextColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+
+            <EditText
+                android:id="@+id/edtSendAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_border"
+                android:fontFamily="@font/roboto_regular"
+                android:hint="@string/address"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="@color/activeTabTextColor"
+                android:textColorHighlight="@color/haveAccountColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/profileDetailsFlagHeight"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/edtSendAmount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_border"
+                        android:enabled="true"
+                        android:focusable="false"
+                        android:fontFamily="@font/roboto_regular"
+                        android:hint="@string/amount"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:padding="@dimen/camera_margin"
+                        android:textColor="@color/activeTabTextColor"
+                        android:textColorHighlight="@color/haveAccountColor"
+                        android:textSize="@dimen/have_account_text_size" />
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:layout_weight="1">
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edit_border"
+                        android:clickable="true"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:fontFamily="@font/roboto_regular"
+                        android:hint="@string/amount"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:padding="@dimen/camera_margin"
+                        android:textColor="@color/activeTabTextColor"
+                        android:textColorHighlight="@color/haveAccountColor"
+                        android:textSize="@dimen/have_account_text_size"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/txtSendAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="@string/transaction_send_amount_empty"
+                        android:textColor="@color/to_usd_convert_color"
+                        android:textSize="@dimen/have_account_text_size" />
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtSendCommission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="34dp"
+                android:layout_marginTop="14dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/transaction_commission"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="12sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
+
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sign_up_size"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rounded_green_filled_transparent_button_smallr"
+            android:elevation="2dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/continueLabel"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sign_up_text_size"
+            android:translationZ="2dp" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

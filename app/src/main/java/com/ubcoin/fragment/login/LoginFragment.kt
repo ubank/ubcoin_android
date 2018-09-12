@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.text.Editable
 import android.view.View
-import android.widget.ImageView
+import android.widget.Button
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
@@ -20,7 +20,6 @@ import com.ubcoin.utils.ImeNextActionHandler
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.TextWatcherAdatepr
 import io.reactivex.functions.Consumer
-import java.net.HttpURLConnection
 
 /**
  * Created by Yuriy Aizenberg
@@ -36,15 +35,15 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
-        view.findViewById<View>(R.id.llDontHaveAccount).setOnClickListener {
+        view.findViewById<View>(R.id.txtDontHaveAccount).setOnClickListener {
             getSwitcher()?.run {
                 clearBackStack().addTo(StartupFragment::class.java, false).addTo(SignupFragment::class.java)
             }
         }
 
-        val imgLogin = view.findViewById<ImageView>(R.id.imgLogin)
+        val imgLogin = view.findViewById<Button>(R.id.imgLogin)
 
-        view.findViewById<View>(R.id.llLogin).setOnClickListener {
+        imgLogin.setOnClickListener {
             processLogin()
         }
         llForgotPassword = view.findViewById(R.id.llForgotPassword)
@@ -75,9 +74,9 @@ class LoginFragment : BaseFragment() {
                 txtLoginError.visibility = View.INVISIBLE
                 imgLogin?.run {
                     if (isValidData()) {
-                        setImageResource(R.drawable.rounded_green_filled_button)
+                        setBackgroundResource(R.drawable.rounded_green_filled_button_smallr)
                     } else {
-                        setImageResource(R.drawable.rounded_green_filled_transparent_button)
+                        setBackgroundResource(R.drawable.rounded_green_filled_transparent_button_smallr)
                     }
                 }
             }
@@ -116,8 +115,8 @@ class LoginFragment : BaseFragment() {
     private fun processLogin() {
         activity?.run {
             if (isValidData()) {
-                showProgressDialog("Login", "Login")
-                DataProvider.login(edtLoginEmail?.text.toString().trim(), edtLoginPassword.text.toString().trim(), successConsumer(), Consumer {
+                showProgressDialog(R.string.login, R.string.login   )
+                DataProvider.login(edtLoginEmail.text.toString().trim(), edtLoginPassword.text.toString().trim(), successConsumer(), Consumer {
                     hideProgressDialog()
                     handleException(it)
                 })
@@ -127,6 +126,7 @@ class LoginFragment : BaseFragment() {
 
 
     override fun onUnauthorized(httpRequestException: HttpRequestException): Boolean {
+        super.onUnauthorized(httpRequestException)
         txtLoginError.visibility = View.VISIBLE
         return true
     }

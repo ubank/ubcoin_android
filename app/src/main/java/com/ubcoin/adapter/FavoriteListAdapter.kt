@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.squareup.picasso.MemoryPolicy
-import com.squareup.picasso.NetworkPolicy
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
-import com.ubcoin.utils.RoundedCornersTransform
+import com.ubcoin.utils.moneyFormat
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -32,19 +31,27 @@ class FavoriteListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Fa
             vHolder.imgFavoriteItemLogo.setImageResource(R.drawable.img_photo_placeholder)
         } else {
             val dimensionPixelSize = context.resources.getDimensionPixelSize(R.dimen.marketInFavoriteHeightImage)
-            Picasso.get().load(images!![0])
-                    .resize(dimensionPixelSize, dimensionPixelSize)
+            GlideApp.with(context).load(images!![0])
+                    .override(dimensionPixelSize, dimensionPixelSize)
                     .centerCrop()
-                    .onlyScaleDown()
-                    .transform(RoundedCornersTransform())
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .transform(RoundedCorners(10))
+                    .skipMemoryCache(true)
                     .placeholder(R.drawable.img_photo_placeholder)
                     .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgFavoriteItemLogo)
+//            Picasso.get().load(images!![0])
+//                    .resize(dimensionPixelSize, dimensionPixelSize)
+//                    .centerCrop()
+//                    .onlyScaleDown()
+//                    .transform(RoundedCornersTransform())
+//                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                    .networkPolicy(NetworkPolicy.NO_CACHE)
+//                    .placeholder(R.drawable.img_photo_placeholder)
+//                    .error(R.drawable.img_photo_placeholder)
+//                    .into(vHolder.imgFavoriteItemLogo)
         }
         vHolder.txtFavoriteItemName.text = item.title
-        vHolder.txtFavoriteItemPrice.text = (item.price.toString() + " UBC")
+        vHolder.txtFavoriteItemPrice.text = (item.price ?: .0).moneyFormat() + " UBC"
         vHolder.ratingBar.setRating(item.user?.rating?.roundToInt() ?: 0)
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, item)
     }

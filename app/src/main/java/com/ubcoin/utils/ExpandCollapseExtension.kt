@@ -18,7 +18,7 @@ fun View.expand(duration: Long) {
     measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     val targetHeight = measuredHeight
 
-    layoutParams.height = 1
+    layoutParams.height = 0
     visibility = View.VISIBLE
     val a = object : Animation() {
 

@@ -41,7 +41,7 @@ class PasswordInputExtension : RelativeLayout {
         val attributes = context.theme.obtainStyledAttributes(attrs, R.styleable.PasswordInputExtension, 0, 0)
 
         val inputHint = attributes.getString(R.styleable.PasswordInputExtension_PasswordInputHint)
-        edtPasswordInputExtension?.hint = inputHint?: context.resources.getString(R.string.password_hint)
+        edtPasswordInputExtension?.hint = inputHint ?: context.resources.getString(R.string.password_hint)
         attributes.recycle()
 
     }

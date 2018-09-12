@@ -1,16 +1,13 @@
 package com.ubcoin.fragment.market
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.webkit.WebChromeClient
+import android.webkit.CookieManager
+import android.webkit.WebSettings
 import android.webkit.WebView
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.R.id.webView
-import android.webkit.WebSettings
-import android.os.Build
-import android.webkit.CookieManager
-import com.ubcoin.ThePreferences
 
 
 /**
@@ -51,7 +48,7 @@ class TelegramChannelFragment : BaseFragment() {
         if (Build.VERSION.SDK_INT >= 21) {
             webView.settings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             val cookieManager = CookieManager.getInstance()
-            cookieManager.setCookie("set-cookie", ThePreferences().getWVCookie())
+//            cookieManager.setCookie("set-cookie", ThePreferences().getWVCookie())
             cookieManager.setAcceptThirdPartyCookies(webView, true)
         }
     }

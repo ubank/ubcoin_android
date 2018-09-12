@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="underlineColor">#32bb8f</color>
+
     <color name="statusBar">#cdcdcd</color>
 
     <color name="headerTextColor">#403d45</color>
@@ -38,6 +40,23 @@
 
     <color name="inactiveTabTextColor">#b3403d45</color>
     <color name="activeTabTextColor">#403d45</color>
+
+    <color name="myBalanceInactiveColor">#4c403d45</color>
+    <color name="colorTopUpDivider">#66595959</color>
+
+    <color name="inputBorderColor">#d4d4d4</color>
+    <color name="to_usd_convert_color">#979797</color>
+
+    <color name="overlapStartGradient">#66000000</color>
+    <color name="overlapEndGradient">#19000000</color>
+
+    <color name="itemStatusCheck">#ea9121</color>
+    <color name="itemStatusCheckTransparent">#33ea9121</color>
+
+    <color name="itemStatusBlock">#e93754</color>
+    <color name="itemStatusBlockTransparent">#33e93754</color>
+
+    <color name="convertPriceTextColor">#202022</color>
 
     <array name="progressColors">
         <item>#326cbb</item>

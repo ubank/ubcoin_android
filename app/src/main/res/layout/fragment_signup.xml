@@ -8,13 +8,13 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/common_header"/>
+    <include layout="@layout/common_header_login"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="@dimen/have_account_margin"
-        android:layout_marginStart="@dimen/have_account_margin"
+        android:layout_marginEnd="@dimen/header_margin_start"
+        android:layout_marginStart="@dimen/header_margin_start"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -32,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            app:met_primaryColor="@color/greenMainColor"
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/name"
@@ -50,6 +51,7 @@
             android:layout_marginEnd="@dimen/header_margin_start"
             android:layout_marginTop="@dimen/header_margin_start"
             android:hint="@string/email"
+            app:met_primaryColor="@color/greenMainColor"
             android:imeOptions="actionNext"
             android:inputType="textWebEmailAddress"
             android:lines="1"
@@ -62,6 +64,7 @@
         <com.ubcoin.view.PasswordInputExtension
             android:id="@+id/edtPasswordInput"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/header_margin_start"
             android:layout_height="wrap_content" />
 
 
@@ -75,26 +78,22 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/llSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <Button
+                android:id="@+id/llSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sign_up_size"
                 android:layout_marginEnd="@dimen/sign_up_margin"
                 android:layout_marginStart="@dimen/sign_up_margin"
-                android:background="@drawable/rounded_green_filled_button" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/sign_up"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:textSize="@dimen/sign_up_text_size"
+                android:background="@drawable/rounded_green_filled_button_smallr" />
+
 
         </RelativeLayout>
 
@@ -135,6 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/sign_up_margin"
             android:layout_marginStart="@dimen/sign_up_margin"
+            android:layout_marginTop="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -151,7 +151,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/ic_next" />
 
 

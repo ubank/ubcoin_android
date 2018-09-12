@@ -13,6 +13,7 @@ import com.ubcoin.model.response.MarketItem
 import com.ubcoin.network.DataProvider
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
+import com.ubcoin.utils.ProfileHolder
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 
@@ -32,12 +33,10 @@ class FavoriteListFragment : FirstLineFragment() {
 
     private var isLoading = false
     private var isEndOfLoading = false
-    private var currentDisposable : Disposable? = null
+    private var currentDisposable: Disposable? = null
     private var currentPage = 0
 
     override fun getLayoutResId() = R.layout.fragment_favorites
-
-    override fun getHeaderIcon() = R.drawable.ic_back
 
     override fun getHeaderText() = R.string.header_favorites
 
@@ -69,7 +68,17 @@ class FavoriteListFragment : FirstLineFragment() {
             adapter = favoriteListAdapter
         }
 
-        loadData()
+        if (!ProfileHolder.isAuthorized()) {
+            rvMarketList.visibility = View.GONE
+            llNoFavoriteItems.visibility = View.VISIBLE
+        } else {
+            rvMarketList.visibility = View.VISIBLE
+            llNoFavoriteItems.visibility = View.GONE
+            loadData()
+        }
+
+        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
+        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
 
     }
 
@@ -118,6 +127,11 @@ class FavoriteListFragment : FirstLineFragment() {
     override fun onResume() {
         super.onResume()
         callItemRemoved()
+        if (favoriteListAdapter != null && favoriteListAdapter?.isEmpty() == false) {
+            if (!rvMarketList.canScrollVertically(1)) {
+                rvMarketList.postDelayed({ rvMarketList.scrollToPosition(favoriteListAdapter!!.itemCount - 1) }, 300L)
+            }
+        }
     }
 
 
@@ -159,9 +173,5 @@ class FavoriteListFragment : FirstLineFragment() {
         }
     }
 
-    override fun onIconClick() {
-        super.onIconClick()
-        activity?.onBackPressed()
-    }
 
 }

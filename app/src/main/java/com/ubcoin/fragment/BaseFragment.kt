@@ -1,32 +1,47 @@
 package com.ubcoin.fragment
 
+import android.Manifest.permission.*
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
+import com.crashlytics.android.Crashlytics
 import com.ubcoin.R
 import com.ubcoin.ThePreferences
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.NetworkConnectivityException
-import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.RxUtils
+import com.ubcoin.pub.devrel.easypermissions.EasyPermissions
+import com.ubcoin.pub.devrel.easypermissions.PermissionRequest
 import com.ubcoin.switcher.FragmentSwitcher
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
+import io.reactivex.Maybe
 import kotlinx.android.synthetic.main.common_header.*
+import java.io.File
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
+
 
 /**
  * Created by Yuriy Aizenberg
@@ -48,6 +63,130 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     private var headerIcon: View? = null
     private var llHeaderImage: View? = null
     var txtHeader: TextView? = null
+
+    //Media support here
+    companion object {
+        private const val PERMISSIONS_REQUEST = 30000
+        private const val CAMERA_INTENT = 30001
+        private const val GALLERY_INTENT = 30002
+
+        private var fileName: String? = null
+
+        private val perms = arrayOf(CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE)
+
+    }
+
+    fun checkPermissions(): Boolean {
+        return EasyPermissions.hasPermissions(activity!!, perms)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, object : EasyPermissions.PermissionCallbacks {
+            override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+                if (checkPermissions()) {
+                    onPermissionsGranted()
+                }
+            }
+
+            override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+            }
+
+            override fun onRequestPermissionsResult(p0: Int, p1: Array<out String>, p2: IntArray) {
+            }
+
+        })
+    }
+
+    fun requestPermissionsInternal() {
+        val build = PermissionRequest.Builder(this, PERMISSIONS_REQUEST, perms).build()
+        EasyPermissions.requestPermissions(build)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PERMISSIONS_REQUEST && resultCode == Activity.RESULT_OK) {
+            if (checkPermissions()) onPermissionsGranted()
+        }
+        if (requestCode == CAMERA_INTENT && resultCode == Activity.RESULT_OK) {
+            val file = File(Environment.getExternalStorageDirectory(), fileName)
+            if (file.exists() && file.canRead()) {
+                onCameraCaptured(file.absolutePath)
+            } else {
+                onCameraFailure()
+            }
+        }
+        if (requestCode == GALLERY_INTENT && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                onGalleryFailure()
+            } else {
+                resolveFilePath(data)
+            }
+        }
+    }
+
+    private fun resolveFilePath(data: Intent) {
+        Maybe.create<String> {
+            try {
+                val pickedImage = data.data
+                val filePath = arrayOf(MediaStore.Images.Media.DATA)
+                val cursor = activity?.contentResolver?.query(pickedImage, filePath, null, null, null)
+                cursor?.moveToFirst()
+                val imagePath = cursor?.getString(cursor.getColumnIndex(filePath[0])) ?: ""
+                cursor?.close()
+                it.onSuccess(imagePath)
+            } catch (e: Exception) {
+                it.onError(e)
+            } finally {
+                it.onComplete()
+            }
+        }
+                .compose(RxUtils.applyMaybe())
+                .subscribe({ onGalleryCaptured(it) }, { onCameraFailure() })
+    }
+
+    open fun onPermissionsGranted() {
+
+    }
+
+    fun startGalleryIntent() {
+        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+        photoPickerIntent.type = "image/*"
+        startActivityForResult(photoPickerIntent, GALLERY_INTENT)
+    }
+
+    fun startCameraIntent() {
+        val packageName = activity!!.applicationContext.packageName
+        val imageName = "$packageName.${System.currentTimeMillis()}.jpg"
+        val file = File(Environment.getExternalStorageDirectory(), imageName)
+        val uri = FileProvider.getUriForFile(activity!!, "$packageName.provider", file)
+        fileName = imageName
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri)
+
+        startActivityForResult(intent, CAMERA_INTENT)
+    }
+
+    open fun onGalleryCaptured(filePath: String) {
+
+    }
+
+    open fun onCameraCaptured(filePath: String) {
+
+    }
+
+    open fun onGalleryFailure() {
+
+    }
+
+    open fun onCameraFailure() {
+
+    }
+
+    private fun checkPermissionInternal(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(activity!!, permission) == PackageManager.PERMISSION_GRANTED
+    }
 
     open fun isFirstLineFragment() = false
 
@@ -110,9 +249,6 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
-    open fun isGradientShow() = true
-
-
     fun hideFooter() {
         toggleFooter(false, activity as IActivity)
     }
@@ -144,10 +280,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
             txtHeader?.text = getString(getHeaderText())
         }
         if (getHeaderIcon() != noHeaderObject) {
-            imgHeaderLeft?.run {
-                setImageResource(getHeaderIcon())
-                setOnClickListener { onIconClick() }
-            }
+            imgHeaderLeft?.setImageResource(getHeaderIcon())
+            llHeaderLeft?.setOnClickListener { onIconClick() }
         }
     }
 
@@ -156,11 +290,18 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         inputMethodManager.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
+    fun showKeyboard(edtText: EditText, context: Context) {
+        edtText.requestFocus()
+        val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+    }
+
     open fun onIconClick() {
 
     }
 
     protected open fun handleException(t: Throwable) {
+        Crashlytics.logException(t)
         try {
             hideSweetAlertDialog()
             when (t) {
@@ -189,25 +330,37 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    private fun onNoNetworkException(exception: NetworkConnectivityException) {
-        showSweetAlertDialog("Error", getString(R.string.no_network_error))
+    override fun onPause() {
+        super.onPause()
+        hideKeyboard()
     }
 
-    protected open fun onUnauthorized(httpRequestException: HttpRequestException) = false
+    @Suppress("UNUSED_PARAMETER")
+    private fun onNoNetworkException(exception: NetworkConnectivityException) {
+        showSweetAlertDialog(getString(R.string.error), getString(R.string.no_network_error))
+    }
+
+    protected open fun onUnauthorized(httpRequestException: HttpRequestException) : Boolean {
+        ThePreferences().clearProfile()
+        ThePreferences().clearPrefs()
+        ProfileHolder.user = null
+        ProfileHolder.balance = null
+        return false;
+    }
 
     protected open fun handleByChild(httpRequestException: HttpRequestException) = false
 
     private fun processHttpRequestException(httpRequestException: HttpRequestException) {
         if (httpRequestException.isServerError()) {
-            showSweetAlertDialog("Server says", httpRequestException.toServerErrorString())
+            showSweetAlertDialog(getString(R.string.server_says_error_title), httpRequestException.toServerErrorString())
         } else {
             processThrowable(RuntimeException(httpRequestException.throwable))
         }
     }
 
     private fun processThrowable(throwable: Throwable) {
-        showSweetAlertDialog("Ooops. Something goes wrong", "" + throwable.message)
+        Crashlytics.logException(throwable)
+        showSweetAlertDialog(getString(R.string.no_network_error))
     }
 
     private fun hideSweetAlertDialog() {
@@ -222,12 +375,28 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     }
 
+    fun showSweetAlertDialog(message: String) {
+        activity?.run {
+            materialDialog = MaterialDialog.Builder(this).content(message).build()
+            materialDialog?.show()
+        }
+
+    }
+
     protected fun hideViewsQuietly(vararg v: View?) {
         v.run {
             v.forEach {
                 it?.visibility = View.GONE
             }
         }
+    }
+
+    fun showSweetAlertDialog(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        showSweetAlertDialog(getString(titleRes), getString(messageRes))
+    }
+
+    protected fun showProgressDialog(@StringRes titleRes: Int, @StringRes messageRes: Int) {
+        showProgressDialog(getString(titleRes), getString(messageRes))
     }
 
     protected fun showProgressDialog(title: String, message: String) {
@@ -251,7 +420,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     protected fun showNeedToRegistration() {
         activity?.run {
             MaterialDialog.Builder(this)
-                    .title("Error")
+                    .title(getString(R.string.title))
                     .content(R.string.need_to_logged_in)
                     .build()
                     .show()

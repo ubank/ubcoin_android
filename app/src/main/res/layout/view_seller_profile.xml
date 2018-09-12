@@ -11,6 +11,7 @@
     <ImageView
         android:id="@+id/imgSellerProfile"
         android:layout_width="@dimen/detailsSubProfileHeight"
+        android:scaleType="centerCrop"
         android:layout_height="@dimen/detailsSubProfileHeight"
         android:layout_marginStart="@dimen/detailsProfileMargin"
         android:src="@drawable/img_logo"

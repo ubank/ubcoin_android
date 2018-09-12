@@ -5,7 +5,7 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="log_in">Log in</string>
     <string name="password_hint">Password</string>
-    <string name="empty">""</string>
+    <string name="empty" translatable="false">""</string>
     <string name="weak">Weak</string>
     <string name="fair">Fair</string>
     <string name="normal">Normal</string>
@@ -15,14 +15,16 @@
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="sign_up_first_upper">Sign up</string>
     <string name="user_agreement">User agreement</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password">Forgot password</string>
+    <string name="forgot_password_question">Forgot password?</string>
     <string name="reset_password_text">Forgot your password? No worries.\nJust enter your Email to reset the password.</string>
     <string name="email">Email</string>
     <string name="send">send</string>
+    <string name="send_fist_capital">Send</string>
     <string name="name">Name</string>
     <string name="telegram_username">Telegram username</string>
     <string name="please_verify_email_address">Please verify your Email address</string>
-    <string name="we_sent_a_verification_letter">We sent a verification letter to stand@gmail.com.\nClick the link in the Email to get started!</string>
+    <string name="we_sent_a_verification_letter">We sent a verification letter to %1$s.\nClick the link in the Email to get started!</string>
     <string name="close">Close</string>
     <string name="menu_label_market">Market</string>
     <string name="menu_label_favorites">Favorites</string>
@@ -37,12 +39,11 @@
     <string name="your_favorite_items_will_be_here">Your favorite items will be here</string>
     <string name="location_label">Location</string>
     <string name="seller_label">Seller</string>
-    <string name="successfully_confirmed">Successfully confirmed</string>
-    <string name="lets_get_started">Let’s get it started!</string>
     <string name="code">Code</string>
     <string name="resend_it">Resend it</string>
     <string name="didn_t_get_the_email">Didn’t get the email?</string>
     <string name="confirmation">Confirmation</string>
+    <string name="confirmation_code">Confirmation code</string>
     <string name="no_active_deals">No active deals</string>
     <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Items you are going to buy or to sell\nwill be here</string>
     <string name="deals_header">Deals</string>
@@ -51,14 +52,128 @@
     <string name="no_network_error">Check Internet availability and the correct date and time. After that try again. In case of failure, contact support.</string>
     <string name="need_to_logged_in">You need to be logged in</string>
     <string name="ubc_postfix">UBC</string>
+    <string name="balance_placeholder">%1$s UBC</string>
+    <string name="balance_placeholder_prefix">UBC %1$s</string>
     <string name="i_want_to_buy">I want to buy</string>
     <string name="open_with_outer_app_label">Open with</string>
 
-    <string name="API_KEY">AIzaSyBf8cAbZWk6uJIbCHFLc_hWKM2j-bYeqpA</string>
+    <string name="API_KEY" translatable="false">AIzaSyBf8cAbZWk6uJIbCHFLc_hWKM2j-bYeqpA</string>
 
     <string name="distance_unknown">\?</string>
     <string name="distance_km">km</string>
     <string name="distance_m">m</string>
+    <string name="my_balance">My balance</string>
+    <string name="email_already_taken">Email already taken</string>
+    <string name="account_settings">Account settings</string>
+    <string name="done">Done</string>
+    <string name="common">Common</string>
+    <string name="log_out">Log out</string>
+    <string name="country">Country</string>
+    <string name="my_reviews">My reviews</string>
+    <string name="language">Language</string>
 
 
+    <string name="rationale_ask">This app may not work correctly without the requested permissions.</string>
+    <string name="rationale_ask_again">
+        This app may not work correctly without the requested permissions.
+        Open the app settings screen to modify app permissions.
+    </string>
+    <string name="title_settings_dialog">Permissions Required</string>
+    <string name="successfully_confirmed">Successfully confirmed</string>
+    <string name="lets_get_started">Let’s get it started!</string>
+    <string name="logout_text">Are you sure you want to log out?</string>
+    <string name="cancel">Cancel</string>
+    <string name="about">About</string>
+    <string name="take_from_camera">Take from camera</string>
+    <string name="take_from_gallery">Take from gallery</string>
+    <string name="delete_current">Delete current</string>
+    <string name="select_action">Select action</string>
+    <string name="title">Title</string>
+    <string name="category">Category</string>
+    <string name="description">Description</string>
+    <string name="sell_price">Sell price</string>
+    <string name="select_category">Select category</string>
+    <string name="select_location">Select location</string>
+    <string name="location_dots">Location</string>
+    <string name="err_title_missing">Title is missing</string>
+    <string name="err_price_required">Price required</string>
+    <string name="err_category_missing">Category is missing</string>
+    <string name="err_location_missing">Location is missing</string>
+    <string name="err_image_missing">Image is missing</string>
+    <string name="unable_to_load_photo">Unable to load photo</string>
+    <string name="connect_to_seller">Connect to seller</string>
+    <string name="share_link_chooser">Share link using</string>
+    <string name="top_up">Top up</string>
+    <string name="transaction_history">Transaction history</string>
+    <string name="all_your_transactions">All of your transaction history will be shown\nhere right after the first top up.</string>
+    <string name="scan_or_press">Scan QR-code or press to the\naddress to top up your balance.</string>
+    <string name="go_to_coss_exchange">Go to Coss\nexchange</string>
+    <string name="how_to_get_ucb_tokens">How to get UCB tokens</string>
+    <string name="coss_io">https://coss.io/</string>
+    <string name="address_copied_toast">Address copied</string>
+    <string name="send_ubc_to_any_erc_20_compatible_wallet">Send UBC to any ERC-20 compatible wallet.</string>
+    <string name="address">Address</string>
+    <string name="amount">Amount</string>
+    <string name="continueLabel">Continue</string>
+    <string name="transaction_commission_format">Transaction commission: %1$s UBC</string>
+    <string name="transaction_commission">Transaction commission: 0 UBC</string>
+    <string name="balance_placeholder_prefix_usd">USD %1$s</string>
+    <string name="transaction_send_amount_empty">USD 0.00</string>
+    <string name="transaction_commission_label">Transaction commission</string>
+    <string name="total_amount">Total amount</string>
+
+    <string name="info_label">Info</string>
+    <string name="transaction_amount_with_pats">(USD %1$s)</string>
+    <string name="error">Error</string>
+    <string name="server_says_error_title">Server says</string>
+    <string name="wait_please_title">Wait please</string>
+    <string name="wait_please_message">Wait please</string>
+    <string name="to_buy">To buy</string>
+    <string name="to_sell">To sell</string>
+    <string name="email_successfully_sent">An email has been successfully sent</string>
+    <string name="confirmation_code_invalid">Confirmation code invalid</string>
+    <string name="email_not_found">Email not found</string>
+    <string name="login">Login</string>
+    <string name="sucess">Success</string>
+    <string name="invlid_code">Invalid code</string>
+    <string name="email_invalid">Email invalid</string>
+    <string name="registration">Registration</string>
+    <string name="updating_profile_process">Updating profile</string>
+    <string name="logout">Logout</string>
+    <string name="loading">Loading</string>
+    <string name="create_product_progress">Create product</string>
+    <string name="product_created_success">Product created</string>
+    <string name="err_unable_take_photo">Unable to take photo</string>
+    <string name="withdraw_progress">Withdraw</string>
+    <string name="withdraw_sucess">Withdraw success</string>
+
+    <string name="open_telegram_text">Ubcoin Market is going to open a Telegram bot. This is necessary to buy or sell smth. Please create a Telegram account if you don’t have one.</string>
+    <string name="open">Open</string>
+
+    <string name="str_status_check">Please wait, your listing will appear on the Market right after moderation process.</string>
+    <string name="str_status_blocked1">Listing was blocked for some reason. Please read our\u0020</string>
+    <string name="str_status_blockedClickable">Terms and conditions\u0020</string>
+    <string name="str_status_blocked2">and edit your listing.</string>
+    <string name="str_active_buyers">Active buyers</string>
+    <string name="str_others">Others</string>
+
+    <string name="str_item_status_active">Active</string>
+    <string name="str_item_status_deactivated">Deactivated</string>
+    <string name="str_item_status_sold">Sold</string>
+    <string name="str_item_status_blocked">Blocked</string>
+    <string name="str_item_status_reserved">Reserved</string>
+    <string name="str_item_status_check">In moderation</string>
+    <string name="str_item_status_created" translatable="false">Created</string>
+    <string name="str_deals_confirmed_by" translatable="false">Deal confirmed by %1$s</string>
+    <string name="str_deals_active_buyers" translatable="false">%1$s active buyers</string>
+
+    <string name="hint_price_in_usd" translatable="false">Price in $</string>
+    <string name="text_your_price_will_be" translatable="false">Your price will be fixed in UBC</string>
+    <string name="hint_price_in_ubc" translatable="false">Price in UBC</string>
+    <string name="hint_convertation_in_progress" translatable="false">Convertation in progress...</string>
+    <string name="hint_convertation_failed" translatable="false">Convertation failed</string>
+    <string name="balance_placeholder_usd" translatable="false">%1$s USD</string>
+
+    <string name="your_listing_in_moderation" translatable="false">Your listing is in moderation</string>
+    <string name="your_listing_in_moderation_details" translatable="false">It will appear on the Market right after\nmoderation process.</string>
 </resources>

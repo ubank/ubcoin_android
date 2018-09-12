@@ -20,4 +20,7 @@
         <attr name="PasswordInputHint" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="RefreshableEditText">
+        <attr name="RefreshViewHint" format="string"/>
+    </declare-styleable>
 </resources>

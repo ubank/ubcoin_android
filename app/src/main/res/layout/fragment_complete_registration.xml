@@ -8,7 +8,7 @@
     android:focusable="true"
     android:orientation="vertical">
 
-    <include layout="@layout/common_header"/>
+    <include layout="@layout/common_header_login"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txtWeSentLatter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/have_account_margin"
@@ -35,8 +36,9 @@
             android:layout_marginTop="@dimen/have_account_margin"
             android:hint="@string/code"
             android:maxLines="1"
-            android:inputType="text"
+            android:inputType="number"
             android:imeOptions="actionDone"
+            app:met_primaryColor="@color/greenMainColor"
             android:textColorHighlight="@color/haveAccountColor"
             app:met_floatingLabel="highlight"
             app:met_textColor="@color/inputTextColor"
@@ -51,7 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginBottom="@dimen/camera_margin"
                 android:layout_marginTop="@dimen/camera_margin"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/didn_t_get_the_email"
@@ -60,7 +62,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/have_account_margin"
+                android:layout_marginBottom="@dimen/camera_margin"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="@dimen/camera_margin"
                 android:fontFamily="@font/roboto_regular"
@@ -85,23 +87,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <Button
                 android:id="@+id/imgSend"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/sign_up_size"
                 android:layout_marginEnd="@dimen/sign_up_margin"
                 android:layout_marginStart="@dimen/sign_up_margin"
-                android:background="@drawable/rounded_green_filled_transparent_button" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:fontFamily="@font/roboto_medium"
                 android:text="@string/send"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:textSize="@dimen/sign_up_text_size"
+                android:background="@drawable/rounded_green_filled_transparent_button_smallr" />
+
 
         </RelativeLayout>
 

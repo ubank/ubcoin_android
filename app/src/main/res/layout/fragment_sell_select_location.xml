@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_header_select_location" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/edtLocationAutoComplete" />
+
+
+        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
+            android:id="@+id/edtLocationAutoComplete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/header_margin_start"
+            android:layout_marginStart="@dimen/header_margin_start"
+            android:hint="@string/location_dots"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:lines="1"
+            android:text="Test"
+            android:textColorHighlight="@color/haveAccountColor"
+            gpb:met_floatingLabel="highlight"
+            gpb:met_hideUnderline="true"
+            gpb:met_primaryColor="@color/greenMainColor"
+            gpb:met_textColor="@color/inputTextColor"
+            gpb:met_textColorHint="@color/haveAccountColor" />
+
+
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            gpb:colors="@array/progressColors"
+            gpb:type="nexus_rotation_cross" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

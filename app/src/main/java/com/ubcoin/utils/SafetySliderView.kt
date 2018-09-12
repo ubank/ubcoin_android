@@ -12,12 +12,26 @@ import com.daimajia.slider.library.R
 
 class SafetySliderView(context: Context, val height: Int, val width: Int) : CustomBaseSliderView(context) {
 
+    var onClickListener: ClickListener? = null
+
     override fun getView(): View {
         val view = LayoutInflater.from(context).inflate(R.layout.render_type_text, null)
         val imageView = view.findViewById<ImageView>(R.id.daimajia_slider_image)
-        bindEventAndShow(view, imageView, true, height, width)
+        bindEventAndShow(view, imageView, true, height, width, context)
+        view.setOnClickListener {
+            onClickListener?.performClick()
+        }
         return view
     }
 
+    abstract class ClickListener(val filePath: String) {
+
+        fun performClick() {
+            onClick(filePath)
+        }
+
+        abstract fun onClick(filePath: String)
+
+    }
 
 }

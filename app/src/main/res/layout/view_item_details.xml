@@ -2,10 +2,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:background="@color/itemDetailsBackground"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/llMarketItemStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/itemStatusCheckTransparent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imgMarketItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:src="@drawable/ic_market_item_moderation" />
+
+        <TextView
+            android:id="@+id/txtMarketItemStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="18dp"
+            android:layout_toEndOf="@id/imgMarketItemStatus"
+            android:fontFamily="@font/roboto_regular"
+            android:text="@string/str_status_check"
+            android:textColor="@color/itemStatusCheck"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,23 +49,50 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/marginItemDetails"
             android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginEnd="@dimen/marginItemDetails"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtItemPrice"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:layout_marginTop="25dp"
-                android:textColor="@color/headerTextColor"
-                android:textSize="@dimen/please_verify_text_size" />
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:id="@+id/txtItemPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/please_verify_text_size" />
+
+
+                <TextView
+                    android:id="@+id/txtPriceInCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@id/txtItemPrice"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:maxLines="1"
+
+                    android:singleLine="true"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/currencyPriceDetailsSize" />
+
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/llItemDetailCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -40,9 +100,8 @@
                     android:id="@+id/txtItemCategor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/camera_margin"
-                    android:layout_marginTop="@dimen/camera_margin"
                     android:fontFamily="@font/roboto_regular"
+                    android:gravity="center_vertical"
                     android:textColor="@color/greenMainColor" />
 
                 <ImageView
@@ -57,8 +116,8 @@
                 android:id="@+id/txtMarketProductName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/headerTextColor"
                 android:textSize="@dimen/please_verify_text_size" />
@@ -72,13 +131,13 @@
         android:layout_marginStart="@dimen/marginItemDetails"
         android:layout_marginTop="15dp"
         android:text="@string/location_label"
+        android:textAllCaps="true"
         android:textColor="@color/haveAccountColor" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -95,8 +154,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/imgMarket"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="15dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/rounded_corners_black_transparent"
                 android:gravity="center_vertical">
 
@@ -110,10 +169,10 @@
                     android:id="@+id/txtLocationDistance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginEnd="@dimen/camera_end_margin"
                     android:layout_marginStart="3dp"
                     android:layout_marginTop="3dp"
+                    android:layout_marginEnd="@dimen/camera_end_margin"
+                    android:layout_marginBottom="3dp"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/menu_textsize" />
@@ -127,6 +186,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/llDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -136,7 +196,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/marginItemDetails"
             android:layout_marginStart="@dimen/marginItemDetails"
             android:orientation="vertical">
 
@@ -145,16 +204,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginBottom="25dp"
-                android:layout_marginEnd="38dp"
                 android:layout_marginTop="22dp"
+                android:layout_marginEnd="38dp"
+                android:layout_marginBottom="25dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/roboto_medium"
+                android:fontFamily="@font/roboto_regular"
                 android:maxLines="4"
                 android:textColor="@color/headerTextColor"
                 android:textSize="@dimen/sign_up_text_size" />
 
             <ImageView
+                android:id="@+id/imgDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -172,6 +232,7 @@
         android:layout_marginStart="@dimen/marginItemDetails"
         android:layout_marginTop="15dp"
         android:text="@string/seller_label"
+        android:textAllCaps="true"
         android:textColor="@color/haveAccountColor" />
 
     <LinearLayout
@@ -182,48 +243,46 @@
         <include layout="@layout/view_seller_profile" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:textColor="#e93754"
-        android:text="REPORT POST"
-        android:textSize="14sp"
-        android:layout_marginTop="30dp"
-        android:elevation="2dp"
-        android:translationZ="2dp"
-        android:background="@android:color/white"
-        android:layout_height="wrap_content" />
-
 
     <RelativeLayout
-        android:layout_marginTop="20dp"
-        android:id="@+id/llWantToBuy"
-        android:background="@android:color/white"
+        android:id="@+id/wantToBuyContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/white">
 
-        <ImageView
+        <Button
+            android:id="@+id/llWantToBuy"
             android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_height="@dimen/sign_up_size"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/rounded_green_filled_button" />
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_green_filled_button_smallr"
+            android:elevation="2dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="@string/i_want_to_buy"
-            android:textAllCaps="true"
+            android:text="@string/connect_to_seller"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/sign_up_text_size" />
+            android:textSize="@dimen/sign_up_text_size"
+            android:translationZ="2dp" />
+
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/llPurchasesContainer"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPurchases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
 
 
 </LinearLayout>

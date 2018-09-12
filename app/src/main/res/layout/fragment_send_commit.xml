@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/common_header" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginTop="@dimen/camera_margin"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/price_top_margin"
+            android:layout_marginStart="@dimen/price_top_margin"
+            android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/address"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="@dimen/topUpGreyTextSize" />
+
+            <TextView
+                android:id="@+id/txtInfoAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/camera_margin"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/activeTabTextColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/infoTopMargin"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/amount"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="@dimen/topUpGreyTextSize" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/camera_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtInfoAmountUBC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/activeTabTextColor"
+                    android:textSize="@dimen/have_account_text_size" />
+
+                <TextView
+                    android:id="@+id/txtInfoAmountUSD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/camera_margin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/to_usd_convert_color"
+                    android:textSize="@dimen/have_account_text_size" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/infoTopMargin"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/transaction_commission_label"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="@dimen/topUpGreyTextSize" />
+
+            <TextView
+                android:id="@+id/txtInfoTransactionCommission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/camera_margin"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/activeTabTextColor"
+                android:textSize="@dimen/have_account_text_size" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/total_amount_top_margin"
+                android:textColor="@color/activeTabTextColor"
+                android:textSize="@dimen/have_account_text_size"
+                android:text="@string/total_amount"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/txtInfoTotalAmount"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/myBalanceButtonBottomMargin"
+                android:textColor="@color/greenMainColor"
+                android:textSize="@dimen/header_text_size"
+                android:layout_marginBottom="@dimen/topUpContainerBottomPadding"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white">
+
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sign_up_size"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="@dimen/sign_up_margin"
+            android:layout_marginStart="@dimen/sign_up_margin"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_green_filled_button_smallr"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/send"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sign_up_text_size" />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

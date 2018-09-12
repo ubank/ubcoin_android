@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/profileDetailsItemHeight">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/edtSellPrice"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profileDetailsItemHeight"
+        android:layout_marginStart="@dimen/have_account_text_size"
+        android:layout_marginTop="@dimen/header_margin_start"
+        android:layout_marginEnd="@dimen/have_account_text_size"
+        android:enabled="false"
+        android:hint="@string/sell_price"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:lines="1"
+        android:textColorHighlight="@color/haveAccountColor"
+        app:met_floatingLabel="highlight"
+        app:met_primaryColor="@color/greenMainColor"
+        app:met_textColor="@color/inputTextColor"
+        app:met_textColorHint="@color/haveAccountColor" />
+
+    <ImageView
+        android:id="@+id/imgRefresh"
+        android:layout_width="25dp"
+        android:background="@drawable/ic_refresh_background"
+        android:src="@drawable/ic_refresh_convert"
+        app:layout_constraintEnd_toEndOf="@id/edtSellPrice"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="25dp" />
+
+    <FrameLayout
+        android:id="@+id/touchContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/imgRefresh"
+        app:layout_constraintStart_toStartOf="@+id/edtSellPrice" />
+
+</android.support.constraint.ConstraintLayout>

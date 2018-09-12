@@ -1,14 +1,16 @@
 package com.ubcoin.utils
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
-import com.squareup.picasso.Callback
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.RequestCreator
-
+import com.ubcoin.GlideApp
+import com.ubcoin.GlideRequest
 import java.io.File
 
 /**
@@ -36,7 +38,7 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
         return super.image(res)
     }
 
-    protected fun bindEventAndShow(v: View, targetImageView: ImageView?, disableCacheAndStore: Boolean, height: Int, width: Int) {
+    protected fun bindEventAndShow(v: View, targetImageView: ImageView?, disableCacheAndStore: Boolean, height: Int, width: Int, context: Context) {
         if (!disableCacheAndStore) {
             super.bindEventAndShow(v, targetImageView)
             return
@@ -55,12 +57,14 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
 
         mLoadListener?.onStart(me)
 
-        val p = if (picasso != null) picasso else Picasso.get()
-        val requestCreator: RequestCreator?
+        val glide = GlideApp.with(context)
+
+        // val p = if (picasso != null) picasso else Picasso.get()
+        val requestCreator: GlideRequest<Drawable>
         requestCreator = when {
-            url != null -> p.load(mUrl)
-            mFile != null -> p.load(mFile!!)
-            mRes != 0 -> p.load(mRes)
+            url != null -> glide.load(mUrl)
+            mFile != null -> glide.load(mFile!!)
+            mRes != 0 -> glide.load(mRes)
             else -> return
         }
 
@@ -81,26 +85,30 @@ abstract class CustomBaseSliderView protected constructor(context: Context) : Ba
         }
 
         when (scaleType) {
-            BaseSliderView.ScaleType.Fit -> requestCreator.fit()
-            BaseSliderView.ScaleType.FitCenterCrop -> requestCreator.fit().centerCrop()
-            BaseSliderView.ScaleType.CenterCrop -> requestCreator.resize(width, height).onlyScaleDown().centerCrop()
-            BaseSliderView.ScaleType.CenterInside -> requestCreator.resize(width, height).onlyScaleDown().centerInside()
+            BaseSliderView.ScaleType.Fit -> requestCreator.fitCenter()
+            BaseSliderView.ScaleType.FitCenterCrop -> requestCreator.fitCenter().centerCrop()
+            BaseSliderView.ScaleType.CenterCrop -> requestCreator.override(width, height).centerCrop()
+            BaseSliderView.ScaleType.CenterInside -> requestCreator.override(width, height).centerInside()
         }
 
-        requestCreator.into(targetImageView, object : Callback {
-            override fun onSuccess() {
-                if (v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar) != null) {
-                    v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar).visibility = View.INVISIBLE
-                }
-            }
-
-            override fun onError(e: Exception) {
+        requestCreator.listener(object : RequestListener<Drawable> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                 mLoadListener?.onEnd(false, me)
                 if (v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar) != null) {
                     v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar).visibility = View.INVISIBLE
                 }
+                return false
             }
+
+            override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                if (v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar) != null) {
+                    v.findViewById<View>(com.daimajia.slider.library.R.id.loading_bar).visibility = View.INVISIBLE
+                }
+                return false
+            }
+
         })
+        requestCreator.into(targetImageView)
     }
 }
 

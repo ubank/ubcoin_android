@@ -3,7 +3,7 @@ package com.ubcoin.network
 import android.util.Log
 import com.google.gson.Gson
 import com.ubcoin.ThePreferences
-import com.ubcoin.model.Error
+import com.ubcoin.model.ErrorWrapper
 import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +12,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.HttpURLConnection
-import kotlin.system.exitProcess
 
 
 /**
@@ -33,11 +32,15 @@ object NetworkModule {
                 .validateEagerly(true)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(NullOrEmptyConvertFactory())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(gsonConverterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl("https://my.ubcoin.io/")
                 .client(client())
                 .build()
+    }
+
+    fun gsonConverterFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create()
     }
 
     fun client(): OkHttpClient {
@@ -68,19 +71,20 @@ object NetworkModule {
             try {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
-                    if (response?.code()?: 401 == HttpURLConnection.HTTP_OK) {
-                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
-                        thePreferences.setWVCookie(response.header("set-cookie"))
+                    if (response?.code() ?: 401 == HttpURLConnection.HTTP_OK) {
+//                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
+//                        thePreferences.setWVCookie(response.header("set-cookie"))
                         thePreferences.setToken(response.header(AUTH_HEADER))
                     }
                 } else {
                     response = it.proceed(it.request().newBuilder()
-                            .addHeader("Cookie", thePreferences.getCookie() ?: "")
+//                            .addHeader("Cookie", thePreferences.getCookie() ?: "")
                             .addHeader(AUTH_HEADER, thePreferences.getToken() ?: "")
                             .build())
                 }
                 val code = response.code()
                 if (code == HttpURLConnection.HTTP_OK) {
+                    checkResponseContentLength(response)
                     response
                 } else {
                     throw HttpRequestException(null, parseResponseForError(response), code)
@@ -90,19 +94,32 @@ object NetworkModule {
             } catch (e: Exception) {
                 throw HttpRequestException(e, null)
             }
-
-
         }
     }
 
-    private fun parseResponseForError(response: Response): Error? {
+    private fun checkResponseContentLength(response: Response?) {
+        val get = response?.headers()?.get("Content-Length")
+        if (get == null || get.isBlank()) {
+            response?.headers()?.newBuilder()?.add("Content-Length", "0")
+        }
+    }
+
+    private fun parseResponseForError(response: Response): ErrorWrapper? {
         return try {
-            Gson().fromJson(response.body()!!.string(), Error::class.java)
+            Gson().fromJson(response.body()!!.string(), ErrorWrapper::class.java)
         } catch (e: Exception) {
             Log.e(javaClass.name, e.message, e)
             null
         }
     }
+
+    /* val error = Error()
+                val fromJson = Gson().fromJson(responseBody, AlternativeServerError::class.java)
+                error.errorValidations = ArrayList()
+                val errorValidation = ErrorValidation()
+                errorValidation.message = fromJson.message
+                (error.errorValidations as ArrayList).add(errorValidation)
+                errorWrapper.error = error*/
 
     private fun logInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -110,7 +127,7 @@ object NetworkModule {
         return httpLoggingInterceptor
     }
 
-    private fun networkHandleInterceptor() : Interceptor {
+    private fun networkHandleInterceptor(): Interceptor {
         return Interceptor { chain ->
             if (!NetworkConnectivityAwareManager.isNetworkAvailable()) {
                 throw NetworkConnectivityException()

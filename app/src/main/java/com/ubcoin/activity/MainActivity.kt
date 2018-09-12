@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.*
@@ -20,6 +19,8 @@ import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.market.MarketListFragment
+import com.ubcoin.fragment.profile.ProfileMainFragment
+import com.ubcoin.fragment.sell.SellFragment
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
@@ -60,26 +61,34 @@ class MainActivity : BaseActivity() {
         menuBottomView.menuViewCallback = object : IMenuViewCallback {
             override fun onMenuSelected(menuItems: MenuItems, menuSingleView: MenuSingleView, isAlreadyActivated: Boolean) {
                 if (!isAlreadyActivated) {
-                    menuBottomView.activate(menuItems)
                     when (menuItems) {
                         MenuItems.MARKET -> {
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         }
                         MenuItems.FAVORITE -> {
-                            if (!ProfileHolder.isAuthorized()) {
-                                showNeedToRegistration()
-                                return
-                            }
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(FavoriteListFragment::class.java)
                         }
                         MenuItems.SELL -> {
-                            goStub()
+                            if (!ProfileHolder.isAuthorized()) {
+                                startSignIn()
+                                return
+                            }
+                            menuBottomView.activate(menuItems)
+                            fragmentSwitcher?.clearBackStack()?.addTo(SellFragment::class.java)
                         }
                         MenuItems.DEALS -> {
+                            menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {
-                            goStub()
+                            if (!ProfileHolder.isAuthorized()) {
+                                checkProfileLoggedIn()
+                            } else {
+                                menuBottomView.activate(menuItems)
+                                fragmentSwitcher?.clearBackStack()?.addTo(ProfileMainFragment::class.java)
+                            }
                         }
                         MenuItems.SIGN_IN -> {
                             startSignIn()
@@ -117,12 +126,13 @@ class MainActivity : BaseActivity() {
         super.onNewIntent(intent)
         if (intent?.getBooleanExtra(KEY_REFRESH_AFTER_LOGIN, false) == true) {
             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
+            menuBottomView.activate(MenuItems.MARKET)
         }
     }
 
     private fun showNeedToRegistration() {
         MaterialDialog.Builder(this)
-                .title("Error")
+                .title(getString(R.string.error))
                 .content(R.string.need_to_logged_in)
                 .build()
                 .show()
@@ -141,15 +151,20 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE) {
-            checkProfileLoggedIn()
-        } else if (requestCode == REQUEST_FINE_LOCATION) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_FINE_LOCATION) {
             if (checkPermissions(false)) {
                 startLocationUpdates()
                 getLastLocation()
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            checkProfileLoggedIn()
         }
     }
 
@@ -181,14 +196,6 @@ class MainActivity : BaseActivity() {
             }, Looper.myLooper())
         }
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
     }
 
     fun getLastLocation() {

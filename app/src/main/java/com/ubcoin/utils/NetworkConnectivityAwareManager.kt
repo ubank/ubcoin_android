@@ -10,11 +10,11 @@ import com.ubcoin.TheApplication
  */
 object NetworkConnectivityAwareManager {
 
-    private val application : TheApplication by lazy {
+    private val application: TheApplication by lazy {
         TheApplication.instance
     }
 
-    fun isNetworkAvailable() : Boolean {
+    fun isNetworkAvailable(): Boolean {
         val connectivityManager = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = connectivityManager.activeNetworkInfo
         return netInfo != null && netInfo.isConnected

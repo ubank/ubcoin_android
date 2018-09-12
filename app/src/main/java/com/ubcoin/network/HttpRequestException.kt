@@ -1,6 +1,6 @@
 package com.ubcoin.network
 
-import com.ubcoin.model.Error
+import com.ubcoin.model.ErrorWrapper
 
 /**
  * Created by Yuriy Aizenberg
@@ -8,16 +8,16 @@ import com.ubcoin.model.Error
 class HttpRequestException : Throwable {
 
     var throwable: Throwable? = null
-    var error: Error? = null
+    var errorWrapper: ErrorWrapper? = null
     var errorCode: Int = -1
 
 
-    constructor(throwable: Throwable?, error: Error?) : this(throwable, error, -1)
+    constructor(throwable: Throwable?, errorWrapper: ErrorWrapper?) : this(throwable, errorWrapper, -1)
 
-    constructor(throwable: Throwable?, error: Error?, errorCode: Int) {
+    constructor(throwable: Throwable?, errorWrapper: ErrorWrapper?, errorCode: Int) {
         this.errorCode = errorCode
         this.throwable = throwable
-        this.error = error
+        this.errorWrapper = errorWrapper
     }
 
     constructor() : super()
@@ -25,6 +25,6 @@ class HttpRequestException : Throwable {
     fun isServerError(): Boolean = throwable == null
 
     fun toServerErrorString(): String {
-        return error?.toString() ?: "Unknown"
+        return errorWrapper?.error?.toString() ?: "Unknown"
     }
 }

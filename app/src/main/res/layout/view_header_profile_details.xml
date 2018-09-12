@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_size">
+
+
+        <RelativeLayout
+            android:id="@+id/llHeaderLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgHeaderLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/header_margin_end"
+                android:layout_marginStart="@dimen/header_margin_start"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_back" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txtHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/llHeaderLeft"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/account_settings"
+            android:textColor="@color/headerTextColor"
+            android:textSize="@dimen/header_text_size" />
+
+
+        <RelativeLayout
+            android:id="@+id/llHeaderRight"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:id="@+id/txtHeaderRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/header_margin_start"
+                android:layout_marginStart="@dimen/header_margin_start"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/done"
+                android:textAllCaps="true"
+                android:textColor="@color/greenMainColor"
+                android:textSize="@dimen/sign_up_text_size" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llMainGradient"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/main_gradient"
+        android:orientation="horizontal" />
+
+
+
+
+</LinearLayout>
