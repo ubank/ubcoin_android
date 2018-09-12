@@ -5,11 +5,9 @@ package com.ubcoin.model.response
  */
 data class DealItem(
         val id: String,
-        val categoryId: String?,
-        val title: String?,
+         val categoryId: String,
+        val title: String,
         val price: Double,
-        val description: String?,
-        val disableNotifyEmail: Boolean,
-        val agreement: Boolean,
+        val description: String,
         val images: List<String>?
 )

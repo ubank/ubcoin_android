@@ -1,5 +1,6 @@
 package com.ubcoin.model.response
 
+import com.google.gson.annotations.SerializedName
 import com.ubcoin.R
 
 /**
@@ -7,14 +8,38 @@ import com.ubcoin.R
  */
 const val NO_RESOURCE = -1
 
-enum class MarketItemStatus(val stringResourceId: Int, val description: Int, val inListPositionIndex: Int) {
+enum class MarketItemStatus(val stringResourceId: Int, val description: Int, val groupKey: Int) {
 
-    ACTIVE(R.string.str_item_status_active, NO_RESOURCE, 0),
-    CHECK(R.string.str_item_status_check, R.string.str_status_check, 1),
+    @SerializedName("ACTIVE")
+    ACTIVE(R.string.str_item_status_active, NO_RESOURCE, 1),
+
+    @SerializedName("CHECK")
+    CHECK(R.string.str_item_status_check, R.string.str_status_check, 2),
+
+    @SerializedName("CHECKING")
     CHECKING(R.string.str_item_status_check, R.string.str_status_check, 2),
-    BLOCKED(R.string.str_item_status_blocked, R.string.empty, 6),
-    DEACTIVATED(R.string.str_item_status_deactivated, NO_RESOURCE, 3),
+
+    @SerializedName("BLOCKED")
+    BLOCKED(R.string.str_item_status_blocked, R.string.empty, 3),
+
+    @SerializedName("DEACTIVATED")
+    DEACTIVATED(R.string.str_item_status_deactivated, NO_RESOURCE, 4),
+
+    @SerializedName("RESERVED")
     RESERVED(R.string.str_item_status_reserved, NO_RESOURCE, 5),
-    SOLD(R.string.str_item_status_sold, NO_RESOURCE, 4);
+
+    @SerializedName("SOLD")
+    SOLD(R.string.str_item_status_sold, NO_RESOURCE, 6);
+
+    companion object {
+        fun bySplitKey(key: Int) : MarketItemStatus {
+            values().forEach {
+                if (it.groupKey == key) return it
+            }
+            return ACTIVE
+        }
+    }
+
+
 
 }

@@ -32,11 +32,15 @@ object NetworkModule {
                 .validateEagerly(true)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(NullOrEmptyConvertFactory())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(gsonConverterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl("https://my.ubcoin.io/")
                 .client(client())
                 .build()
+    }
+
+    fun gsonConverterFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create()
     }
 
     fun client(): OkHttpClient {

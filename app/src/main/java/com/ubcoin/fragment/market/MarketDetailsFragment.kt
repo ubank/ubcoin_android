@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
-import android.text.Spannable
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -24,6 +25,7 @@ import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.BaseSliderView
 import com.daimajia.slider.library.Transformers.BaseTransformer
 import com.daimajia.slider.library.Transformers.DefaultTransformer
+import com.google.android.gms.common.util.CollectionUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -36,17 +38,25 @@ import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.ThePreferences
+import com.ubcoin.adapter.IRecyclerTouchListener
+import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.model.FakePurchase
+import com.ubcoin.model.IPurchaseObject
+import com.ubcoin.model.Purchase
+import com.ubcoin.model.PurchaseContainer
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MarketItemStatus
+import com.ubcoin.model.response.PurchaseItemStatus
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.request.BuyerPurchaseLinkRequest
+import com.ubcoin.network.request.SellerPurchaseLinkRequest
 import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_stub.view.*
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -69,6 +79,10 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var imgDescription: View
     private lateinit var llDescription: View
     private lateinit var wantToBuyContainer: View
+
+    private lateinit var llPurchasesContainer: View
+    private lateinit var rvPurchases: RecyclerView
+
 
     //Header
     private lateinit var imgHeaderLeft: ImageView
@@ -106,6 +120,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
+
+        llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
+        rvPurchases = view.findViewById(R.id.rvPurchases)
 
         imgHeaderLeft = view.findViewById(R.id.imgHeaderLeft)
         imgHeaderRight = view.findViewById(R.id.imgHeaderRight)
@@ -186,6 +203,10 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         view.findViewById<TextView>(R.id.txtHeaderSimple).text = marketItem.title
         view.findViewById<TextView>(R.id.txtItemPrice).text = (marketItem.price
                 ?: .0).moneyFormat() + " UBC"
+
+        view.findViewById<TextView>(R.id.txtPriceInCurrency).text =
+                if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null
+
         view.findViewById<TextView>(R.id.txtItemCategor).text = marketItem.category?.name
         view.findViewById<TextView>(R.id.txtMarketProductName).text = marketItem.title
         val description = marketItem.description
@@ -209,11 +230,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                         override fun onPositiveClick(materialDialog: MaterialDialog) {
                             materialDialog.dismiss()
                             thePreferences.disableTgDialog()
-                            callWantToBuy()
+                            callWantToBuy(marketItem.id, true)
                         }
                     })
                 } else {
-                    callWantToBuy()
+                    callWantToBuy(marketItem.id, true)
                 }
             }
 
@@ -264,9 +285,69 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         if (marketItem.isOwner()) {
             wantToBuyContainer.visibility = View.GONE
+            rvPurchases.visibility = View.VISIBLE
             checkMarketItemStatus()
+            setupPurchases()
         } else {
             wantToBuyContainer.visibility = View.VISIBLE
+            rvPurchases.visibility = View.GONE
+        }
+    }
+
+    private fun setupPurchases() {
+        if (!CollectionUtils.isEmpty(marketItem.purchases)) {
+            val purchaseUserAdapter = PurchaseUserAdapter(activity!!)
+            purchaseUserAdapter.setHasStableIds(true)
+
+            rvPurchases.setHasFixedSize(true)
+            rvPurchases.layoutManager = LinearLayoutManager(activity!!)
+
+            rvPurchases.adapter = purchaseUserAdapter
+
+            val purchaseContainer = PurchaseContainer()
+
+            marketItem.purchases.forEach {
+                when(it.status) {
+                    PurchaseItemStatus.ACTIVE, PurchaseItemStatus.CREATED ->  {
+                        purchaseContainer.activePurchases.add(it)
+                    }
+                    else -> {
+                        purchaseContainer.otherPurchases.add(it)
+                    }
+                }
+            }
+            val list = ArrayList<IPurchaseObject>()
+            if (purchaseContainer.shouldDivideByBlocks()) {
+                list.add(FakePurchase(getString(R.string.str_item_status_reserved)))
+                list.addAll(purchaseContainer.activePurchases)
+
+                list.add(FakePurchase(getString(R.string.str_others)))
+                list.addAll(purchaseContainer.otherPurchases)
+            } else {
+               list.addAll(purchaseContainer.activePurchases)
+               list.addAll(purchaseContainer.otherPurchases)
+            }
+            if (!list.isEmpty()) {
+                purchaseUserAdapter.addData(list)
+            }
+            purchaseUserAdapter.recyclerTouchListener = object : IRecyclerTouchListener<IPurchaseObject> {
+                override fun onItemClick(data: IPurchaseObject, position: Int) {
+                    val purchase = data as Purchase
+                    val thePreferences = ThePreferences()
+                    if (thePreferences.shouldShowThDialog()) {
+                        OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
+                            override fun onPositiveClick(materialDialog: MaterialDialog) {
+                                materialDialog.dismiss()
+                                thePreferences.disableTgDialog()
+                                callWantToBuy(purchase.id, true)
+                            }
+                        })
+                    } else {
+                        callWantToBuy(purchase.id, true)
+                    }
+                }
+
+            }
         }
     }
 
@@ -301,7 +382,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                         }
                     }
 
-                    spannableString.setSpan(clickableSpan, firstPartString.length - 1, firstPartString.length + clickablePart.length - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(clickableSpan, firstPartString.length, firstPartString.length + clickablePart.length - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     txtMarketItemStatus.movementMethod = LinkMovementMethod.getInstance()
                     txtMarketItemStatus.text = spannableString
 
@@ -425,9 +506,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
 
-    private fun callWantToBuy() {
+    private fun callWantToBuy(id: String, fromBuyer: Boolean) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discuss(marketItem.id, object : SilentConsumer<TgLink> {
+        DataProvider.discuss(if (fromBuyer) BuyerPurchaseLinkRequest(marketItem.id) else SellerPurchaseLinkRequest(id), object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url

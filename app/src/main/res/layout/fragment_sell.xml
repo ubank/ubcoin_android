@@ -100,28 +100,44 @@
                     android:layout_height="@dimen/profileDetailsItemHeight"
                     android:layout_width="match_parent">
 
-                    <com.rengwuxian.materialedittext.MaterialEditText
-                        android:id="@+id/edtSellPrice"
+                    <com.ubcoin.view.RefreshableEditText
+                        android:id="@+id/refreshViewUsd"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/profileDetailsItemHeight"
-                        android:layout_marginEnd="@dimen/have_account_text_size"
-                        android:layout_marginStart="@dimen/have_account_text_size"
-                        android:layout_marginTop="@dimen/header_margin_start"
-                        android:enabled="false"
-                        android:hint="@string/sell_price"
-                        android:imeOptions="actionNext"
-                        android:inputType="text"
-                        app:met_primaryColor="@color/greenMainColor"
-                        android:lines="1"
-                        android:textColorHighlight="@color/haveAccountColor"
-                        app:met_floatingLabel="highlight"
-                        app:met_textColor="@color/inputTextColor"
-                        app:met_textColorHint="@color/haveAccountColor" />
+                        app:RefreshViewHint="@string/hint_price_in_usd"
+                        android:layout_height="wrap_content" />
 
-                    <FrameLayout
-                        android:id="@+id/llSellContainer"
+                  <!--  <FrameLayout
+                        android:id="@+id/llSellContainerInUsd"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent" />-->
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textSize="12sp"
+                    android:text="@string/text_your_price_will_be"
+                    android:textColor="@color/convertPriceTextColor"
+                    android:layout_marginStart="@dimen/have_account_text_size"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_height="@dimen/profileDetailsItemHeight"
+                    android:layout_width="match_parent">
+
+                    <com.ubcoin.view.RefreshableEditText
+                        android:id="@+id/refreshViewUbc"
+                        android:layout_width="match_parent"
+                        app:RefreshViewHint="@string/hint_price_in_ubc"
+                        android:layout_height="wrap_content" />
+
+                    <!--<FrameLayout
+                        android:id="@+id/llSellContainerInUbc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />-->
 
                 </RelativeLayout>
 

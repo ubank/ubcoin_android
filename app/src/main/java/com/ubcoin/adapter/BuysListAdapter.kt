@@ -9,13 +9,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.DealItemWrapper
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.moneyFormat
 
 /**
  * Created by Yuriy Aizenberg
  */
-class DealsListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, DealsListAdapter.VHolder>(context) {
+class BuysListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, BuysListAdapter.VHolder>(context) {
 
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): VHolder {
@@ -23,9 +24,8 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, 
     }
 
     override fun onBindViewHolder(vHolder: VHolder, p1: Int) {
-        val itemWrapper = getItem(p1)
-        val item = itemWrapper.dealItem
-        val images = item.images
+        val marketItem = getItem(p1)
+        val images = marketItem.dealItem.images
         if (CollectionExtensions.nullOrEmpty(images)) {
             vHolder.imgDealsItemLogo.setImageResource(R.drawable.img_photo_placeholder)
         } else {
@@ -41,9 +41,9 @@ class DealsListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, 
                     .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgDealsItemLogo)
         }
-        vHolder.txtDealsItemPrice.text = item.title
-        vHolder.txtDealsItemName.text = (item.price.moneyFormat() + " UBC")
-        bindTouchListener(vHolder.itemView, vHolder.adapterPosition, itemWrapper)
+        vHolder.txtDealsItemPrice.text = marketItem.dealItem.title
+        vHolder.txtDealsItemName.text = (marketItem.dealItem.price.moneyFormat() + " UBC")
+        bindTouchListener(vHolder.itemView, vHolder.adapterPosition, marketItem)
     }
 
 

@@ -10,10 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.model.response.MarketItem
-import com.ubcoin.utils.CollectionExtensions
-import com.ubcoin.utils.DistanceUtils
-import com.ubcoin.utils.ProfileHolder
-import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.*
 import com.ubcoin.view.rating.RatingBarView
 import kotlin.math.roundToInt
 
@@ -36,6 +33,11 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             ubcPostfix = context.getString(R.string.ubc_postfix)
         }
         return ubcPostfix
+    }
+
+    private fun getPriceInCurrency(marketItem: MarketItem): String? {
+        if (!marketItem.isPriceInCurrencyPresented()) return null
+        return "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + " " + marketItem.currency
     }
 
     @SuppressLint("SetTextI18n")
@@ -83,12 +85,10 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.txtLocationDistance.text = null
         }
 
+        vh.txtPriceInCurrency.text = getPriceInCurrency(item)
+
         bindTouchListener(vh.itemView, vh.adapterPosition, item)
     }
-
-/*    private fun formatPriceWithTwoDigits(currentPrice: Float): String {
-        return String.format("%.2f", currentPrice)
-    }*/
 
 
     class ViewHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView) {
@@ -101,6 +101,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         val ratingBarView: RatingBarView = findView(R.id.ratingBarView)
         val llFavoriteContainer: View = findView(R.id.llFavoriteContainer)
         val imgFavorite: ImageView = findView(R.id.imgFavorite)
+        val txtPriceInCurrency: TextView = findView(R.id.txtPriceInCurrency)
 
     }
 

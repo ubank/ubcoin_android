@@ -66,6 +66,10 @@ abstract class BaseRecyclerAdapter<T, VH : BaseRecyclerAdapter.VHolder>(protecte
         }
     }
 
+    protected fun unbindTouchListener(view: View) {
+        view.setOnClickListener(null)
+    }
+
     override fun getItemCount(): Int = data.size
 
     override fun getItemId(position: Int): Long = position.toLong()

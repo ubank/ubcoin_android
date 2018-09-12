@@ -148,8 +148,8 @@
 
     <string name="str_status_check">잠시만 기다려주세요. 확인작업 후 물건이 등록됩니다.</string>
 
-    <string name="str_status_blocked1">물건등록이 어떠한 사유로 반려되었습니다.Listing </string>
-    <string name="str_status_blockedClickable">이용약관 </string>
+    <string name="str_status_blocked1">물건등록이 어떠한 사유로 반려되었습니다.Listing\u0020</string>
+    <string name="str_status_blockedClickable">이용약관\u0020</string>
     <string name="str_status_blocked2">을 읽으시고 다시 신청해주세요.</string>
 
     <string name="str_active_buyers">Active buyers</string>

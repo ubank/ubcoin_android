@@ -4,12 +4,10 @@ import android.location.Address
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Display
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.cocosw.bottomsheet.BottomSheet
 import com.crashlytics.android.Crashlytics
@@ -43,8 +41,9 @@ import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
 import com.ubcoin.view.OpenTelegramDialogManager
-import io.fabric.sdk.android.services.common.Crash
+import com.ubcoin.view.RefreshableEditText
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Consumer
 
 /**
  * Created by Yuriy Aizenberg
@@ -52,7 +51,8 @@ import io.reactivex.disposables.Disposable
 class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>, OnMapReadyCallback, ILocationChangeCallback {
 
     private val requestCode = 19990
-    private var disposable: Disposable?= null
+    private var disposable: Disposable? = null
+    private var isConversionInProgress = false
 
 
     private val datum = ArrayList<SellImageModel>()
@@ -60,17 +60,20 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private var bottomSheet: BottomSheet? = null
     private var fromCamera = false
     private var googleMap: GoogleMap? = null
-    private var currentPrice: Double = .0
+    private var currentPriceInUBC: Double = .0
+    private var currentPriceInUSD: Double = .0
     private var marker: Marker? = null
 
     private lateinit var mapView: MapView
     private lateinit var edtSellTitle: MaterialEditText
     private lateinit var edtSellCategory: MaterialEditText
-    private lateinit var edtSellPrice: MaterialEditText
     private lateinit var edtSellDescription: MaterialEditText
     private lateinit var txtSellLocation: TextView
     private lateinit var llSellLocation: View
     private lateinit var btnSellDone: View
+
+    private lateinit var refreshViewUbc: RefreshableEditText
+    private lateinit var refreshViewUsd: RefreshableEditText
 
 
     init {
@@ -84,6 +87,9 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     override fun onViewInflated(view: View, savedInstanceState: Bundle?) {
         super.onViewInflated(view, savedInstanceState)
         SellCreateDataHolder.reset()
+
+        refreshViewUbc = view.findViewById(R.id.refreshViewUbc)
+        refreshViewUsd = view.findViewById(R.id.refreshViewUsd)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvSellImages)
         recyclerView.setHasFixedSize(true)
@@ -99,7 +105,6 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         mapView = view.findViewById(R.id.mapView)
         edtSellTitle = view.findViewById(R.id.edtSellTitle)
         edtSellCategory = view.findViewById(R.id.edtSellCategory)
-        edtSellPrice = view.findViewById(R.id.edtSellPrice)
         edtSellDescription = view.findViewById(R.id.edtSellDescription)
         txtSellLocation = view.findViewById(R.id.txtSellLocation)
         llSellLocation = view.findViewById(R.id.llSellLocation)
@@ -110,17 +115,33 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
         setupData()
 
-        view.findViewById<View>(R.id.llSellContainer).setOnTouchListener { _, p1 ->
-            if (p1!!.action == MotionEvent.ACTION_UP) {
-                openPriceDialog()
-            }
-            true
-        }
+
         view.findViewById<View>(R.id.llCategoryContainer).setOnTouchListener { _, motionEvent ->
             if (motionEvent!!.action == MotionEvent.ACTION_UP) {
                 getSwitcher()?.addTo(SelectCategoryFragment::class.java, SelectCategoryFragment.createBundle(SellCreateDataHolder.category?.id), true)
             }
             true
+        }
+
+        refreshViewUsd.refreshListener = object : RefreshableEditText.IRefreshListener {
+            override fun onViewClick() {
+                openPriceDialog(false)
+            }
+
+            override fun onRefreshClick() {
+                setCurrentPrice(true)
+            }
+        }
+
+        refreshViewUbc.refreshListener = object : RefreshableEditText.IRefreshListener {
+            override fun onViewClick() {
+                openPriceDialog(true)
+            }
+
+            override fun onRefreshClick() {
+                setCurrentPrice(false)
+            }
+
         }
 
         llSellLocation.setOnClickListener {
@@ -271,12 +292,11 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         createProductRequest.images = images
 
         DataProvider.createProduct(createProductRequest,
-                object : SilentConsumer<MarketItem> {
-                    override fun onConsume(t: MarketItem) {
+                object : SilentConsumer<IdResponse> {
+                    override fun onConsume(t: IdResponse) {
                         hideProgressDialog()
-//                        Toast.makeText(activity, R.string.product_created_success, Toast.LENGTH_SHORT).show()
                         activity?.onBackPressed()
-                        getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(t), false)
+                        getSwitcher()?.addTo(SellInModerationDetails::class.java, true, false)
                     }
 
                 },
@@ -299,7 +319,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             showSweetAlertDialog(R.string.error, R.string.err_title_missing)
             return null
         }
-        if (currentPrice <= 0f) {
+        if (currentPriceInUSD <= 0f) {
             showSweetAlertDialog(R.string.error, R.string.err_price_required)
             return null
         }
@@ -325,7 +345,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 categoryId,
                 title,
                 edtSellDescription.text.toString().trim(),
-                currentPrice,
+                currentPriceInUSD,
                 location,
                 true, true, ArrayList()
         )
@@ -371,10 +391,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 8f))
             }
         }
-        setCurrentPrice()
+        if (currentPriceInUBC > .0f) {
+            setCurrentPrice(true)
+        }
     }
 
-    private fun openPriceDialog() {
+    private fun openPriceDialog(shouldConvertToUSD: Boolean) {
         val materialDialog = MaterialDialog.Builder(activity!!)
                 .customView(R.layout.fragment_content_select_price, false)
                 .build()
@@ -386,25 +408,73 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
         materialDialog.findViewById(R.id.btnDialogDone).setOnClickListener {
             materialDialog.dismiss()
-            currentPrice = try {
+            val value = try {
                 edtPrice.text.toString().toDouble()
             } catch (e: Exception) {
                 .0
             }
-            setCurrentPrice()
+            if (shouldConvertToUSD) currentPriceInUBC = value else currentPriceInUSD = value
+            setCurrentPrice(shouldConvertToUSD)
 
         }
-        if (currentPrice > 0f) {
-            edtPrice.setText(currentPrice.toString())
+        if (shouldConvertToUSD && currentPriceInUBC > 0f) {
+            edtPrice.setText(currentPriceInUBC.toString())
+        } else if (!shouldConvertToUSD && currentPriceInUSD > 0f) {
+            edtPrice.setText(currentPriceInUSD.toString())
         }
-        materialDialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        materialDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         materialDialog.show()
     }
 
-    private fun setCurrentPrice() {
-        edtSellPrice.setText(getFormattedPrice())
+    private fun setCurrentPrice(shouldConvertToUSD: Boolean) {
+        if (shouldConvertToUSD) {
+            if (currentPriceInUBC <= .0f) {
+                refreshViewUbc.stopRefreshAndSetValue("")
+                refreshViewUsd.stopRefreshAndSetValue("")
+                return
+            }
+            refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
+            refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_IN_PROGRESS)
+            isConversionInProgress = true
+            DataProvider.getConversionFromUBC(currentPriceInUBC.toString(), Consumer { t ->
+                isConversionInProgress = false
+                if (t == null) {
+                    refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
+                } else {
+                    currentPriceInUSD = t.amount
+                    refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+                }
+            }, Consumer { t ->
+                isConversionInProgress = false
+                Crashlytics.logException(t)
+                refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
+            })
+        } else {
+            if (currentPriceInUSD <= .0) {
+                currentPriceInUBC = .0
+                currentPriceInUSD = .0
+                refreshViewUbc.stopRefreshAndSetValue("")
+                refreshViewUsd.stopRefreshAndSetValue("")
+                return
+            }
+            isConversionInProgress = true
+            refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+            refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_IN_PROGRESS)
+            DataProvider.getConversionFromUSD(currentPriceInUSD.toString(), Consumer { t ->
+                isConversionInProgress = false
+                if (t == null) {
+                    refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
+                } else {
+                    currentPriceInUBC = t.amount
+                    refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
+                }
+            }, Consumer { t ->
+                isConversionInProgress = false
+                Crashlytics.logException(t)
+                refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
+            })
+        }
     }
-
 
     override fun onItemClick(data: SellImageModel, position: Int) {
         bottomSheet?.dismiss()
@@ -522,16 +592,20 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         setupData()
     }
 
-    private fun getFormattedPrice(): String {
-        if (currentPrice <= .0) {
-            currentPrice = .0
-            return getString(R.string.balance_placeholder, "0.00")
+    private fun getFormattedPrice(showUBCBalance: Boolean): String {
+        if (showUBCBalance) {
+            if (currentPriceInUBC <= .0) {
+                currentPriceInUBC = .0
+                return getString(R.string.balance_placeholder, "0.00")
+            }
+            return getString(R.string.balance_placeholder, currentPriceInUBC.moneyFormat())
+        } else {
+            if (currentPriceInUSD <= .0) {
+                currentPriceInUSD = .0
+                return getString(R.string.balance_placeholder_usd, "0.00")
+            }
+            return getString(R.string.balance_placeholder_usd, currentPriceInUSD.moneyFormat())
         }
-        return getString(R.string.balance_placeholder, currentPrice.moneyFormat())
     }
-
-/*    private fun formatPriceWithTwoDigits(): String {
-        return String.format("%.2f", currentPrice)
-    }*/
 
 }

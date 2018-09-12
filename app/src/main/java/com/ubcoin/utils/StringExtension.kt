@@ -3,13 +3,13 @@ package com.ubcoin.utils
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.text.TextUtils
 import com.nulabinc.zxcvbn.Zxcvbn
+import com.ubcoin.model.PurchaseUser
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.Collections.replaceAll
-
 
 
 /**
@@ -35,6 +35,14 @@ fun String.copyToClipBoard(context: Context, label: String) {
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clipData = ClipData.newPlainText(label, this)
     clipboardManager.primaryClip = clipData
+}
+
+fun Double.moneyRoundedFormat() : String {
+    val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    formatSymbols.groupingSeparator = ' '
+    formatSymbols.decimalSeparator = '.'
+    val formatter = DecimalFormat("###,###.##", formatSymbols)
+    return formatter.format(this)
 }
 
 fun Float.moneyFormat(): String {
@@ -77,4 +85,9 @@ fun Double.bigMoneyFormat(): String {
         }
     }
     return format
+}
+
+fun PurchaseUser.getNickName() : String {
+    if (TextUtils.isEmpty(name)) return ""
+    return WordUtils.capitalizeFully(name).replace(" ", "")
 }

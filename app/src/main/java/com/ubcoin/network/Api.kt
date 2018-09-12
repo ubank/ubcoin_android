@@ -79,7 +79,7 @@ interface Api {
     fun getBuyersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<DealsListResponse>
 
     @GET("/api/purchases/seller")
-    fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<DealsListResponse>
+    fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 
     @GET("/api/items/categories")
     fun getCategories(): Observable<List<Category>>
@@ -112,5 +112,5 @@ interface Api {
     fun withdraw(@Body withdraw: Withdraw): Observable<WithdrawResponse>
 
     @POST("/api/items/discuss")
-    fun discuss(@Body request: IdRequest): Observable<TgLink>
+    fun discuss(@Body request: IPurchaseLinkRequest): Observable<TgLink>
 }

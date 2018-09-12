@@ -59,5 +59,6 @@
 
     <dimen name="infoTopMargin">26dp</dimen>
     <dimen name="total_amount_top_margin">62dp</dimen>
+    <dimen name="currencyPriceDetailsSize">15sp</dimen>
 
 </resources>

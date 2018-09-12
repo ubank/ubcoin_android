@@ -3,7 +3,6 @@ package com.ubcoin.network
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.support.annotation.IdRes
 import com.ubcoin.model.ConversionResponse
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
@@ -13,7 +12,6 @@ import com.ubcoin.utils.ProfileHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-import io.reactivex.functions.Function
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -122,9 +120,9 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun discuss(itemId: String, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
+    fun discuss(iPurchaseLinkRequest: IPurchaseLinkRequest, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
-                .discuss(IdRequest(itemId))
+                .discuss(iPurchaseLinkRequest)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -173,7 +171,7 @@ object DataProvider {
     }
 
 
-    fun getSellerItems(limit: Int, page: Int, onSuccess: Consumer<DealsListResponse>, onError: Consumer<Throwable>) {
+    fun getSellerItems(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .getSellersItems(limit, page)
                 .compose(RxUtils.applyT())
@@ -210,9 +208,8 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>): Disposable {
+    fun createProduct(createProductRequest: CreateProductRequest, onSuccess: Consumer<IdResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().createProduct(createProductRequest)
-                .map { t -> networkModule.api().marketItem(t.id).blockingFirst() }
                 .compose(RxUtils.applyTSingle())
                 .subscribe(onSuccess, onError)
     }

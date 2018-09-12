@@ -148,8 +148,8 @@
 
     <string name="str_status_check">Silahkan tunggu, pencatatan anda akan muncul di pasar setelah tepat setelah proses moderasi.</string>
 
-    <string name="str_status_blocked1">Pencatatan diblokir untuk beberapa alasan. Silakan baca </string>
-    <string name="str_status_blockedClickable">Syarat dan Ketentuan </string>
+    <string name="str_status_blocked1">Pencatatan diblokir untuk beberapa alasan. Silakan baca\u0020</string>
+    <string name="str_status_blockedClickable">Syarat dan Ketentuan\u0020</string>
     <string name="str_status_blocked2">kami dan sunting pencatatan Anda.</string>
 
     <string name="str_active_buyers">Active buyers</string>

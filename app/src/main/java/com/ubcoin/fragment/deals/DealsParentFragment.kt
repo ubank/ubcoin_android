@@ -23,8 +23,8 @@ class DealsParentFragment : FirstLineFragment() {
         val fragmentPagerItemAdapter = FragmentPagerItemAdapter(
                 childFragmentManager,
                 FragmentPagerItems.with(activity)
-                        .add(getString(R.string.to_buy), DealsBuyFragment::class.java)
-                        .add(getString(R.string.to_sell), DealsSellFragment::class.java)
+                        .add(getString(R.string.to_buy), BuyDealsChildFragment::class.java)
+                        .add(getString(R.string.to_sell), SellDealsChildFragment::class.java)
                         .create()
         )
         viewPager.adapter = fragmentPagerItemAdapter

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:background="@color/itemDetailsBackground"
     android:clickable="true"
     android:focusable="true"
@@ -10,9 +11,9 @@
     <RelativeLayout
         android:id="@+id/llMarketItemStatus"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
-        android:background="@color/itemStatusCheckTransparent">
+        android:background="@color/itemStatusCheckTransparent"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imgMarketItemStatus"
@@ -24,18 +25,18 @@
 
         <TextView
             android:id="@+id/txtMarketItemStatus"
-            android:layout_toEndOf="@id/imgMarketItemStatus"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="22dp"
-            android:layout_centerVertical="true"
-            android:textSize="12sp"
-            android:layout_marginBottom="18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="18dp"
+            android:layout_toEndOf="@id/imgMarketItemStatus"
             android:fontFamily="@font/roboto_regular"
             android:text="@string/str_status_check"
-            android:textColor="@color/itemStatusCheck" />
+            android:textColor="@color/itemStatusCheck"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
@@ -52,14 +53,40 @@
             android:layout_marginEnd="@dimen/marginItemDetails"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtItemPrice"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/headerTextColor"
-                android:textSize="@dimen/please_verify_text_size" />
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:id="@+id/txtItemPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/please_verify_text_size" />
+
+
+                <TextView
+                    android:id="@+id/txtPriceInCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toEndOf="@id/txtItemPrice"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:maxLines="1"
+
+                    android:singleLine="true"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/currencyPriceDetailsSize" />
+
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/llItemDetailCategory"
@@ -239,6 +266,20 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sign_up_text_size"
             android:translationZ="2dp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/llPurchasesContainer"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvPurchases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
 
     </RelativeLayout>

@@ -5,14 +5,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
-import com.ubcoin.TheApplication
 import com.ubcoin.ThePreferences
-import com.ubcoin.adapter.DealsListAdapter
+import com.ubcoin.adapter.BuysListAdapter
+import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.model.response.DealItemWrapper
-import com.ubcoin.model.response.DealsListResponse
-import com.ubcoin.model.response.TgLink
+import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
@@ -24,24 +22,17 @@ import com.ubcoin.view.OpenTelegramDialogManager
  */
 private const val LIMIT = 30
 
-abstract class BaseDealsChildFragment : BaseFragment() {
+class BuyDealsChildFragment : BaseFragment() {
 
     private lateinit var llNoDeals: View
-    private lateinit var dealsListAdapter: DealsListAdapter
+    private lateinit var sellsListAdapter: BuysListAdapter
     private lateinit var recyclerView: RecyclerView
     private var progressCenter: View? = null
     private var progressBottom: View? = null
 
-    enum class Type {
-        SELL,
-        BUY
-    }
-
     private var isLoading = false
     private var isEndOfLoading = false
     private var currentPage = -1
-
-    abstract fun getFragmentType(): Type
 
     override fun getLayoutResId() = R.layout.fragment_deals_child
 
@@ -52,13 +43,13 @@ abstract class BaseDealsChildFragment : BaseFragment() {
         progressBottom = view.findViewById(R.id.progressBottom)
         recyclerView = view.findViewById(R.id.rvDeals)
 
-        dealsListAdapter = DealsListAdapter(activity!!)
-        dealsListAdapter.setHasStableIds(true)
+        sellsListAdapter = BuysListAdapter(activity!!)
+        sellsListAdapter.setHasStableIds(true)
 
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = dealsListAdapter
+        recyclerView.adapter = sellsListAdapter
 
         if (ProfileHolder.isAuthorized()) {
             llNoDeals.visibility = View.GONE
@@ -70,7 +61,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
         }
 
 
-        dealsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
+        sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
             override fun onItemClick(data: DealItemWrapper, position: Int) {
                 val thePreferences = ThePreferences()
                 if (thePreferences.shouldShowThDialog()) {
@@ -97,7 +88,8 @@ abstract class BaseDealsChildFragment : BaseFragment() {
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discuss(data.dealItem.id, object : SilentConsumer<TgLink> {
+        //todo !!!
+        /*DataProvider.discuss(data.dealItem.id, object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
@@ -111,7 +103,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
                 handleException(t)
             }
 
-        })
+        })*/
     }
 
     fun loadData() {
@@ -119,7 +111,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
 
         currentPage++
 
-        if (dealsListAdapter.isEmpty()) {
+        if (sellsListAdapter.isEmpty()) {
             progressCenter?.visibility = View.VISIBLE
         } else {
             progressBottom?.visibility = View.VISIBLE
@@ -132,8 +124,8 @@ abstract class BaseDealsChildFragment : BaseFragment() {
                 if (data.size < LIMIT) {
                     isEndOfLoading = true
                 }
-                dealsListAdapter.addData(data)
-                if (dealsListAdapter.isEmpty()) {
+                sellsListAdapter.addData(data)
+                if (sellsListAdapter.isEmpty()) {
                     llNoDeals.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 } else {
@@ -149,11 +141,7 @@ abstract class BaseDealsChildFragment : BaseFragment() {
             }
 
         }
-        if (getFragmentType() == Type.BUY) {
-            DataProvider.getBuyersItems(LIMIT, currentPage, onSuccess, onError)
-        } else {
-            DataProvider.getSellerItems(LIMIT, currentPage, onSuccess, onError)
-        }
+        DataProvider.getBuyersItems(LIMIT, currentPage, onSuccess, onError)
     }
 
     private fun hideProgress() {
