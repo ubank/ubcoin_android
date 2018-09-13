@@ -27,16 +27,15 @@ import com.ubcoin.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
-import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.SellImageModel
 import com.ubcoin.model.response.Location
-import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
+import com.ubcoin.utils.MaxValueInputFilter
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
@@ -44,6 +43,7 @@ import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.RefreshableEditText
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import java.text.DecimalFormat
 
 /**
  * Created by Yuriy Aizenberg
@@ -417,11 +417,17 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             setCurrentPrice(shouldConvertToUSD)
 
         }
+        val decimalFormat = DecimalFormat()
+        decimalFormat.maximumFractionDigits = 4
+        var format = ""
         if (shouldConvertToUSD && currentPriceInUBC > 0f) {
-            edtPrice.setText(currentPriceInUBC.toString())
+            format = decimalFormat.format(currentPriceInUBC)
         } else if (!shouldConvertToUSD && currentPriceInUSD > 0f) {
-            edtPrice.setText(currentPriceInUSD.toString())
+            format = decimalFormat.format(currentPriceInUSD)
         }
+        format = java.lang.String(format).replaceAll("\\s+", "").replace(",", ".")
+        edtPrice.setText(format)
+        edtPrice.filters += MaxValueInputFilter()
         materialDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         materialDialog.show()
     }

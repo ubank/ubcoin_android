@@ -31,7 +31,6 @@
             android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
-            android:text="Test"
             android:textColorHighlight="@color/haveAccountColor"
             gpb:met_floatingLabel="highlight"
             gpb:met_hideUnderline="true"

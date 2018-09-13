@@ -12,7 +12,6 @@
         android:id="@+id/txtItemLocation"
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
-        android:text="test"
         android:layout_marginStart="@dimen/camera_margin"
         android:textColor="@color/headerTextColor"
         android:textSize="@dimen/sign_up_text_size"

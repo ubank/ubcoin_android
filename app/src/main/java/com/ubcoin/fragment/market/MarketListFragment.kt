@@ -87,7 +87,7 @@ class MarketListFragment : FirstLineFragment() {
 
         marketListAdapter?.recyclerTouchListener = object : IRecyclerTouchListener<MarketItem> {
             override fun onItemClick(data: MarketItem, position: Int) {
-                getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data), true)
+                getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data, position), true)
             }
         }
         view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
@@ -139,6 +139,23 @@ class MarketListFragment : FirstLineFragment() {
     fun onLatLngEvent(latLng: LatLng) {
         if (marketListAdapter != null) {
             marketListAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    @Subscribe
+    fun onFavoriteEvent(event: UpdateMarketItemEvent?) {
+        if (event != null && event.position != -1) {
+            try {
+                val item = marketListAdapter?.getItem(position = event.position) ?: return
+                item.favorite = event.isFavorite
+                if (event.position == 0) {
+                    marketListAdapter?.notifyDataSetChanged()
+                } else {
+                    marketListAdapter?.notifyItemChanged(event.position)
+                }
+            } catch (e: Exception) {
+            }
+
         }
     }
 

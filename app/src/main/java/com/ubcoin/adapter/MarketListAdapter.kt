@@ -65,7 +65,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         }
         val rating = item.user?.rating?.roundToInt()
         vh.ratingBarView.setRating(rating ?: 0)
-        if (!ProfileHolder.isAuthorized()) {
+        if (!ProfileHolder.isAuthorized() || item.isOwner()) {
             vh.imgFavorite.visibility = View.GONE
             vh.llFavoriteContainer.setOnClickListener { }
         } else {

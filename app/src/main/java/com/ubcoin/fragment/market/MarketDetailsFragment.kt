@@ -57,6 +57,7 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -95,6 +96,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var imgMarketItemStatus: ImageView
     private lateinit var txtMarketItemStatus: TextView
 
+    private var itemPositionInList = -1
+
     private var idForRemove: String? = null
     private val isFavoriteProcessing = AtomicBoolean(false)
 
@@ -102,8 +105,13 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     companion object {
         fun getBundle(marketItem: MarketItem): Bundle {
+            return getBundle(marketItem, -1)
+        }
+
+        fun getBundle(marketItem: MarketItem, position: Int): Bundle {
             val bundle = Bundle()
             bundle.putSerializable(MarketItem::class.java.simpleName, marketItem)
+            bundle.putInt("i", position)
             return bundle
         }
     }
@@ -120,7 +128,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
-
+        itemPositionInList = arguments?.getInt("i", -1) ?: -1
         llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
         rvPurchases = view.findViewById(R.id.rvPurchases)
 
@@ -159,7 +167,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         })
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
-        setFavorite(marketItem.favorite)
+        if (marketItem.isOwner()) {
+            hideFavorite()
+        } else {
+            setFavorite(marketItem.favorite)
+        }
 
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
@@ -307,8 +319,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             val purchaseContainer = PurchaseContainer()
 
             marketItem.purchases.forEach {
-                when(it.status) {
-                    PurchaseItemStatus.ACTIVE, PurchaseItemStatus.CREATED ->  {
+                when (it.status) {
+                    PurchaseItemStatus.ACTIVE, PurchaseItemStatus.CREATED -> {
                         purchaseContainer.activePurchases.add(it)
                     }
                     else -> {
@@ -324,8 +336,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                 list.add(FakePurchase(getString(R.string.str_others)))
                 list.addAll(purchaseContainer.otherPurchases)
             } else {
-               list.addAll(purchaseContainer.activePurchases)
-               list.addAll(purchaseContainer.otherPurchases)
+                list.addAll(purchaseContainer.activePurchases)
+                list.addAll(purchaseContainer.otherPurchases)
             }
             if (!list.isEmpty()) {
                 purchaseUserAdapter.addData(list)
@@ -372,7 +384,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                     val firstPartString = getString(R.string.str_status_blocked1)
                     val clickablePart = getString(R.string.str_status_blockedClickable)
                     val secondPartString = getString(R.string.str_status_blocked2)
-
 
 
                     val spannableString = SpannableString(firstPartString + clickablePart + secondPartString)
@@ -553,6 +564,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                 }
                 setFavorite(marketItem.favorite)
                 isFavoriteProcessing.set(false)
+                if (itemPositionInList != -1) {
+                    EventBus.getDefault().post(UpdateMarketItemEvent(position = itemPositionInList, isFavorite = marketItem.favorite))
+                }
             }
 
         }
@@ -570,22 +584,19 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     @SuppressLint("RestrictedApi")
+    private fun hideFavorite() {
+        fabActive.show()
+        fabActive.visibility = View.GONE
+        fabActive.setOnClickListener {
+        }
+        fabInactive.hide()
+        fabInactive.visibility = View.GONE
+        fabInactive.setOnClickListener { }
+
+    }
+
+    @SuppressLint("RestrictedApi")
     private fun setFavorite(isFavorite: Boolean) {
-        /* fab.backgroundTintList =
-                 if (isFavorite)
-                     ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.greenMainColor))
-                 else
-                     ColorStateList.valueOf(ContextCompat.getColor(activity!!, android.R.color.white))
-
-         val drawable =
-                 if (isFavorite)
-                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_white)
-                 else
-                     ContextCompat.getDrawable(activity!!, R.drawable.ic_baseline_favorite_green)
-         fab.setImageDrawable(drawable)
-         fab.invalidate()*/
-
-
         if (!isFavorite) {
             fabActive.show()
             fabActive.visibility = View.VISIBLE
