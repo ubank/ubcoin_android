@@ -176,4 +176,9 @@
 
     <string name="your_listing_in_moderation" translatable="false">Your listing is in moderation</string>
     <string name="your_listing_in_moderation_details" translatable="false">It will appear on the Market right after\nmoderation process.</string>
+    <string name="top_up_description" translatable="false">Your wallet is permanent but it has changeable top up address. You can use the current address for top up within:</string>
+    <string name="copy" translatable="false">Copy</string>
+    <string name="choose_exchange_label" translatable="false">Choose exchange to buy UBC</string>
+    <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet" translatable="false">If you received tokens during ICO, go to your\nERC-20 wallet.</string>
+    <string name="choose_the_exchange_header" translatable="false">Choose the exchange</string>
 </resources>

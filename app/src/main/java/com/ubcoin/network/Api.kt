@@ -113,4 +113,7 @@ interface Api {
 
     @POST("/api/items/discuss")
     fun discuss(@Body request: IPurchaseLinkRequest): Observable<TgLink>
+
+    @GET("/api/wallet/markets")
+    fun exchangeMarkets() : Observable<List<ExchangeMarket>>
 }

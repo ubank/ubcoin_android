@@ -1,5 +1,6 @@
 package com.ubcoin.network
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
@@ -24,6 +25,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by Yuriy Aizenberg
  */
+@SuppressLint("CheckResult")
 object DataProvider {
 
     private var networkModule: NetworkModule = NetworkModule
@@ -241,7 +243,7 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
+    private fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .getConversion(conversionRequest)
                 .compose(RxUtils.applyT())
@@ -266,6 +268,12 @@ object DataProvider {
 
     fun withdraw(amount: Double, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().withdraw(Withdraw(address, amount))
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getExchangeMarkets(onSuccess: Consumer<List<ExchangeMarket>>, onError: Consumer<Throwable>) : Disposable {
+        return networkModule.api().exchangeMarkets()
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
