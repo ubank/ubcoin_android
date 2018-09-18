@@ -22,7 +22,7 @@ fun String.checkAsPassword(): Int = if (isEmpty()) -1 else Zxcvbn().measure(this
 
 fun String.toDate(): Date? {
     return try {
-        SimpleDateFormat("yyyyMMdd'T'HHmmssZ", Locale.getDefault()).parse(this)
+            SimpleDateFormat("yyyyMMdd'T'HHmmssZ", Locale.getDefault()).parse(this)
     } catch (e: Exception) {
         null
     }

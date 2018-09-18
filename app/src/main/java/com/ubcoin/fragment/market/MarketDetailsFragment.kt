@@ -351,11 +351,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                             override fun onPositiveClick(materialDialog: MaterialDialog) {
                                 materialDialog.dismiss()
                                 thePreferences.disableTgDialog()
-                                callWantToBuy(purchase.id, true)
+                                callWantToBuy(purchase.id, false)
                             }
                         })
                     } else {
-                        callWantToBuy(purchase.id, true)
+                        callWantToBuy(purchase.id, false)
                     }
                 }
 

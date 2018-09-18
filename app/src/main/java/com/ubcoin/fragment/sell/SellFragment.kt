@@ -319,7 +319,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             showSweetAlertDialog(R.string.error, R.string.err_title_missing)
             return null
         }
-        if (currentPriceInUSD <= 0f) {
+        if (currentPriceInUBC <= 0f) {
             showSweetAlertDialog(R.string.error, R.string.err_price_required)
             return null
         }
@@ -345,7 +345,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 categoryId,
                 title,
                 edtSellDescription.text.toString().trim(),
-                currentPriceInUSD,
+                currentPriceInUBC,
                 location,
                 true, true, ArrayList()
         )
