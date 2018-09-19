@@ -16,7 +16,7 @@ data class MarketItem(
         val location: Location?,
         val createdDate: String?,
         var favorite: Boolean,
-        val status: MarketItemStatus?,
+        var status: MarketItemStatus?,
         val title: String?,
         val price: Double?,
         val shareUrl: String?,

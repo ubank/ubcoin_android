@@ -1,6 +1,7 @@
 package com.ubcoin.fragment.market
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.daimajia.slider.library.Animations.DescriptionAnimation
@@ -41,6 +43,7 @@ import com.ubcoin.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.model.FakePurchase
 import com.ubcoin.model.IPurchaseObject
 import com.ubcoin.model.Purchase
@@ -77,6 +80,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var txtDescription: TextView
+    private lateinit var llWantToBuy: View
     private lateinit var imgDescription: View
     private lateinit var llDescription: View
     private lateinit var wantToBuyContainer: View
@@ -84,17 +88,30 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var llPurchasesContainer: View
     private lateinit var rvPurchases: RecyclerView
 
+    private lateinit var txtItemCategory: TextView
+    private lateinit var txtMarketProductName: TextView
+    private lateinit var txtPriceInCurrency: TextView
+    private lateinit var txtItemPrice: TextView
+
+    private lateinit var txtUserName: TextView
+    private lateinit var ratingBarView: RatingBarView
+    private lateinit var imgSellerProfile: ImageView
 
     //Header
     private lateinit var imgHeaderLeft: ImageView
     private lateinit var header: View
     private lateinit var txtHeaderSimple: TextView
     private lateinit var imgHeaderRight: ImageView
+    private lateinit var llHeaderRightSimple: View
+
+    private lateinit var llHeaderRightMenu: View
+    private lateinit var imgHeaderRightMenu: ImageView
 
     //Status
     private lateinit var llMarketItemStatus: View
     private lateinit var imgMarketItemStatus: ImageView
     private lateinit var txtMarketItemStatus: TextView
+
 
     private var itemPositionInList = -1
 
@@ -132,10 +149,28 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
         rvPurchases = view.findViewById(R.id.rvPurchases)
 
+        txtItemCategory =  view.findViewById(R.id.txtItemCategor)
+        txtMarketProductName =  view.findViewById(R.id.txtMarketProductName)
+        txtPriceInCurrency = view.findViewById(R.id.txtPriceInCurrency)
+        txtItemPrice = view.findViewById(R.id.txtItemPrice)
+
+        imgSellerProfile = view.findViewById(R.id.imgSellerProfile)
+
+        txtUserName = view.findViewById(R.id.txtUserName)
+        ratingBarView = view.findViewById(R.id.ratingBarView)
+
+        llWantToBuy = view.findViewById<View>(R.id.llWantToBuy)
+        imgDescription = view.findViewById(R.id.imgDescription)
+        llDescription = view.findViewById<View>(R.id.llDescription)
+        txtDescription = view.findViewById(R.id.txtMarketProductDescription)
+
         imgHeaderLeft = view.findViewById(R.id.imgHeaderLeft)
         imgHeaderRight = view.findViewById(R.id.imgHeaderRight)
         header = view.findViewById(R.id.header)
         txtHeaderSimple = view.findViewById(R.id.txtHeaderSimple)
+        llHeaderRightSimple = view.findViewById(R.id.llHeaderRightSimple)
+        llHeaderRightMenu = view.findViewById(R.id.llHeaderRightMenu)
+        imgHeaderRightMenu = view.findViewById(R.id.imgHeaderRightMenu)
 
         wantToBuyContainer = view.findViewById(R.id.wantToBuyContainer)
 
@@ -173,6 +208,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             setFavorite(marketItem.favorite)
         }
 
+        mapView = view.findViewById(R.id.mapView)
+        mapView.getMapAsync(this)
+        installData()
+    }
+
+    private fun installData() {
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
 
@@ -212,27 +253,26 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             stopAutoCycle()
         }
 
-        view.findViewById<TextView>(R.id.txtHeaderSimple).text = marketItem.title
-        view.findViewById<TextView>(R.id.txtItemPrice).text = (marketItem.price
-                ?: .0).moneyFormat() + " UBC"
+        txtHeaderSimple.text = marketItem.title
+       txtItemPrice.text = (marketItem.price  ?: .0).moneyFormat() + " UBC"
 
-        view.findViewById<TextView>(R.id.txtPriceInCurrency).text =
+        txtPriceInCurrency.text =
                 if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null
 
-        view.findViewById<TextView>(R.id.txtItemCategor).text = marketItem.category?.name
-        view.findViewById<TextView>(R.id.txtMarketProductName).text = marketItem.title
+       txtItemCategory.text = marketItem.category?.name
+        txtMarketProductName.text = marketItem.title
         val description = marketItem.description
-        txtDescription = view.findViewById(R.id.txtMarketProductDescription)
+
         txtDescription.viewTreeObserver.addOnGlobalLayoutListener(getGlobalLayoutListener())
         txtDescription.text = description
 
-        llDescription = view.findViewById<View>(R.id.llDescription)
+
         if (description == null || description.isBlank()) {
             llDescription.visibility = View.GONE
         }
-        imgDescription = view.findViewById(R.id.imgDescription)
 
-        view.findViewById<View>(R.id.llWantToBuy).setOnClickListener {
+
+        llWantToBuy.setOnClickListener {
             if (!ProfileHolder.isAuthorized()) {
                 showNeedToRegistration()
             } else {
@@ -252,11 +292,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         }
 
-        val imageView = view.findViewById<ImageView>(R.id.imgSellerProfile)
+
         val user = marketItem.user
         val avatarUrl = user?.avatarUrl
         if (avatarUrl == null) {
-            imageView.setImageResource(R.drawable.img_profile_default)
+            imgSellerProfile.setImageResource(R.drawable.img_profile_default)
         } else {
             GlideApp.with(activity!!).load(avatarUrl)
                     .override(R.dimen.detailsSubProfileHeight, R.dimen.detailsSubProfileHeight)
@@ -264,11 +304,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                     .transform(RoundedCorners(context!!.resources.getDimensionPixelSize(R.dimen.detailsSubProfileHeight)))
                     .placeholder(R.drawable.img_profile_default)
                     .error(R.drawable.img_profile_default)
-                    .into(imageView)
+                    .into(imgSellerProfile)
         }
-        view.findViewById<TextView>(R.id.txtUserName).text = user?.name
+        txtUserName.text = user?.name
 
-        user?.rating?.toInt()?.let { view.findViewById<RatingBarView>(R.id.ratingBarView).setRating(it) }
+        user?.rating?.toInt()?.let { ratingBarView.setRating(it) }
 
         val location = marketItem.location
 
@@ -280,21 +320,24 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             txtLocationDistance.text = null
         }
 
-        mapView = view.findViewById(R.id.mapView)
-        mapView.getMapAsync(this)
+
 
         if (!ProfileHolder.isAuthorized()) {
             fabInactive.hide()
             fabActive.hide()
         }
 
-        view.findViewById<View>(R.id.llHeaderRightSimple).setOnClickListener {
+        llHeaderRightSimple.setOnClickListener {
             val shareUrl = marketItem.shareUrl
             if (shareUrl != null && !shareUrl.isBlank()) {
                 TheApplication.instance.openShareIntent(shareUrl, activity!!)
             }
         }
 
+        setOwnerDependData()
+    }
+
+    fun setOwnerDependData() {
         if (marketItem.isOwner()) {
             wantToBuyContainer.visibility = View.GONE
             rvPurchases.visibility = View.VISIBLE
@@ -303,6 +346,60 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         } else {
             wantToBuyContainer.visibility = View.VISIBLE
             rvPurchases.visibility = View.GONE
+        }
+
+
+
+        setupActions()
+    }
+
+    private fun setupActions() {
+        if (!marketItem.isOwner() || marketItem.status?.whatCanOwnerDo() == MarketItemStatus.DoActions.NOTHING) {
+            llHeaderRightMenu.visibility = View.GONE
+            llHeaderRightMenu.setOnClickListener { }
+        } else {
+            llHeaderRightMenu.visibility = View.VISIBLE
+            llHeaderRightMenu.setOnClickListener {
+                ActionsDialogManager.show(activity!!, marketItem.status?.whatCanOwnerDo()
+                        ?: MarketItemStatus.DoActions.NOTHING)
+                { items: ActionsDialogManager.Items, dialog: Dialog ->
+                    dialog.dismiss()
+                    when (items) {
+                        ActionsDialogManager.Items.EDIT -> {
+                        }
+                        ActionsDialogManager.Items.ACTIVATE -> {
+                            toggleState(true)
+                        }
+                        ActionsDialogManager.Items.DEACTIVATE -> {
+                            toggleState(false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun toggleState(activate: Boolean) {
+        val onSuccess = Consumer<MarketItem> { t ->
+            hideProgressDialog()
+            activity?.let {
+                if (activate) {
+                    Toast.makeText(it, R.string.the_listining_is_activated, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(it, R.string.the_listining_is_deactivated, Toast.LENGTH_SHORT).show()
+                }
+            }
+            EventBus.getDefault().post(UpdateMarketStateItemEvent(t))
+            marketItem.status = t?.status
+            setOwnerDependData()
+        }
+
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
+        if (activate) {
+            DataProvider.activate(marketItem.id, onSuccess, silentConsumer())
+        } else {
+            DataProvider.deactivate(marketItem.id, onSuccess, silentConsumer())
         }
     }
 
@@ -366,6 +463,17 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private fun checkMarketItemStatus() {
         if (marketItem.status != null) {
             when (marketItem.status) {
+                MarketItemStatus.DEACTIVATED -> {
+                    llMarketItemStatus.visibility = View.VISIBLE
+                    llMarketItemStatus.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.itemStatusDeactivatedTransparent))
+
+                    txtMarketItemStatus.text = getString(marketItem.status!!.description)
+                    txtMarketItemStatus.setTextColor(ContextCompat.getColor(activity!!, R.color.itemStatusDeactivated))
+
+                    imgMarketItemStatus.setImageResource(R.drawable.ic_deact)
+                }
+
+
                 MarketItemStatus.CHECK, MarketItemStatus.CHECKING -> {
                     llMarketItemStatus.visibility = View.VISIBLE
                     llMarketItemStatus.setBackgroundColor(ContextCompat.getColor(activity!!, R.color.itemStatusCheckTransparent))
@@ -457,6 +565,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         header.setBackgroundColor(Color.WHITE)
         imgHeaderRight.setImageResource(R.drawable.ic_share_details_black)
         imgHeaderLeft.setImageResource(R.drawable.ic_back_details_black)
+        imgHeaderRightMenu.setImageResource(R.drawable.ic_menu_black)
     }
 
     private fun onExpand() {
@@ -465,6 +574,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         header.setBackgroundColor(Color.TRANSPARENT)
         imgHeaderRight.setImageResource(R.drawable.ic_share_details_white)
         imgHeaderLeft.setImageResource(R.drawable.ic_back_details_white)
+        imgHeaderRightMenu.setImageResource(R.drawable.ic_menu_white)
     }
 
     override fun onViewInflated(view: View, savedInstanceState: Bundle?) {

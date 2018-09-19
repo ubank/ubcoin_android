@@ -23,7 +23,7 @@ enum class MarketItemStatus(val stringResourceId: Int, val description: Int, val
     BLOCKED(R.string.str_item_status_blocked, R.string.empty, 3),
 
     @SerializedName("DEACTIVATED")
-    DEACTIVATED(R.string.str_item_status_deactivated, NO_RESOURCE, 4),
+    DEACTIVATED(R.string.str_item_status_deactivated, R.string.str_status_deactivated, 4),
 
     @SerializedName("RESERVED")
     RESERVED(R.string.str_item_status_reserved, NO_RESOURCE, 5),
@@ -38,6 +38,22 @@ enum class MarketItemStatus(val stringResourceId: Int, val description: Int, val
             }
             return ACTIVE
         }
+    }
+
+    fun whatCanOwnerDo() : DoActions {
+        return when (this) {
+            MarketItemStatus.ACTIVE -> DoActions.EDIT_OR_DEACTIVATE
+            MarketItemStatus.CHECK , MarketItemStatus.BLOCKED -> DoActions.EDIT_ONLY
+            MarketItemStatus.DEACTIVATED -> DoActions.EDIT_OR_ACTIVATE
+            MarketItemStatus.CHECKING, MarketItemStatus.RESERVED,  MarketItemStatus.SOLD -> DoActions.NOTHING
+        }
+    }
+
+    enum class DoActions {
+        NOTHING,
+        EDIT_OR_DEACTIVATE,
+        EDIT_OR_ACTIVATE,
+        EDIT_ONLY
     }
 
 

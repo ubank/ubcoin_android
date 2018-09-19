@@ -72,9 +72,10 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private lateinit var llSellLocation: View
     private lateinit var btnSellDone: View
 
+    private lateinit var llHeaderRight: View
+
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
-
 
     init {
         (0..4).forEach { datum.add(SellImageModel()) }
@@ -90,6 +91,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
         refreshViewUbc = view.findViewById(R.id.refreshViewUbc)
         refreshViewUsd = view.findViewById(R.id.refreshViewUsd)
+        llHeaderRight = view.findViewById(R.id.llHeaderRight)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvSellImages)
         recyclerView.setHasFixedSize(true)

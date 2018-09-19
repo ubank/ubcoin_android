@@ -42,15 +42,15 @@ class InfoFragment : BaseFragment() {
             activity?.onBackPressed()
             return
         }
-        val address = arguments!!.getString(ADDRESS)
+        val address = arguments!!.getString(ADDRESS) ?: ""
         view.findViewById<TextView>(R.id.txtInfoAddress).text = address
         val amount = arguments!!.getDouble(AMOUNT)
         val commission = arguments!!.getDouble(COMMISSION)
 
-        view.findViewById<TextView>(R.id.txtInfoAmountUBC).text = getString(R.string.balance_placeholder_prefix, amount.bigMoneyFormat())
+        view.findViewById<TextView>(R.id.txtInfoAmountUBC).text = getString(R.string.balance_placeholder_prefix, (amount - commission).bigMoneyFormat())
         view.findViewById<TextView>(R.id.txtInfoAmountUSD).text = getString(R.string.transaction_amount_with_pats, arguments!!.getDouble(CONVERSION).bigMoneyFormat())
         view.findViewById<TextView>(R.id.txtInfoTransactionCommission).text = getString(R.string.balance_placeholder_prefix, commission.bigMoneyFormat())
-        view.findViewById<TextView>(R.id.txtInfoTotalAmount).text = getString(R.string.balance_placeholder_prefix, (amount + commission).bigMoneyFormat())
+        view.findViewById<TextView>(R.id.txtInfoTotalAmount).text = getString(R.string.balance_placeholder_prefix, amount.bigMoneyFormat())
 
         view.findViewById<View>(R.id.btnSend).setOnClickListener {
             performSend(address, amount)

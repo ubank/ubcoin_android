@@ -2,14 +2,17 @@ package com.ubcoin.fragment.login
 
 import android.view.View
 import com.ubcoin.R
-import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.activity.MainActivity
+import com.ubcoin.fragment.FirstLineFragment
 
 /**
  * Created by Yuriy Aizenberg
  */
-class StartupFragment : BaseFragment() {
+class StartupFragment : FirstLineFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_startup
+
+    override fun isFooterShow() = true
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
@@ -18,11 +21,14 @@ class StartupFragment : BaseFragment() {
     }
 
     private fun startSignUp() {
-        getSwitcher()?.addTo(SignupFragment::class.java)
+        if (activity != null && activity is MainActivity) {
+            (activity as MainActivity).startSignIn(true)
+        }
     }
 
     private fun startLogIn() {
-        val switcher = getSwitcher()
-        switcher?.addTo(LoginFragment::class.java)
+        if (activity != null && activity is MainActivity) {
+            (activity as MainActivity).startSignIn(false)
+        }
     }
 }

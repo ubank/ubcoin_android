@@ -56,6 +56,9 @@
     <color name="itemStatusBlock">#e93754</color>
     <color name="itemStatusBlockTransparent">#33e93754</color>
 
+    <color name="itemStatusDeactivated">#5d696e</color>
+    <color name="itemStatusDeactivatedTransparent">#e8e8e8</color>
+
     <color name="convertPriceTextColor">#202022</color>
     <color name="ethColor">#7e7e82</color>
     <color name="hashBackground">#ececec</color>

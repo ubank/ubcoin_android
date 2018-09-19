@@ -18,10 +18,13 @@ import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
+import com.ubcoin.fragment.login.StartupFragment
 import com.ubcoin.fragment.market.MarketListFragment
 import com.ubcoin.fragment.profile.ProfileMainFragment
+import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.SellFragment
 import com.ubcoin.model.event.UserEventWrapper
+import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.menu.IMenuViewCallback
 import com.ubcoin.view.menu.MenuItems
@@ -57,7 +60,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
         fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
-        menuBottomView.setIgnored(MenuItems.SIGN_IN)
+//        menuBottomView.setIgnored(MenuItems.SIGN_IN) //Now signin can be selected
         menuBottomView.menuViewCallback = object : IMenuViewCallback {
             override fun onMenuSelected(menuItems: MenuItems, menuSingleView: MenuSingleView, isAlreadyActivated: Boolean) {
                 if (!isAlreadyActivated) {
@@ -91,7 +94,7 @@ class MainActivity : BaseActivity() {
                             }
                         }
                         MenuItems.SIGN_IN -> {
-                            startSignIn()
+                           startSignIn()
                         }
                     }
                 }
@@ -165,6 +168,10 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
             checkProfileLoggedIn()
+            val fragment = supportFragmentManager.findFragmentById(getFragmentContainerId())
+            if (fragment is StartupFragment) {
+                onBackPressed()
+            }
         }
     }
 
@@ -218,7 +225,12 @@ class MainActivity : BaseActivity() {
 
 
     private fun startSignIn() {
-        startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_CODE)
+        menuBottomView.activateSignIn(true)
+        fragmentSwitcher?.addTo(StartupFragment::class.java)
+    }
+
+    fun startSignIn(isSignUp: Boolean) {
+        startActivityForResult(LoginActivity.getStartupIntent(this, isSignUp), REQUEST_CODE)
     }
 
     override fun onBackPressed() {

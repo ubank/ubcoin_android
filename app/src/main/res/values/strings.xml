@@ -181,4 +181,11 @@
     <string name="choose_exchange_label" translatable="false">Choose exchange to buy UBC</string>
     <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet" translatable="false">If you received tokens during ICO, go to your\nERC-20 wallet.</string>
     <string name="choose_the_exchange_header" translatable="false">Choose the exchange</string>
+    <string name="dialog_action_edit" translatable="false">Edit</string>
+    <string name="dialog_action_activate" translatable="false">Activate</string>
+    <string name="dialog_action_deactivate" translatable="false">Deactivate</string>
+    <string name="str_status_deactivated" translatable="false">Your listing is deactivated. and hided from the Market. Activate the listing to sell your item.</string>
+    <string name="the_listining_is_activated" translatable="false">The listing is activated</string>
+    <string name="the_listining_is_deactivated" translatable="false">The listing is deactivated</string>
+
 </resources>

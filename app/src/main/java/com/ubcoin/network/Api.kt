@@ -116,4 +116,10 @@ interface Api {
 
     @GET("/api/wallet/markets")
     fun exchangeMarkets() : Observable<List<ExchangeMarket>>
+
+    @POST("/api/items/activate")
+    fun activate(@Body activateDeactivateRequest: ActivateDeactivateRequest) : Observable<MarketItem>
+
+    @POST("/api/items/deactivate")
+    fun deactivate(@Body activateDeactivateRequest: ActivateDeactivateRequest) : Observable<MarketItem>
 }

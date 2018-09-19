@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import com.ubcoin.model.CommissionAndConversionResponse
 import com.ubcoin.model.ConversionResponse
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
@@ -266,16 +267,51 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun getCommissionBeforeAndConversionTOUSDAfter(amount: Double, onSuccess: Consumer<CommissionAndConversionResponse>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api()
+                .getCommission(amount)
+                .flatMap(
+                        { t ->
+                            networkModule.api().getConversion(ConversionRequest("UBC", "USD", (amount - t.commission).toString()))
+                        }, { t1, t2 ->
+                    CommissionAndConversionResponse(t1, t2)
+                }
+                ).compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun withdraw(amount: Double, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().withdraw(Withdraw(address, amount))
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun getExchangeMarkets(onSuccess: Consumer<List<ExchangeMarket>>, onError: Consumer<Throwable>) : Disposable {
+    fun getExchangeMarkets(onSuccess: Consumer<List<ExchangeMarket>>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().exchangeMarkets()
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
+    }
+
+    fun activate(itemId: String, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>): Disposable {
+        return toggleStatusInternal(itemId, activate = true)
+                .subscribe(onSuccess, onError)
+    }
+
+    fun deactivate(itemId: String, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>): Disposable {
+        return toggleStatusInternal(itemId, activate = false)
+                .subscribe(onSuccess, onError)
+    }
+
+    private fun toggleStatusInternal(itemId: String, activate: Boolean): Observable<MarketItem> {
+        val request = ActivateDeactivateRequest(itemId)
+        val api = networkModule.api()
+        val observable: Observable<MarketItem>
+        observable = if (activate) {
+            api.activate(request)
+        } else {
+            api.deactivate(request)
+        }
+        return observable.compose(RxUtils.applyT())
     }
 
 
