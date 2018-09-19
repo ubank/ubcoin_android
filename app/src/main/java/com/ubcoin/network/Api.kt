@@ -90,6 +90,9 @@ interface Api {
     @POST("/api/items")
     fun createProduct(@Body createProductRequest: CreateProductRequest): Observable<IdResponse>
 
+    @PUT("/api/items")
+    fun updateProduct(@Body updateProductRequest: UpdateProductRequest): Observable<MarketItem>
+
     @GET("/api/wallet/balance")
     fun balance(): Observable<MyBalance>
 

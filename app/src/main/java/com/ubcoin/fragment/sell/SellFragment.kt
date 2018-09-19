@@ -29,12 +29,14 @@ import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
 import com.ubcoin.model.response.Location
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLink
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
+import com.ubcoin.network.request.UpdateProductRequest
 import com.ubcoin.utils.MaxValueInputFilter
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
@@ -43,11 +45,14 @@ import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.RefreshableEditText
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import org.greenrobot.eventbus.EventBus
 import java.text.DecimalFormat
 
 /**
  * Created by Yuriy Aizenberg
  */
+const val MARKET_TO_EDIT_KEY = "market_to_edit_key"
+
 class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>, OnMapReadyCallback, ILocationChangeCallback {
 
     private val requestCode = 19990
@@ -74,6 +79,8 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
+    private var editedMarket: MarketItem? = null
+    private var isEdit = false
 
     init {
         (0..4).forEach { datum.add(SellImageModel()) }
@@ -148,14 +155,58 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         }
 
         btnSellDone.setOnClickListener {
-            val validateDataAndCreateRequest = validateDataAndCreateRequest()
-            if (validateDataAndCreateRequest != null) {
-                hideKeyboard()
-                if (validateTgUser()) {
-                    loadImagesAndCreate(validateDataAndCreateRequest)
+            if (!isEdit) {
+                val validateDataAndCreateRequest = validateDataAndCreateRequest()
+                if (validateDataAndCreateRequest != null) {
+                    hideKeyboard()
+                    if (validateTgUser()) {
+                        loadImagesAndCreate(validateDataAndCreateRequest)
+                    }
+                }
+            } else {
+                val updateRequest = validateDataAndUpdateRequest()
+                if (updateRequest != null) {
+                    hideKeyboard()
+                    loadImagesAndUpdate(updateRequest)
                 }
             }
         }
+
+        checkIsInEditMode()
+
+    }
+
+
+    private fun checkIsInEditMode() {
+        val serializable = arguments?.getSerializable(MARKET_TO_EDIT_KEY)
+        if (serializable != null) {
+            editedMarket = serializable as MarketItem
+            isEdit = true
+        }
+        if (!isEdit) return
+        SellCreateDataHolder.category = editedMarket?.category
+        SellCreateDataHolder.location = editedMarket?.location
+        adapter.clear()
+        editedMarket?.images?.forEach {
+            val data = SellImageModel()
+            data.serverUrl = it
+            adapter.addData(data)
+        }
+        if (adapter.itemCount < 5) {
+            for (i in adapter.itemCount until 5) {
+                adapter.addData(SellImageModel())
+            }
+        }
+
+        edtSellTitle.setText(editedMarket?.title)
+        edtSellDescription.setText(editedMarket?.description)
+
+        currentPriceInUSD = editedMarket?.priceInCurrency ?: .0
+        currentPriceInUBC = editedMarket?.price ?: .0
+
+        refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
+        refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+
     }
 
     override fun onLatLngChanged(latLng: LatLng) {
@@ -307,6 +358,62 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 })
     }
 
+
+    private fun loadImagesAndUpdate(updateProductRequest: UpdateProductRequest) {
+        showProgressDialog(R.string.update_product_progress, R.string.wait_please_message)
+        val imageUrls = ArrayList<String>()
+        val resultUrls = ArrayList<String>()
+        datum.forEach {
+            if (it.filePath != null) {
+                imageUrls.add(it.filePath!!)
+            } else if (it.hasServerImage()) {
+                resultUrls.add(it.serverUrl!!)
+            }
+        }
+        if (!imageUrls.isEmpty()) {
+            DataProvider.uploadFiles(imageUrls,
+                    object : SilentConsumer<TgLinks> {
+                        override fun onConsume(t: TgLinks) {
+                            t.tgLinks.forEach {
+                                resultUrls.add(it.url)
+                            }
+                            afterImagesLoadedUpdate(updateProductRequest, resultUrls)
+                        }
+                    },
+                    object : SilentConsumer<Throwable> {
+                        override fun onConsume(t: Throwable) {
+                            handleException(t)
+                        }
+                    })
+        } else {
+            afterImagesLoadedUpdate(updateProductRequest, resultUrls)
+        }
+    }
+
+    private fun afterImagesLoadedUpdate(updateProductRequest: UpdateProductRequest, images: List<String>) {
+        updateProductRequest.images = images
+
+        DataProvider.updateProduct(updateProductRequest,
+                object : SilentConsumer<MarketItem> {
+                    override fun onConsume(t: MarketItem) {
+                        hideProgressDialog()
+                        EventBus.getDefault().post(MarketUpdateEvent(t))
+                        activity?.onBackPressed()
+                        getSwitcher()?.addTo(SuccessFullyConfirmed::class.java, true, false)
+                    }
+
+                },
+                object : SilentConsumer<Throwable> {
+                    override fun onConsume(t: Throwable) {
+                        handleException(t)
+                    }
+
+                })
+    }
+
+
+
+
     override fun handleException(t: Throwable) {
         hideProgressDialog()
         super.handleException(t)
@@ -350,9 +457,17 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         )
     }
 
+    private fun validateDataAndUpdateRequest() : UpdateProductRequest? {
+        val validateDataAndCreateRequest = validateDataAndCreateRequest()
+        if (validateDataAndCreateRequest != null) {
+            return UpdateProductRequest.fromCreateRequest(validateDataAndCreateRequest, editedMarket!!.id)
+        }
+        return null
+    }
+
     private fun hasImages(): Boolean {
         datum.forEach {
-            if (it.hasImage()) return true
+            if (it.hasImage() || it.hasServerImage()) return true
         }
         return false
     }
@@ -486,7 +601,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         bottomSheet = BottomSheet.Builder(activity!!)
                 .title(getString(R.string.select_action))
                 .darkTheme()
-                .sheet(if (data.hasImage()) R.menu.menu_pick_retake_photo else R.menu.menu_pick_new_photo)
+                .sheet(if (data.hasImage() || data.hasServerImage()) R.menu.menu_pick_retake_photo else R.menu.menu_pick_new_photo)
                 .listener { dialog, which ->
                     when (which) {
                         R.id.camera, R.id.gallery -> {
@@ -611,6 +726,18 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             }
             return getString(R.string.balance_placeholder_usd, currentPriceInUSD.moneyFormat())
         }
+    }
+
+    companion object {
+        fun getBundle(marketItem: MarketItem): Bundle {
+            val bundle = Bundle()
+            bundle.putSerializable(MARKET_TO_EDIT_KEY, marketItem)
+            return bundle
+        }
+    }
+
+    override fun isFirstLineFragment(): Boolean {
+        return !isEdit
     }
 
 }

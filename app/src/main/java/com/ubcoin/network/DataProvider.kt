@@ -217,6 +217,12 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun updateProduct(updateProductRequest: UpdateProductRequest, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api().updateProduct(updateProductRequest)
+                .compose(RxUtils.applyTSingle())
+                .subscribe(onSuccess, onError)
+    }
+
     fun balance(onSuccess: Consumer<MyBalance>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().balance()
                 .compose(RxUtils.applyTSingle())

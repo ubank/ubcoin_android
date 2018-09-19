@@ -11,6 +11,7 @@ import com.ubcoin.adapter.GridItemOffsetDecoration
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.MarketListAdapter
 import com.ubcoin.fragment.FirstLineFragment
+import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -139,6 +140,23 @@ class MarketListFragment : FirstLineFragment() {
     fun onLatLngEvent(latLng: LatLng) {
         if (marketListAdapter != null) {
             marketListAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    @Subscribe
+    fun onMarketUpdate(marketUpdateEvent: MarketUpdateEvent) {
+        if (marketListAdapter != null) {
+            for ((index, datum) in marketListAdapter!!.data.withIndex()) {
+                if (datum.id == marketUpdateEvent.marketItem.id) {
+                    marketListAdapter!!.data[index] = datum
+                    if (index == 0) {
+                        marketListAdapter!!.notifyDataSetChanged()
+                    } else {
+                        marketListAdapter!!.notifyItemChanged(index)
+                    }
+                    break
+                }
+            }
         }
     }
 

@@ -19,11 +19,17 @@ class SellImagesAdapter(context: Context) : BaseRecyclerAdapter<SellImageModel, 
 
     override fun onBindViewHolder(vh: SellImageVH, position: Int) {
         val item = getItem(position)
-        if (item.hasImage()) {
+        if (item.hasImage() || item.hasServerImage()) {
             vh.imgSellImage.scaleType = ImageView.ScaleType.CENTER_CROP
-            GlideApp.with(context)
-                    .load(File(item.filePath))
-                    .centerCrop()
+            val request = if (item.hasImage()) {
+                GlideApp.with(context)
+                        .load(File(item.filePath))
+            } else {
+                GlideApp.with(context)
+                        .load(item.serverUrl)
+            }
+
+            request.centerCrop()
                     .into(vh.imgSellImage)
         } else {
             vh.imgSellImage.scaleType = ImageView.ScaleType.CENTER_INSIDE
@@ -41,7 +47,7 @@ class SellImagesAdapter(context: Context) : BaseRecyclerAdapter<SellImageModel, 
 
     fun findFirstEmptyContainerPosition(): Int {
         for ((index, element) in data.withIndex()) {
-            if (!element.hasImage()) return index
+            if (!element.hasImage() && !element.hasServerImage()) return index
         }
         return -1
     }

@@ -44,6 +44,8 @@ import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
+import com.ubcoin.fragment.sell.MarketUpdateEvent
+import com.ubcoin.fragment.sell.SellFragment
 import com.ubcoin.model.FakePurchase
 import com.ubcoin.model.IPurchaseObject
 import com.ubcoin.model.Purchase
@@ -61,6 +63,7 @@ import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -149,8 +152,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
         rvPurchases = view.findViewById(R.id.rvPurchases)
 
-        txtItemCategory =  view.findViewById(R.id.txtItemCategor)
-        txtMarketProductName =  view.findViewById(R.id.txtMarketProductName)
+        txtItemCategory = view.findViewById(R.id.txtItemCategor)
+        txtMarketProductName = view.findViewById(R.id.txtMarketProductName)
         txtPriceInCurrency = view.findViewById(R.id.txtPriceInCurrency)
         txtItemPrice = view.findViewById(R.id.txtItemPrice)
 
@@ -254,12 +257,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         txtHeaderSimple.text = marketItem.title
-       txtItemPrice.text = (marketItem.price  ?: .0).moneyFormat() + " UBC"
+        txtItemPrice.text = (marketItem.price ?: .0).moneyFormat() + " UBC"
 
         txtPriceInCurrency.text =
                 if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null
 
-       txtItemCategory.text = marketItem.category?.name
+        txtItemCategory.text = marketItem.category?.name
         txtMarketProductName.text = marketItem.title
         val description = marketItem.description
 
@@ -366,6 +369,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                     dialog.dismiss()
                     when (items) {
                         ActionsDialogManager.Items.EDIT -> {
+                            getSwitcher()?.addTo(SellFragment::class.java, SellFragment.getBundle(marketItem), false)
                         }
                         ActionsDialogManager.Items.ACTIVATE -> {
                             toggleState(true)
@@ -584,7 +588,23 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
         mapView.onResume()
+    }
+
+    override fun onPause() {
+        EventBus.getDefault().unregister(this)
+        super.onPause()
+    }
+
+    @Subscribe
+    fun onMarketUpdateEvent(marketUpdateEvent: MarketUpdateEvent) {
+        if (marketItem.id == marketUpdateEvent.marketItem.id) {
+            marketItem = marketUpdateEvent.marketItem
+            installData()
+        }
     }
 
     override fun onDestroy() {

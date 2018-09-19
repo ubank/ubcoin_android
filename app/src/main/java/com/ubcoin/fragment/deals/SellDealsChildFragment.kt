@@ -11,6 +11,7 @@ import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.fragment.market.UpdateMarketStateItemEvent
+import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -129,6 +130,24 @@ class SellDealsChildFragment : BaseFragment() {
     override fun onPause() {
         EventBus.getDefault().unregister(this)
         super.onPause()
+    }
+
+    @Subscribe
+    fun onMarketUpdate(marketUpdateEvent: MarketUpdateEvent) {
+        val arrayList = ArrayList<MarketItem>()
+        sellsListAdapter.data.forEach {
+            if (it is MarketItem) {
+                arrayList.add(it)
+            }
+        }
+        for ((index, datum) in arrayList.withIndex()) {
+            if (datum.id == marketUpdateEvent.marketItem.id) {
+                arrayList[index] = marketUpdateEvent.marketItem
+                break
+            }
+        }
+        sellsListAdapter.clear()
+        sellsListAdapter.addData(prepareData(arrayList))
     }
 
     @Subscribe

@@ -188,4 +188,7 @@
     <string name="the_listining_is_activated" translatable="false">The listing is activated</string>
     <string name="the_listining_is_deactivated" translatable="false">The listing is deactivated</string>
 
+    <string name="update_product_progress" translatable="false">Update product</string>
+    <string name="product_update_success" translatable="false">Product updated</string>
+
 </resources>
