@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import com.afollestad.materialdialogs.DialogAction
+import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.event.UpdateTransactionMessage
@@ -65,13 +67,8 @@ class InfoFragment : BaseFragment() {
                 if (!t.isSuccess()) {
                     showSweetAlertDialog(getString(R.string.error), t.message)
                 } else {
-                    activity?.run {
-                        Toast.makeText(this, R.string.withdraw_sucess, Toast.LENGTH_SHORT).show()
-                        EventBus.getDefault().post(UpdateTransactionMessage())
-                        onBackPressed()
-                        onBackPressed()
-                    }
-
+                    EventBus.getDefault().post(UpdateTransactionMessage())
+                    showDialogAndGoNext()
                 }
             }
 
@@ -87,12 +84,23 @@ class InfoFragment : BaseFragment() {
         super.handleException(t)
     }
 
+    private fun showDialogAndGoNext() {
+        activity?.let { activity ->
+            MaterialDialog.Builder(activity)
+                    .content(R.string.str_send_success)
+                    .neutralText(R.string.close)
+                    .onAny { materialDialog: MaterialDialog, _: DialogAction -> materialDialog.dismiss()}
+                    .dismissListener {
+                        activity.onBackPressed()
+                        activity.onBackPressed()
+                    }.build()
+                    .show()
+        }
+    }
+
     override fun handleByChild(httpRequestException: HttpRequestException): Boolean {
         if (httpRequestException.isServerError() && httpRequestException.errorCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-            Toast.makeText(activity, R.string.withdraw_sucess, Toast.LENGTH_SHORT).show()
-            EventBus.getDefault().post(UpdateTransactionMessage())
-            activity?.onBackPressed()
-            activity?.onBackPressed()
+            showDialogAndGoNext()
             return true
         }
         return super.handleByChild(httpRequestException)

@@ -72,7 +72,7 @@ class RefreshableEditText : ConstraintLayout {
             RefreshableEditText.RefreshState.REFRESH_FAILURE -> {
                 setRefreshColor()
                 showRefreshButton()
-                materialEditText.setText(R.string.hint_convertation_failed)
+                materialEditText.text = null
             }
         }
     }

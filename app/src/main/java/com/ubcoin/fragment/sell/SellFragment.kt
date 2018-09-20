@@ -360,7 +360,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
 
     private fun loadImagesAndUpdate(updateProductRequest: UpdateProductRequest) {
-        showProgressDialog(R.string.update_product_progress, R.string.wait_please_message)
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
         val imageUrls = ArrayList<String>()
         val resultUrls = ArrayList<String>()
         datum.forEach {

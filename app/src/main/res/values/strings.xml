@@ -163,32 +163,30 @@
     <string name="str_item_status_blocked">Blocked</string>
     <string name="str_item_status_reserved">Reserved</string>
     <string name="str_item_status_check">In moderation</string>
-    <string name="str_item_status_created" translatable="false">Created</string>
-    <string name="str_deals_confirmed_by" translatable="false">Deal confirmed by %1$s</string>
-    <string name="str_deals_active_buyers" translatable="false">%1$s active buyers</string>
+    <string name="str_deals_confirmed_by">Deal confirmed by %1$s</string>
+    <string name="str_deals_active_buyers">%1$s active buyers</string>
 
-    <string name="hint_price_in_usd" translatable="false">Price in $</string>
-    <string name="text_your_price_will_be" translatable="false">Your price will be fixed in UBC</string>
-    <string name="hint_price_in_ubc" translatable="false">Price in UBC</string>
-    <string name="hint_convertation_in_progress" translatable="false">Convertation in progress...</string>
-    <string name="hint_convertation_failed" translatable="false">Convertation failed</string>
+    <string name="hint_price_in_usd">Price in $</string>
+    <string name="hint_price_in_ubc">Price in UBC</string>
+    <string name="hint_convertation_in_progress">Convertation in progress…</string>
     <string name="balance_placeholder_usd" translatable="false">%1$s USD</string>
 
-    <string name="your_listing_in_moderation" translatable="false">Your listing is in moderation</string>
-    <string name="your_listing_in_moderation_details" translatable="false">It will appear on the Market right after\nmoderation process.</string>
-    <string name="top_up_description" translatable="false">Your wallet is permanent but it has changeable top up address. You can use the current address for top up within:</string>
-    <string name="copy" translatable="false">Copy</string>
-    <string name="choose_exchange_label" translatable="false">Choose exchange to buy UBC</string>
-    <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet" translatable="false">If you received tokens during ICO, go to your\nERC-20 wallet.</string>
-    <string name="choose_the_exchange_header" translatable="false">Choose the exchange</string>
-    <string name="dialog_action_edit" translatable="false">Edit</string>
-    <string name="dialog_action_activate" translatable="false">Activate</string>
-    <string name="dialog_action_deactivate" translatable="false">Deactivate</string>
-    <string name="str_status_deactivated" translatable="false">Your listing is deactivated. and hided from the Market. Activate the listing to sell your item.</string>
-    <string name="the_listining_is_activated" translatable="false">The listing is activated</string>
-    <string name="the_listining_is_deactivated" translatable="false">The listing is deactivated</string>
+    <string name="your_listing_in_moderation">Your listing is in moderation</string>
+    <string name="your_listing_in_moderation_details">It will appear on the Market right after\nmoderation process.</string>
+    <string name="top_up_description">Your wallet is permanent but it has changeable top up address. You can use the current address for top up within:</string>
+    <string name="copy">Copy</string>
+    <string name="choose_exchange_label">Choose exchange to buy UBC</string>
+    <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet">If you received tokens during ICO, go to your\nERC-20 wallet.</string>
+    <string name="choose_the_exchange_header">Exchange to buy UBC</string>
+    <string name="dialog_action_edit">Edit</string>
+    <string name="dialog_action_activate">Activate</string>
+    <string name="dialog_action_deactivate">Deactivate</string>
+    <string name="str_status_deactivated">Your listing is deactivated. and hided from the Market. Activate the listing to sell your item.</string>
+    <string name="the_listining_is_activated">The listing is activated</string>
+    <string name="the_listining_is_deactivated">The listing is deactivated</string>
 
-    <string name="update_product_progress" translatable="false">Update product</string>
-    <string name="product_update_success" translatable="false">Product updated</string>
+    <string name="text_your_price_will_be">Your price will be fixed in UBC</string>
+    <string name="str_send_success">Your transaction has been broadcast to the network. This does not mean that it has been successfully sent. During times of extreme volume, it may take 3+ hours to send.</string>
+
 
 </resources>
