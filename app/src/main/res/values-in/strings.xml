@@ -180,5 +180,5 @@
     <string name="choose_the_exchange_header">Bursa untuk membeli UBC</string>
     <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet">Jika Anda menerima token selama ICO, pergi ke wallet ERC-20 anda</string>
     <string name="str_send_success">Transaksi Anda telah ditambahkan ke antrian. Transaksi mungkin belum dikirim. Selama masa volume jaringan yang ekstrim, mungkin butuh waktu 3 jam lebih untuk selesai</string>
-
+    <string name="text_your_price_will_be">Harga Anda akan tetap dalam bentuk UBC</string>
 </resources>
