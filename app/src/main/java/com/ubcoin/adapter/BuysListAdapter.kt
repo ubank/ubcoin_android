@@ -11,6 +11,7 @@ import com.ubcoin.R
 import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.CollectionExtensions
+import com.ubcoin.utils.getCapitalizedName
 import com.ubcoin.utils.moneyFormat
 
 /**
@@ -41,8 +42,10 @@ class BuysListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, B
                     .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgDealsItemLogo)
         }
+        vHolder.imgDealsSmallIcon.setImageResource(R.drawable.ic_tg)
         vHolder.txtDealsItemPrice.text = marketItem.dealItem.title
         vHolder.txtDealsItemName.text = (marketItem.dealItem.price.moneyFormat() + " UBC")
+        vHolder.txtDealsItemStatus.text = marketItem.seller.getCapitalizedName()
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, marketItem)
     }
 
@@ -51,6 +54,8 @@ class BuysListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, B
         val imgDealsItemLogo: ImageView = findView(R.id.imgDealsItemLogo)
         val txtDealsItemPrice: TextView = findView(R.id.txtDealsItemPrice)
         val txtDealsItemName: TextView = findView(R.id.txtDealsItemName)
+        val imgDealsSmallIcon: ImageView = findView(R.id.imgDealsSmallIcon)
+        val txtDealsItemStatus: TextView = findView(R.id.txtDealsItemStatus)
     }
 
 }

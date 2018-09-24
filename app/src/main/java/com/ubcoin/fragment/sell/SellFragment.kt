@@ -28,10 +28,7 @@ import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
-import com.ubcoin.model.response.Location
-import com.ubcoin.model.response.MarketItem
-import com.ubcoin.model.response.TgLink
-import com.ubcoin.model.response.TgLinks
+import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -159,7 +156,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 val validateDataAndCreateRequest = validateDataAndCreateRequest()
                 if (validateDataAndCreateRequest != null) {
                     hideKeyboard()
-                    if (validateTgUser()) {
+                    if (validateTgUser(validateDataAndCreateRequest)) {
                         loadImagesAndCreate(validateDataAndCreateRequest)
                     }
                 }
@@ -275,14 +272,20 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         disposable?.dispose()
     }
 
-    private fun validateTgUser(): Boolean {
+    private fun validateTgUser(createProductRequest: CreateProductRequest): Boolean {
         val authorizedInTg = ProfileHolder.user!!.authorizedInTg ?: false
         if (!authorizedInTg) {
             showProgressDialog(R.string.loading, R.string.wait_please_message)
             DataProvider.getTgLink(object : SilentConsumer<TgLink> {
                 override fun onConsume(t: TgLink) {
                     hideProgressDialog()
-                    ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg ?: false
+                    val verified = t.user?.authorizedInTg ?: false
+                    ProfileHolder.user!!.authorizedInTg = verified
+                    ProfileHolder.updateUser()
+                    if (verified) {
+                        loadImagesAndCreate(createProductRequest)
+                        return
+                    }
                     val preferences = ThePreferences()
                     if (preferences.shouldShowThDialog()) {
                         activity?.run {
@@ -295,7 +298,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                             })
                         }
                     } else {
-                        TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                         TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
                     }
                 }
 
@@ -399,7 +402,14 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                         hideProgressDialog()
                         EventBus.getDefault().post(MarketUpdateEvent(t))
                         activity?.onBackPressed()
-                        getSwitcher()?.addTo(SuccessFullyConfirmed::class.java, true, false)
+                        when (t.status ?: MarketItemStatus.ACTIVE) {
+                            MarketItemStatus.CHECK, MarketItemStatus.CHECKING -> {
+                                getSwitcher()?.addTo(SellInModerationDetails::class.java, true, false)
+                            }
+                            else -> {
+                                getSwitcher()?.addTo(SuccessFullyConfirmed::class.java, true, false)
+                            }
+                        }
                     }
 
                 },

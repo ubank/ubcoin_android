@@ -93,6 +93,11 @@ fun PurchaseUser.getNickName() : String {
     return WordUtils.capitalizeFully(name).replace(" ", "")
 }
 
+fun PurchaseUser.getCapitalizedName() : String {
+    if (TextUtils.isEmpty(name)) return ""
+    return WordUtils.capitalizeFully(name)
+}
+
 fun Long.toTimeLaps() : String {
     if (this <= 0L) return "00:00:00"
     /*//return SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date(this))

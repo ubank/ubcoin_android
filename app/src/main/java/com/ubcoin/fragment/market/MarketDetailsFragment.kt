@@ -95,6 +95,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtMarketProductName: TextView
     private lateinit var txtPriceInCurrency: TextView
     private lateinit var txtItemPrice: TextView
+    private lateinit var txtActiveDealsCount: TextView
 
     private lateinit var txtUserName: TextView
     private lateinit var ratingBarView: RatingBarView
@@ -158,6 +159,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         txtItemPrice = view.findViewById(R.id.txtItemPrice)
 
         imgSellerProfile = view.findViewById(R.id.imgSellerProfile)
+        txtActiveDealsCount = view.findViewById(R.id.txtActiveDealsCount)
 
         txtUserName = view.findViewById(R.id.txtUserName)
         ratingBarView = view.findViewById(R.id.ratingBarView)
@@ -258,6 +260,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         txtHeaderSimple.text = marketItem.title
         txtItemPrice.text = (marketItem.price ?: .0).moneyFormat() + " UBC"
+
+        val itemsCount = marketItem.user?.itemsCount ?: 0
+        txtActiveDealsCount.text = resources.getQuantityString(R.plurals.txt_active_deals_count, itemsCount,itemsCount)
 
         txtPriceInCurrency.text =
                 if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null

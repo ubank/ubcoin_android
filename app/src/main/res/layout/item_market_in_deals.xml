@@ -15,8 +15,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/marketInFavoriteMarginDiff"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/marketInFavoriteMarginDiff"
+        android:layout_marginStart="@dimen/marketInFavoriteMarginDiff"
+        android:layout_marginEnd="@dimen/marketInFavoriteMarginDiff"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@id/imgDealsItemLogo"
         android:orientation="vertical">
 
@@ -25,23 +28,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
+            android:text="123456"
             android:textColor="@color/headerTextColor"
-            android:textSize="@dimen/price_textsize" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/txtDealsItemName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:text="12345678"
             android:fontFamily="@font/roboto_regular"
             android:maxLines="1"
             android:textColor="@color/headerTextColor"
-            android:textSize="@dimen/price_textsize" />
+            android:textSize="14sp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

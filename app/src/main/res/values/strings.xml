@@ -188,5 +188,10 @@
     <string name="text_your_price_will_be">Your price will be fixed in UBC</string>
     <string name="str_send_success">Your transaction has been broadcast to the network. This does not mean that it has been successfully sent. During times of extreme volume, it may take 3+ hours to send.</string>
 
+    <plurals name="txt_active_deals_count">
+        <item quantity="zero">%d active deals</item>
+        <item quantity="one">%d active deal</item>
+        <item quantity="other">%d active deals</item>
+    </plurals>
 
 </resources>

@@ -17,6 +17,12 @@ object ProfileHolder {
             EventBus.getDefault().postSticky(UserEventWrapper(field))
         }
 
+    fun updateUser() {
+        user?.let {
+            ThePreferences().setCurrentUser(it)
+        }
+    }
+
     var balance: MyBalance? = null
 
     fun isAuthorized() = user != null
