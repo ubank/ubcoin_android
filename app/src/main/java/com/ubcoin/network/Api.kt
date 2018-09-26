@@ -115,7 +115,10 @@ interface Api {
     fun withdraw(@Body withdraw: Withdraw): Observable<WithdrawResponse>
 
     @POST("/api/items/discuss")
-    fun discuss(@Body request: IPurchaseLinkRequest): Observable<TgLink>
+    fun discussFromBuyer(@Body request: BuyerPurchaseLinkRequest): Observable<TgLink>
+
+    @POST("/api/items/discuss")
+    fun discussFromSeller(@Body request: SellerPurchaseLinkRequest): Observable<TgLink>
 
     @GET("/api/wallet/markets")
     fun exchangeMarkets() : Observable<List<ExchangeMarket>>

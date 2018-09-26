@@ -654,7 +654,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun callWantToBuy(id: String, fromBuyer: Boolean) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discuss(if (fromBuyer) BuyerPurchaseLinkRequest(marketItem.id) else SellerPurchaseLinkRequest(id), object : SilentConsumer<TgLink> {
+
+        val onSuccess = object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
@@ -663,9 +664,17 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                 }
             }
 
-        }, Consumer {
+        }
+        val onError = Consumer<Throwable> {
             handleException(it)
-        })
+        }
+
+        if (fromBuyer) {
+            DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(marketItem.id), onSuccess, onError)
+        } else {
+            DataProvider.discussFromSeller(SellerPurchaseLinkRequest(id), onSuccess, onError)
+        }
+
     }
 
     private fun requestFavorite(favorite: Boolean) {

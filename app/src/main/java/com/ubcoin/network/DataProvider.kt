@@ -123,9 +123,16 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun discuss(iPurchaseLinkRequest: IPurchaseLinkRequest, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
+    fun discussFromBuyer(buyerPurchaseLinkRequest: BuyerPurchaseLinkRequest, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
-                .discuss(iPurchaseLinkRequest)
+                .discussFromBuyer(buyerPurchaseLinkRequest)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun discussFromSeller(sellerPurchaseLinkRequest: SellerPurchaseLinkRequest, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api()
+                .discussFromSeller(sellerPurchaseLinkRequest)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

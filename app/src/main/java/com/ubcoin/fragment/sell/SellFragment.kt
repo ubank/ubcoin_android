@@ -279,7 +279,10 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             DataProvider.getTgLink(object : SilentConsumer<TgLink> {
                 override fun onConsume(t: TgLink) {
                     hideProgressDialog()
-                    val verified = t.user?.authorizedInTg ?: false
+                    var verified = false
+                    if (t.user?.authorizedInTg != null) {
+                        verified = t.user.authorizedInTg!!
+                    }
                     ProfileHolder.user!!.authorizedInTg = verified
                     ProfileHolder.updateUser()
                     if (verified) {

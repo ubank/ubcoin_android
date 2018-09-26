@@ -15,6 +15,7 @@ import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.BuyerPurchaseLinkRequest
+import com.ubcoin.network.request.SellerPurchaseLinkRequest
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.OpenTelegramDialogManager
@@ -90,7 +91,7 @@ class BuyDealsChildFragment : BaseFragment() {
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discuss(BuyerPurchaseLinkRequest(data.dealItem.id), object : SilentConsumer<TgLink> {
+        DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(data.dealItem.id), object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
