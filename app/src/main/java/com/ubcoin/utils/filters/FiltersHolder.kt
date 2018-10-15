@@ -97,6 +97,7 @@ object FiltersHolder {
 
     fun resetFilters() {
         filtersFromFiltersBean.reset()
+        filteredIds.clear()
     }
 
     private fun calcChanges(): Boolean {
