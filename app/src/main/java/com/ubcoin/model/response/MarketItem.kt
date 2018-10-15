@@ -16,7 +16,7 @@ data class MarketItem(
         val location: Location?,
         val createdDate: String?,
         var favorite: Boolean,
-        val status: MarketItemStatus?,
+        var status: MarketItemStatus?,
         val title: String?,
         val price: Double?,
         val shareUrl: String?,
@@ -32,5 +32,10 @@ data class MarketItem(
     fun isPriceInCurrencyPresented() : Boolean {
         return priceInCurrency != null && currency != null
     }
+
+    override fun toString(): String {
+        return "MarketItem(id='$id', title=$title)"
+    }
+
 
 }

@@ -72,16 +72,17 @@
                 android:layout_height="match_parent">
 
                 <TextView
+                    android:id="@+id/txtActiveDealsCount"
                     android:layout_width="wrap_content"
                     android:textSize="12sp"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/sellerProfileGray"
-                    android:text="1 active deal"
                     android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     android:layout_marginStart="32dp"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/sellerProfileGray"

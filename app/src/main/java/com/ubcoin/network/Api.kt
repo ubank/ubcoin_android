@@ -44,14 +44,26 @@ interface Api {
     @GET("/api/items")
     fun marketList(
             @Query("size") limit: Int,
-            @Query("page") page: Int): Observable<MarketListResponse>
+            @Query("page") page: Int,
+            @Query("category") categories: List<String>?,
+            @Query("maxPrice") maxPrice: Double?,
+            @Query("maxDistance") maxDistance: Int?,
+            @Query("sortByDate") sortByDate: String?,
+            @Query("sortByPrice") sortByPrice: String?,
+            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
 
     @GET("/api/items")
     fun marketList(
             @Query("size") limit: Int,
             @Query("page") page: Int,
             @Query("latPoint") latPoint: Double,
-            @Query("longPoint") longPoint: Double): Observable<MarketListResponse>
+            @Query("longPoint") longPoint: Double,
+            @Query("category") categories: List<String>?,
+            @Query("maxPrice") maxPrice: Double?,
+            @Query("maxDistance") maxDistance: Int?,
+            @Query("sortByDate") sortByDate: String?,
+            @Query("sortByPrice") sortByPrice: String?,
+            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
 
     @GET("/api/items/{itemId}")
     fun marketItem(@Path("itemId") itemId: String): Observable<MarketItem>
@@ -90,6 +102,9 @@ interface Api {
     @POST("/api/items")
     fun createProduct(@Body createProductRequest: CreateProductRequest): Observable<IdResponse>
 
+    @PUT("/api/items")
+    fun updateProduct(@Body updateProductRequest: UpdateProductRequest): Observable<MarketItem>
+
     @GET("/api/wallet/balance")
     fun balance(): Observable<MyBalance>
 
@@ -112,5 +127,17 @@ interface Api {
     fun withdraw(@Body withdraw: Withdraw): Observable<WithdrawResponse>
 
     @POST("/api/items/discuss")
-    fun discuss(@Body request: IPurchaseLinkRequest): Observable<TgLink>
+    fun discussFromBuyer(@Body request: BuyerPurchaseLinkRequest): Observable<TgLink>
+
+    @POST("/api/items/discuss")
+    fun discussFromSeller(@Body request: SellerPurchaseLinkRequest): Observable<TgLink>
+
+    @GET("/api/wallet/markets")
+    fun exchangeMarkets() : Observable<List<ExchangeMarket>>
+
+    @POST("/api/items/activate")
+    fun activate(@Body activateDeactivateRequest: ActivateDeactivateRequest) : Observable<MarketItem>
+
+    @POST("/api/items/deactivate")
+    fun deactivate(@Body activateDeactivateRequest: ActivateDeactivateRequest) : Observable<MarketItem>
 }

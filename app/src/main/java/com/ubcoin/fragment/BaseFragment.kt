@@ -19,11 +19,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import com.ubcoin.R
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
 import com.ubcoin.network.HttpRequestException
@@ -37,7 +38,6 @@ import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
 import io.reactivex.Maybe
-import kotlinx.android.synthetic.main.common_header.*
 import java.io.File
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
@@ -60,7 +60,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     private var materialDialog: MaterialDialog? = null
     private var progressDialog: MaterialDialog? = null
 
-    private var headerIcon: View? = null
+    private var headerIcon: ImageView? = null
     private var llHeaderImage: View? = null
     var txtHeader: TextView? = null
 
@@ -205,6 +205,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         if (getTopLeftLayoutId() != noHeaderObject) {
             llHeaderImage = view.findViewById(getTopLeftLayoutId())
         }
+
         return view
     }
 
@@ -280,8 +281,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
             txtHeader?.text = getString(getHeaderText())
         }
         if (getHeaderIcon() != noHeaderObject) {
-            imgHeaderLeft?.setImageResource(getHeaderIcon())
-            llHeaderLeft?.setOnClickListener { onIconClick() }
+            headerIcon?.setImageResource(getHeaderIcon())
+            llHeaderImage?.setOnClickListener { onIconClick() }
         }
     }
 

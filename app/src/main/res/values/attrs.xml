@@ -2,17 +2,17 @@
 <resources>
 
     <declare-styleable name="MenuItemStyle">
-        <attr name="MenuItemText" format="string"/>
-        <attr name="MenuItemActiveTextColor" format="color"/>
-        <attr name="MenuItemInactiveTextColor" format="color"/>
-        <attr name="MenuItemActiveIcon" format="reference"/>
-        <attr name="MenuItemInactiveIcon" format="reference"/>
+        <attr name="MenuItemText" format="string" />
+        <attr name="MenuItemActiveTextColor" format="color" />
+        <attr name="MenuItemInactiveTextColor" format="color" />
+        <attr name="MenuItemActiveIcon" format="reference" />
+        <attr name="MenuItemInactiveIcon" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="RatingBarViewStyle">
-        <attr name="RatingIcon" format="reference"/>
-        <attr name="RatingInactiveIcon" format="reference"/>
-        <attr name="RatingInactiveTransparent" format="boolean"/>
+        <attr name="RatingIcon" format="reference" />
+        <attr name="RatingInactiveIcon" format="reference" />
+        <attr name="RatingInactiveTransparent" format="boolean" />
         <attr name="RatingValue" format="integer" />
     </declare-styleable>
 
@@ -21,6 +21,29 @@
     </declare-styleable>
 
     <declare-styleable name="RefreshableEditText">
-        <attr name="RefreshViewHint" format="string"/>
+        <attr name="RefreshViewHint" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="OrderView">
+        <attr name="orderDirection" format="enum">
+            <enum name="none" value="0" />
+            <enum name="asc" value="1" />
+            <enum name="desc" value="2" />
+        </attr>
+        <attr name="orderText" format="string"/>
+        <attr name="selectedColor" format="color"/>
+        <attr name="unselectedColor" format="color"/>
+        <attr name="ascIcon" format="reference"/>
+        <attr name="descIcon" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SelectableView">
+        <attr name="selectableActiveColor" format="color"/>
+        <attr name="selectableInactiveColor" format="color"/>
+        <attr name="selectableText" format="string"/>
+        <attr name="selectableIndex" format="integer"/>
+        <attr name="selectableActiveUnderline" format="reference"/>
+        <attr name="selectableInactiveUnderline" format="reference"/>
+        <attr name="selectableCallbackParam" format="string"/>
     </declare-styleable>
 </resources>

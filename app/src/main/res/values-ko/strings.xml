@@ -152,13 +152,34 @@
     <string name="str_status_blockedClickable">이용약관\u0020</string>
     <string name="str_status_blocked2">을 읽으시고 다시 신청해주세요.</string>
 
-    <string name="str_active_buyers">Active buyers</string>
-    <string name="str_others">Others</string>
-    <string name="str_item_status_active">Active</string>
-    <string name="str_item_status_deactivated">Deactivated</string>
-    <string name="str_item_status_sold">Sold</string>
-    <string name="str_item_status_blocked">Blocked</string>
-    <string name="str_item_status_reserved">Reserved</string>
-    <string name="str_item_status_check">In moderation</string>
+    <string name="str_active_buyers">활동중인 구매자</string>
+    <string name="str_others">타인</string>
+    <string name="str_item_status_active">활성화</string>
+    <string name="str_item_status_deactivated">비활성화</string>
+    <string name="str_item_status_sold">판매됨</string>
+    <string name="str_item_status_blocked">거부됨</string>
+    <string name="str_item_status_reserved">예약됨</string>
+    <string name="str_item_status_check">심사중</string>
+    <string name="str_deals_confirmed_by">에 의해 승인되었습니다 %1$s</string>
+    <string name="str_deals_active_buyers">%1$s 활동중인 구매자</string>
+    <string name="hint_price_in_usd">가격 $</string>
+    <string name="hint_price_in_ubc">가격 UBC</string>
+    <string name="hint_convertation_in_progress">변환중…</string>
+    <string name="copy">복사</string>
+    <string name="top_up_description">귀화의 지갑은 영구적이나 변경가능한 충전주소가 있습니다. 현재 주소를 통해 충전이 가능합니다:</string>
+    <string name="the_listining_is_activated" >T등재가 활성화 되었습니다.</string>
+    <string name="the_listining_is_deactivated" >등재가 비활성화 되었습니다.</string>
+    <string name="dialog_action_edit" >수정</string>
+    <string name="dialog_action_activate">활성화</string>
+    <string name="dialog_action_deactivate">비활성화</string>
+    <string name="your_listing_in_moderation">등록하신 물건이 심사중입니다.</string>
+    <string name="your_listing_in_moderation_details">심사 후 물건이 등록됩니다.</string>
+
+    <string name="choose_exchange_label">UBC를 구매하기 위해 거래소를 선정해주세요</string>
+    <string name="str_status_deactivated">등재한 물건이 비활성화 되었으며 시장으로부터 가려집니다. 물건을 등재하여 물건을 판매하세요.</string>
+    <string name="choose_the_exchange_header">UBC를 구매하기 위해 환전</string>
+    <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet">만약 ICO 기간동안 토큰을 받았다면 ERC-20 지갑을 열람해보세요 </string>
+    <string name="str_send_success">본인 거래가 진행대기란에 등록되었습니다. 네트워크 트레픽이 높은경우 최대 3시간정도 걸릴 수 있습니다.</string>
+    <string name="text_your_price_will_be">당신의 가격은 UBC로 고정될 것입니다</string>
 
 </resources>

@@ -5,14 +5,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
-import com.ubcoin.ThePreferences
+import com.ubcoin.TheApplication
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.BuysListAdapter
-import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.request.BuyerPurchaseLinkRequest
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.OpenTelegramDialogManager
@@ -88,13 +89,12 @@ class BuyDealsChildFragment : BaseFragment() {
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        //todo !!!
-        /*DataProvider.discuss(data.dealItem.id, object : SilentConsumer<TgLink> {
+        DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(data.dealItem.id), object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
                 if (fullUrl.isNotBlank()) {
-                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BaseDealsChildFragment, 18888)
+                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BuyDealsChildFragment, 18888)
                 }
             }
 
@@ -103,7 +103,7 @@ class BuyDealsChildFragment : BaseFragment() {
                 handleException(t)
             }
 
-        })*/
+        })
     }
 
     fun loadData() {

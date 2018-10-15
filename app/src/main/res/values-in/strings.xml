@@ -152,13 +152,33 @@
     <string name="str_status_blockedClickable">Syarat dan Ketentuan\u0020</string>
     <string name="str_status_blocked2">kami dan sunting pencatatan Anda.</string>
 
-    <string name="str_active_buyers">Active buyers</string>
-    <string name="str_others">Others</string>
-    <string name="str_item_status_active">Active</string>
-    <string name="str_item_status_deactivated">Deactivated</string>
-    <string name="str_item_status_sold">Sold</string>
-    <string name="str_item_status_blocked">Blocked</string>
-    <string name="str_item_status_reserved">Reserved</string>
-    <string name="str_item_status_check">In moderation</string>
+    <string name="str_active_buyers">pembeli aktif</string>
+    <string name="str_others">Lainnya</string>
+    <string name="str_item_status_active">Aktif</string>
+    <string name="str_item_status_deactivated">Nonaktif</string>
+    <string name="str_item_status_sold">Terjual</string>
+    <string name="str_item_status_blocked">Diblokir</string>
+    <string name="str_item_status_reserved">Sudah Dipesan</string>
+    <string name="str_item_status_check">Sedang di moderasi</string>
+    <string name="str_deals_confirmed_by">Transaksi dikonfirmasi oleh %1$s</string>
+    <string name="str_deals_active_buyers">%1$s pembeli aktif</string>
+    <string name="hint_price_in_usd">Harga dalam $</string>
+    <string name="hint_price_in_ubc">Harga dalam UBC</string>
+    <string name="hint_convertation_in_progress">Percakapan sedang berlangsung…</string>
+    <string name="copy">Salin</string>
+    <string name="top_up_description">Dompet Anda permanen tetapi memiliki alamat isi saldo yang dapat diganti. Anda dapat menggunakan alamat saat ini untuk isi saldo dalam:</string>
+    <string name="the_listining_is_activated">Pencatatan diaktifkan</string>
+    <string name="the_listining_is_deactivated">Pencatatan dinonaktifkan</string>
+    <string name="dialog_action_edit">Sunting</string>
+    <string name="dialog_action_activate">Mengaktifkan</string>
+    <string name="dialog_action_deactivate">Menonaktifkan</string>
+    <string name="your_listing_in_moderation">Pencatatan anda sedang di moderasi</string>
+    <string name="your_listing_in_moderation_details">Barang akan muncul di Pasar tepat setelah proses moderasi</string>
 
+    <string name="choose_exchange_label">Pilih bursa untuk membeli UBC</string>
+    <string name="str_status_deactivated">Pencatatan Anda dinonaktifkan dan disembunyikan dari Market. Aktifkan pencatatan untuk menjual barang Anda.</string>
+    <string name="choose_the_exchange_header">Bursa untuk membeli UBC</string>
+    <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet">Jika Anda menerima token selama ICO, pergi ke wallet ERC-20 anda</string>
+    <string name="str_send_success">Transaksi Anda telah ditambahkan ke antrian. Transaksi mungkin belum dikirim. Selama masa volume jaringan yang ekstrim, mungkin butuh waktu 3 jam lebih untuk selesai</string>
+    <string name="text_your_price_will_be">Harga Anda akan tetap dalam bentuk UBC</string>
 </resources>

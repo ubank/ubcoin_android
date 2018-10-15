@@ -23,20 +23,18 @@ import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.ILocationChangeCallback
 import com.ubcoin.R
 import com.ubcoin.TheApplication
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
-import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.SellImageModel
-import com.ubcoin.model.response.Location
-import com.ubcoin.model.response.MarketItem
-import com.ubcoin.model.response.TgLink
-import com.ubcoin.model.response.TgLinks
+import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
+import com.ubcoin.network.request.UpdateProductRequest
+import com.ubcoin.utils.MaxValueInputFilter
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.SellCreateDataHolder
 import com.ubcoin.utils.moneyFormat
@@ -44,10 +42,14 @@ import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.RefreshableEditText
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import org.greenrobot.eventbus.EventBus
+import java.text.DecimalFormat
 
 /**
  * Created by Yuriy Aizenberg
  */
+const val MARKET_TO_EDIT_KEY = "market_to_edit_key"
+
 class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>, OnMapReadyCallback, ILocationChangeCallback {
 
     private val requestCode = 19990
@@ -74,7 +76,8 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
-
+    private var editedMarket: MarketItem? = null
+    private var isEdit = false
 
     init {
         (0..4).forEach { datum.add(SellImageModel()) }
@@ -149,14 +152,58 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         }
 
         btnSellDone.setOnClickListener {
-            val validateDataAndCreateRequest = validateDataAndCreateRequest()
-            if (validateDataAndCreateRequest != null) {
-                hideKeyboard()
-                if (validateTgUser()) {
-                    loadImagesAndCreate(validateDataAndCreateRequest)
+            if (!isEdit) {
+                val validateDataAndCreateRequest = validateDataAndCreateRequest()
+                if (validateDataAndCreateRequest != null) {
+                    hideKeyboard()
+                    if (validateTgUser(validateDataAndCreateRequest)) {
+                        loadImagesAndCreate(validateDataAndCreateRequest)
+                    }
+                }
+            } else {
+                val updateRequest = validateDataAndUpdateRequest()
+                if (updateRequest != null) {
+                    hideKeyboard()
+                    loadImagesAndUpdate(updateRequest)
                 }
             }
         }
+
+        checkIsInEditMode()
+
+    }
+
+
+    private fun checkIsInEditMode() {
+        val serializable = arguments?.getSerializable(MARKET_TO_EDIT_KEY)
+        if (serializable != null) {
+            editedMarket = serializable as MarketItem
+            isEdit = true
+        }
+        if (!isEdit) return
+        SellCreateDataHolder.category = editedMarket?.category
+        SellCreateDataHolder.location = editedMarket?.location
+        adapter.clear()
+        editedMarket?.images?.forEach {
+            val data = SellImageModel()
+            data.serverUrl = it
+            adapter.addData(data)
+        }
+        if (adapter.itemCount < 5) {
+            for (i in adapter.itemCount until 5) {
+                adapter.addData(SellImageModel())
+            }
+        }
+
+        edtSellTitle.setText(editedMarket?.title)
+        edtSellDescription.setText(editedMarket?.description)
+
+        currentPriceInUSD = editedMarket?.priceInCurrency ?: .0
+        currentPriceInUBC = editedMarket?.price ?: .0
+
+        refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
+        refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+
     }
 
     override fun onLatLngChanged(latLng: LatLng) {
@@ -225,14 +272,23 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         disposable?.dispose()
     }
 
-    private fun validateTgUser(): Boolean {
+    private fun validateTgUser(createProductRequest: CreateProductRequest): Boolean {
         val authorizedInTg = ProfileHolder.user!!.authorizedInTg ?: false
         if (!authorizedInTg) {
             showProgressDialog(R.string.loading, R.string.wait_please_message)
             DataProvider.getTgLink(object : SilentConsumer<TgLink> {
                 override fun onConsume(t: TgLink) {
                     hideProgressDialog()
-                    ProfileHolder.user!!.authorizedInTg = t.user?.authorizedInTg ?: false
+                    var verified = false
+                    if (t.user?.authorizedInTg != null) {
+                        verified = t.user.authorizedInTg!!
+                    }
+                    ProfileHolder.user!!.authorizedInTg = verified
+                    ProfileHolder.updateUser()
+                    if (verified) {
+                        loadImagesAndCreate(createProductRequest)
+                        return
+                    }
                     val preferences = ThePreferences()
                     if (preferences.shouldShowThDialog()) {
                         activity?.run {
@@ -245,7 +301,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                             })
                         }
                     } else {
-                        TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
+                         TheApplication.instance.openTelegramIntent(t.url, t.appUrl, this@SellFragment, requestCode)
                     }
                 }
 
@@ -308,6 +364,69 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 })
     }
 
+
+    private fun loadImagesAndUpdate(updateProductRequest: UpdateProductRequest) {
+        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
+        val imageUrls = ArrayList<String>()
+        val resultUrls = ArrayList<String>()
+        datum.forEach {
+            if (it.filePath != null) {
+                imageUrls.add(it.filePath!!)
+            } else if (it.hasServerImage()) {
+                resultUrls.add(it.serverUrl!!)
+            }
+        }
+        if (!imageUrls.isEmpty()) {
+            DataProvider.uploadFiles(imageUrls,
+                    object : SilentConsumer<TgLinks> {
+                        override fun onConsume(t: TgLinks) {
+                            t.tgLinks.forEach {
+                                resultUrls.add(it.url)
+                            }
+                            afterImagesLoadedUpdate(updateProductRequest, resultUrls)
+                        }
+                    },
+                    object : SilentConsumer<Throwable> {
+                        override fun onConsume(t: Throwable) {
+                            handleException(t)
+                        }
+                    })
+        } else {
+            afterImagesLoadedUpdate(updateProductRequest, resultUrls)
+        }
+    }
+
+    private fun afterImagesLoadedUpdate(updateProductRequest: UpdateProductRequest, images: List<String>) {
+        updateProductRequest.images = images
+
+        DataProvider.updateProduct(updateProductRequest,
+                object : SilentConsumer<MarketItem> {
+                    override fun onConsume(t: MarketItem) {
+                        hideProgressDialog()
+                        EventBus.getDefault().post(MarketUpdateEvent(t))
+                        activity?.onBackPressed()
+                        when (t.status ?: MarketItemStatus.ACTIVE) {
+                            MarketItemStatus.CHECK, MarketItemStatus.CHECKING -> {
+                                getSwitcher()?.addTo(SellInModerationDetails::class.java, true, false)
+                            }
+                            else -> {
+                                getSwitcher()?.addTo(SuccessFullyConfirmed::class.java, true, false)
+                            }
+                        }
+                    }
+
+                },
+                object : SilentConsumer<Throwable> {
+                    override fun onConsume(t: Throwable) {
+                        handleException(t)
+                    }
+
+                })
+    }
+
+
+
+
     override fun handleException(t: Throwable) {
         hideProgressDialog()
         super.handleException(t)
@@ -319,7 +438,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             showSweetAlertDialog(R.string.error, R.string.err_title_missing)
             return null
         }
-        if (currentPriceInUSD <= 0f) {
+        if (currentPriceInUBC <= 0f) {
             showSweetAlertDialog(R.string.error, R.string.err_price_required)
             return null
         }
@@ -345,15 +464,23 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 categoryId,
                 title,
                 edtSellDescription.text.toString().trim(),
-                currentPriceInUSD,
+                currentPriceInUBC,
                 location,
                 true, true, ArrayList()
         )
     }
 
+    private fun validateDataAndUpdateRequest() : UpdateProductRequest? {
+        val validateDataAndCreateRequest = validateDataAndCreateRequest()
+        if (validateDataAndCreateRequest != null) {
+            return UpdateProductRequest.fromCreateRequest(validateDataAndCreateRequest, editedMarket!!.id)
+        }
+        return null
+    }
+
     private fun hasImages(): Boolean {
         datum.forEach {
-            if (it.hasImage()) return true
+            if (it.hasImage() || it.hasServerImage()) return true
         }
         return false
     }
@@ -417,11 +544,17 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             setCurrentPrice(shouldConvertToUSD)
 
         }
+        val decimalFormat = DecimalFormat()
+        decimalFormat.maximumFractionDigits = 4
+        var format = ""
         if (shouldConvertToUSD && currentPriceInUBC > 0f) {
-            edtPrice.setText(currentPriceInUBC.toString())
+            format = decimalFormat.format(currentPriceInUBC)
         } else if (!shouldConvertToUSD && currentPriceInUSD > 0f) {
-            edtPrice.setText(currentPriceInUSD.toString())
+            format = decimalFormat.format(currentPriceInUSD)
         }
+        format = java.lang.String(format).replaceAll("\\s+", "").replace(",", ".")
+        edtPrice.setText(format)
+        edtPrice.filters += MaxValueInputFilter()
         materialDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         materialDialog.show()
     }
@@ -481,7 +614,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         bottomSheet = BottomSheet.Builder(activity!!)
                 .title(getString(R.string.select_action))
                 .darkTheme()
-                .sheet(if (data.hasImage()) R.menu.menu_pick_retake_photo else R.menu.menu_pick_new_photo)
+                .sheet(if (data.hasImage() || data.hasServerImage()) R.menu.menu_pick_retake_photo else R.menu.menu_pick_new_photo)
                 .listener { dialog, which ->
                     when (which) {
                         R.id.camera, R.id.gallery -> {
@@ -606,6 +739,18 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             }
             return getString(R.string.balance_placeholder_usd, currentPriceInUSD.moneyFormat())
         }
+    }
+
+    companion object {
+        fun getBundle(marketItem: MarketItem): Bundle {
+            val bundle = Bundle()
+            bundle.putSerializable(MARKET_TO_EDIT_KEY, marketItem)
+            return bundle
+        }
+    }
+
+    override fun isFirstLineFragment(): Boolean {
+        return !isEdit
     }
 
 }

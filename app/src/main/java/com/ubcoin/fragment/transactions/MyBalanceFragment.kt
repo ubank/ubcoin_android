@@ -187,7 +187,8 @@ class MyBalanceFragment : BaseFragment() {
     }
 
     private fun onTopUpClick() {
-        showProgressDialog(R.string.wait_please_title, R.string.loading)
+        getSwitcher()?.addTo(TopUpFragment::class.java)
+        /*showProgressDialog(R.string.wait_please_title, R.string.loading)
         DataProvider.topUp(object : SilentConsumer<TopUp> {
             override fun onConsume(t: TopUp) {
                 hideProgressDialog()
@@ -199,7 +200,7 @@ class MyBalanceFragment : BaseFragment() {
                 handleException(t)
             }
 
-        })
+        })*/
     }
 
     fun onTopUpReady(t: TopUp) {

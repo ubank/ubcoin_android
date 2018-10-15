@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.profile.ProfileCompleteResponse

@@ -9,8 +9,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.response.Commission
+import com.ubcoin.model.CommissionAndConversionResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
@@ -121,8 +120,7 @@ class SendFragment : BaseFragment() {
     private fun setCurrentAmount() {
         if (currentAmount > .0) {
             edtSendAmount.setText(getString(R.string.balance_placeholder_prefix, currentAmount.moneyFormat()))
-            calculateCommission()
-            calculateConversion()
+            calculateCommisionAndConversion()
         } else {
             edtSendAmount.text = null
             txtSendAmount.setText(R.string.transaction_send_amount_empty)
@@ -150,37 +148,18 @@ class SendFragment : BaseFragment() {
         btnContinue.setOnClickListener { }
     }
 
-    private fun calculateCommission() {
+    private fun calculateCommisionAndConversion() {
         isCommissionCalculated.set(false)
         currentCommission = .0
-        disableNext()
-        DataProvider.getCommission(currentAmount, object : SilentConsumer<Commission> {
-            override fun onConsume(t: Commission) {
-                currentCommission = t.commission
-                isCommissionCalculated.set(true)
-                txtSendCommission.text = getString(R.string.transaction_commission_format, t.commission.bigMoneyFormat())
-                if (checkAllCalculated()) {
-                    enableNext()
-                } else {
-                    disableNext()
-                }
-            }
-
-        }, object : SilentConsumer<Throwable> {
-            override fun onConsume(t: Throwable) {
-                handleException(t)
-            }
-
-        })
-    }
-
-    private fun calculateConversion() {
         currentConversion = .0
         disableNext()
-        DataProvider.getConversionFromUBC(currentAmount.toString(), object : SilentConsumer<ConversionResponse> {
-            override fun onConsume(t: ConversionResponse) {
-                currentConversion = t.amount
-                txtSendAmount.text = getString(R.string.balance_placeholder_prefix_usd, t.amount.bigMoneyFormat())
+        DataProvider.getCommissionBeforeAndConversionTOUSDAfter(currentAmount, object : SilentConsumer<CommissionAndConversionResponse> {
+            override fun onConsume(t: CommissionAndConversionResponse) {
+                currentConversion = t.conversionResponse.amount
+                txtSendAmount.text = getString(R.string.balance_placeholder_prefix_usd, t.conversionResponse.amount.bigMoneyFormat())
+                currentCommission = t.commission.commission
+                isCommissionCalculated.set(true)
+                txtSendCommission.text = getString(R.string.transaction_commission_format, t.commission.commission.bigMoneyFormat())
                 if (checkAllCalculated()) {
                     enableNext()
                 } else {

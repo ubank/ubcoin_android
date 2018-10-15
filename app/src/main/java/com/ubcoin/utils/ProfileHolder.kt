@@ -1,6 +1,6 @@
 package com.ubcoin.utils
 
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.User
@@ -16,6 +16,12 @@ object ProfileHolder {
             field = value
             EventBus.getDefault().postSticky(UserEventWrapper(field))
         }
+
+    fun updateUser() {
+        user?.let {
+            ThePreferences().setCurrentUser(it)
+        }
+    }
 
     var balance: MyBalance? = null
 

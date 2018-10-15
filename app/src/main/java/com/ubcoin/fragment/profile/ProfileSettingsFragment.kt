@@ -10,7 +10,7 @@ import com.mukesh.countrypicker.CountryPicker
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.GlideApp
 import com.ubcoin.R
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.activity.IActivity
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.MarketListFragment

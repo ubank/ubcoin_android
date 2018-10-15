@@ -10,12 +10,16 @@ import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.MarketDetailsFragment
+import com.ubcoin.fragment.market.UpdateMarketStateItemEvent
+import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.MarketItemsSorterBySections
 import com.ubcoin.utils.ProfileHolder
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.function.BiConsumer
 
 /**
@@ -116,6 +120,54 @@ class SellDealsChildFragment : BaseFragment() {
         DataProvider.getSellerItems(LIMIT, currentPage, onSuccess, onError)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onPause() {
+        EventBus.getDefault().unregister(this)
+        super.onPause()
+    }
+
+    @Subscribe
+    fun onMarketUpdate(marketUpdateEvent: MarketUpdateEvent) {
+        val arrayList = ArrayList<MarketItem>()
+        sellsListAdapter.data.forEach {
+            if (it is MarketItem) {
+                arrayList.add(it)
+            }
+        }
+        for ((index, datum) in arrayList.withIndex()) {
+            if (datum.id == marketUpdateEvent.marketItem.id) {
+                arrayList[index] = marketUpdateEvent.marketItem
+                break
+            }
+        }
+        sellsListAdapter.clear()
+        sellsListAdapter.addData(prepareData(arrayList))
+    }
+
+    @Subscribe
+    fun onActivatedOrDeactivated(updateMarketStateItemEvent: UpdateMarketStateItemEvent) {
+        val arrayList = ArrayList<MarketItem>()
+        sellsListAdapter.data.forEach {
+            if (it is MarketItem) {
+                arrayList.add(it)
+            }
+        }
+        for (datum in arrayList) {
+            if (datum.id == updateMarketStateItemEvent.marketItem.id) {
+                datum.status = updateMarketStateItemEvent.marketItem.status
+                break
+            }
+        }
+        sellsListAdapter.clear()
+        sellsListAdapter.addData(prepareData(arrayList))
+    }
+
     private fun prepareData(marketItems: List<MarketItem>): List<MarketItemMarker> {
         if (CollectionUtils.isEmpty(marketItems)) return ArrayList()
 
@@ -162,10 +214,10 @@ class SellDealsChildFragment : BaseFragment() {
         sortedList.forEach {
             val currentList: ArrayList<MarketItem>? =
                     if (!associatedMap.containsKey(it.status!!.groupKey)) {
-                        associatedMap.put(it.status.groupKey, ArrayList())
-                        associatedMap[it.status.groupKey]
+                        associatedMap.put(it.status!!.groupKey, ArrayList())
+                        associatedMap[it.status!!.groupKey]
                     } else {
-                        associatedMap[it.status.groupKey]
+                        associatedMap[it.status!!.groupKey]
                     }
             currentList!!.add(it)
         }

@@ -28,7 +28,7 @@
     <dimen name="marginItemDetails">17dp</dimen>
 
     <dimen name="marketInFavoriteHeight">90dp</dimen>
-    <dimen name="marketInFavoriteHeightImage">60dp</dimen>
+    <dimen name="marketInFavoriteHeightImage">65dp</dimen>
     <dimen name="marketInFavoriteHeightImageBordered">80dp</dimen>
     <dimen name="marketInFavoriteMarginDiff">15dp</dimen>
 

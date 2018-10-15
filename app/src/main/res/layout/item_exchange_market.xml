@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgExchangeMarketLogo"
+        android:layout_width="@dimen/detailsSubProfileHeight"
+        android:src="@drawable/img_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="@dimen/header_margin_start"
+        android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+        android:layout_marginBottom="@dimen/favorite_fragment_text_margin"
+        android:layout_height="@dimen/detailsSubProfileHeight" />
+
+    <TextView
+        android:id="@+id/txtExchangeMarketName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/favorite_fragment_text_margin"
+        android:fontFamily="@font/roboto_regular"
+        android:text="Coss"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/sellerProfileNickColor"
+        android:textSize="@dimen/have_account_text_size"
+        app:layout_constraintStart_toEndOf="@+id/imgExchangeMarketLogo"
+        app:layout_constraintTop_toTopOf="@+id/imgExchangeMarketLogo"
+        app:layout_constraintBottom_toBottomOf="@id/imgExchangeMarketLogo"/>
+
+    <LinearLayout
+        android:id="@+id/llExchangeMarketQuotationUSD"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/imgExchangeMarketLogo"
+        app:layout_constraintStart_toStartOf="@+id/txtExchangeMarketName">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_eth" />
+
+        <TextView
+            android:id="@+id/txtExchangeMarketQuotationUSD"
+            android:text="0.0000065 USD"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="@dimen/menu_textsize"
+            android:textColor="@color/ethColor"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtExchangeMarketQuotationETH"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="$ 0.00011525 ETH"
+        android:textColor="@color/ethColor"
+        android:textSize="@dimen/menu_textsize"
+        app:layout_constraintStart_toEndOf="@+id/llExchangeMarketQuotationUSD"
+        app:layout_constraintTop_toTopOf="@+id/llExchangeMarketQuotationUSD" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

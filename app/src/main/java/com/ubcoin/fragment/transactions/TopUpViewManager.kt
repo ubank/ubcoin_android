@@ -12,6 +12,7 @@ import com.ubcoin.model.response.TopUp
 /**
  * Created by Yuriy Aizenberg
  */
+@Deprecated("Use fragment instead of this")
 object TopUpViewManager {
 
     @SuppressLint("StaticFieldLeak")
@@ -54,6 +55,7 @@ object TopUpViewManager {
         dialog = null
     }
 
+    @Deprecated("Use fragment instead of this")
     interface ITopupView {
 
         enum class Action {
