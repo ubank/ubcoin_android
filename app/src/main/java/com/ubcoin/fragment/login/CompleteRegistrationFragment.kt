@@ -7,7 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.DataProvider
@@ -17,7 +17,6 @@ import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.TextWatcherAdatepr
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.fragment_complete_registration.*
 import retrofit2.Response
 
 /**
@@ -34,6 +33,7 @@ class CompleteRegistrationFragment : BaseFragment() {
     private lateinit var userName: String
     private lateinit var password: String
     private lateinit var llResendCode: View
+    private lateinit var edtCode: MaterialEditText
 
     companion object {
         fun getBundle(email: String, userName: String, password: String): Bundle {
@@ -53,7 +53,7 @@ class CompleteRegistrationFragment : BaseFragment() {
         email = arguments?.getString(BUNDLE_EMAIL) ?: ""
         userName = arguments?.getString(BUNDLE_NAME) ?: ""
         password = arguments?.getString(BUNDLE_PASSWORD) ?: ""
-        val edtCode = view.findViewById<MaterialEditText>(R.id.edtCode)
+        edtCode = view.findViewById(R.id.edtCode)
         val imgSend = view.findViewById<View>(R.id.imgSend)
         edtCode.setOnEditorActionListener(object : ImeDoneActionHandler() {
             override fun onActionCall() {

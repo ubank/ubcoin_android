@@ -97,12 +97,19 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun getMarketList(limit: Int, page: Int, latPoint: Double?, longPoint: Double?, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
+    fun getMarketList(limit: Int, page: Int, latPoint: Double?, longPoint: Double?,
+                      categories: List<String>?,
+                      maxPrice: Double?,
+                      maxDistance: Int?,
+                      sortByDate: String?,
+                      sortByPrice: String?,
+                      sortByDistance: String?,
+                      onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
         val marketList =
                 if (latPoint != null && longPoint != null) {
-                    networkModule.api().marketList(limit, page, latPoint, longPoint)
+                    networkModule.api().marketList(limit, page, latPoint, longPoint, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance)
                 } else {
-                    networkModule.api().marketList(limit, page)
+                    networkModule.api().marketList(limit, page, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance)
                 }
         return marketList
                 .debounce(100, TimeUnit.MILLISECONDS)

@@ -23,7 +23,7 @@ import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.ILocationChangeCallback
 import com.ubcoin.R
 import com.ubcoin.TheApplication
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment

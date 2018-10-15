@@ -43,7 +43,7 @@ class BuysListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, B
                     .into(vHolder.imgDealsItemLogo)
         }
         vHolder.imgDealsSmallIcon.setImageResource(R.drawable.ic_tg)
-        vHolder.txtDealsItemPrice.text = marketItem.dealItem.title
+        vHolder.txtDealsItemPrice.text = marketItem.dealItem.title.trim()
         vHolder.txtDealsItemName.text = (marketItem.dealItem.price.moneyFormat() + " UBC")
         vHolder.txtDealsItemStatus.text = marketItem.seller.getCapitalizedName()
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, marketItem)

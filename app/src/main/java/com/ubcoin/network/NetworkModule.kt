@@ -2,7 +2,8 @@ package com.ubcoin.network
 
 import android.util.Log
 import com.google.gson.Gson
-import com.ubcoin.ThePreferences
+import com.ubcoin.isDebug
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.model.ErrorWrapper
 import com.ubcoin.utils.NetworkConnectivityAwareManager
 import okhttp3.*
@@ -27,6 +28,14 @@ object NetworkModule {
         return retrofit().create(Api::class.java)
     }
 
+    private fun getUrl() : String {
+        return if (isDebug()) {
+            "https://qa.ubcoin.io/api/"
+        } else {
+            "https://my.ubcoin.io/"
+        }
+    }
+
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
                 .validateEagerly(true)
@@ -34,7 +43,7 @@ object NetworkModule {
                 .addConverterFactory(NullOrEmptyConvertFactory())
                 .addConverterFactory(gsonConverterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("https://my.ubcoin.io/")
+                .baseUrl(getUrl())
                 .client(client())
                 .build()
     }
@@ -72,13 +81,10 @@ object NetworkModule {
                 if (it.request().url().toString().endsWith("/api/auth")) {
                     response = it.proceed(it.request())
                     if (response?.code() ?: 401 == HttpURLConnection.HTTP_OK) {
-//                        thePreferences.setCookie(response.header("set-cookie")?.split(";")?.get(0))
-//                        thePreferences.setWVCookie(response.header("set-cookie"))
                         thePreferences.setToken(response.header(AUTH_HEADER))
                     }
                 } else {
                     response = it.proceed(it.request().newBuilder()
-//                            .addHeader("Cookie", thePreferences.getCookie() ?: "")
                             .addHeader(AUTH_HEADER, thePreferences.getToken() ?: "")
                             .build())
                 }
@@ -112,14 +118,6 @@ object NetworkModule {
             null
         }
     }
-
-    /* val error = Error()
-                val fromJson = Gson().fromJson(responseBody, AlternativeServerError::class.java)
-                error.errorValidations = ArrayList()
-                val errorValidation = ErrorValidation()
-                errorValidation.message = fromJson.message
-                (error.errorValidations as ArrayList).add(errorValidation)
-                errorWrapper.error = error*/
 
     private fun logInterceptor(): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()

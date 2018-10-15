@@ -39,7 +39,7 @@ import com.squareup.picasso.Picasso
 import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.TheApplication
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment

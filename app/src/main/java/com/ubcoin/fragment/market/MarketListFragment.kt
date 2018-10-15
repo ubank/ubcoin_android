@@ -1,22 +1,30 @@
 package com.ubcoin.fragment.market
 
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import com.google.android.gms.maps.model.LatLng
 import com.ubcoin.R
 import com.ubcoin.TheApplication
+import com.ubcoin.adapter.FilterItemsAdapter
 import com.ubcoin.adapter.GridItemOffsetDecoration
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.MarketListAdapter
 import com.ubcoin.fragment.FirstLineFragment
+import com.ubcoin.fragment.filter.FiltersFragment
 import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.MarketItem
+import com.ubcoin.model.ui.*
+import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.filters.FiltersHolder
+import com.ubcoin.utils.gone
+import com.ubcoin.utils.visible
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
@@ -33,14 +41,20 @@ private const val LIMIT = 30
 class MarketListFragment : FirstLineFragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var rvFiltersInMarketList: RecyclerView
+    private lateinit var filterContainer: View
     private lateinit var progressCenter: View
     private lateinit var progressBottom: View
+    private lateinit var llHeaderRight: View
+    private lateinit var llNoItems: View
     private var marketListAdapter: MarketListAdapter? = null
+    private var filterAdapter: FilterItemsAdapter? = null
     private var currentDisposableLoader: Disposable? = null
 
     private var currentPage = 0
     private var isLoading = false
     private var isEndOfLoading = false
+    private var fixedLocationLatLng: LatLng? = null
 
     private val isFavoriteProcessing = AtomicBoolean(false)
 
@@ -49,10 +63,16 @@ class MarketListFragment : FirstLineFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         recyclerView = view.findViewById(R.id.rvMarketList)
+        if (TheApplication.instance.currentLocation != null) {
+            fixedLocationLatLng = TheApplication.instance.copyCurrentLocation()
+        }
 
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
+        llHeaderRight = view.findViewById(R.id.llHeaderRight)
+        llHeaderRight.setOnClickListener { getSwitcher()?.addTo(FiltersFragment::class.java) }
 
+        llNoItems = view.findViewById(R.id.llNoItems)
         marketListAdapter = MarketListAdapter(activity!!)
         marketListAdapter?.setHasStableIds(true)
         marketListAdapter?.favoriteListener = object : MarketListAdapter.IFavoriteListener {
@@ -93,7 +113,36 @@ class MarketListFragment : FirstLineFragment() {
         }
         view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
         view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
+        filterContainer = view.findViewById(R.id.filterContainer)
 
+        rvFiltersInMarketList = view.findViewById(R.id.rvFiltersInMarketList)
+        rvFiltersInMarketList.setHasFixedSize(true)
+        rvFiltersInMarketList.layoutManager = LinearLayoutManager(activity!!, LinearLayoutManager.HORIZONTAL, false)
+
+        filterAdapter = FilterItemsAdapter(activity!!)
+        filterAdapter!!.setHasStableIds(true)
+        filterAdapter!!.onFilterClear = { filterModel: FilterModel<*>, i: Int ->
+            filterAdapter!!.data.removeAt(i)
+            if (i == 0) {
+                filterAdapter!!.notifyDataSetChanged()
+            } else {
+                filterAdapter!!.notifyItemRemoved(i)
+            }
+            if (filterAdapter!!.isEmpty()) {
+                filterContainer.gone()
+            }
+            when (filterModel) {
+                is CategoryFilterModel -> FiltersHolder.removeDirectly(filterModel.model.id)
+                is ConditionFilterModel -> FiltersHolder.removeFilterDirectly(FilterType.CONDITION)
+                is DistanceFilterModel -> FiltersHolder.removeFilterDirectly(FilterType.MAX_DISTANCE)
+                is PriceFilterModel -> FiltersHolder.removeFilterDirectly(FilterType.MAX_PRICE)
+                is OrderFilterModel -> FiltersHolder.removeFilterDirectly(FilterType.SORT_BY)
+            }
+            resetLoading()
+        }
+
+        rvFiltersInMarketList.adapter = filterAdapter!!
+        fetchFilters()
     }
 
     private fun loadData() {
@@ -107,8 +156,24 @@ class MarketListFragment : FirstLineFragment() {
 
         cancelCurrentLoading()
         isLoading = true
+        llNoItems.gone()
+        val categoriesIds: ArrayList<String>?
+        if (FiltersHolder.hasAnyCategoryInFilter()) {
+            categoriesIds = ArrayList()
+            FiltersHolder.resolveWithOrdering().forEach {
+                categoriesIds.add(it.id)
+            }
+        } else {
+            categoriesIds = null
+        }
         currentDisposableLoader = DataProvider.getMarketList(LIMIT, currentPage,
-                TheApplication.instance.currentLatitude(), TheApplication.instance.currentLongitude(),
+                fixedLocationLatLng?.latitude, fixedLocationLatLng?.longitude,
+                categoriesIds,
+                FiltersHolder.getFilterObjectForList().maxPrice,
+                FiltersHolder.getFilterObjectForList().maxDistance,
+                FiltersHolder.getOrderByDate(),
+                FiltersHolder.getOrderByPrice(),
+                FiltersHolder.getOrderByDistance(),
                 Consumer {
                     if (it.data.size < LIMIT) {
                         isEndOfLoading = true
@@ -117,6 +182,11 @@ class MarketListFragment : FirstLineFragment() {
                     isLoading = false
                     hideViewsQuietly(progressCenter, progressBottom)
                     marketListAdapter?.addData(it.data)
+                    if (marketListAdapter?.isEmpty() != false) {
+                        llNoItems.visible()
+                    } else {
+                        llNoItems.gone()
+                    }
                 },
                 Consumer {
                     handleException(it)
@@ -135,6 +205,60 @@ class MarketListFragment : FirstLineFragment() {
         super.onPause()
         EventBus.getDefault().unregister(this)
     }
+
+    @Subscribe
+    fun onFilterEvent(event: UpdateFilterEvent) {
+        if (event.type != FilterType.CATEGORY) {
+            fetchFilters()
+            resetLoading()
+        }
+    }
+
+    private fun resetLoading() {
+        isLoading = false
+        isEndOfLoading = false
+        currentPage = 0
+        marketListAdapter?.clear()
+        cancelCurrentLoading()
+        //ReFix location
+        if (TheApplication.instance.currentLocation != null) {
+            fixedLocationLatLng = TheApplication.instance.copyCurrentLocation()
+        }
+        loadData()
+    }
+
+    private fun fetchFilters() {
+        val arrayList = ArrayList<FilterModel<*>>()
+        if (FiltersHolder.hasAnyCategoryInFilter()) {
+            val ordering = FiltersHolder.resolveWithOrdering()
+            ordering.forEach {
+                arrayList.add(CategoryFilterModel(it))
+            }
+        }
+
+        val filters = FiltersHolder.getFilterObjectForFilters()
+        if (filters.maxDistance != null) {
+            arrayList.add(DistanceFilterModel(filters.maxDistance!!))
+        }
+        if (filters.maxPrice != null) {
+            arrayList.add(PriceFilterModel(filters.maxPrice!!))
+        }
+        if (filters.conditionType != ConditionType.NONE) {
+            arrayList.add(ConditionFilterModel(filters.conditionType))
+        }
+        if (filters.orderBean != null) {
+            arrayList.add(OrderFilterModel(filters.orderBean!!))
+        }
+
+        if (arrayList.isNotEmpty()) {
+            filterAdapter!!.data = arrayList
+            filterContainer.visible()
+        } else {
+            filterAdapter!!.clear()
+            filterContainer.gone()
+        }
+    }
+
 
     @Subscribe
     fun onLatLngEvent(latLng: LatLng) {
@@ -244,4 +368,9 @@ class MarketListFragment : FirstLineFragment() {
     }
 
     override fun getHeaderText() = R.string.app_name
+
+    override fun onDestroyView() {
+        FiltersHolder.onDestroy()
+        super.onDestroyView()
+    }
 }

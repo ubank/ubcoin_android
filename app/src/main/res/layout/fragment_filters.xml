@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground">
+
+    <include
+        android:id="@+id/llHeaderFilter"
+        layout="@layout/view_header_filters"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="70dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llHeaderFilter">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Common"
+                android:textAllCaps="true"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="12sp" />
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/labelCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/category"
+                    android:textColor="@color/haveAccountColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/edtCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:text="@string/all_categories"
+                    android:textColorHighlight="@color/haveAccountColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/labelCategories"
+                    app:met_floatingLabel="none"
+                    app:met_primaryColor="@color/greenMainColor"
+                    app:met_textColor="@color/inputTextColor"
+                    app:met_textColorHint="@color/haveAccountColor" />
+
+                <ImageView
+                    android:id="@+id/imgRefresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:src="@drawable/ic_next"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/edtCategory"
+                    app:layout_constraintTop_toTopOf="@id/edtCategory" />
+
+                <FrameLayout
+                    android:id="@+id/touchCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/edtCategory"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:id="@+id/labelMaxPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Max. price"
+                    android:textColor="@color/haveAccountColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/edtMaxPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:enabled="false"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:text="@string/ubc_postfix"
+                    android:textColorHighlight="@color/haveAccountColor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/labelMaxPrice"
+                    app:met_floatingLabel="none"
+                    app:met_primaryColor="@color/greenMainColor"
+                    app:met_textColor="@color/inputTextColor"
+                    app:met_textColorHint="@color/haveAccountColor" />
+
+                <FrameLayout
+                    android:id="@+id/touchMaxPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/edtMaxPrice"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/labelMaxDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Max. distance"
+                    android:textColor="@color/haveAccountColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.ubcoin.view.filter.SelectableView
+                            android:id="@+id/selectDistance1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:selectableActiveColor="@color/greenMainColor"
+                            app:selectableActiveUnderline="@drawable/underline_active_selection"
+                            app:selectableCallbackParam="1"
+                            app:selectableInactiveColor="@color/activeTabTextColor"
+                            app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                            app:selectableIndex="0"
+                            app:selectableText="1 km" />
+
+                        <com.ubcoin.view.filter.SelectableView
+                            android:id="@+id/selectDistance5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/selectDistance1"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:selectableActiveColor="@color/greenMainColor"
+                            app:selectableActiveUnderline="@drawable/underline_active_selection"
+                            app:selectableInactiveColor="@color/activeTabTextColor"
+                            app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                            app:selectableIndex="1"
+                            app:selectableCallbackParam="5"
+                            app:selectableText="5 km" />
+
+                        <com.ubcoin.view.filter.SelectableView
+                            android:id="@+id/selectDistance10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/selectDistance5"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:selectableActiveColor="@color/greenMainColor"
+                            app:selectableActiveUnderline="@drawable/underline_active_selection"
+                            app:selectableInactiveColor="@color/activeTabTextColor"
+                            app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                            app:selectableIndex="2"
+                            app:selectableCallbackParam="10"
+                            app:selectableText="10 km" />
+
+                        <com.ubcoin.view.filter.SelectableView
+                            android:id="@+id/selectDistance100"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/selectDistance10"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:selectableCallbackParam="100"
+                            app:selectableActiveColor="@color/greenMainColor"
+                            app:selectableActiveUnderline="@drawable/underline_active_selection"
+                            app:selectableInactiveColor="@color/activeTabTextColor"
+                            app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                            app:selectableIndex="3"
+                            app:selectableText="100 km" />
+
+                    </android.support.constraint.ConstraintLayout>
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:id="@+id/labelCondition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="Condition"
+                    android:textColor="@color/haveAccountColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp">
+
+                    <com.ubcoin.view.filter.SelectableView
+                        android:id="@+id/selectConditionNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:selectableActiveColor="@color/greenMainColor"
+                        app:selectableActiveUnderline="@drawable/underline_active_selection"
+                        app:selectableInactiveColor="@color/activeTabTextColor"
+                        app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                        app:selectableCallbackParam="new"
+                        app:selectableIndex="0"
+                        app:selectableText="New" />
+
+                    <com.ubcoin.view.filter.SelectableView
+                        android:id="@+id/selectConditionUsed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/selectConditionNew"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:selectableActiveColor="@color/greenMainColor"
+                        app:selectableActiveUnderline="@drawable/underline_active_selection"
+                        app:selectableInactiveColor="@color/activeTabTextColor"
+                        app:selectableInactiveUnderline="@drawable/underline_inactive_selection"
+                        app:selectableIndex="1"
+                        app:selectableCallbackParam="used"
+                        app:selectableText="Used" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="@font/roboto_regular"
+                android:text="Sort by"
+                android:textAllCaps="true"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+
+                <com.ubcoin.view.filter.OrderView
+                    android:id="@+id/orderViewPlacementData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ascIcon="@drawable/ic_sort_selected_asc"
+                    app:descIcon="@drawable/ic_sort_selected_desc"
+                    app:orderDirection="asc"
+                    app:orderText="@string/sort_by_date"
+                    app:selectedColor="@color/greenMainColor"
+                    app:unselectedColor="@color/activeTabTextColor" />
+
+                <com.ubcoin.view.filter.OrderView
+                    android:id="@+id/orderViewItemPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ascIcon="@drawable/ic_sort_selected_asc"
+                    app:descIcon="@drawable/ic_sort_selected_desc"
+                    app:orderDirection="asc"
+                    app:orderText="@string/sort_by_price"
+                    app:selectedColor="@color/greenMainColor"
+                    app:unselectedColor="@color/activeTabTextColor" />
+
+                <com.ubcoin.view.filter.OrderView
+                    android:id="@+id/orderViewDistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:ascIcon="@drawable/ic_sort_selected_asc"
+                    app:descIcon="@drawable/ic_sort_selected_desc"
+                    app:orderDirection="asc"
+                    app:orderText="@string/sort_by_distance"
+                    app:selectedColor="@color/greenMainColor"
+                    app:unselectedColor="@color/activeTabTextColor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/btnShowItems"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/sign_up_size"
+        android:layout_marginStart="@dimen/sign_up_margin"
+        android:layout_marginEnd="@dimen/sign_up_margin"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/rounded_green_filled_button_smallr"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/done"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/sign_up_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

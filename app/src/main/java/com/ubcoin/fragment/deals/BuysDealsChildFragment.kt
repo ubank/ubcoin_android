@@ -6,16 +6,14 @@ import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
 import com.ubcoin.TheApplication
-import com.ubcoin.ThePreferences
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.BuysListAdapter
-import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.BuyerPurchaseLinkRequest
-import com.ubcoin.network.request.SellerPurchaseLinkRequest
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.OpenTelegramDialogManager

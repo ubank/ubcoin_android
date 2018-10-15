@@ -1,8 +1,9 @@
-package com.ubcoin
+package com.ubcoin.preferences
 
 import android.content.SharedPreferences
 import android.util.Log
 import com.google.gson.Gson
+import com.ubcoin.TheApplication
 import com.ubcoin.model.TemporaryUser
 import com.ubcoin.model.response.User
 

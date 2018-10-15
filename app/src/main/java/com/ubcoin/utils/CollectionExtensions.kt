@@ -10,3 +10,7 @@ object CollectionExtensions {
 
 
 }
+
+fun <T, V> Map<T, V>.hashCodeKeys() : Int {
+    return HashSet<V>(values).hashCode()
+}

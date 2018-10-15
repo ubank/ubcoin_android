@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.*
@@ -19,19 +20,26 @@ import com.ubcoin.fragment.NotImplementedYetFragment
 import com.ubcoin.fragment.deals.DealsParentFragment
 import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.login.StartupFragment
+import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.fragment.market.MarketListFragment
 import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.SellFragment
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.model.response.MarketItemStatus
+import com.ubcoin.network.DataProvider
 import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.gone
+import com.ubcoin.utils.visible
 import com.ubcoin.view.menu.IMenuViewCallback
 import com.ubcoin.view.menu.MenuItems
 import com.ubcoin.view.menu.MenuSingleView
+import io.fabric.sdk.android.services.common.Crash
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 
@@ -106,6 +114,7 @@ class MainActivity : BaseActivity() {
             startLocationUpdates()
             getLastLocation()
         }
+        tryParseIntent(intent)
     }
 
     private fun checkPermissions(requestPermissions: Boolean): Boolean {
@@ -130,6 +139,30 @@ class MainActivity : BaseActivity() {
         if (intent?.getBooleanExtra(KEY_REFRESH_AFTER_LOGIN, false) == true) {
             fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
             menuBottomView.activate(MenuItems.MARKET)
+        } else {
+            tryParseIntent(intent)
+        }
+    }
+
+    private fun tryParseIntent(intent: Intent?) {
+        try {
+            val split = intent?.data?.schemeSpecificPart?.split("id=")
+            split?.let { list ->
+                if (list.size == 2) {
+                    val id = list.get(1)
+                    val view = findViewById<View>(R.id.progressCenter)
+                    view.visible()
+                    DataProvider.getMarketItemById(id, Consumer {
+                        view.gone()
+                        fragmentSwitcher?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(it), false)
+                    }, Consumer {
+                        view.gone()
+                        Crashlytics.logException(it)
+                    })
+                }
+            }
+        } catch (e: Exception) {
+            Crashlytics.logException(e)
         }
     }
 

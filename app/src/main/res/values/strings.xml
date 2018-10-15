@@ -187,11 +187,29 @@
 
     <string name="text_your_price_will_be">Your price will be fixed in UBC</string>
     <string name="str_send_success">Your transaction has been broadcast to the network. This does not mean that it has been successfully sent. During times of extreme volume, it may take 3+ hours to send.</string>
+    <string name="all_categories" translatable="false">All categories</string>
 
     <plurals name="txt_active_deals_count">
         <item quantity="zero">%d active deals</item>
         <item quantity="one">%d active deal</item>
         <item quantity="other">%d active deals</item>
+    </plurals>
+
+    <string name="sort_by_date" translatable="false">Placement date</string>
+    <string name="sort_by_price" translatable="false">Item price</string>
+    <string name="sort_by_distance" translatable="false">Distance to seller</string>
+    <string name="header_filters" translatable="false">Filters</string>
+    <string name="btn_show_items" translatable="false">Show items</string>
+
+    <string name="condition_new" translatable="false">New</string>
+    <string name="condition_used" translatable="false">Used</string>
+
+    <string name="label_no_item" translatable="false">No results</string>
+    <string name="label_no_item_description" translatable="false">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
+
+    <plurals name="categories_count">
+        <item quantity="one">%d category</item>
+        <item quantity="other">%d categories</item>
     </plurals>
 
 </resources>

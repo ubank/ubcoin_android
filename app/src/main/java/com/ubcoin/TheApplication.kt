@@ -16,6 +16,7 @@ import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.NetworkModule
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.utils.ProfileHolder
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.EventBus
@@ -58,6 +59,18 @@ class TheApplication : MultiDexApplication() {
             null
         } else {
             currentLocation!!.longitude
+        }
+    }
+
+    fun copyCurrentLocation() : LatLng? {
+        return if (currentLocation != null) {
+            try {
+                LatLng(currentLatitude()!!, currentLongitude()!!)
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
         }
     }
 
@@ -162,4 +175,8 @@ class TheApplication : MultiDexApplication() {
         const val TELEGRAM_PACKAGE_NAME = "org.telegram.messenger"
     }
 
+}
+
+fun isDebug(): Boolean {
+    return BuildConfig.DEBUG
 }

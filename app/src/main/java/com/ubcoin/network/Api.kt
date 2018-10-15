@@ -44,14 +44,26 @@ interface Api {
     @GET("/api/items")
     fun marketList(
             @Query("size") limit: Int,
-            @Query("page") page: Int): Observable<MarketListResponse>
+            @Query("page") page: Int,
+            @Query("category") categories: List<String>?,
+            @Query("maxPrice") maxPrice: Double?,
+            @Query("maxDistance") maxDistance: Int?,
+            @Query("sortByDate") sortByDate: String?,
+            @Query("sortByPrice") sortByPrice: String?,
+            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
 
     @GET("/api/items")
     fun marketList(
             @Query("size") limit: Int,
             @Query("page") page: Int,
             @Query("latPoint") latPoint: Double,
-            @Query("longPoint") longPoint: Double): Observable<MarketListResponse>
+            @Query("longPoint") longPoint: Double,
+            @Query("category") categories: List<String>?,
+            @Query("maxPrice") maxPrice: Double?,
+            @Query("maxDistance") maxDistance: Int?,
+            @Query("sortByDate") sortByDate: String?,
+            @Query("sortByPrice") sortByPrice: String?,
+            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
 
     @GET("/api/items/{itemId}")
     fun marketItem(@Path("itemId") itemId: String): Observable<MarketItem>

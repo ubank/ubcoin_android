@@ -33,4 +33,9 @@ data class MarketItem(
         return priceInCurrency != null && currency != null
     }
 
+    override fun toString(): String {
+        return "MarketItem(id='$id', title=$title)"
+    }
+
+
 }
