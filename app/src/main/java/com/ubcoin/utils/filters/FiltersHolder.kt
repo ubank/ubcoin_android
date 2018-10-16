@@ -106,12 +106,24 @@ object FiltersHolder {
         return hasChanges || hasCategoriesChanges
     }
 
+    private fun calcChangesOnlyCategories() : Boolean {
+        hasCategoriesChanges = isCategoriesChanged()
+        return hasCategoriesChanges
+    }
+
     fun getChangesAndDrop(): Boolean {
         val changes = calcChanges()
         hasChanges = false
         hasCategoriesChanges = false
         applyCategoriesChanged()
         selectedBean.applyFrom(filtersFromFiltersBean)
+        return changes
+    }
+
+    fun getChangesAndDropOnlyCategories() : Boolean {
+        val changes = calcChangesOnlyCategories()
+        hasCategoriesChanges = false
+        applyCategoriesChanged()
         return changes
     }
 

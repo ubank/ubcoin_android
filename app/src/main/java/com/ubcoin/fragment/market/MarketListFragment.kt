@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.market
 
+import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,6 +15,7 @@ import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.MarketListAdapter
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.filter.FiltersFragment
+import com.ubcoin.fragment.filter.SelectCategoryFilterFragment
 import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.ui.*
@@ -111,8 +113,6 @@ class MarketListFragment : FirstLineFragment() {
                 getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data, position), true)
             }
         }
-        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
-        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
         filterContainer = view.findViewById(R.id.filterContainer)
 
         rvFiltersInMarketList = view.findViewById(R.id.rvFiltersInMarketList)
@@ -208,7 +208,7 @@ class MarketListFragment : FirstLineFragment() {
 
     @Subscribe
     fun onFilterEvent(event: UpdateFilterEvent) {
-        if (event.type != FilterType.CATEGORY) {
+        if (event.type != FilterType.CATEGORY || event.directly) {
             fetchFilters()
             resetLoading()
         }
@@ -372,5 +372,12 @@ class MarketListFragment : FirstLineFragment() {
     override fun onDestroyView() {
         FiltersHolder.onDestroy()
         super.onDestroyView()
+    }
+
+    override fun getHeaderIcon() = R.drawable.ic_category
+
+    override fun onIconClick() {
+        super.onIconClick()
+        getSwitcher()?.addTo(SelectCategoryFilterFragment::class.java, SelectCategoryFilterFragment.getBundle(true), true)
     }
 }

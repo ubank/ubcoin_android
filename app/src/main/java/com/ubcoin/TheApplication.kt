@@ -162,6 +162,7 @@ class TheApplication : MultiDexApplication() {
         val shareIntent = Intent(Intent.ACTION_SEND)
         shareIntent.type = "text/plain"
         shareIntent.putExtra(Intent.EXTRA_TEXT, url)
+
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val createChooser = Intent.createChooser(shareIntent, getString(R.string.share_link_chooser))
         createChooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

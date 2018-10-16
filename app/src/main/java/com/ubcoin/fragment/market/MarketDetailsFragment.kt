@@ -338,7 +338,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llHeaderRightSimple.setOnClickListener {
             val shareUrl = marketItem.shareUrl
             if (shareUrl != null && !shareUrl.isBlank()) {
-                TheApplication.instance.openShareIntent(shareUrl, activity!!)
+                val message = "${marketItem.title?: ""} - buy fast and safe for cryptocurrency on Ubcoin Market\n$shareUrl"
+                TheApplication.instance.openShareIntent(message, activity!!)
             }
         }
 

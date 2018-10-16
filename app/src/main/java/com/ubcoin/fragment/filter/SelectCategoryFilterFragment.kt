@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.filter
 
+import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -21,12 +22,14 @@ import org.greenrobot.eventbus.EventBus
 /**
  * Created by Yuriy Aizenberg
  */
+const val BUNDLE_FROM_MAIN_SCREEN = "BFMSScreen"
 class SelectCategoryFilterFragment : BaseFragment(), Consumer<List<Category>> {
 
     lateinit var rvCategories: RecyclerView
     lateinit var progressCenter: View
     lateinit var progressBottom: View
     private lateinit var adapter: SelectCategoryForFilterAdapter
+    private var isDirectly = false
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
@@ -41,6 +44,7 @@ class SelectCategoryFilterFragment : BaseFragment(), Consumer<List<Category>> {
         } else {
             queryCategories()
         }
+        isDirectly = arguments?.getBoolean(BUNDLE_FROM_MAIN_SCREEN, false)?:false
     }
 
     private fun queryCategories() {
@@ -128,8 +132,19 @@ class SelectCategoryFilterFragment : BaseFragment(), Consumer<List<Category>> {
 
     override fun onBackPressed(): Boolean {
         if (FiltersHolder.isCategoriesChanged()) {
-            EventBus.getDefault().post(UpdateFilterEvent(FilterType.CATEGORY))
+            if (isDirectly) {
+                FiltersHolder.getChangesAndDropOnlyCategories()
+            }
+            EventBus.getDefault().post(UpdateFilterEvent(FilterType.CATEGORY, isDirectly))
         }
         return super.onBackPressed()
+    }
+
+    companion object {
+        fun getBundle(fromMainScreen: Boolean) : Bundle {
+            val args = Bundle()
+            args.putBoolean(BUNDLE_FROM_MAIN_SCREEN, fromMainScreen)
+            return args
+        }
     }
 }

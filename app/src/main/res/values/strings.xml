@@ -204,8 +204,8 @@
     <string name="condition_new" translatable="false">New</string>
     <string name="condition_used" translatable="false">Used</string>
 
-    <string name="label_no_item" translatable="false">No results</string>
-    <string name="label_no_item_description" translatable="false">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
+    <string name="label_no_item">No results</string>
+    <string name="label_no_item_description">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
 
     <plurals name="categories_count">
         <item quantity="one">%d category</item>
