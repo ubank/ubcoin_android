@@ -97,6 +97,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtItemPrice: TextView
     private lateinit var txtActiveDealsCount: TextView
 
+    private lateinit var tvAddress: TextView
+
     private lateinit var txtUserName: TextView
     private lateinit var ratingBarView: RatingBarView
     private lateinit var imgSellerProfile: ImageView
@@ -157,6 +159,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         txtMarketProductName = view.findViewById(R.id.txtMarketProductName)
         txtPriceInCurrency = view.findViewById(R.id.txtPriceInCurrency)
         txtItemPrice = view.findViewById(R.id.txtItemPrice)
+        tvAddress = view.findViewById(R.id.tvAddress)
+
 
         imgSellerProfile = view.findViewById(R.id.imgSellerProfile)
         txtActiveDealsCount = view.findViewById(R.id.txtActiveDealsCount)
@@ -267,6 +271,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         txtPriceInCurrency.text =
                 if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null
 
+        if(!marketItem.location?.text.isNullOrEmpty())
+        {
+            tvAddress.visibility = View.VISIBLE
+            tvAddress.text = marketItem.location?.text
+        }
         txtItemCategory.text = marketItem.category?.name
         txtMarketProductName.text = marketItem.title
         val description = marketItem.description

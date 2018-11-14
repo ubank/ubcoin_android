@@ -27,9 +27,9 @@
     <string name="close">Tutup</string>
     <string name="menu_label_market">Pasar</string>
     <string name="menu_label_favorites">Favorit</string>
-    <string name="menu_label_sell">Penjualan</string>
+    <string name="menu_label_sell">Jual</string>
     <string name="menu_label_messages">Pesan</string>
-    <string name="menu_label_deals">Penawaran</string>
+    <string name="menu_label_deals">Kesepakatan</string>
     <string name="menu_label_profile">Profil</string>
     <string name="menu_label_signin">Masuk</string>
 
@@ -45,7 +45,7 @@
     <string name="confirmation_code">Kode Konfirmasi</string>
     <string name="no_active_deals">Tidak ada penawaran aktif</string>
     <string name="items_you_are_going_to_buy_or_to_sell_will_be_here">Barang yang akan Anda beli atau jual\nakan berada di sini</string>
-    <string name="deals_header">Penawaran</string>
+    <string name="deals_header">Kesepakatan</string>
     <string name="requires_external_app">Membutuhkan Aplikasi eksternal</string>
     <string name="confirm">Konfirmasi</string>
     <string name="no_network_error">Periksa ketersediaan Internet dan tanggal dan waktu yang benar. Setelah itu coba lagi. Jika terjadi kegagalan, hubungi dukungan.</string>
@@ -62,7 +62,7 @@
     <string name="my_balance">Saldo saya</string>
     <string name="email_already_taken">Email sudah di ambil</string>
     <string name="account_settings">Pengaturan akun</string>
-    <string name="done">Sudah</string>
+    <string name="done">Selesai</string>
     <string name="common">Umum</string>
     <string name="log_out">Keluar</string>
     <string name="country">Negara</string>
@@ -180,7 +180,7 @@
     <string name="choose_the_exchange_header">Bursa untuk membeli UBC</string>
     <string name="if_you_received_tokens_during_ico_go_to_your_erc_20_wallet">Jika Anda menerima token selama ICO, pergi ke wallet ERC-20 anda</string>
     <string name="str_send_success">Transaksi Anda telah ditambahkan ke antrian. Transaksi mungkin belum dikirim. Selama masa volume jaringan yang ekstrim, mungkin butuh waktu 3 jam lebih untuk selesai</string>
-    <string name="text_your_price_will_be">Harga Anda akan tetap dalam bentuk UBC</string>
+    <string name="text_your_price_will_be">Harga anda akan ditetapkan dalam UBC</string>
 
     <string name="label_no_item">Tidak ada hasil</string>
     <string name="label_no_item_description">Sepertinya tidak ada yang bisa ditampilkan.\nSilakan coba atur ulang filter Anda.</string>
