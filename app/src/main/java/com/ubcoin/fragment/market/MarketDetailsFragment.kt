@@ -16,9 +16,7 @@ import android.text.style.ClickableSpan
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.daimajia.slider.library.Animations.DescriptionAnimation
@@ -43,6 +41,7 @@ import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.fragment.sell.SellFragment
@@ -62,7 +61,6 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.view_item_details.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
@@ -100,6 +98,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     private lateinit var tvAddress: TextView
     private lateinit var tvExchangeRate: TextView
+    private lateinit var rlSellerProfile: RelativeLayout
 
     private lateinit var txtUserName: TextView
     private lateinit var ratingBarView: RatingBarView
@@ -164,6 +163,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         tvAddress = view.findViewById(R.id.tvAddress)
         tvExchangeRate = view.findViewById(R.id.tvExchageRate)
+        rlSellerProfile = view.findViewById(R.id.rlSellerProfile)
 
         imgSellerProfile = view.findViewById(R.id.imgSellerProfile)
         txtActiveDealsCount = view.findViewById(R.id.txtActiveDealsCount)
@@ -293,6 +293,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             llDescription.visibility = View.GONE
         }
 
+        rlSellerProfile.setOnClickListener{
+            getSwitcher()?.addTo(SellerProfileFragment::class.java, SellerProfileFragment.getBundle(marketItem.user!!), false)
+        }
 
         llWantToBuy.setOnClickListener {
             if (!ProfileHolder.isAuthorized()) {

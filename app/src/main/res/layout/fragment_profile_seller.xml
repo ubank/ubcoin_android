@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+
+    android:background="#f8f8f8">
+
+    <include layout="@layout/view_header_profile_seller" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:id="@+id/imgSellerProfile"
+            android:layout_width="@dimen/detailsSubProfileHeight"
+            android:scaleType="centerCrop"
+            android:layout_height="@dimen/detailsSubProfileHeight"
+            android:layout_marginStart="@dimen/detailsProfileMargin"
+            android:src="@drawable/img_logo"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_toEndOf="@id/imgSellerProfile"
+            android:layout_toStartOf="@id/imgNext"
+            android:layout_marginStart="@dimen/detailsProfileMargin"
+            android:layout_marginEnd="@dimen/detailsProfileMarginSmall"
+            android:layout_marginTop="@dimen/detailsProfileMarginSmall"
+            android:layout_marginBottom="@dimen/detailsProfileMarginSmall"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtUserName"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/detailsProfileTextSize16"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/sellerProfileNickColor"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/sellerProfileGray"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvOnMarket"
+                        android:layout_width="wrap_content"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@color/sellerProfileGray"
+                        android:layout_marginTop="12dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text.items"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textColor="#919191"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="10dp"
+        android:textAllCaps="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvMarketList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"/>
+
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            gpb:colors="@array/progressColors"
+            gpb:type="nexus_rotation_cross" />
+
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressBottom"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:visibility="gone"
+            gpb:colors="@array/progressColors"
+            gpb:type="nexus_rotation_cross" />
+
+        <LinearLayout
+            android:id="@+id/llNoItems"
+            android:layout_width="match_parent"
+            android:layout_height="285dp"
+            android:layout_marginTop="@dimen/favorite_fragment_top_margin"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="53dp"
+                    android:src="@drawable/img_no_result" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/label_no_item"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/please_verify_text_size" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+                    android:gravity="center"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/label_no_item_description"
+                    android:textColor="@color/haveAccountColor"
+                    android:textSize="@dimen/sign_up_text_size" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.text.TextUtils
 import com.nulabinc.zxcvbn.Zxcvbn
+import com.ubcoin.R
 import com.ubcoin.model.PurchaseUser
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols

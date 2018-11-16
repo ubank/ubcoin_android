@@ -206,10 +206,30 @@
 
     <string name="label_no_item">No results</string>
     <string name="label_no_item_description">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
+    <string name="text.items">Items</string>
+    <string name="text.on_market">On market</string>
 
     <plurals name="categories_count">
         <item quantity="one">%d category</item>
         <item quantity="other">%d categories</item>
+    </plurals>
+
+    <plurals name="txt_days">
+        <item quantity="zero">%d days</item>
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+
+    <plurals name="txt_month">
+        <item quantity="zero">%d months</item>
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
+
+    <plurals name="txt_years">
+        <item quantity="zero">%d years</item>
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
     </plurals>
 
 </resources>

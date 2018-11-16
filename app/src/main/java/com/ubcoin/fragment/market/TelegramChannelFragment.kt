@@ -37,7 +37,7 @@ class TelegramChannelFragment : BaseFragment() {
         url = arguments!!.getString(BUNDLE_WEB_ARG)
         header = arguments!!.getString(BUNDLE_HEADER)
         webView = view.findViewById(R.id.webView)
-        txtHeader?.text = header
+        txtProfileHeader?.text = header
         initializeWebView()
         webView.loadUrl(url)
     }

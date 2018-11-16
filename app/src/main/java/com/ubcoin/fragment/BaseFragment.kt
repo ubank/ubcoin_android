@@ -62,7 +62,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
 
     private var headerIcon: ImageView? = null
     private var llHeaderImage: View? = null
-    var txtHeader: TextView? = null
+    var txtProfileHeader: TextView? = null
 
     //Media support here
     companion object {
@@ -197,7 +197,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         onViewInflated(view)
         onViewInflated(view, savedInstanceState)
         if (getTopHeaderTextId() != noHeaderObject) {
-            txtHeader = view.findViewById(getTopHeaderTextId())
+            txtProfileHeader = view.findViewById(getTopHeaderTextId())
         }
         if (getTopLeftIconId() != noHeaderObject) {
             headerIcon = view.findViewById(getTopLeftIconId())
@@ -277,8 +277,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     }
 
     private fun changeActivityAttributes() {
-        if (getHeaderText() != noHeaderObject && txtHeader != null) {
-            txtHeader?.text = getString(getHeaderText())
+        if (getHeaderText() != noHeaderObject && txtProfileHeader != null) {
+            txtProfileHeader?.text = getString(getHeaderText())
         }
         if (getHeaderIcon() != noHeaderObject) {
             headerIcon?.setImageResource(getHeaderIcon())

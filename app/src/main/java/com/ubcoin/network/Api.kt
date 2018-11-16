@@ -42,6 +42,12 @@ interface Api {
     fun updateProfileEmailAndName(@Body updateUserData: UpdateUserData): Observable<Response<Unit>>
 
     @GET("/api/items")
+    fun sellerMarketItemsList(
+            @Query("sellerId") sellerId: String?,
+            @Query("size") limit: Int,
+            @Query("page") page: Int): Observable<MarketListResponse>
+
+    @GET("/api/items")
     fun marketList(
             @Query("size") limit: Int,
             @Query("page") page: Int,

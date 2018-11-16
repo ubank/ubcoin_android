@@ -195,6 +195,13 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun getSellerMarketItemsList(sellerId: String, limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .sellerMarketItemsList(sellerId, limit, page)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun getMarketItemById(itemId: String, onSuccess: Consumer<MarketItem>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .marketItem(itemId)
