@@ -53,9 +53,10 @@
             android:layout_marginEnd="@dimen/marginItemDetails"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:layout_marginTop="25dp">
 
                 <TextView
@@ -64,29 +65,57 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/headerTextColor"
+                    android:text="3 2000.00 UBC"
                     android:textSize="@dimen/please_verify_text_size" />
 
-
-                <TextView
-                    android:id="@+id/txtPriceInCurrency"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_toEndOf="@id/txtItemPrice"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center"
-                    android:maxLines="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="29dp"
+                    android:orientation="horizontal">
 
-                    android:singleLine="true"
-                    android:textColor="@color/haveAccountColor"
-                    android:textSize="@dimen/currencyPriceDetailsSize" />
+                    <TextView
+                        android:id="@+id/txtPriceInCurrency"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/txtItemPrice"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/roboto_regular"
+                        android:maxLines="1"
+                        android:text="22 232"
+                        android:singleLine="true"
+                        android:textColor="@color/headerTextColor"
+                        android:textSize="@dimen/currencyPriceDetailsSize" />
 
-            </RelativeLayout>
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#cccccc"/>
 
+                    <TextView
+                        android:id="@+id/tvExchageRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_toEndOf="@id/txtItemPrice"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/roboto_regular"
+                        android:maxLines="1"
+                        android:text="22 232"
+                        android:singleLine="true"
+                        android:textColor="@color/haveAccountColor"
+                        android:textSize="@dimen/currencyPriceDetailsSize" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/llItemDetailCategory"

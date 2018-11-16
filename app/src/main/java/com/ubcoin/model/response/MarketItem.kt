@@ -21,6 +21,7 @@ data class MarketItem(
         val price: Double?,
         val shareUrl: String?,
         val priceInCurrency: Double?,
+        val rate: Double?,
         val currency: String?,
         val purchases: List<Purchase>
 ) : MarketItemMarker {

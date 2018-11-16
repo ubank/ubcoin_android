@@ -46,6 +46,14 @@ fun Double.moneyRoundedFormat() : String {
     return formatter.format(this)
 }
 
+fun Double.rateRoundedFormat() : String {
+    val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    formatSymbols.groupingSeparator = ' '
+    formatSymbols.decimalSeparator = '.'
+    val formatter = DecimalFormat("#.####", formatSymbols)
+    return formatter.format(this)
+}
+
 fun Float.moneyFormat(): String {
     return this.toDouble().moneyFormat()
 }
