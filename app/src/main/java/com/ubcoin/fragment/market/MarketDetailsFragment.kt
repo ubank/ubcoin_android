@@ -53,6 +53,7 @@ import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.model.response.PurchaseItemStatus
 import com.ubcoin.model.response.TgLink
+import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.BuyerPurchaseLinkRequest
@@ -97,6 +98,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtActiveDealsCount: TextView
 
     private lateinit var tvAddress: TextView
+    private lateinit var tvCondition: TextView
+    private lateinit var llCondition: LinearLayout
     private lateinit var tvExchangeRate: TextView
     private lateinit var rlSellerProfile: RelativeLayout
 
@@ -155,6 +158,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         itemPositionInList = arguments?.getInt("i", -1) ?: -1
         llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
         rvPurchases = view.findViewById(R.id.rvPurchases)
+        tvCondition = view.findViewById(R.id.tvCondition)
+        llCondition = view.findViewById(R.id.llCondition)
 
         txtItemCategory = view.findViewById(R.id.txtItemCategor)
         txtMarketProductName = view.findViewById(R.id.txtMarketProductName)
@@ -281,6 +286,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             tvAddress.visibility = View.VISIBLE
             tvAddress.text = marketItem.location?.text
         }
+
+        if(marketItem.condition == null)
+            llCondition.visibility = View.GONE
+        else
+            tvCondition.text = getString(ConditionType.valueOf(marketItem.condition!!).getResId())
+
         txtItemCategory.text = marketItem.category?.name
         txtMarketProductName.text = marketItem.title
         val description = marketItem.description

@@ -69,28 +69,59 @@
                     android:layout_height="@dimen/profileDetailsItemHeight"
                     android:layout_width="match_parent">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/edtSellCategory"
-                    android:layout_width="match_parent"
-                    app:met_primaryColor="@color/greenMainColor"
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_marginEnd="@dimen/have_account_text_size"
-                    android:layout_marginStart="@dimen/have_account_text_size"
-                    android:layout_marginTop="@dimen/header_margin_start"
-                    android:drawableEnd="@drawable/ic_next"
-                    android:ellipsize="end"
-                    android:enabled="false"
-                    android:hint="@string/category"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:lines="1"
-                    android:textColorHighlight="@color/haveAccountColor"
-                    app:met_floatingLabel="highlight"
-                    app:met_textColor="@color/inputTextColor"
-                    app:met_textColorHint="@color/haveAccountColor" />
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/edtSellCategory"
+                        android:layout_width="match_parent"
+                        app:met_primaryColor="@color/greenMainColor"
+                        android:layout_height="@dimen/profileDetailsItemHeight"
+                        android:layout_marginEnd="@dimen/have_account_text_size"
+                        android:layout_marginStart="@dimen/have_account_text_size"
+                        android:layout_marginTop="@dimen/header_margin_start"
+                        android:drawableEnd="@drawable/ic_next"
+                        android:ellipsize="end"
+                        android:enabled="false"
+                        android:hint="@string/category"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:textColorHighlight="@color/haveAccountColor"
+                        app:met_floatingLabel="highlight"
+                        app:met_textColor="@color/inputTextColor"
+                        app:met_textColorHint="@color/haveAccountColor" />
 
                     <FrameLayout
                         android:id="@+id/llCategoryContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_height="@dimen/profileDetailsItemHeight"
+                    android:layout_width="match_parent">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/etCondition"
+                        android:layout_width="match_parent"
+                        app:met_primaryColor="@color/greenMainColor"
+                        android:layout_height="@dimen/profileDetailsItemHeight"
+                        android:layout_marginEnd="@dimen/have_account_text_size"
+                        android:layout_marginStart="@dimen/have_account_text_size"
+                        android:layout_marginTop="@dimen/header_margin_start"
+                        android:drawableEnd="@drawable/ic_next"
+                        android:ellipsize="end"
+                        android:enabled="false"
+                        android:hint="@string/text.condition"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:textColorHighlight="@color/haveAccountColor"
+                        app:met_floatingLabel="highlight"
+                        app:met_textColor="@color/inputTextColor"
+                        app:met_textColorHint="@color/haveAccountColor" />
+
+                    <FrameLayout
+                        android:id="@+id/llCondition"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

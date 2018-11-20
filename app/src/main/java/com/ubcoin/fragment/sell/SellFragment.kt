@@ -30,6 +30,7 @@ import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.model.SellImageModel
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
+import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.CreateProductRequest
@@ -74,6 +75,8 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private lateinit var llSellLocation: View
     private lateinit var btnSellDone: View
 
+    private lateinit var etCondition: MaterialEditText
+
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
     private var editedMarket: MarketItem? = null
@@ -113,6 +116,8 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         llSellLocation = view.findViewById(R.id.llSellLocation)
         btnSellDone = view.findViewById(R.id.btnSellDone)
 
+        etCondition = view.findViewById(R.id.etCondition)
+
         mapView.getMapAsync(this)
         mapView.onCreate(savedInstanceState)
 
@@ -122,6 +127,13 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         view.findViewById<View>(R.id.llCategoryContainer).setOnTouchListener { _, motionEvent ->
             if (motionEvent!!.action == MotionEvent.ACTION_UP) {
                 getSwitcher()?.addTo(SelectCategoryFragment::class.java, SelectCategoryFragment.createBundle(SellCreateDataHolder.category?.id), true)
+            }
+            true
+        }
+
+        view.findViewById<View>(R.id.llCondition).setOnTouchListener { _, motionEvent ->
+            if (motionEvent!!.action == MotionEvent.ACTION_UP) {
+                getSwitcher()?.addTo(SelectConditionFragment::class.java, SelectConditionFragment.createBundle(SellCreateDataHolder.condition?.ordinal), true)
             }
             true
         }
@@ -183,6 +195,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         if (!isEdit) return
         SellCreateDataHolder.category = editedMarket?.category
         SellCreateDataHolder.location = editedMarket?.location
+        SellCreateDataHolder.condition = ConditionType.valueOf(editedMarket?.condition?:"NEW")
         adapter.clear()
         editedMarket?.images?.forEach {
             val data = SellImageModel()
@@ -449,6 +462,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             return null
         }
 
+        val condition = SellCreateDataHolder.condition
+        if (condition == null) {
+            showSweetAlertDialog(R.string.error, R.string.text_condition_is_missing)
+            return null
+        }
+
         val location = SellCreateDataHolder.location
         if (location == null || !location.isAddressPresented()) {
             showSweetAlertDialog(R.string.error, R.string.err_location_missing)
@@ -466,7 +485,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 edtSellDescription.text.toString().trim(),
                 currentPriceInUBC,
                 location,
-                true, true, ArrayList()
+                true, true, ArrayList(), condition.name
         )
     }
 
@@ -501,6 +520,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             edtSellCategory.text = null
         } else {
             edtSellCategory.setText(category.name)
+        }
+        val condition = SellCreateDataHolder.condition
+        if (condition == null) {
+            etCondition.text = null
+        } else {
+            etCondition.setText(getString(condition.getResId()))
         }
         val location = SellCreateDataHolder.location
         if (location == null) {

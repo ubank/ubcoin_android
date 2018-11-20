@@ -208,6 +208,10 @@
     <string name="label_no_item_description">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
     <string name="text.items">Items</string>
     <string name="text.on_market">On market</string>
+    <string name="text.on_ubicoin_market">on Ubcoin Market</string>
+    <string name="text.condition">Condition</string>
+    <string name="text.select_condition">Select condition</string>
+    <string name="text.condition_is_missing">Condition is missing</string>
 
     <plurals name="categories_count">
         <item quantity="one">%d category</item>

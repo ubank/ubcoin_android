@@ -23,7 +23,8 @@ data class MarketItem(
         val priceInCurrency: Double?,
         val rate: Double?,
         val currency: String?,
-        val purchases: List<Purchase>
+        val purchases: List<Purchase>,
+        val condition: String?
 ) : MarketItemMarker {
 
     fun isOwner() : Boolean {

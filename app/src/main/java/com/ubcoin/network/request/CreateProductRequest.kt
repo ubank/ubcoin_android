@@ -13,5 +13,6 @@ data class CreateProductRequest(
         val location: Location?,
         val disableNotifyToEmail: Boolean,
         val agreement: Boolean,
-        var images: List<String>
+        var images: List<String>,
+        val condition: String
 )

@@ -2,6 +2,7 @@ package com.ubcoin.utils
 
 import com.ubcoin.model.response.Category
 import com.ubcoin.model.response.Location
+import com.ubcoin.model.ui.condition.ConditionType
 
 /**
  * Created by Yuriy Aizenberg
@@ -9,6 +10,12 @@ import com.ubcoin.model.response.Location
 object SellCreateDataHolder {
 
     var category: Category? = null
+        set(value) {
+            hasChanges = true
+            field = value
+        }
+
+    var condition: ConditionType? = null
         set(value) {
             hasChanges = true
             field = value
@@ -28,6 +35,7 @@ object SellCreateDataHolder {
         category = null
         location = null
         hasChanges = false
+        condition = null
     }
 
     fun isCategoriesLoaded() = !categories.isEmpty()
