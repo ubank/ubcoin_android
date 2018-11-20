@@ -104,12 +104,13 @@ object DataProvider {
                       sortByDate: String?,
                       sortByPrice: String?,
                       sortByDistance: String?,
+                      condition: String?,
                       onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
         val marketList =
                 if (latPoint != null && longPoint != null) {
-                    networkModule.api().marketList(limit, page, latPoint, longPoint, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance)
+                    networkModule.api().marketList(limit, page, latPoint, longPoint, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
                 } else {
-                    networkModule.api().marketList(limit, page, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance)
+                    networkModule.api().marketList(limit, page, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
                 }
         return marketList
                 .debounce(100, TimeUnit.MILLISECONDS)

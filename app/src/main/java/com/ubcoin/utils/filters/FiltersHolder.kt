@@ -3,6 +3,7 @@ package com.ubcoin.utils.filters
 import com.ubcoin.model.response.Category
 import com.ubcoin.model.ui.FilterType
 import com.ubcoin.model.ui.condition.ConditionType
+import com.ubcoin.model.ui.order.OrderBean
 import com.ubcoin.model.ui.order.OrderDirection
 import com.ubcoin.model.ui.order.OrderType
 import com.ubcoin.utils.hashCodeKeys
@@ -182,6 +183,12 @@ object FiltersHolder {
 
     fun getOrderByDistance(): String? {
         return getOrderInternal(OrderType.DISTANCE)
+    }
+
+    fun getCondition(): String? {
+        if(selectedBean.conditionType == ConditionType.NONE)
+            return null
+        return selectedBean.conditionType.name
     }
 
     private fun getOrderInternal(requestOrderType: OrderType): String? {

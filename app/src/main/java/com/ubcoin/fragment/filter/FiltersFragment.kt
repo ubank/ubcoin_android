@@ -179,12 +179,12 @@ class FiltersFragment : BaseFragment() {
 
         when (filterObjectForFilters.conditionType) {
             ConditionType.NEW -> {
-                selectConditionUsed.changeSelectionVisual(true)
-                selectConditionNew.changeSelectionVisual(false)
-            }
-            ConditionType.USED -> {
                 selectConditionUsed.changeSelectionVisual(false)
                 selectConditionNew.changeSelectionVisual(true)
+            }
+            ConditionType.USED -> {
+                selectConditionUsed.changeSelectionVisual(true)
+                selectConditionNew.changeSelectionVisual(false)
             }
             ConditionType.NONE -> {
                 selectConditionUsed.changeSelectionVisual(false)

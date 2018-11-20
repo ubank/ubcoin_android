@@ -56,7 +56,8 @@ interface Api {
             @Query("maxDistance") maxDistance: Int?,
             @Query("sortByDate") sortByDate: String?,
             @Query("sortByPrice") sortByPrice: String?,
-            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
+            @Query("sortByDistance") sortByDistance: String?,
+            @Query("condition") condition: String?): Observable<MarketListResponse>
 
     @GET("/api/items")
     fun marketList(
@@ -69,7 +70,8 @@ interface Api {
             @Query("maxDistance") maxDistance: Int?,
             @Query("sortByDate") sortByDate: String?,
             @Query("sortByPrice") sortByPrice: String?,
-            @Query("sortByDistance") sortByDistance: String?): Observable<MarketListResponse>
+            @Query("sortByDistance") sortByDistance: String?,
+            @Query("condition") condition: String?): Observable<MarketListResponse>
 
     @GET("/api/items/{itemId}")
     fun marketItem(@Path("itemId") itemId: String): Observable<MarketItem>

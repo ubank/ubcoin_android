@@ -174,6 +174,7 @@ class MarketListFragment : FirstLineFragment() {
                 FiltersHolder.getOrderByDate(),
                 FiltersHolder.getOrderByPrice(),
                 FiltersHolder.getOrderByDistance(),
+                FiltersHolder.getCondition(),
                 Consumer {
                     if (it.data.size < LIMIT) {
                         isEndOfLoading = true
