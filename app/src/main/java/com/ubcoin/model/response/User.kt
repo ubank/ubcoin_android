@@ -23,5 +23,6 @@ data class User(
         var settings: Settings?,
         var walletNumber: Long?,
         var wallet: Wallet?,
-        var authorizedInTg: Boolean?
+        var authorizedInTg: Boolean?,
+        var shareLink: String?
 ) : Serializable

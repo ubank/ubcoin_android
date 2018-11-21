@@ -96,7 +96,7 @@ class SellerProfileFragment : BaseFragment() {
         llHeaderRight = view.findViewById(R.id.llHeaderRight)
 
         llHeaderRight.setOnClickListener{
-            val shareUrl = user.name + " " + getString(R.string.text_on_ubicoin_market) + ": " + "https://qa.ubcoin.io/api/seller/?id=" + user.id
+            val shareUrl = user.name + " " + getString(R.string.text_on_ubicoin_market) + ": " + user.shareLink?:""
             val message = "$shareUrl"
             TheApplication.instance.openShareIntent(message, activity!!)
         }

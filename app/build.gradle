@@ -15,8 +15,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 32
-        versionName "1.0.32"
+        versionCode 51
+        versionName "1.0.51"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
