@@ -1,5 +1,6 @@
 package com.ubcoin.fragment.transactions
 
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,7 +12,9 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.adapter.TransactionsAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.model.Currency
 import com.ubcoin.model.event.UpdateTransactionMessage
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.TopUp
 import com.ubcoin.model.response.TransactionListResponse
@@ -30,7 +33,17 @@ import org.greenrobot.eventbus.Subscribe
 
 private const val LIMIT = 30
 
+
+
 class MyBalanceFragment : BaseFragment() {
+
+    companion object {
+        fun getBundle(currencyType: Currency): Bundle {
+            val bundle = Bundle()
+            bundle.putSerializable("currency", currencyType)
+            return bundle
+        }
+    }
 
     private lateinit var txtMyBalance: TextView
 
@@ -50,11 +63,15 @@ class MyBalanceFragment : BaseFragment() {
     private var currentPage: Int = -1
     private lateinit var transactionsAdapter: TransactionsAdapter
 
+    private lateinit var currencyType: Currency
+
     override fun getLayoutResId() = R.layout.fragment_my_balance
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llMyBalanceTopUp).setOnClickListener { onTopUpClick() }
+
+        currencyType = if(arguments?.getSerializable("currency") == null) Currency.UBC else arguments?.getSerializable("currency") as Currency
 
         txtMyBalance = view.findViewById(R.id.txtMyBalance)
 
@@ -111,8 +128,15 @@ class MyBalanceFragment : BaseFragment() {
         DataProvider.balance(object : SilentConsumer<MyBalance> {
             override fun onConsume(t: MyBalance) {
                 hideProgressDialog()
-                txtMyBalance.text = "${t.effectiveAmount.moneyFormat()} ${getString(R.string.ubc_postfix)}"
-                if (t.effectiveAmount > 0f) {
+
+                var effectiveAmount = if(currencyType == Currency.UBC) t.effectiveAmount else t.effectiveAmountETH
+
+                if(currencyType == Currency.UBC)
+                    txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.ubc_postfix)}"
+                else
+                    txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.eth_postfix)}"
+
+                if (effectiveAmount > 0f) {
                     changeSendBackground(true)
                 } else {
                     changeSendBackground(false)
@@ -159,7 +183,7 @@ class MyBalanceFragment : BaseFragment() {
         }
 
         currentPage++
-        DataProvider.transactions(LIMIT, currentPage, object : SilentConsumer<TransactionListResponse> {
+        DataProvider.transactions(currencyType, LIMIT, currentPage, object : SilentConsumer<TransactionListResponse> {
             override fun onConsume(t: TransactionListResponse) {
                 stopLoading()
                 if (clear) {
@@ -187,7 +211,7 @@ class MyBalanceFragment : BaseFragment() {
     }
 
     private fun onTopUpClick() {
-        getSwitcher()?.addTo(TopUpFragment::class.java)
+        getSwitcher()?.addTo(TopUpFragment::class.java, TopUpFragment.getBundle(currencyType), false)
         /*showProgressDialog(R.string.wait_please_title, R.string.loading)
         DataProvider.topUp(object : SilentConsumer<TopUp> {
             override fun onConsume(t: TopUp) {
@@ -248,7 +272,7 @@ class MyBalanceFragment : BaseFragment() {
     }
 
     private fun onSendClick() {
-        getSwitcher()?.addTo(SendFragment::class.java)
+        getSwitcher()?.addTo(SendFragment::class.java, SendFragment.getBundle(currencyType), false)
     }
 
     private fun changeSendBackground(isActive: Boolean) {

@@ -6,8 +6,10 @@ import android.widget.TextView
 import com.ubcoin.R
 import com.ubcoin.R.drawable.ic_back
 import com.ubcoin.R.string.balance_placeholder
+import com.ubcoin.R.string.eth_balance_placeholder
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
+import com.ubcoin.model.Currency
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -23,6 +25,7 @@ class ProfileMainFragment : FirstLineFragment() {
     private lateinit var txtProfileName: TextView
     //    private lateinit var imgProfilePhoto: ImageView
     private lateinit var txtProfileBalance: TextView
+    private lateinit var txtProfileBalanceETH: TextView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private var disposable: Disposable? = null
@@ -33,6 +36,7 @@ class ProfileMainFragment : FirstLineFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
         txtProfileBalance = view.findViewById(R.id.txtProfileBalance)
+        txtProfileBalanceETH = view.findViewById(R.id.txtProfileBalanceETH)
         txtProfileName = view.findViewById(R.id.txtProfileName)
 //        imgProfilePhoto = view.findViewById(R.id.imgProfilePhoto)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
@@ -44,6 +48,10 @@ class ProfileMainFragment : FirstLineFragment() {
         }
         view.findViewById<View>(R.id.llProfileBalance).setOnClickListener {
             getSwitcher()?.addTo(MyBalanceFragment::class.java)
+        }
+
+        view.findViewById<View>(R.id.llProfileBalanceETH).setOnClickListener {
+            getSwitcher()?.addTo(MyBalanceFragment::class.java, MyBalanceFragment.getBundle(Currency.ETH), false)
         }
     }
 
@@ -96,6 +104,10 @@ class ProfileMainFragment : FirstLineFragment() {
         txtProfileBalance.text = getString(
                 balance_placeholder,
                 (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat())
+
+        txtProfileBalanceETH.text = getString(
+                eth_balance_placeholder,
+                (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormat())
 
 /*        val avatarUrl = user.avatarUrl
         if (avatarUrl != null && avatarUrl.isNotBlank()) {

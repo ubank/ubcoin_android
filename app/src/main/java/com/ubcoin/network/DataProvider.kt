@@ -6,6 +6,7 @@ import android.location.Address
 import android.location.Geocoder
 import com.ubcoin.model.CommissionAndConversionResponse
 import com.ubcoin.model.ConversionResponse
+import com.ubcoin.model.Currency
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -251,9 +252,9 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun transactions(limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
+    fun transactions(currencyType: Currency, limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
-                .transactions(limit, page)
+                .transactions(currencyType, limit, page)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -301,6 +302,19 @@ object DataProvider {
                 .flatMap(
                         { t ->
                             networkModule.api().getConversion(ConversionRequest("UBC", "USD", (amount - t.commission).toString()))
+                        }, { t1, t2 ->
+                    CommissionAndConversionResponse(t1, t2)
+                }
+                ).compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getCommissionBeforeAndConversionFROMETHTOUSDAfter(amount: Double, onSuccess: Consumer<CommissionAndConversionResponse>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api()
+                .getCommission(amount)
+                .flatMap(
+                        { t ->
+                            networkModule.api().getConversion(ConversionRequest("ETH", "USD", (amount - t.commission).toString()))
                         }, { t1, t2 ->
                     CommissionAndConversionResponse(t1, t2)
                 }

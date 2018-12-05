@@ -7,5 +7,7 @@ import java.io.Serializable
  */
 data class MyBalance(
         val effectiveAmount: Double,
-        val amountOnHold: Double
+        val amountOnHold: Double,
+        val effectiveAmountETH: Double,
+        val amountOnHoldETH: Double
 ) : Serializable

@@ -236,4 +236,12 @@
         <item quantity="other">%d years</item>
     </plurals>
 
+    <string name="text.my_eth_balance">My ETH balance</string>
+    <string name="text.my_ubc_balance">My UBC balance</string>
+    <string name="send_eth_to_your_erc_etherium_wallet">Send ETH to your Ethereum wallet.</string>
+    <string name="eth_transaction_commission_format">Commission for Gas: %1$s ETH. Gas is a fee that Ethereum blockchain takes for making a transaction.</string>
+    <string name="eth_postfix">ETH</string>
+    <string name="eth_balance_placeholder">%1$s ETH</string>
+    <string name="eth_balance_placeholder_prefix">ETH %1$s</string>
+
 </resources>
