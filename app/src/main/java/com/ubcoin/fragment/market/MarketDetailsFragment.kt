@@ -101,6 +101,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var tvCondition: TextView
     private lateinit var llCondition: LinearLayout
     private lateinit var tvExchangeRate: TextView
+    private lateinit var txtPriceInCurrencyETH: TextView
+    private lateinit var tvExchangeRateETH: TextView
     private lateinit var rlSellerProfile: RelativeLayout
 
     private lateinit var txtUserName: TextView
@@ -168,6 +170,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         tvAddress = view.findViewById(R.id.tvAddress)
         tvExchangeRate = view.findViewById(R.id.tvExchageRate)
+        tvExchangeRateETH = view.findViewById(R.id.tvExchageRateETH)
+        txtPriceInCurrencyETH = view.findViewById(R.id.txtPriceInCurrencyETH)
         rlSellerProfile = view.findViewById(R.id.rlSellerProfile)
 
         imgSellerProfile = view.findViewById(R.id.imgSellerProfile)
@@ -277,9 +281,14 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         txtActiveDealsCount.text = resources.getQuantityString(R.plurals.txt_active_deals_count, itemsCount,itemsCount)
 
         txtPriceInCurrency.text =
-                if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + marketItem.currency else null
+                if (marketItem.isPriceInCurrencyPresented()) "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + " " + marketItem.currency else null
+
+
+        txtPriceInCurrencyETH.text =
+                 "~" + marketItem.priceETH!!.moneyRoundedFormat() + " ETH"
 
         tvExchangeRate.text = if(!marketItem.currency.isNullOrEmpty() && marketItem.rate != null) "1 UBC = " + marketItem.rate!!.rateRoundedFormat() + " " + marketItem.currency else null
+        tvExchangeRateETH.text = if(!marketItem.currency.isNullOrEmpty() && marketItem.rateETH != null) "1 UBC = " + ((1 / marketItem.rateETH!!) * marketItem.rate!!).rateRoundedFormatETH() + " ETH" else null
 
         if(!marketItem.location?.text.isNullOrEmpty())
         {

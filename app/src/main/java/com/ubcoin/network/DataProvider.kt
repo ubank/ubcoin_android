@@ -6,7 +6,7 @@ import android.location.Address
 import android.location.Geocoder
 import com.ubcoin.model.CommissionAndConversionResponse
 import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -252,7 +252,7 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun transactions(currencyType: Currency, limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
+    fun transactions(currencyType: CryptoCurrency, limit: Int, page: Int, onSuccess: Consumer<TransactionListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .transactions(currencyType, limit, page)
                 .compose(RxUtils.applyT())
@@ -273,7 +273,7 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    private fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
+    fun getConversion(conversionRequest: ConversionRequest, onSuccess: Consumer<ConversionResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api()
                 .getConversion(conversionRequest)
                 .compose(RxUtils.applyT())
@@ -322,8 +322,8 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun withdraw(amount: Double, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>): Disposable {
-        return networkModule.api().withdraw(Withdraw(address, amount))
+    fun withdraw(currencyType:CryptoCurrency, amountETH: Double?, amountUBC: Double?, address: String, onSuccess: Consumer<WithdrawResponse>, onError: Consumer<Throwable>): Disposable {
+        return networkModule.api().withdraw(Withdraw(currencyType.toString(), amountETH, amountUBC, address))
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -355,6 +355,4 @@ object DataProvider {
         }
         return observable.compose(RxUtils.applyT())
     }
-
-
 }

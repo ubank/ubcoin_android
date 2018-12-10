@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.response.TopUp
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -22,7 +22,7 @@ import io.reactivex.disposables.Disposable
 class TopUpFragment : BaseFragment() {
 
     companion object {
-        fun getBundle(currencyType: Currency): Bundle {
+        fun getBundle(currencyType: CryptoCurrency): Bundle {
             val bundle = Bundle()
             bundle.putSerializable("currency", currencyType)
             return bundle
@@ -39,12 +39,12 @@ class TopUpFragment : BaseFragment() {
     private var disposable: Disposable? = null
     private lateinit var tvGoToERCWallet: View
 
-    private lateinit var currencyType: Currency
+    private lateinit var currencyType: CryptoCurrency
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
 
-        currencyType = if(arguments?.getSerializable("currency") == null) Currency.UBC else arguments?.getSerializable("currency") as Currency
+        currencyType = if(arguments?.getSerializable("currency") == null) CryptoCurrency.UBC else arguments?.getSerializable("currency") as CryptoCurrency
 
         txtTopUpHash = view.findViewById(R.id.txtTopUpHash)
         txtTopUpTimer = view.findViewById(R.id.txtTopUpTimer)
@@ -53,8 +53,8 @@ class TopUpFragment : BaseFragment() {
         llChooseExchangeToBuyUBC = view.findViewById(R.id.llChooseExchangeToBuyUBC)
         tvGoToERCWallet = view.findViewById(R.id.tvGoToERCWallet)
 
-        llChooseExchangeToBuyUBC.visibility = if(currencyType == Currency.UBC) View.VISIBLE else View.GONE
-        tvGoToERCWallet.visibility = if(currencyType == Currency.UBC) View.VISIBLE else View.GONE
+        llChooseExchangeToBuyUBC.visibility = if(currencyType == CryptoCurrency.UBC) View.VISIBLE else View.GONE
+        tvGoToERCWallet.visibility = if(currencyType == CryptoCurrency.UBC) View.VISIBLE else View.GONE
         llChooseExchangeToBuyUBC.setOnClickListener {
             getSwitcher()?.addTo(ChooseExchangeFragment::class.java)
         }

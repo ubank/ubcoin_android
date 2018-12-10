@@ -19,6 +19,7 @@ import java.util.*
 class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransaction, TransactionsAdapter.VHolder>(context) {
 
     private val ubcPostfix: String = context.getString(R.string.ubc_postfix)
+    private val ethPostfix: String = context.getString(R.string.eth_postfix)
     private val positiveColor = ContextCompat.getColor(context, R.color.greenMainColor)
     private val negativeColor = ContextCompat.getColor(context, R.color.activeTabTextColor)
 
@@ -34,6 +35,7 @@ class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransact
         }
         vHolder.txtItemTransactionDate.text = date.toTransactionDate()
         vHolder.txtItemTransactionAmount.text = """${if (transaction.amountUBC > .0) "+ " else ""}${transaction.amountUBC.moneyFormat()} $ubcPostfix"""
+        vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormat()} $ethPostfix"""
         if (transaction.isPositive()) {
             vHolder.txtItemTransactionAmount.setTextColor(positiveColor)
         } else {

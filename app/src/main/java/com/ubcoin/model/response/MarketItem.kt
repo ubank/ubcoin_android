@@ -22,6 +22,8 @@ data class MarketItem(
         val shareUrl: String?,
         val priceInCurrency: Double?,
         val rate: Double?,
+        val priceETH: Double?,
+        val rateETH: Double?,
         val currency: String?,
         val purchases: List<Purchase>,
         val condition: String?

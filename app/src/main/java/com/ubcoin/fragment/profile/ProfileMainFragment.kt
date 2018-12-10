@@ -9,7 +9,7 @@ import com.ubcoin.R.string.balance_placeholder
 import com.ubcoin.R.string.eth_balance_placeholder
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -51,7 +51,7 @@ class ProfileMainFragment : FirstLineFragment() {
         }
 
         view.findViewById<View>(R.id.llProfileBalanceETH).setOnClickListener {
-            getSwitcher()?.addTo(MyBalanceFragment::class.java, MyBalanceFragment.getBundle(Currency.ETH), false)
+            getSwitcher()?.addTo(MyBalanceFragment::class.java, MyBalanceFragment.getBundle(CryptoCurrency.ETH), false)
         }
     }
 

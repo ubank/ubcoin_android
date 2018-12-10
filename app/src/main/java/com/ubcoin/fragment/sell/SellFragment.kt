@@ -27,12 +27,15 @@ import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellImagesAdapter
 import com.ubcoin.fragment.FirstLineFragment
+import com.ubcoin.model.CryptoCurrency
+import com.ubcoin.model.Currency
 import com.ubcoin.model.SellImageModel
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.network.request.ConversionRequest
 import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.network.request.UpdateProductRequest
 import com.ubcoin.utils.MaxValueInputFilter
@@ -45,6 +48,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import org.greenrobot.eventbus.EventBus
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 /**
  * Created by Yuriy Aizenberg
@@ -55,7 +59,6 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
     private val requestCode = 19990
     private var disposable: Disposable? = null
-    private var isConversionInProgress = false
 
 
     private val datum = ArrayList<SellImageModel>()
@@ -65,6 +68,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private var googleMap: GoogleMap? = null
     private var currentPriceInUBC: Double = .0
     private var currentPriceInUSD: Double = .0
+    private var currentPriceInETH: Double = .0
     private var marker: Marker? = null
 
     private lateinit var mapView: MapView
@@ -79,6 +83,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
+    private lateinit var refreshViewETH: RefreshableEditText
     private var editedMarket: MarketItem? = null
     private var isEdit = false
 
@@ -96,6 +101,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
         refreshViewUbc = view.findViewById(R.id.refreshViewUbc)
         refreshViewUsd = view.findViewById(R.id.refreshViewUsd)
+        refreshViewETH = view.findViewById(R.id.refreshViewETH)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rvSellImages)
         recyclerView.setHasFixedSize(true)
@@ -138,23 +144,33 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             true
         }
 
-        refreshViewUsd.refreshListener = object : RefreshableEditText.IRefreshListener {
+        refreshViewETH.refreshListener = object : RefreshableEditText.IRefreshListener {
             override fun onViewClick() {
-                openPriceDialog(false)
+                openPriceDialog(Currency.ETH)
             }
 
             override fun onRefreshClick() {
-                setCurrentPrice(true)
+                setCurrentPrice(Currency.ETH)
+            }
+        }
+
+        refreshViewUsd.refreshListener = object : RefreshableEditText.IRefreshListener {
+            override fun onViewClick() {
+                openPriceDialog(Currency.USD)
+            }
+
+            override fun onRefreshClick() {
+                setCurrentPrice(Currency.USD)
             }
         }
 
         refreshViewUbc.refreshListener = object : RefreshableEditText.IRefreshListener {
             override fun onViewClick() {
-                openPriceDialog(true)
+                openPriceDialog(Currency.UBC)
             }
 
             override fun onRefreshClick() {
-                setCurrentPrice(false)
+                setCurrentPrice(Currency.UBC)
             }
 
         }
@@ -213,9 +229,11 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
 
         currentPriceInUSD = editedMarket?.priceInCurrency ?: .0
         currentPriceInUBC = editedMarket?.price ?: .0
+        currentPriceInETH = editedMarket?.priceETH ?: .0
 
-        refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
-        refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+        refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(Currency.UBC))
+        refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(Currency.USD))
+        refreshViewETH.stopRefreshAndSetValue(getFormattedPrice(Currency.ETH))
 
     }
 
@@ -544,11 +562,11 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             }
         }
         if (currentPriceInUBC > .0f) {
-            setCurrentPrice(true)
+            setCurrentPrice(Currency.UBC)
         }
     }
 
-    private fun openPriceDialog(shouldConvertToUSD: Boolean) {
+    private fun openPriceDialog(currencyType: Currency) {
         val materialDialog = MaterialDialog.Builder(activity!!)
                 .customView(R.layout.fragment_content_select_price, false)
                 .build()
@@ -565,71 +583,104 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             } catch (e: Exception) {
                 .0
             }
-            if (shouldConvertToUSD) currentPriceInUBC = value else currentPriceInUSD = value
-            setCurrentPrice(shouldConvertToUSD)
+
+            when(currencyType) {
+                Currency.UBC -> currentPriceInUBC = value
+                Currency.USD -> currentPriceInUSD = value
+                Currency.ETH -> currentPriceInETH = value
+            }
+
+            setCurrentPrice(currencyType)
 
         }
-        val decimalFormat = DecimalFormat()
+
+        val otherSymbols = DecimalFormatSymbols()
+        otherSymbols.decimalSeparator = '.'
+        val decimalFormat = DecimalFormat("0.#########", otherSymbols)
         decimalFormat.maximumFractionDigits = 4
         var format = ""
-        if (shouldConvertToUSD && currentPriceInUBC > 0f) {
-            format = decimalFormat.format(currentPriceInUBC)
-        } else if (!shouldConvertToUSD && currentPriceInUSD > 0f) {
-            format = decimalFormat.format(currentPriceInUSD)
+
+        when(currencyType) {
+            Currency.UBC -> if(currentPriceInUBC > 0f) format = decimalFormat.format(currentPriceInUBC)
+            Currency.USD -> if(currentPriceInUSD > 0f) format = decimalFormat.format(currentPriceInUSD)
+            Currency.ETH -> if(currentPriceInETH > 0f) format = decimalFormat.format(currentPriceInETH)
         }
-        format = java.lang.String(format).replaceAll("\\s+", "").replace(",", ".")
+
+        //format = java.lang.String(format).replaceAll("\\s+", "").replace(",", ".")
+
         edtPrice.setText(format)
         edtPrice.filters += MaxValueInputFilter()
         materialDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         materialDialog.show()
     }
 
-    private fun setCurrentPrice(shouldConvertToUSD: Boolean) {
-        if (shouldConvertToUSD) {
-            if (currentPriceInUBC <= .0f) {
-                refreshViewUbc.stopRefreshAndSetValue("")
-                refreshViewUsd.stopRefreshAndSetValue("")
-                return
-            }
-            refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
-            refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_IN_PROGRESS)
-            isConversionInProgress = true
-            DataProvider.getConversionFromUBC(currentPriceInUBC.toString(), Consumer { t ->
-                isConversionInProgress = false
+    private fun getRefrashableEditTextByCurrency(currencyType: Currency) : RefreshableEditText? {
+        var refreshableEditText: RefreshableEditText? = null
+        when (currencyType)
+        {
+            Currency.UBC -> refreshableEditText = refreshViewUbc
+            Currency.ETH -> refreshableEditText = refreshViewETH
+            Currency.USD -> refreshableEditText = refreshViewUsd
+        }
+        return refreshableEditText
+    }
+
+    private fun getValueByCurrency(currencyType: Currency) : Double {
+        var value = .0
+        when (currencyType)
+        {
+            Currency.UBC -> value = currentPriceInUBC
+            Currency.ETH -> value = currentPriceInETH
+            Currency.USD -> value = currentPriceInUSD
+        }
+        return value
+    }
+
+    private fun setValueByCurrency(currencyType: Currency, value: Double) {
+        when (currencyType)
+        {
+            Currency.UBC -> currentPriceInUBC = value
+            Currency.ETH -> currentPriceInETH = value
+            Currency.USD -> currentPriceInUSD = value
+        }
+    }
+
+    private fun setCurrentPrice(currencyType: Currency) {
+
+        var slaves: MutableList <Currency> = ArrayList<Currency>()
+        var master: RefreshableEditText? = null
+
+        if(currencyType == Currency.UBC) master = getRefrashableEditTextByCurrency(currencyType) else slaves.add(Currency.UBC)
+        if(currencyType == Currency.ETH) master = getRefrashableEditTextByCurrency(currencyType) else slaves.add(Currency.ETH)
+        if(currencyType == Currency.USD) master = getRefrashableEditTextByCurrency(currencyType) else slaves.add(Currency.USD)
+
+        if (getValueByCurrency(currencyType) <= .0) {
+            currentPriceInUBC = .0
+            currentPriceInUSD = .0
+            currentPriceInETH = .0
+            refreshViewUbc.stopRefreshAndSetValue("")
+            refreshViewUsd.stopRefreshAndSetValue("")
+            refreshViewETH.stopRefreshAndSetValue("")
+            return
+        }
+
+        master!!.stopRefreshAndSetValue(getFormattedPrice(currencyType))
+
+        for(slave in slaves)
+        {
+            var refreshableEditText: RefreshableEditText = getRefrashableEditTextByCurrency(slave)!!
+
+            refreshableEditText.setRefreshState(RefreshableEditText.RefreshState.REFRESH_IN_PROGRESS)
+            DataProvider.getConversion(ConversionRequest(currencyType.toString(), slave.toString(), getValueByCurrency(currencyType).toString()), Consumer { t ->
                 if (t == null) {
-                    refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
+                    refreshableEditText.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
                 } else {
-                    currentPriceInUSD = t.amount
-                    refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
+                    setValueByCurrency(slave, t.amount)
+                    refreshableEditText.stopRefreshAndSetValue(getFormattedPrice(slave))
                 }
             }, Consumer { t ->
-                isConversionInProgress = false
                 Crashlytics.logException(t)
                 refreshViewUsd.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
-            })
-        } else {
-            if (currentPriceInUSD <= .0) {
-                currentPriceInUBC = .0
-                currentPriceInUSD = .0
-                refreshViewUbc.stopRefreshAndSetValue("")
-                refreshViewUsd.stopRefreshAndSetValue("")
-                return
-            }
-            isConversionInProgress = true
-            refreshViewUsd.stopRefreshAndSetValue(getFormattedPrice(false))
-            refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_IN_PROGRESS)
-            DataProvider.getConversionFromUSD(currentPriceInUSD.toString(), Consumer { t ->
-                isConversionInProgress = false
-                if (t == null) {
-                    refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
-                } else {
-                    currentPriceInUBC = t.amount
-                    refreshViewUbc.stopRefreshAndSetValue(getFormattedPrice(true))
-                }
-            }, Consumer { t ->
-                isConversionInProgress = false
-                Crashlytics.logException(t)
-                refreshViewUbc.setRefreshState(RefreshableEditText.RefreshState.REFRESH_FAILURE)
             })
         }
     }
@@ -750,19 +801,22 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         setupData()
     }
 
-    private fun getFormattedPrice(showUBCBalance: Boolean): String {
-        if (showUBCBalance) {
-            if (currentPriceInUBC <= .0) {
-                currentPriceInUBC = .0
-                return getString(R.string.balance_placeholder, "0.00")
+    private fun getFormattedPrice(currencyType: Currency): String {
+
+        val value = getValueByCurrency(currencyType)
+        if (value <= .0) {
+            setValueByCurrency(currencyType, .0)
+            when (currencyType) {
+                Currency.UBC -> return getString(R.string.balance_placeholder, "0.00")
+                Currency.USD -> return getString(R.string.balance_placeholder_usd, "0.00")
+                Currency.ETH -> return getString(R.string.eth_balance_placeholder, "0.00")
             }
-            return getString(R.string.balance_placeholder, currentPriceInUBC.moneyFormat())
-        } else {
-            if (currentPriceInUSD <= .0) {
-                currentPriceInUSD = .0
-                return getString(R.string.balance_placeholder_usd, "0.00")
-            }
-            return getString(R.string.balance_placeholder_usd, currentPriceInUSD.moneyFormat())
+        }
+
+        when (currencyType) {
+            Currency.UBC -> return getString(R.string.balance_placeholder, value.moneyFormat())
+            Currency.USD -> return getString(R.string.balance_placeholder_usd, value.moneyFormat())
+            Currency.ETH -> return getString(R.string.eth_balance_placeholder, value.moneyFormat())
         }
     }
 

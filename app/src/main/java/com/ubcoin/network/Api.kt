@@ -1,7 +1,7 @@
 package com.ubcoin.network
 
 import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -118,7 +118,7 @@ interface Api {
     fun balance(): Observable<MyBalance>
 
     @GET("/api/wallet/transactions")
-    fun transactions(@Query("currencyType") currencyType: Currency, @Query("size") limit: Int, @Query("page") page: Int): Observable<TransactionListResponse>
+    fun transactions(@Query("currencyType") currencyType: CryptoCurrency, @Query("size") limit: Int, @Query("page") page: Int): Observable<TransactionListResponse>
 
     @GET("/api/wallet/transactions")
     fun transaction(@Query("id") id: String): Observable<TransactionListResponse>

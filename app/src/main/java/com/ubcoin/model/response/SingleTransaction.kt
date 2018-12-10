@@ -8,6 +8,7 @@ import java.io.Serializable
 data class SingleTransaction(
         val id: String,
         val amountUBC: Double,
+        val amountETH: Double,
         val status: String,
         val type: String,
         val from: String,

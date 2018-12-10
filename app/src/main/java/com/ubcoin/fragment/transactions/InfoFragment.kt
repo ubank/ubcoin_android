@@ -3,11 +3,11 @@ package com.ubcoin.fragment.transactions
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.event.UpdateTransactionMessage
 import com.ubcoin.model.response.WithdrawResponse
 import com.ubcoin.network.DataProvider
@@ -27,13 +27,16 @@ private const val ADDRESS = "address"
 
 class InfoFragment : BaseFragment() {
 
+    private lateinit var currencyType: CryptoCurrency
+
     companion object {
-        fun createBundle(amount: Double, commission: Double, conversion: Double, address: String): Bundle {
+        fun createBundle(currencyType: CryptoCurrency, amount: Double, commission: Double, conversion: Double, address: String): Bundle {
             val args = Bundle()
             args.putString(ADDRESS, address)
             args.putDouble(AMOUNT, amount)
             args.putDouble(COMMISSION, commission)
             args.putDouble(CONVERSION, conversion)
+            args.putSerializable("currency", currencyType)
             return args
         }
     }
@@ -48,11 +51,12 @@ class InfoFragment : BaseFragment() {
         view.findViewById<TextView>(R.id.txtInfoAddress).text = address
         val amount = arguments!!.getDouble(AMOUNT)
         val commission = arguments!!.getDouble(COMMISSION)
+        currencyType = if(arguments?.getSerializable("currency") == null) CryptoCurrency.UBC else arguments?.getSerializable("currency") as CryptoCurrency
 
-        view.findViewById<TextView>(R.id.txtInfoAmountUBC).text = getString(R.string.balance_placeholder_prefix, (amount - commission).bigMoneyFormat())
+        view.findViewById<TextView>(R.id.txtInfoAmountUBC).text = if(currencyType == CryptoCurrency.UBC) getString(R.string.balance_placeholder_prefix, (amount - commission).bigMoneyFormat()) else getString(R.string.eth_balance_placeholder_prefix, (amount - commission).bigMoneyFormat())
         view.findViewById<TextView>(R.id.txtInfoAmountUSD).text = getString(R.string.transaction_amount_with_pats, arguments!!.getDouble(CONVERSION).bigMoneyFormat())
-        view.findViewById<TextView>(R.id.txtInfoTransactionCommission).text = getString(R.string.balance_placeholder_prefix, commission.bigMoneyFormat())
-        view.findViewById<TextView>(R.id.txtInfoTotalAmount).text = getString(R.string.balance_placeholder_prefix, amount.bigMoneyFormat())
+        view.findViewById<TextView>(R.id.txtInfoTransactionCommission).text = if(currencyType == CryptoCurrency.UBC) getString(R.string.balance_placeholder_prefix, commission.bigMoneyFormat()) else getString(R.string.eth_balance_placeholder_prefix, commission.bigMoneyFormat())
+        view.findViewById<TextView>(R.id.txtInfoTotalAmount).text = if(currencyType == CryptoCurrency.UBC) getString(R.string.balance_placeholder_prefix, amount.bigMoneyFormat()) else getString(R.string.eth_balance_placeholder_prefix, amount.bigMoneyFormat())
 
         view.findViewById<View>(R.id.btnSend).setOnClickListener {
             performSend(address, amount)
@@ -61,7 +65,9 @@ class InfoFragment : BaseFragment() {
 
     private fun performSend(address: String, amount: Double) {
         showProgressDialog(R.string.wait_please_title, R.string.withdraw_progress)
-        DataProvider.withdraw(amount, address, object : SilentConsumer<WithdrawResponse> {
+        val amountETH = if(currencyType == CryptoCurrency.ETH) amount else null
+        val amountUBC = if(currencyType == CryptoCurrency.UBC) amount else null
+        DataProvider.withdraw(currencyType, amountETH, amountUBC, address, object : SilentConsumer<WithdrawResponse> {
             override fun onConsume(t: WithdrawResponse) {
                 hideProgressDialog()
                 if (!t.isSuccess()) {

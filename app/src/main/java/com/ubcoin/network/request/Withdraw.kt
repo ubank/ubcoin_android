@@ -6,7 +6,9 @@ import java.io.Serializable
  * Created by Yuriy Aizenberg
  */
 data class Withdraw(
-        val externalAddress: String,
-        val amountUBC: Double
+        val currencyType: String,
+        val amountETH: Double?,
+        val amountUBC: Double?,
+        val externalAddress: String
 
 ) : Serializable

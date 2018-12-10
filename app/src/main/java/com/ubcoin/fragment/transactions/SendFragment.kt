@@ -11,7 +11,7 @@ import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.CommissionAndConversionResponse
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class SendFragment : BaseFragment() {
 
     companion object {
-        fun getBundle(currencyType: Currency): Bundle {
+        fun getBundle(currencyType: CryptoCurrency): Bundle {
             val bundle = Bundle()
             bundle.putSerializable("currency", currencyType)
             return bundle
@@ -43,7 +43,7 @@ class SendFragment : BaseFragment() {
     private var currentAmount: Double = .0
     private var currentCommission: Double = .0
     private var currentConversion: Double = .0
-    private lateinit var currencyType: Currency
+    private lateinit var currencyType: CryptoCurrency
 
     private val isCommissionCalculated = AtomicBoolean(false)
 
@@ -56,8 +56,8 @@ class SendFragment : BaseFragment() {
         txtSendCommission = view.findViewById(R.id.txtSendCommission)
         tvSend = view.findViewById(R.id.tvSend)
         btnContinue = view.findViewById(R.id.btnContinue)
-        currencyType = if(arguments?.getSerializable("currency") == null) Currency.UBC else arguments?.getSerializable("currency") as Currency
-        tvSend.text = if(currencyType == Currency.UBC) getString(R.string.send_ubc_to_any_erc_20_compatible_wallet) else getString(R.string.send_eth_to_your_erc_etherium_wallet)
+        currencyType = if(arguments?.getSerializable("currency") == null) CryptoCurrency.UBC else arguments?.getSerializable("currency") as CryptoCurrency
+        tvSend.text = if(currencyType == CryptoCurrency.UBC) getString(R.string.send_ubc_to_any_erc_20_compatible_wallet) else getString(R.string.send_eth_to_your_erc_etherium_wallet)
 
         edtSendAddress.addTextChangedListener(object : TextWatcherAdatepr() {
             override fun afterTextChanged(p0: Editable?) {
@@ -79,7 +79,7 @@ class SendFragment : BaseFragment() {
         })
 
         currentCommission = .0
-        if(currencyType == Currency.UBC)
+        if(currencyType == CryptoCurrency.UBC)
             txtSendCommission.text = getString(R.string.transaction_commission_format, currentCommission.bigMoneyFormat())
         else
             txtSendCommission.text = getString(R.string.eth_transaction_commission_format, currentCommission.bigMoneyFormat())
@@ -139,7 +139,7 @@ class SendFragment : BaseFragment() {
 
     private fun setCurrentAmount() {
         if (currentAmount > .0) {
-            if(currencyType == Currency.UBC)
+            if(currencyType == CryptoCurrency.UBC)
                 edtSendAmount.setText(getString(R.string.balance_placeholder_prefix, currentAmount.moneyFormat()))
             else
                 edtSendAmount.setText(getString(R.string.eth_balance_placeholder_prefix, currentAmount.moneyFormat()))
@@ -161,7 +161,7 @@ class SendFragment : BaseFragment() {
     private fun goNext() {
         getSwitcher()?.addTo(
                 InfoFragment::class.java,
-                InfoFragment.createBundle(currentAmount, currentCommission, currentConversion, edtSendAddress.text.toString()),
+                InfoFragment.createBundle(currencyType, currentAmount, currentCommission, currentConversion, edtSendAddress.text.toString()),
                 false
         )
     }
@@ -176,7 +176,7 @@ class SendFragment : BaseFragment() {
         currentCommission = .0
         currentConversion = .0
         disableNext()
-        if(currencyType == Currency.UBC)
+        if(currencyType == CryptoCurrency.UBC)
             DataProvider.getCommissionBeforeAndConversionTOUSDAfter(currentAmount, object : SilentConsumer<CommissionAndConversionResponse> {
                 override fun onConsume(t: CommissionAndConversionResponse) {
                     currentConversion = t.conversionResponse.amount

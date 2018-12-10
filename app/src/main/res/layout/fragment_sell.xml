@@ -150,7 +150,7 @@
                     android:layout_marginBottom="15dp"
                     android:fontFamily="@font/roboto_regular"
                     android:textSize="12sp"
-                    android:text="@string/text_your_price_will_be"
+                    android:text="@string/text.your_price_will_be_displayed_in_ubc_and_in_eth"
                     android:textColor="@color/convertPriceTextColor"
                     android:layout_marginStart="@dimen/have_account_text_size"
                     android:layout_height="wrap_content" />
@@ -163,6 +163,23 @@
                         android:id="@+id/refreshViewUbc"
                         android:layout_width="match_parent"
                         app:RefreshViewHint="@string/hint_price_in_ubc"
+                        android:layout_height="wrap_content" />
+
+                    <!--<FrameLayout
+                        android:id="@+id/llSellContainerInUbc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />-->
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_height="@dimen/profileDetailsItemHeight"
+                    android:layout_width="match_parent">
+
+                    <com.ubcoin.view.RefreshableEditText
+                        android:id="@+id/refreshViewETH"
+                        android:layout_width="match_parent"
+                        app:RefreshViewHint="@string/hint_price_in_eth"
                         android:layout_height="wrap_content" />
 
                     <!--<FrameLayout

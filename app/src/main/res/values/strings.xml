@@ -243,5 +243,7 @@
     <string name="eth_postfix">ETH</string>
     <string name="eth_balance_placeholder">%1$s ETH</string>
     <string name="eth_balance_placeholder_prefix">ETH %1$s</string>
+    <string name="text.your_price_will_be_displayed_in_ubc_and_in_eth">Your price will be displayed in UBC and in ETH.</string>
+    <string name="hint_price_in_eth">Price in ETH</string>
 
 </resources>

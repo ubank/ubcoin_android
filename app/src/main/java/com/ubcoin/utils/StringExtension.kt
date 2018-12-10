@@ -55,6 +55,14 @@ fun Double.rateRoundedFormat() : String {
     return formatter.format(this)
 }
 
+fun Double.rateRoundedFormatETH() : String {
+    val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    formatSymbols.groupingSeparator = ' '
+    formatSymbols.decimalSeparator = '.'
+    val formatter = DecimalFormat("#.######", formatSymbols)
+    return formatter.format(this)
+}
+
 fun Float.moneyFormat(): String {
     return this.toDouble().moneyFormat()
 }

@@ -1,6 +1,12 @@
 package com.ubcoin.model
 
-enum class Currency {
+enum class CryptoCurrency {
     UBC,
     ETH
+}
+
+enum class Currency {
+    UBC,
+    ETH,
+    USD
 }

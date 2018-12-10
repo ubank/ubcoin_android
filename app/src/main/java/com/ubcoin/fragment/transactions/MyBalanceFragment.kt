@@ -12,9 +12,8 @@ import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.adapter.TransactionsAdapter
 import com.ubcoin.fragment.BaseFragment
-import com.ubcoin.model.Currency
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.event.UpdateTransactionMessage
-import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MyBalance
 import com.ubcoin.model.response.TopUp
 import com.ubcoin.model.response.TransactionListResponse
@@ -38,7 +37,7 @@ private const val LIMIT = 30
 class MyBalanceFragment : BaseFragment() {
 
     companion object {
-        fun getBundle(currencyType: Currency): Bundle {
+        fun getBundle(currencyType: CryptoCurrency): Bundle {
             val bundle = Bundle()
             bundle.putSerializable("currency", currencyType)
             return bundle
@@ -63,7 +62,7 @@ class MyBalanceFragment : BaseFragment() {
     private var currentPage: Int = -1
     private lateinit var transactionsAdapter: TransactionsAdapter
 
-    private lateinit var currencyType: Currency
+    private lateinit var currencyType: CryptoCurrency
 
     override fun getLayoutResId() = R.layout.fragment_my_balance
 
@@ -71,7 +70,7 @@ class MyBalanceFragment : BaseFragment() {
         super.onViewInflated(view)
         view.findViewById<View>(R.id.llMyBalanceTopUp).setOnClickListener { onTopUpClick() }
 
-        currencyType = if(arguments?.getSerializable("currency") == null) Currency.UBC else arguments?.getSerializable("currency") as Currency
+        currencyType = if(arguments?.getSerializable("currency") == null) CryptoCurrency.UBC else arguments?.getSerializable("currency") as CryptoCurrency
 
         txtMyBalance = view.findViewById(R.id.txtMyBalance)
 
@@ -129,9 +128,9 @@ class MyBalanceFragment : BaseFragment() {
             override fun onConsume(t: MyBalance) {
                 hideProgressDialog()
 
-                var effectiveAmount = if(currencyType == Currency.UBC) t.effectiveAmount else t.effectiveAmountETH
+                var effectiveAmount = if(currencyType == CryptoCurrency.UBC) t.effectiveAmount else t.effectiveAmountETH
 
-                if(currencyType == Currency.UBC)
+                if(currencyType == CryptoCurrency.UBC)
                     txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.ubc_postfix)}"
                 else
                     txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.eth_postfix)}"
