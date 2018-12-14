@@ -22,6 +22,7 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.copyToClipBoard
 import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.moneyFormatETH
 import io.reactivex.disposables.Disposable
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -133,7 +134,7 @@ class MyBalanceFragment : BaseFragment() {
                 if(currencyType == CryptoCurrency.UBC)
                     txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.ubc_postfix)}"
                 else
-                    txtMyBalance.text = "${effectiveAmount.moneyFormat()} ${getString(R.string.eth_postfix)}"
+                    txtMyBalance.text = "${effectiveAmount.moneyFormatETH()} ${getString(R.string.eth_postfix)}"
 
                 if (effectiveAmount > 0f) {
                     changeSendBackground(true)

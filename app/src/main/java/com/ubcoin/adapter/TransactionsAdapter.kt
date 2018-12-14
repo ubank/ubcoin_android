@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.ubcoin.R
 import com.ubcoin.model.response.SingleTransaction
 import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.moneyFormatETH
 import com.ubcoin.utils.toDate
 import com.ubcoin.utils.toTransactionDate
 import java.util.*
@@ -35,7 +36,7 @@ class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransact
         }
         vHolder.txtItemTransactionDate.text = date.toTransactionDate()
         vHolder.txtItemTransactionAmount.text = """${if (transaction.amountUBC > .0) "+ " else ""}${transaction.amountUBC.moneyFormat()} $ubcPostfix"""
-        vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormat()} $ethPostfix"""
+        vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormatETH()} $ethPostfix"""
         if (transaction.isPositive()) {
             vHolder.txtItemTransactionAmount.setTextColor(positiveColor)
         } else {

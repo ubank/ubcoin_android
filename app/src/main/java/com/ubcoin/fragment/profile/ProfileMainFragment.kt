@@ -15,6 +15,7 @@ import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.moneyFormatETH
 import io.reactivex.disposables.Disposable
 
 /**
@@ -107,7 +108,7 @@ class ProfileMainFragment : FirstLineFragment() {
 
         txtProfileBalanceETH.text = getString(
                 eth_balance_placeholder,
-                (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormat())
+                (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH())
 
 /*        val avatarUrl = user.avatarUrl
         if (avatarUrl != null && avatarUrl.isNotBlank()) {

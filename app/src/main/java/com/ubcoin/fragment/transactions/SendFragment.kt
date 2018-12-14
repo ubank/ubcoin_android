@@ -14,10 +14,7 @@ import com.ubcoin.model.CommissionAndConversionResponse
 import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.ImeDoneActionHandler
-import com.ubcoin.utils.TextWatcherAdatepr
-import com.ubcoin.utils.bigMoneyFormat
-import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -142,7 +139,7 @@ class SendFragment : BaseFragment() {
             if(currencyType == CryptoCurrency.UBC)
                 edtSendAmount.setText(getString(R.string.balance_placeholder_prefix, currentAmount.moneyFormat()))
             else
-                edtSendAmount.setText(getString(R.string.eth_balance_placeholder_prefix, currentAmount.moneyFormat()))
+                edtSendAmount.setText(getString(R.string.eth_balance_placeholder_prefix, currentAmount.moneyFormatETH()))
             calculateCommisionAndConversion()
         } else {
             edtSendAmount.text = null

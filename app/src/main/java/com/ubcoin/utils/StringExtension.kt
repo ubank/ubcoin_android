@@ -47,6 +47,26 @@ fun Double.moneyRoundedFormat() : String {
     return formatter.format(this)
 }
 
+fun Double.moneyRoundedFormatETH() : String {
+    val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    formatSymbols.groupingSeparator = ' '
+    formatSymbols.decimalSeparator = '.'
+    val formatter = DecimalFormat("###,###.####", formatSymbols)
+    formatter.minimumFractionDigits = 4
+    return formatter.format(this)
+}
+
+
+fun Double.moneyFormatETH(): String {
+    val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
+    formatSymbols.decimalSeparator = '.'
+    formatSymbols.groupingSeparator = ' '
+    val formatter = DecimalFormat("###,###.####", formatSymbols)
+    formatter.minimumFractionDigits = 4
+    var format = formatter.format(this)
+    return format
+}
+
 fun Double.rateRoundedFormat() : String {
     val formatSymbols = DecimalFormatSymbols(Locale.getDefault())
     formatSymbols.groupingSeparator = ' '
@@ -60,6 +80,7 @@ fun Double.rateRoundedFormatETH() : String {
     formatSymbols.groupingSeparator = ' '
     formatSymbols.decimalSeparator = '.'
     val formatter = DecimalFormat("#.######", formatSymbols)
+    formatter.minimumFractionDigits = 6
     return formatter.format(this)
 }
 

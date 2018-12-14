@@ -285,7 +285,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
 
         txtPriceInCurrencyETH.text =
-                 "~" + marketItem.priceETH!!.moneyRoundedFormat() + " ETH"
+                 marketItem.priceETH!!.moneyRoundedFormatETH() + " ETH"
 
         tvExchangeRate.text = if(!marketItem.currency.isNullOrEmpty() && marketItem.rate != null) "1 UBC = " + marketItem.rate!!.rateRoundedFormat() + " " + marketItem.currency else null
         tvExchangeRateETH.text = if(!marketItem.currency.isNullOrEmpty() && marketItem.rateETH != null) "1 UBC = " + ((1 / marketItem.rateETH!!) * marketItem.rate!!).rateRoundedFormatETH() + " ETH" else null

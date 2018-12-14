@@ -38,10 +38,7 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.ConversionRequest
 import com.ubcoin.network.request.CreateProductRequest
 import com.ubcoin.network.request.UpdateProductRequest
-import com.ubcoin.utils.MaxValueInputFilter
-import com.ubcoin.utils.ProfileHolder
-import com.ubcoin.utils.SellCreateDataHolder
-import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.RefreshableEditText
 import io.reactivex.disposables.Disposable
@@ -816,7 +813,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         when (currencyType) {
             Currency.UBC -> return getString(R.string.balance_placeholder, value.moneyFormat())
             Currency.USD -> return getString(R.string.balance_placeholder_usd, value.moneyFormat())
-            Currency.ETH -> return getString(R.string.eth_balance_placeholder, value.moneyFormat())
+            Currency.ETH -> return getString(R.string.eth_balance_placeholder, value.moneyFormatETH())
         }
     }
 
