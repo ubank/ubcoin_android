@@ -5,8 +5,8 @@ import com.ubcoin.R
  */
 enum class ConditionType {
     NONE(-1),
-    NEW(R.string.condition_new),
-    USED(R.string.condition_used);
+    NEW(R.string.text_condition_new),
+    USED(R.string.text_condition_used);
 
     private val resId: Int
 
