@@ -21,6 +21,7 @@ import kotlin.math.roundToInt
 class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, MarketListAdapter.ViewHolder>(context) {
 
     private var ubcPostfix: String? = null
+    private var ethPostfix: String? = null
 
     var favoriteListener: IFavoriteListener? = null
 
@@ -35,6 +36,13 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
         return ubcPostfix
     }
 
+    private fun getEthPostfix(): String? {
+        if (ethPostfix == null) {
+            ethPostfix = context.getString(R.string.eth_postfix)
+        }
+        return ethPostfix
+    }
+
     private fun getPriceInCurrency(marketItem: MarketItem): String? {
         if (!marketItem.isPriceInCurrencyPresented()) return null
         return "~" + marketItem.priceInCurrency!!.moneyRoundedFormat() + " " + marketItem.currency
@@ -44,7 +52,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
     override fun onBindViewHolder(vh: ViewHolder, position: Int) {
         val item = getItem(position)
         vh.txtMarketProductName.text = item.title
-        vh.txtMarketPrice.text = """${(item.price ?: .0).moneyFormat()} ${getUbcPostfix()}"""
+        vh.txtMarketPrice.text = """${(item.priceETH ?: .0).moneyFormatETH()} ${getEthPostfix()}"""
 
         val images = item.images
         if (CollectionExtensions.nullOrEmpty(images)) {
