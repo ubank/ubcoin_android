@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/header"
+        android:layout_alignParentStart="true"
         android:fillViewport="true">
 
 
@@ -52,7 +52,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/profileDetailsItemHeight"
                     android:layout_marginEnd="@dimen/have_account_text_size"
-                    app:met_primaryColor="@color/greenMainColor"
                     android:layout_marginStart="@dimen/have_account_text_size"
                     android:layout_marginTop="@dimen/header_margin_start"
                     android:ellipsize="end"
@@ -62,17 +61,17 @@
                     android:lines="1"
                     android:textColorHighlight="@color/haveAccountColor"
                     app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/greenMainColor"
                     app:met_textColor="@color/inputTextColor"
                     app:met_textColorHint="@color/haveAccountColor" />
 
                 <RelativeLayout
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight">
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/edtSellCategory"
                         android:layout_width="match_parent"
-                        app:met_primaryColor="@color/greenMainColor"
                         android:layout_height="@dimen/profileDetailsItemHeight"
                         android:layout_marginEnd="@dimen/have_account_text_size"
                         android:layout_marginStart="@dimen/have_account_text_size"
@@ -86,6 +85,7 @@
                         android:lines="1"
                         android:textColorHighlight="@color/haveAccountColor"
                         app:met_floatingLabel="highlight"
+                        app:met_primaryColor="@color/greenMainColor"
                         app:met_textColor="@color/inputTextColor"
                         app:met_textColorHint="@color/haveAccountColor" />
 
@@ -97,13 +97,13 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_width="match_parent">
+                    android:id="@+id/rlConditionFull"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight">
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/etCondition"
                         android:layout_width="match_parent"
-                        app:met_primaryColor="@color/greenMainColor"
                         android:layout_height="@dimen/profileDetailsItemHeight"
                         android:layout_marginEnd="@dimen/have_account_text_size"
                         android:layout_marginStart="@dimen/have_account_text_size"
@@ -117,6 +117,7 @@
                         android:lines="1"
                         android:textColorHighlight="@color/haveAccountColor"
                         app:met_floatingLabel="highlight"
+                        app:met_primaryColor="@color/greenMainColor"
                         app:met_textColor="@color/inputTextColor"
                         app:met_textColorHint="@color/haveAccountColor" />
 
@@ -127,17 +128,53 @@
 
                 </RelativeLayout>
 
+                <LinearLayout
+                    android:id="@+id/llFileUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.rengwuxian.materialedittext.MaterialEditText
+                        android:id="@+id/etSellFileUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/profileDetailsItemHeight"
+                        android:layout_marginEnd="@dimen/have_account_text_size"
+                        android:layout_marginStart="@dimen/have_account_text_size"
+                        android:layout_marginTop="@dimen/header_margin_start"
+                        android:ellipsize="end"
+                        android:hint="@string/text.link_to_download_file"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:textColorHighlight="@color/haveAccountColor"
+                        app:met_floatingLabel="highlight"
+                        app:met_primaryColor="@color/greenMainColor"
+                        app:met_textColor="@color/inputTextColor"
+                        app:met_textColorHint="@color/haveAccountColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/have_account_text_size"
+                        android:layout_marginStart="@dimen/have_account_text_size"
+                        android:layout_marginTop="@dimen/header_margin_start"
+                        android:text="@string/text.digital_asset_upload_description"
+                        android:textColor="@color/convertPriceTextColor"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
                 <RelativeLayout
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight">
 
                     <com.ubcoin.view.RefreshableEditText
                         android:id="@+id/refreshViewUsd"
                         android:layout_width="match_parent"
-                        app:RefreshViewHint="@string/hint_price_in_usd"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:RefreshViewHint="@string/hint_price_in_usd" />
 
-                  <!--  <FrameLayout
+                    <!--  <FrameLayout
                         android:id="@+id/llSellContainerInUsd"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />-->
@@ -146,24 +183,24 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
+                    android:layout_marginStart="@dimen/have_account_text_size"
+                    android:layout_marginTop="15dp"
                     android:fontFamily="@font/roboto_regular"
-                    android:textSize="12sp"
                     android:text="@string/text.your_price_will_be_displayed_in_ubc_and_in_eth"
                     android:textColor="@color/convertPriceTextColor"
-                    android:layout_marginStart="@dimen/have_account_text_size"
-                    android:layout_height="wrap_content" />
+                    android:textSize="12sp" />
 
                 <RelativeLayout
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight">
 
                     <com.ubcoin.view.RefreshableEditText
                         android:id="@+id/refreshViewUbc"
                         android:layout_width="match_parent"
-                        app:RefreshViewHint="@string/hint_price_in_ubc"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:RefreshViewHint="@string/hint_price_in_ubc" />
 
                     <!--<FrameLayout
                         android:id="@+id/llSellContainerInUbc"
@@ -173,14 +210,14 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_height="@dimen/profileDetailsItemHeight"
-                    android:layout_width="match_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/profileDetailsItemHeight">
 
                     <com.ubcoin.view.RefreshableEditText
                         android:id="@+id/refreshViewETH"
                         android:layout_width="match_parent"
-                        app:RefreshViewHint="@string/hint_price_in_eth"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        app:RefreshViewHint="@string/hint_price_in_eth" />
 
                     <!--<FrameLayout
                         android:id="@+id/llSellContainerInUbc"
@@ -216,7 +253,6 @@
                     android:layout_marginStart="@dimen/have_account_text_size"
                     android:layout_marginTop="@dimen/header_margin_start"
                     android:drawableEnd="@drawable/ic_next"
-                    app:met_primaryColor="@color/greenMainColor"
                     android:ellipsize="end"
                     android:hint="@string/description"
                     android:maxLines="4"
@@ -224,11 +260,13 @@
                     android:singleLine="false"
                     android:textColorHighlight="@color/haveAccountColor"
                     app:met_floatingLabel="highlight"
+                    app:met_primaryColor="@color/greenMainColor"
                     app:met_textColor="@color/inputTextColor"
                     app:met_textColorHint="@color/haveAccountColor" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/camera_margin"
@@ -261,7 +299,6 @@
                     android:textAllCaps="false"
                     android:textColor="@color/haveAccountColor"
                     android:textSize="@dimen/user_agreement_text_size" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -314,29 +351,27 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/btnSellDone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
-
-                    <Button
-                        android:id="@+id/btnSellDone"
-                        android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginEnd="@dimen/have_account_text_size"
-                        android:layout_marginStart="@dimen/have_account_text_size"
-                        android:layout_marginTop="15dp"
-                        android:background="@color/greenMainColor"
-                        android:elevation="2dp"
-                        android:text="@string/done"
-                        android:textColor="@android:color/white"
-                        android:textSize="14sp"
-                        android:translationZ="2dp" />
-
-                </LinearLayout>
-
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginEnd="@dimen/have_account_text_size"
+                    android:layout_marginStart="@dimen/have_account_text_size"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/greenMainColor"
+                    android:elevation="2dp"
+                    android:text="@string/done"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"
+                    android:translationZ="2dp" />
 
             </LinearLayout>
 

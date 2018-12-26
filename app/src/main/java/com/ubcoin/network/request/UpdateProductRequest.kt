@@ -15,7 +15,8 @@ data class UpdateProductRequest(
         val disableNotifyToEmail: Boolean,
         val agreement: Boolean,
         var images: List<String>,
-        var condition: String
+        var condition: String?,
+        var fileUrl: String?
 ) {
 
     companion object {
@@ -30,7 +31,8 @@ data class UpdateProductRequest(
                     createProductRequest.disableNotifyToEmail,
                     createProductRequest.agreement,
                     createProductRequest.images,
-                    createProductRequest.condition
+                    createProductRequest.condition,
+                    createProductRequest.fileUrl
             )
         }
     }

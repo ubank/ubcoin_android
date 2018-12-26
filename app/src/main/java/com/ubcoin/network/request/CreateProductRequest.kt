@@ -14,5 +14,6 @@ data class CreateProductRequest(
         val disableNotifyToEmail: Boolean,
         val agreement: Boolean,
         var images: List<String>,
-        val condition: String
+        val condition: String?,
+        val fileUrl: String?
 )

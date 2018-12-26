@@ -62,6 +62,7 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.view_item_details.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
@@ -115,6 +116,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtHeaderSimple: TextView
     private lateinit var imgHeaderRight: ImageView
     private lateinit var llHeaderRightSimple: View
+
+    private lateinit var llFileUrlBuyer: View
+    private lateinit var llFileUrlSeller: View
+    private lateinit var tvFileUrl: TextView
+    private lateinit var llLocation: View
 
     private lateinit var llHeaderRightMenu: View
     private lateinit var imgHeaderRightMenu: ImageView
@@ -179,6 +185,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         txtUserName = view.findViewById(R.id.txtUserName)
         ratingBarView = view.findViewById(R.id.ratingBarView)
+        llFileUrlBuyer = view.findViewById(R.id.llFileUrlBuyer)
+        llFileUrlSeller = view.findViewById(R.id.llFileUrlSeller)
 
         llWantToBuy = view.findViewById<View>(R.id.llWantToBuy)
         imgDescription = view.findViewById(R.id.imgDescription)
@@ -192,6 +200,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llHeaderRightSimple = view.findViewById(R.id.llHeaderRightSimple)
         llHeaderRightMenu = view.findViewById(R.id.llHeaderRightMenu)
         imgHeaderRightMenu = view.findViewById(R.id.imgHeaderRightMenu)
+        tvFileUrl = view.findViewById(R.id.tvFileUrl)
+        llLocation = view.findViewById(R.id.llLocation)
 
         wantToBuyContainer = view.findViewById(R.id.wantToBuyContainer)
 
@@ -273,6 +283,32 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             setCustomAnimation(DescriptionAnimation())
             stopAutoCycle()
         }
+
+        if(marketItem.category!!.id.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
+        {
+            llLocation.visibility = View.GONE
+            llCondition.visibility = View.GONE
+
+            if(marketItem.isOwner())
+            {
+                llFileUrlSeller.visibility = View.VISIBLE
+                tvFileUrl.text = marketItem.fileUrl
+
+            }
+            else
+            {
+                llFileUrlBuyer.visibility = View.VISIBLE
+            }
+        }
+        else
+        {
+            llLocation.visibility = View.VISIBLE
+            llCondition.visibility = View.VISIBLE
+            llFileUrlBuyer.visibility = View.GONE
+            llFileUrlSeller.visibility = View.GONE
+        }
+
+
 
         txtHeaderSimple.text = marketItem.title
         txtItemPrice.text = (marketItem.price ?: .0).moneyFormat() + " UBC"

@@ -184,4 +184,43 @@
 
     <string name="label_no_item">Tidak ada hasil</string>
     <string name="label_no_item_description">Sepertinya tidak ada yang bisa ditampilkan.\nSilakan coba atur ulang filter Anda.</string>
+
+    <plurals name="txt_days">
+        <item quantity="zero">%d hari</item>
+        <item quantity="one">%d hari</item>
+        <item quantity="other">%d hari</item>
+    </plurals>
+
+    <plurals name="txt_month">
+        <item quantity="zero">%d bulan</item>
+        <item quantity="one">%d bulan</item>
+        <item quantity="other">%d bulan</item>
+    </plurals>
+
+    <plurals name="txt_years">
+        <item quantity="zero">%d tahun</item>
+        <item quantity="one">%d tahun</item>
+        <item quantity="other">%d tahun</item>
+    </plurals>
+    <string name="text.on_market">Di pasar</string>
+    <string name="text.condition">Kondisi</string>
+    <string name="text.condition_new">Baru</string>
+    <string name="text.condition_used">Bekas</string>
+    <string name="eth_balance_placeholder">%1$s ETH</string>
+    <string name="eth_balance_placeholder_prefix">ETH %1$s</string>
+    <string name="eth_postfix">ETH</string>
+    <string name="text.your_price_will_be_displayed_in_ubc_and_in_eth">Pembeli dapat membayar Anda dalam bentuk UBC atau ETH.</string>
+    <string name="all_categories">Semua Kategori</string>
+    <string name="sort_by_date">Tanggal Penempatan</string>
+    <string name="sort_by_price">Harga barang</string>
+    <string name="sort_by_distance">Jarak ke penjual</string>
+    <string name="header_filters">Urutkan</string>
+    <string name="btn_show_items">Tampilkan barang</string>
+    <string name="hint_price_in_eth">Harga dalam ETH</string>
+    <string name="send_eth_to_your_erc_etherium_wallet">Kirim ETH ke dompet Ethereum Anda.</string>
+    <string name="text.on_ubicoin_market">di Pasar Ubcoin</string>
+    <string name="text.select_condition">Pilih kondisi</string>
+    <string name="text.condition_is_missing">Kondisi belum dipilih</string>
+    <string name="eth_transaction_commission_format">Komisi Untuk Gas: %1$s ETH. Gas adalah biaya yang Blockchain Ethereum ambil untuk membuat transaksi.</string>
+    <string name="text.items">Item</string>
 </resources>

@@ -70,10 +70,20 @@
             android:layout_height="@dimen/detailsProfileHeightMin"
             android:background="@android:color/white">
 
+            <ImageView
+                android:id="@+id/ivUBC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/img_ubc"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/ivUBC"
                 android:layout_toStartOf="@id/llArrowLayout2">
 
                 <LinearLayout
@@ -82,26 +92,28 @@
                     android:layout_height="1dp"
                     android:layout_centerVertical="true"
                     android:orientation="vertical" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/llAnchor"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginStart="@dimen/detailsProfileMargin"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/text.my_ubc_balance"
-                    android:textColor="@color/haveAccountColor"
-                    android:textSize="@dimen/sign_up_text_size" />
 
                 <TextView
                     android:id="@+id/txtProfileBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/llAnchor"
+                    android:layout_above="@id/llAnchor"
                     android:layout_marginStart="@dimen/detailsProfileMargin"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/headerTextColor"
+                    android:layout_marginBottom="4dp"
                     android:textSize="@dimen/have_account_text_size" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/llAnchor"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/ethColor"
+                    android:textSize="12sp"
+                    android:text="UBC"/>
 
 
             </RelativeLayout>
@@ -125,16 +137,30 @@
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
         <RelativeLayout
             android:id="@+id/llProfileBalanceETH"
             android:layout_width="match_parent"
             android:layout_height="@dimen/detailsProfileHeightMin"
             android:background="@android:color/white">
 
+            <ImageView
+                android:id="@+id/ivETH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                android:src="@drawable/img_eth"/>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_toEndOf="@id/ivETH"
                 android:layout_toStartOf="@id/llArrowLayout2ETH">
 
                 <LinearLayout
@@ -143,26 +169,28 @@
                     android:layout_height="1dp"
                     android:layout_centerVertical="true"
                     android:orientation="vertical" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/llAnchorETH"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginStart="@dimen/detailsProfileMargin"
-                    android:fontFamily="@font/roboto_regular"
-                    android:text="@string/text.my_eth_balance"
-                    android:textColor="@color/haveAccountColor"
-                    android:textSize="@dimen/sign_up_text_size" />
 
                 <TextView
                     android:id="@+id/txtProfileBalanceETH"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/llAnchorETH"
+                    android:layout_above="@id/llAnchorETH"
                     android:layout_marginStart="@dimen/detailsProfileMargin"
                     android:fontFamily="@font/roboto_regular"
                     android:textColor="@color/headerTextColor"
-                    android:textSize="@dimen/have_account_text_size" />
+                    android:textSize="@dimen/have_account_text_size"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/llAnchorETH"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/ethColor"
+                    android:textSize="12sp"
+                    android:text="ETH"/>
 
 
             </RelativeLayout>

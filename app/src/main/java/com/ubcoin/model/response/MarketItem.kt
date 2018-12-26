@@ -26,7 +26,8 @@ data class MarketItem(
         val rateETH: Double?,
         val currency: String?,
         val purchases: List<Purchase>,
-        val condition: String?
+        val condition: String?,
+        val fileUrl: String?
 ) : MarketItemMarker {
 
     fun isOwner() : Boolean {

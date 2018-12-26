@@ -206,72 +206,78 @@
             android:textColor="#de000000" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginItemDetails"
-        android:layout_marginTop="15dp"
-        android:text="@string/location_label"
-        android:textAllCaps="true"
-        android:textColor="@color/haveAccountColor" />
-
-    <TextView
-        android:id="@+id/tvAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginItemDetails"
-        android:layout_marginTop="8dp"
-        android:visibility="gone"
-        android:textColor="@color/haveAccountColor" />
-
-
     <LinearLayout
+        android:id="@+id/llLocation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginTop="15dp"
+            android:text="@string/location_label"
+            android:textAllCaps="true"
+            android:textColor="@color/haveAccountColor" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:textColor="@color/haveAccountColor" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/map_detail_height">
+            android:layout_height="wrap_content">
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp" />
+                android:layout_height="@dimen/map_detail_height">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/imgMarket"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_corners_black_transparent"
-                android:gravity="center_vertical">
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp" />
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:src="@drawable/ic_location_white_mini" />
+                    android:layout_alignBottom="@id/imgMarket"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/rounded_corners_black_transparent"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/txtLocationDistance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="@dimen/camera_end_margin"
-                    android:layout_marginBottom="3dp"
-                    android:fontFamily="@font/roboto_regular"
-                    android:textColor="@android:color/white"
-                    android:textSize="@dimen/menu_textsize" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:src="@drawable/ic_location_white_mini" />
+
+                    <TextView
+                        android:id="@+id/txtLocationDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="@dimen/camera_end_margin"
+                        android:layout_marginBottom="3dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/menu_textsize" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
+            </RelativeLayout>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -313,6 +319,92 @@
                 android:src="@drawable/ic_next" />
 
         </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llFileUrlSeller"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginTop="15dp"
+            android:text="@string/text.file_url"
+            android:textAllCaps="true"
+            android:textColor="@color/haveAccountColor" />
+
+        <TextView
+            android:id="@+id/tvFileUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#de000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/llFileUrlBuyer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_download"
+                android:layout_margin="16dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:textColor="#403d45"
+                    android:text="@string/text.file_is_checked_by_moderator" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#de000000"
+                    android:text="@string/text.buyer_will_receive_the_link_by_e_mail_after_buyer_s_payment_is_frozen_by_escrow_service"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

@@ -102,13 +102,9 @@ class ProfileMainFragment : FirstLineFragment() {
             return
         }
         txtProfileName.text = user.name
-        txtProfileBalance.text = getString(
-                balance_placeholder,
-                (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat())
+        txtProfileBalance.text = (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat()
 
-        txtProfileBalanceETH.text = getString(
-                eth_balance_placeholder,
-                (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH())
+        txtProfileBalanceETH.text = (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH()
 
 /*        val avatarUrl = user.avatarUrl
         if (avatarUrl != null && avatarUrl.isNotBlank()) {

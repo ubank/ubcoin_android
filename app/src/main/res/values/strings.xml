@@ -187,7 +187,7 @@
 
     <string name="text_your_price_will_be">Your price will be fixed in UBC</string>
     <string name="str_send_success">Your transaction has been broadcast to the network. This does not mean that it has been successfully sent. During times of extreme volume, it may take 3+ hours to send.</string>
-    <string name="all_categories" translatable="false">All categories</string>
+    <string name="all_categories">All categories</string>
 
     <plurals name="txt_active_deals_count">
         <item quantity="zero">%d active deals</item>
@@ -195,14 +195,14 @@
         <item quantity="other">%d active deals</item>
     </plurals>
 
-    <string name="sort_by_date" translatable="false">Placement date</string>
-    <string name="sort_by_price" translatable="false">Item price</string>
-    <string name="sort_by_distance" translatable="false">Distance to seller</string>
-    <string name="header_filters" translatable="false">Filters</string>
-    <string name="btn_show_items" translatable="false">Show items</string>
+    <string name="sort_by_date">Placement date</string>
+    <string name="sort_by_price">Item price</string>
+    <string name="sort_by_distance">Distance to seller</string>
+    <string name="header_filters">Filters</string>
+    <string name="btn_show_items">Show items</string>
 
-    <string name="condition_new" translatable="false">New</string>
-    <string name="condition_used" translatable="false">Used</string>
+    <string name="text.condition_new">New</string>
+    <string name="text.condition_used">Used</string>
 
     <string name="label_no_item">No results</string>
     <string name="label_no_item_description">Seems like there is nothing to show.\nPlease try to reset your filters.</string>
@@ -236,14 +236,18 @@
         <item quantity="other">%d years</item>
     </plurals>
 
-    <string name="text.my_eth_balance">My ETH balance</string>
-    <string name="text.my_ubc_balance">My UBC balance</string>
     <string name="send_eth_to_your_erc_etherium_wallet">Send ETH to your Ethereum wallet.</string>
     <string name="eth_transaction_commission_format">Commission for Gas: %1$s ETH. Gas is a fee that Ethereum blockchain takes for making a transaction.</string>
     <string name="eth_postfix">ETH</string>
     <string name="eth_balance_placeholder">%1$s ETH</string>
     <string name="eth_balance_placeholder_prefix">ETH %1$s</string>
-    <string name="text.your_price_will_be_displayed_in_ubc_and_in_eth">Your price will be displayed in UBC and in ETH.</string>
+    <string name="text.your_price_will_be_displayed_in_ubc_and_in_eth">Buyer can pay you in UBC or ETH.</string>
     <string name="hint_price_in_eth">Price in ETH</string>
+    <string name="text.link_to_download_file">LINK TO DOWNLOAD THE FILE</string>
+    <string name="text.digital_asset_upload_description">Paste here link to download your file from cloud storage (Goodle Drive, Dropbox, etc.). Buyers will NOT see this link until escrow service freezes their payment.</string>
+    <string name="text.file_url_is_missing">File url is missing</string>
+    <string name="text.file_is_checked_by_moderator">File is checked by moderator</string>
+    <string name="text.buyer_will_receive_the_link_by_e_mail_after_buyer_s_payment_is_frozen_by_escrow_service">Buyer will receive the link by e-mail after buyer\'s payment is frozen by escrow service.</string>
+    <string name="text.file_url">File url</string>
 
 </resources>
