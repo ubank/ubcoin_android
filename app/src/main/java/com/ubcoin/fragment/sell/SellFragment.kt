@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.cocosw.bottomsheet.BottomSheet
@@ -76,7 +78,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     private lateinit var llSellLocation: View
     private lateinit var btnSellDone: View
 
+    private lateinit var llFileUrl: LinearLayout
+    private lateinit var rlConditionFull: RelativeLayout
+
+    private lateinit var etSellFileUrl: MaterialEditText
     private lateinit var etCondition: MaterialEditText
+    private lateinit var tvLocation: TextView
 
     private lateinit var refreshViewUbc: RefreshableEditText
     private lateinit var refreshViewUsd: RefreshableEditText
@@ -118,8 +125,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         txtSellLocation = view.findViewById(R.id.txtSellLocation)
         llSellLocation = view.findViewById(R.id.llSellLocation)
         btnSellDone = view.findViewById(R.id.btnSellDone)
+        llFileUrl = view.findViewById(R.id.llFileUrl)
+        rlConditionFull = view.findViewById(R.id.rlConditionFull)
 
+        tvLocation = view.findViewById(R.id.tvLocation)
         etCondition = view.findViewById(R.id.etCondition)
+        etSellFileUrl = view.findViewById(R.id.etSellFileUrl)
 
         mapView.getMapAsync(this)
         mapView.onCreate(savedInstanceState)
@@ -254,6 +265,8 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         if (SellCreateDataHolder.hasChanges) {
             setupData()
         }
+
+
         mapView.onResume()
     }
 
@@ -477,10 +490,23 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
             return null
         }
 
-        val condition = SellCreateDataHolder.condition
-        if (condition == null) {
-            showSweetAlertDialog(R.string.error, R.string.text_condition_is_missing)
-            return null
+        var condition: ConditionType? = null
+        var fileUrl: String? = null
+        if(categoryId.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
+        {
+            fileUrl = etSellFileUrl.text.toString()
+            if (fileUrl.isBlank()) {
+                showSweetAlertDialog(R.string.error, R.string.text_file_url_is_missing)
+                return null
+            }
+        }
+        else
+        {
+            condition = SellCreateDataHolder.condition
+            if (condition == null) {
+                showSweetAlertDialog(R.string.error, R.string.text_condition_is_missing)
+                return null
+            }
         }
 
         val location = SellCreateDataHolder.location
@@ -500,7 +526,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 edtSellDescription.text.toString().trim(),
                 currentPriceInUBC,
                 location,
-                true, true, ArrayList(), condition.name
+                true, true, ArrayList(), condition?.name, fileUrl
         )
     }
 
@@ -536,6 +562,23 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         } else {
             edtSellCategory.setText(category.name)
         }
+
+        if(category == null || !category.id.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
+        {
+            rlConditionFull.visibility = View.VISIBLE
+            llFileUrl.visibility = View.GONE
+            llSellLocation.visibility = View.VISIBLE
+            tvLocation.visibility = View.VISIBLE
+        }
+        else
+        {
+            rlConditionFull.visibility = View.GONE
+            llFileUrl.visibility = View.VISIBLE
+            llSellLocation.visibility = View.GONE
+            tvLocation.visibility = View.GONE
+        }
+
+
         val condition = SellCreateDataHolder.condition
         if (condition == null) {
             etCondition.text = null
