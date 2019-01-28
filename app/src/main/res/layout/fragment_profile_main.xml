@@ -215,5 +215,70 @@
         </RelativeLayout>
 
 
+        <RelativeLayout
+            android:id="@+id/rlProfileDeals"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/detailsProfileHeightMin"
+            android:background="@android:color/white"
+            android:layout_marginTop="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toStartOf="@id/llArrowLayoutDeals">
+
+                <LinearLayout
+                    android:id="@+id/llAnchorDeals"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/llAnchorDeals"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:layout_marginBottom="4dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/ethColor"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:text="@string/menu_label_deals"/>
+
+                <TextView
+                    android:id="@+id/txtProfileDeals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/detailsProfileMargin"
+                    android:fontFamily="@font/roboto_regular"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/have_account_text_size"
+                    android:text="@string/menu_label_deals"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/llArrowLayoutDeals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/detailsProfileMargin"
+                    android:src="@drawable/ic_next" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

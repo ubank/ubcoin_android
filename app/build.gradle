@@ -15,8 +15,8 @@ android {
         minSdkVersion 17
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode 53
-        versionName "1.0.53"
+        versionCode 56
+        versionName "1.0.56"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -110,4 +110,6 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '4.21.0'
 }

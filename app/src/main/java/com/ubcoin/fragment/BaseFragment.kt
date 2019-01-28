@@ -282,7 +282,8 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
         if (getHeaderIcon() != noHeaderObject) {
             headerIcon?.setImageResource(getHeaderIcon())
-            llHeaderImage?.setOnClickListener { onIconClick() }
+            llHeaderImage?.setOnClickListener {
+                onIconClick() }
         }
     }
 

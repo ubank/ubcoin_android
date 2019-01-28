@@ -132,7 +132,27 @@
                     android:id="@+id/llFileUrl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/mainBackground">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/camera_margin"
+                            android:layout_marginStart="@dimen/have_account_text_size"
+                            android:layout_marginTop="@dimen/favorite_fragment_text_margin"
+                            android:text="@string/text.link_to_download_file"
+                            android:textAllCaps="true"
+                            android:textColor="@color/haveAccountColor"
+                            android:textSize="16sp"/>
+
+                    </LinearLayout>
+
 
                     <com.rengwuxian.materialedittext.MaterialEditText
                         android:id="@+id/etSellFileUrl"
@@ -140,9 +160,8 @@
                         android:layout_height="@dimen/profileDetailsItemHeight"
                         android:layout_marginEnd="@dimen/have_account_text_size"
                         android:layout_marginStart="@dimen/have_account_text_size"
-                        android:layout_marginTop="@dimen/header_margin_start"
                         android:ellipsize="end"
-                        android:hint="@string/text.link_to_download_file"
+                        android:hint="@string/text.add_your_link_from_cloud_storage"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:lines="1"

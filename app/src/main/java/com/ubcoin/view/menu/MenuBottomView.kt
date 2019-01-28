@@ -44,8 +44,10 @@ class MenuBottomView : LinearLayout {
         menuItemFavorite?.singleMenuCallback = iSingleMenuViewCallback
         menuItemSell?.singleMenuCallback = iSingleMenuViewCallback
         menuItemDeals?.singleMenuCallback = iSingleMenuViewCallback
+        menuItemMessages?.singleMenuCallback = iSingleMenuViewCallback
         menuItemProfile?.singleMenuCallback = iSingleMenuViewCallback
         menuItemSignIn.singleMenuCallback = iSingleMenuViewCallback
+        menuItemDeals.hide()
 
     }
 
@@ -62,6 +64,7 @@ class MenuBottomView : LinearLayout {
             MenuItems.DEALS -> menuItemDeals
             MenuItems.PROFILE -> menuItemProfile
             MenuItems.SIGN_IN -> menuItemSignIn
+            MenuItems.MESSAGES -> menuItemMessages
         }
         if (activeMenuItem == null || !activeMenuItem?.equals(singleView)!!) {
             deactivateCurrent()
@@ -79,6 +82,7 @@ class MenuBottomView : LinearLayout {
             menuItemDeals -> MenuItems.DEALS
             menuItemProfile -> MenuItems.PROFILE
             menuItemSignIn -> MenuItems.SIGN_IN
+            menuItemMessages -> MenuItems.MESSAGES
             else -> throw RuntimeException("Unresolvable menu item")
         }
     }

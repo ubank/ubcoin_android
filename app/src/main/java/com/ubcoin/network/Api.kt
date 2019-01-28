@@ -96,6 +96,9 @@ interface Api {
     @POST("/api/images")
     fun uploadImage(@Part file: MultipartBody.Part): Observable<TgLink>
 
+    @GET("/api/purchases/related")
+    fun getPurchases(@Query("size") limit: Int, @Query("page") page: Int): Observable<RelatedPurchasesResponse>
+
     @GET("/api/purchases/buyer")
     fun getBuyersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<DealsListResponse>
 

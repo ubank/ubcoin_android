@@ -182,6 +182,13 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun getPurchases(limit: Int, page: Int, onSuccess: Consumer<RelatedPurchasesResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getPurchases(limit, page)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun getBuyersItems(limit: Int, page: Int, onSuccess: Consumer<DealsListResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .getBuyersItems(limit, page)

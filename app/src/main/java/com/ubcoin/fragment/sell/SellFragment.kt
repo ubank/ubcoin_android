@@ -495,10 +495,18 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         if(categoryId.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
         {
             fileUrl = etSellFileUrl.text.toString()
+
             if (fileUrl.isBlank()) {
                 showSweetAlertDialog(R.string.error, R.string.text_file_url_is_missing)
                 return null
             }
+
+            if (!fileUrl.verifyUrl()) {
+                showSweetAlertDialog(R.string.error, R.string.text_incorrect_url)
+                return null
+            }
+
+
         }
         else
         {

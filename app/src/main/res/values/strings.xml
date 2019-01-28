@@ -249,5 +249,12 @@
     <string name="text.file_is_checked_by_moderator">File is checked by moderator</string>
     <string name="text.buyer_will_receive_the_link_by_e_mail_after_buyer_s_payment_is_frozen_by_escrow_service">Buyer will receive the link by e-mail after buyer\'s payment is frozen by escrow service.</string>
     <string name="text.file_url">File url</string>
+    <string name="text.add_your_link_from_cloud_storage">Add your link from cloud storage</string>
+    <string name="label.no_messages">No messages</string>
+    <string name="label_seems_like_sign_to_start_connecting_with_people">Seems like it’s a sign to start connecting with people.</string>
+    <string name="text.new_message">New message...</string>
+    <string name="text.connection_problems">Connection problems</string>
+    <string name="text.incorrect_url">Incorrect url</string>
+    <string name="text.purchase">Purchase</string>
 
 </resources>

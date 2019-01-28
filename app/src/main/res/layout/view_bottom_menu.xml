@@ -56,6 +56,17 @@
 
 
         <com.ubcoin.view.menu.MenuSingleView
+            android:id="@+id/menuItemMessages"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            custom:MenuItemActiveIcon="@drawable/ic_message_active"
+            custom:MenuItemActiveTextColor="@color/menuActiveColor"
+            custom:MenuItemInactiveIcon="@drawable/ic_message_inactive"
+            custom:MenuItemInactiveTextColor="@color/menuInactiveColor"
+            custom:MenuItemText="@string/menu_label_messages" />
+
+        <com.ubcoin.view.menu.MenuSingleView
             android:id="@+id/menuItemDeals"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

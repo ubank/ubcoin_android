@@ -36,6 +36,8 @@ class BuyDealsChildFragment : BaseFragment() {
     private var currentPage = -1
 
     override fun getLayoutResId() = R.layout.fragment_deals_child
+    override fun isFooterShow() = false
+    override fun getHeaderIcon() = R.drawable.ic_back
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)

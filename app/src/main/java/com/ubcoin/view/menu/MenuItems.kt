@@ -10,6 +10,7 @@ enum class MenuItems {
     SELL,
     DEALS,
     PROFILE,
-    SIGN_IN
+    SIGN_IN,
+    MESSAGES
 
 }

@@ -6,14 +6,23 @@ import com.ogaclejapan.smarttablayout.SmartTabLayout
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 import com.ubcoin.R
+import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.FirstLineFragment
 
 /**
  * Created by Yuriy Aizenberg
  */
-class DealsParentFragment : FirstLineFragment() {
+class DealsParentFragment : BaseFragment() {
 
     override fun getLayoutResId() = R.layout.fragment_deals
+    override fun getHeaderIcon() = R.drawable.ic_back
+
+    override fun isFooterShow() = false
+
+    override fun onIconClick() {
+        super.onIconClick()
+        activity!!.onBackPressed()
+    }
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
@@ -29,12 +38,5 @@ class DealsParentFragment : FirstLineFragment() {
         )
         viewPager.adapter = fragmentPagerItemAdapter
         smartTabLayout.setViewPager(viewPager)
-
-        view.findViewById<View>(R.id.imgHeaderLeft).visibility = View.INVISIBLE
-        view.findViewById<View>(R.id.llHeaderLeft).setOnClickListener { }
     }
-
-    override fun getHeaderText() = R.string.deals_header
-
-
 }

@@ -22,6 +22,7 @@ import com.ubcoin.fragment.favorite.FavoriteListFragment
 import com.ubcoin.fragment.login.StartupFragment
 import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.fragment.market.MarketListFragment
+import com.ubcoin.fragment.messages.MessagesParentFragment
 import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.SellFragment
@@ -92,6 +93,10 @@ class MainActivity : BaseActivity() {
                         MenuItems.DEALS -> {
                             menuBottomView.activate(menuItems)
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
+                        }
+                        MenuItems.MESSAGES -> {
+                            menuBottomView.activate(menuItems)
+                            fragmentSwitcher?.clearBackStack()?.addTo(MessagesParentFragment::class.java)
                         }
                         MenuItems.PROFILE -> {
                             if (!ProfileHolder.isAuthorized()) {
