@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/mainBackground"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_header_purchase" />
+
+            <com.ubcoin.view.deal_description.ItemDescriptionView
+                android:id="@+id/itemDescription"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.ubcoin.view.deal_description.ProgressDescriptionView
+                android:id="@+id/progressDescription"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.ubcoin.view.deal_description.SellerLocationView
+                android:id="@+id/sellerLocation"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
+
+            <com.ubcoin.view.deal_description.DeliveryTypeView
+                android:id="@+id/deliveryType"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/llDigitalPurchaseDescription"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#fff"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="14dp"
+                    android:layout_marginLeft="14dp"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:textStyle="normal"
+                    android:textColor="#de202022"
+                    android:text="@string/text.after_you_confirm_purchase_description" />
+
+            </LinearLayout>
+
+            <com.ubcoin.view.deal_description.UserProfileView
+                android:id="@+id/userProfile"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnChat"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="normal"
+                android:background="#fff"
+                android:textColor="@color/underlineColor"
+                android:text="@string/text.chat_with_seller"/>
+
+            <com.ubcoin.view.deal_description.ProgressView
+                android:id="@+id/progressView"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"/>
+
+            <Button
+                android:id="@+id/btnReport"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="normal"
+                android:background="#fff"
+                android:textColor="@color/itemStatusBlock"
+                android:text="@string/text.report_problem"/>
+
+            <com.ubcoin.view.deal_description.PurchaseMainView
+                android:id="@+id/purchaseMain"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/btnCancelDeal"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="normal"
+                android:background="#fff"
+                android:textColor="@color/itemStatusBlock"
+                android:text="@string/text.cancel_the_deal"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="16dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

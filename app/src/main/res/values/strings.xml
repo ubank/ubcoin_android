@@ -256,5 +256,33 @@
     <string name="text.connection_problems">Connection problems</string>
     <string name="text.incorrect_url">Incorrect url</string>
     <string name="text.purchase">Purchase</string>
+    <string name="text.chat_with_buyer">Chat with buyer</string>
+    <string name="text.report_problem">Report problem</string>
+    <string name="text.chat_with_seller">Chat with seller</string>
+    <string name="text.buy_now">Buy now</string>
+    <string name="text.progress">Progress</string>
+    <string name="text.item_will_be_delivered_to_me">Item will be delivered to me</string>
+    <string name="text.by_courier_or_delivery_service">by courier or a delivery service</string>
+    <string name="text.i_will_meet_seller_in_person">I will meet seller in person</string>
+    <string name="text.for_a_handshake">for a handshake</string>
+    <string name="text.cancel_the_deal">Cancel the deal</string>
+    <string name="text.confirm_in_eth">Confirm in eth</string>
+    <string name="text.seller_location">Seller location</string>
+    <string name="text.i_confirm_that_file_is_ok">I confirm that file is ok</string>
+    <string name="text.i_received_item">I received item</string>
+    <string name="text.delivery_address">Delivery address</string>
+    <string name="text.after_you_book_description">After you book item, seller will define price of delivery to your address. Delivery price can be 0. If you don’t agree with delivery price, you will be able to cancel the deal and item price will return to your wallet.</string>
+    <string name="text.we_will_block_the_eth_or_ubc">We will block the ETH or UBC amount on your Ubcoin wallet. Seller will receive money only after you get the item in your hands.</string>
+    <string name="text.item_price">Item price</string>
+    <string name="text.currency">Currency</string>
+    <string name="text.confirm_in_ubc">Confirm in UBC</string>
+    <string name="text.after_you_confirm_purchase_description">After you confirm purchase, Item price will be blocked on your Ubcoin wallet by Ubcoin escrow service. Then you will receive on your email link to download file. You will need to download file and check it. Seller will receive money only after you confirm that file is OK.</string>
+    <string name="text.your_balance">Your balance:</string>
+    <string name="text.please_top_up_your_balance">Please top up your balance.</string>
+    <string name="text.ok">OK</string>
+    <string name="text.not_enough_eth">You don\'t have enough ETH on your wallet.</string>
+    <string name="text.not_enough_ubc">You don\'t have enough UBC on your wallet.</string>
+    <string name="text.will_be_blocked">will be blocked on your wallet.</string>
+    <string name="text.confirm_purchace">Confirm purchace?</string>
 
 </resources>

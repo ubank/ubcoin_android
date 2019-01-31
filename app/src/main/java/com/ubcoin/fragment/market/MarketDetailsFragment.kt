@@ -62,7 +62,6 @@ import com.ubcoin.utils.*
 import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.view_item_details.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
@@ -84,13 +83,15 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var mapView: MapView
     private lateinit var appBarLayout: AppBarLayout
     private lateinit var txtDescription: TextView
-    private lateinit var llWantToBuy: View
+    //private lateinit var llWantToBuy: View
     private lateinit var imgDescription: View
     private lateinit var llDescription: View
     private lateinit var wantToBuyContainer: View
+    private lateinit var btnBuy: Button
 
     private lateinit var llPurchasesContainer: View
     private lateinit var rvPurchases: RecyclerView
+    private lateinit var rlBuy : RelativeLayout
 
     private lateinit var txtItemCategory: TextView
     private lateinit var txtMarketProductName: TextView
@@ -168,6 +169,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         rvPurchases = view.findViewById(R.id.rvPurchases)
         tvCondition = view.findViewById(R.id.tvCondition)
         llCondition = view.findViewById(R.id.llCondition)
+        rlBuy = view.findViewById(R.id.rlBuy)
+        btnBuy = view.findViewById(R.id.btnBuy)
 
         txtItemCategory = view.findViewById(R.id.txtItemCategor)
         txtMarketProductName = view.findViewById(R.id.txtMarketProductName)
@@ -188,7 +191,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llFileUrlBuyer = view.findViewById(R.id.llFileUrlBuyer)
         llFileUrlSeller = view.findViewById(R.id.llFileUrlSeller)
 
-        llWantToBuy = view.findViewById<View>(R.id.llWantToBuy)
+        //llWantToBuy = view.findViewById<View>(R.id.llWantToBuy)
         imgDescription = view.findViewById(R.id.imgDescription)
         llDescription = view.findViewById<View>(R.id.llDescription)
         txtDescription = view.findViewById(R.id.txtMarketProductDescription)
@@ -349,10 +352,16 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             llDescription.visibility = View.GONE
         }
 
+        btnBuy.setOnClickListener{
+            getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(marketItem), true)
+        }
+
         rlSellerProfile.setOnClickListener{
             getSwitcher()?.addTo(SellerProfileFragment::class.java, SellerProfileFragment.getBundle(marketItem.user!!), false)
         }
 
+
+        /*
         llWantToBuy.setOnClickListener {
             if (!ProfileHolder.isAuthorized()) {
                 showNeedToRegistration()
@@ -363,15 +372,16 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
                         override fun onPositiveClick(materialDialog: MaterialDialog) {
                             materialDialog.dismiss()
                             thePreferences.disableTgDialog()
-                            callWantToBuy(marketItem.id, true)
+                            callWantToBuy(user.id, true)
                         }
                     })
                 } else {
-                    callWantToBuy(marketItem.id, true)
+                    callWantToBuy(user.id, true)
                 }
             }
 
         }
+        */
 
 
         val user = marketItem.user
@@ -421,11 +431,13 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
     fun setOwnerDependData() {
         if (marketItem.isOwner()) {
+            rlBuy.visibility = View.GONE
             wantToBuyContainer.visibility = View.GONE
             rvPurchases.visibility = View.VISIBLE
             checkMarketItemStatus()
             setupPurchases()
         } else {
+            rlBuy.visibility = View.VISIBLE
             wantToBuyContainer.visibility = View.VISIBLE
             rvPurchases.visibility = View.GONE
         }

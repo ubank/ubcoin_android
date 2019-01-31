@@ -3,189 +3,199 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:gpb="http://schemas.android.com/tools"
-    android:background="@color/hashMainBackground"
-    android:clickable="true"
-    android:focusable="true">
+    xmlns:gpb="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/llHeader"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:layout_height="wrap_content">
 
-        <include
-            android:id="@+id/header"
-            layout="@layout/common_header" />
-    </FrameLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/llTopUpTopContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llHeader">
-
-        <TextView
-            android:id="@+id/txtTopUpDescription"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/roboto_regular"
-            android:gravity="center"
-            android:text="@string/top_up_description"
-            android:textColor="@color/headerTextColor"
-            android:textSize="@dimen/have_account_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:background="@color/hashMainBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-        <TextView
-            android:id="@+id/txtTopUpTimer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:fontFamily="@font/roboto_medium"
-            android:textColor="@color/greenMainColor"
-            android:textSize="@dimen/header_text_size"
-            app:layout_constraintEnd_toEndOf="@id/txtTopUpDescription"
-            app:layout_constraintStart_toStartOf="@id/txtTopUpDescription"
-            app:layout_constraintTop_toBottomOf="@id/txtTopUpDescription" />
-
-
-        <FrameLayout
-            android:id="@+id/llTopUpHashContainer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:background="@color/hashBackground"
-            app:layout_constraintEnd_toEndOf="@id/txtTopUpDescription"
-            app:layout_constraintStart_toStartOf="@id/txtTopUpDescription"
-            app:layout_constraintTop_toBottomOf="@id/txtTopUpTimer">
-
-            <TextView
-                android:id="@+id/txtTopUpHash"
+            <FrameLayout
+                android:id="@+id/llHeader"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="9dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="9dp"
-                android:fontFamily="@font/roboto_regular"
-                android:gravity="center"
-                android:textColor="@color/headerTextColor"
-                android:textSize="14sp" />
-
-        </FrameLayout>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/llCopyCardContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="40dp"
-            android:background="@color/greenMainColor"
-            app:cardBackgroundColor="@color/greenMainColor"
-            app:cardCornerRadius="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/llTopUpHashContainer">
-
-            <LinearLayout
-                android:id="@+id/llTopUpHashCopy"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:background="@android:color/white">
 
-                <ImageView
+                <include
+                    android:id="@+id/header"
+                    layout="@layout/common_header" />
+            </FrameLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/llTopUpTopContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llHeader">
+
+                <TextView
+                    android:id="@+id/txtTopUpDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:gravity="center"
+                    android:text="@string/top_up_description"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/have_account_text_size"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtTopUpTimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_copy" />
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/greenMainColor"
+                    android:textSize="@dimen/header_text_size"
+                    app:layout_constraintEnd_toEndOf="@id/txtTopUpDescription"
+                    app:layout_constraintStart_toStartOf="@id/txtTopUpDescription"
+                    app:layout_constraintTop_toBottomOf="@id/txtTopUpDescription" />
+
+
+                <FrameLayout
+                    android:id="@+id/llTopUpHashContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/hashBackground"
+                    app:layout_constraintEnd_toEndOf="@id/txtTopUpDescription"
+                    app:layout_constraintStart_toStartOf="@id/txtTopUpDescription"
+                    app:layout_constraintTop_toBottomOf="@id/txtTopUpTimer">
+
+                    <TextView
+                        android:id="@+id/txtTopUpHash"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="9dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="center"
+                        android:textColor="@color/headerTextColor"
+                        android:textSize="14sp" />
+
+                </FrameLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/llCopyCardContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginBottom="40dp"
+                    android:background="@color/greenMainColor"
+                    app:cardBackgroundColor="@color/greenMainColor"
+                    app:cardCornerRadius="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llTopUpHashContainer">
+
+                    <LinearLayout
+                        android:id="@+id/llTopUpHashCopy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:src="@drawable/ic_copy" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="@string/copy"
+                            android:textAllCaps="true"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <RelativeLayout
+                android:id="@+id/llChooseExchangeToBuyUBC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/llTopUpTopContainer">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="@string/copy"
-                    android:textAllCaps="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp" />
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginBottom="26dp"
+                    android:fontFamily="@font/roboto_regular"
+                    android:text="@string/choose_exchange_label"
+                    android:textColor="@color/sellerProfileNickColor"
+                    android:textSize="@dimen/have_account_text_size" />
 
-            </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_next" />
 
-        </android.support.v7.widget.CardView>
-
-    </android.support.constraint.ConstraintLayout>
-
-    <RelativeLayout
-        android:id="@+id/llChooseExchangeToBuyUBC"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/llTopUpTopContainer">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
-            android:layout_marginBottom="26dp"
-            android:fontFamily="@font/roboto_regular"
-            android:text="@string/choose_exchange_label"
-            android:textColor="@color/sellerProfileNickColor"
-            android:textSize="@dimen/have_account_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_next" />
-
-    </RelativeLayout>
+            </RelativeLayout>
 
 
-    <TextView
-        android:id="@+id/tvGoToERCWallet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/roboto_regular"
-        android:gravity="center"
-        android:text="@string/if_you_received_tokens_during_ico_go_to_your_erc_20_wallet"
-        android:textColor="@color/haveAccountColor"
-        android:textSize="@dimen/menu_textsize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llChooseExchangeToBuyUBC" />
+            <TextView
+                android:id="@+id/tvGoToERCWallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/roboto_regular"
+                android:gravity="center"
+                android:text="@string/if_you_received_tokens_during_ico_go_to_your_erc_20_wallet"
+                android:textColor="@color/haveAccountColor"
+                android:textSize="@dimen/menu_textsize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/llChooseExchangeToBuyUBC" />
 
-    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
-        android:id="@+id/progressCenter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:colors="@array/progressColors"
-        app:type="nexus_rotation_cross" />
+            <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+                android:id="@+id/progressCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:colors="@array/progressColors"
+                app:type="nexus_rotation_cross" />
 
 
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

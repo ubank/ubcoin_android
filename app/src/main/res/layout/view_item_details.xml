@@ -1,470 +1,475 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gpb="http://schemas.android.com/apk/res-auto"
-    android:background="@color/itemDetailsBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/llMarketItemStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/itemStatusCheckTransparent"
-        android:visibility="gone">
-
-        <ImageView
-            android:id="@+id/imgMarketItemStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:src="@drawable/ic_market_item_moderation" />
-
-        <TextView
-            android:id="@+id/txtMarketItemStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="18dp"
-            android:layout_toEndOf="@id/imgMarketItemStatus"
-            android:fontFamily="@font/roboto_regular"
-            android:text="@string/str_status_check"
-            android:textColor="@color/itemStatusCheck"
-            android:textSize="12sp" />
-
-    </RelativeLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/llContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rlBuy"
+        android:background="@color/itemDetailsBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/llMarketItemStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/itemStatusCheckTransparent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imgMarketItemStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:src="@drawable/ic_market_item_moderation" />
+
+            <TextView
+                android:id="@+id/txtMarketItemStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="18dp"
+                android:layout_toEndOf="@id/imgMarketItemStatus"
+                android:fontFamily="@font/roboto_regular"
+                android:text="@string/str_status_check"
+                android:textColor="@color/itemStatusCheck"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:layout_marginEnd="@dimen/marginItemDetails"
+            android:background="@android:color/white"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="25dp">
-
-                <TextView
-                    android:id="@+id/txtItemPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/headerTextColor"
-                    android:text="3 2000.00 UBC"
-                    android:textSize="@dimen/please_verify_text_size" />
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:layout_marginEnd="@dimen/marginItemDetails"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:layout_marginTop="25dp">
 
                     <TextView
-                        android:id="@+id/txtPriceInCurrencyETH"
+                        android:id="@+id/txtItemPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="22dp"
-                        android:ellipsize="end"
                         android:fontFamily="@font/roboto_medium"
-                        android:maxLines="1"
-                        android:text="22 232"
-                        android:singleLine="true"
                         android:textColor="@color/headerTextColor"
+                        android:text="3 2000.00 UBC"
                         android:textSize="@dimen/please_verify_text_size" />
 
-                    <TextView
-                        android:id="@+id/txtPriceInCurrency"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/roboto_regular"
-                        android:maxLines="1"
-                        android:text="22 232"
-                        android:singleLine="true"
-                        android:textColor="@color/haveAccountColor"
-                        android:textSize="@dimen/currencyPriceDetailsSize" />
-
-                    <TextView
-                        android:id="@+id/tvExchageRate"
-                        android:visibility="gone"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@id/txtItemPrice"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/roboto_regular"
-                        android:maxLines="1"
-                        android:text="22 232"
-                        android:singleLine="true"
-                        android:textColor="@color/haveAccountColor"
-                        android:textSize="@dimen/currencyPriceDetailsSize" />
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/tvExchageRateETH"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@id/txtItemPrice"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/roboto_regular"
-                        android:maxLines="1"
-                        android:text="22 232"
-                        android:singleLine="true"
-                        android:textColor="@color/haveAccountColor"
-                        android:textSize="@dimen/currencyPriceDetailsSize" />
+                        <TextView
+                            android:id="@+id/txtPriceInCurrencyETH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="22dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/roboto_medium"
+                            android:maxLines="1"
+                            android:text="22 232"
+                            android:singleLine="true"
+                            android:textColor="@color/headerTextColor"
+                            android:textSize="@dimen/please_verify_text_size" />
+
+                        <TextView
+                            android:id="@+id/txtPriceInCurrency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxLines="1"
+                            android:text="22 232"
+                            android:singleLine="true"
+                            android:textColor="@color/haveAccountColor"
+                            android:textSize="@dimen/currencyPriceDetailsSize" />
+
+                        <TextView
+                            android:id="@+id/tvExchageRate"
+                            android:visibility="gone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@id/txtItemPrice"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxLines="1"
+                            android:text="22 232"
+                            android:singleLine="true"
+                            android:textColor="@color/haveAccountColor"
+                            android:textSize="@dimen/currencyPriceDetailsSize" />
+
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/tvExchageRateETH"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="16dp"
+                            android:layout_toEndOf="@id/txtItemPrice"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/roboto_regular"
+                            android:maxLines="1"
+                            android:text="22 232"
+                            android:singleLine="true"
+                            android:textColor="@color/haveAccountColor"
+                            android:textSize="@dimen/currencyPriceDetailsSize" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llItemDetailCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtItemCategor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/greenMainColor" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/camera_margin"
-                    android:src="@drawable/ic_next_green_small" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/txtMarketProductName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="25dp"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/headerTextColor"
-                android:textSize="@dimen/please_verify_text_size" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llCondition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:layout_marginTop="15dp"
-            android:text="@string/text.condition"
-            android:textAllCaps="true"
-            android:textColor="@color/haveAccountColor" />
-
-        <TextView
-            android:id="@+id/tvCondition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:text="New"
-            android:textColor="#de000000" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:layout_marginTop="15dp"
-            android:text="@string/location_label"
-            android:textAllCaps="true"
-            android:textColor="@color/haveAccountColor" />
-
-        <TextView
-            android:id="@+id/tvAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            android:textColor="@color/haveAccountColor" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/map_detail_height">
-
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp" />
-
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:id="@+id/llItemDetailCategory"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/imgMarket"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/rounded_corners_black_transparent"
-                    android:gravity="center_vertical">
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtItemCategor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_regular"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/greenMainColor" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:src="@drawable/ic_location_white_mini" />
-
-                    <TextView
-                        android:id="@+id/txtLocationDistance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginEnd="@dimen/camera_end_margin"
-                        android:layout_marginBottom="3dp"
-                        android:fontFamily="@font/roboto_regular"
-                        android:textColor="@android:color/white"
-                        android:textSize="@dimen/menu_textsize" />
-
+                        android:layout_marginStart="@dimen/camera_margin"
+                        android:src="@drawable/ic_next_green_small" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtMarketProductName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="25dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/please_verify_text_size" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCondition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:layout_marginTop="15dp"
+                android:text="@string/text.condition"
+                android:textAllCaps="true"
+                android:textColor="@color/haveAccountColor" />
+
+            <TextView
+                android:id="@+id/tvCondition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:text="New"
+                android:textColor="#de000000" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:layout_marginTop="15dp"
+                android:text="@string/location_label"
+                android:textAllCaps="true"
+                android:textColor="@color/haveAccountColor" />
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:textColor="@color/haveAccountColor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/map_detail_height">
+
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/imgMarket"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/rounded_corners_black_transparent"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:src="@drawable/ic_location_white_mini" />
+
+                        <TextView
+                            android:id="@+id/txtLocationDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginEnd="@dimen/camera_end_margin"
+                            android:layout_marginBottom="3dp"
+                            android:fontFamily="@font/roboto_regular"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/menu_textsize" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txtMarketProductDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginEnd="38dp"
+                    android:layout_marginBottom="25dp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/roboto_regular"
+                    android:maxLines="4"
+                    android:textColor="@color/headerTextColor"
+                    android:textSize="@dimen/sign_up_text_size" />
+
+                <ImageView
+                    android:id="@+id/imgDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_next" />
 
             </RelativeLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        android:orientation="vertical">
-
-        <RelativeLayout
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llFileUrlSeller"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
+            android:background="#fff"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtMarketProductDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="22dp"
-                android:layout_marginEnd="38dp"
-                android:layout_marginBottom="25dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/roboto_regular"
-                android:maxLines="4"
-                android:textColor="@color/headerTextColor"
-                android:textSize="@dimen/sign_up_text_size" />
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:layout_marginTop="15dp"
+                android:text="@string/text.file_url"
+                android:textAllCaps="true"
+                android:textColor="@color/haveAccountColor" />
 
-            <ImageView
-                android:id="@+id/imgDescription"
+            <TextView
+                android:id="@+id/tvFileUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_next" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/llFileUrlSeller"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:layout_marginTop="15dp"
-            android:text="@string/text.file_url"
-            android:textAllCaps="true"
-            android:textColor="@color/haveAccountColor" />
-
-        <TextView
-            android:id="@+id/tvFileUrl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginStart="@dimen/marginItemDetails"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="#de000000" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/llFileUrlBuyer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="#fff"
-        android:orientation="vertical">
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginStart="@dimen/marginItemDetails"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#de000000" />
+        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/llFileUrlBuyer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_download"
-                android:layout_margin="16dp"/>
+            android:layout_marginTop="10dp"
+            android:background="#fff"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textStyle="normal"
-                    android:textColor="#403d45"
-                    android:text="@string/text.file_is_checked_by_moderator" />
+                    android:src="@drawable/ic_download"
+                    android:layout_margin="16dp"/>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="#de000000"
-                    android:text="@string/text.buyer_will_receive_the_link_by_e_mail_after_buyer_s_payment_is_frozen_by_escrow_service"/>
+                    android:layout_marginRight="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="normal"
+                        android:textColor="#403d45"
+                        android:text="@string/text.file_is_checked_by_moderator" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="normal"
+                        android:textColor="#de000000"
+                        android:text="@string/text.buyer_will_receive_the_link_by_e_mail_after_buyer_s_payment_is_frozen_by_escrow_service"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginItemDetails"
+            android:layout_marginTop="15dp"
+            android:text="@string/seller_label"
+            android:textAllCaps="true"
+            android:textColor="@color/haveAccountColor" />
 
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginItemDetails"
-        android:layout_marginTop="15dp"
-        android:text="@string/seller_label"
-        android:textAllCaps="true"
-        android:textColor="@color/haveAccountColor" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <include layout="@layout/view_seller_profile" />
-    </LinearLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/wantToBuyContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/white">
-
-        <Button
-            android:id="@+id/llWantToBuy"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounded_green_filled_button_smallr"
-            android:elevation="2dp"
-            android:fontFamily="@font/roboto_medium"
-            android:text="@string/connect_to_seller"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/sign_up_text_size"
-            android:translationZ="2dp" />
+            android:layout_marginTop="10dp">
+
+            <include layout="@layout/view_seller_profile" />
+        </LinearLayout>
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/llPurchasesContainer"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvPurchases"
+        <RelativeLayout
+            android:id="@+id/wantToBuyContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp">
 
+            <Button
+                android:id="@+id/btnChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="20dp"
+                android:background="#fff"
+                android:elevation="2dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/text.chat_with_seller"
+                android:textColor="@color/underlineColor"
+                android:textSize="@dimen/sign_up_text_size"
+                android:translationZ="2dp" />
 
-    </RelativeLayout>
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/llPurchasesContainer"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
 
-</LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvPurchases"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

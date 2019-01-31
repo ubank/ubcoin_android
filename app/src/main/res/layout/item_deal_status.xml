@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:id="@+id/rlCenter"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/gray_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/tvText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvText" />
+
+    <RelativeLayout
+        android:id="@+id/rlTop"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:layout_above="@id/rlCenter"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/underlineColor"
+        app:layout_constraintBottom_toTopOf="@+id/rlCenter"
+        app:layout_constraintEnd_toStartOf="@+id/tvText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <RelativeLayout
+        android:id="@+id/rlBottom"
+        android:layout_width="3dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/rlCenter"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/underlineColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tvDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rlCenter" />
+
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="sans-serif"
+        android:text="Download link is sent to buyer’s email"
+        android:textColor="@color/activeTabTextColor"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toEndOf="@+id/rlCenter"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif"
+        android:text="Waiting for confirmation that file is OK"
+        android:textColor="#8a202022"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvText"
+        app:layout_constraintTop_toBottomOf="@+id/tvText" />
+
+</android.support.constraint.ConstraintLayout>

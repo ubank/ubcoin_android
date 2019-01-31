@@ -69,7 +69,7 @@ class PurchaseUserAdapter(context: Context) : BaseRecyclerAdapter<IPurchaseObjec
     abstract class AbsPurchaseUserHolder(itemView: View) : VHolder(itemView)
 
     class PurchaseUserHolder(itemView: View) : AbsPurchaseUserHolder(itemView) {
-        val imgPurchaseUserProfile = findView<ImageView>(R.id.imgPurchaseUserProfile)
+        val imgPurchaseUserProfile = findView<ImageView>(R.id.cvImage)
         val txtPurchaseUserName = findView<TextView>(R.id.txtPurchaseUserName)
         val txtPurchaseUserNickname = findView<TextView>(R.id.txtPurchaseUserNickname)
     }
