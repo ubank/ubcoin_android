@@ -9,8 +9,11 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ubcoin.GlideApp
 import com.ubcoin.R
+import com.ubcoin.activity.BaseActivity
+import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.User
+import com.ubcoin.switcher.FragmentSwitcher
 
 class UserProfileView: LinearLayout {
 

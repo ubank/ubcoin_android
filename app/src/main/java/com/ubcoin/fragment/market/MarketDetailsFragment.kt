@@ -41,6 +41,7 @@ import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.messages.ChatFragment
 import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.MarketUpdateEvent
@@ -49,10 +50,7 @@ import com.ubcoin.model.FakePurchase
 import com.ubcoin.model.IPurchaseObject
 import com.ubcoin.model.Purchase
 import com.ubcoin.model.PurchaseContainer
-import com.ubcoin.model.response.MarketItem
-import com.ubcoin.model.response.MarketItemStatus
-import com.ubcoin.model.response.PurchaseItemStatus
-import com.ubcoin.model.response.TgLink
+import com.ubcoin.model.response.*
 import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
@@ -130,6 +128,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var llMarketItemStatus: View
     private lateinit var imgMarketItemStatus: ImageView
     private lateinit var txtMarketItemStatus: TextView
+    private lateinit var btnChat: Button
 
 
     private var itemPositionInList = -1
@@ -171,6 +170,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         llCondition = view.findViewById(R.id.llCondition)
         rlBuy = view.findViewById(R.id.rlBuy)
         btnBuy = view.findViewById(R.id.btnBuy)
+        btnChat = view.findViewById(R.id.btnChat)
 
         txtItemCategory = view.findViewById(R.id.txtItemCategor)
         txtMarketProductName = view.findViewById(R.id.txtMarketProductName)
@@ -360,6 +360,11 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             getSwitcher()?.addTo(SellerProfileFragment::class.java, SellerProfileFragment.getBundle(marketItem.user!!), false)
         }
 
+        btnChat.setOnClickListener {
+            //var deal = DealItemWrapper(marketItem!!.id, MarketItemStatus.ACTIVE, marketItem!!.createdDate!!, DealItem(marketItem!!.id, marketItem!!.categoryId!!, marketItem!!.title!!, marketItem!!.price!!, marketItem!!.description!!, marketItem!!.images), User(), marketItem!!.user!!)
+            //getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(deal), true)
+        }
+
 
         /*
         llWantToBuy.setOnClickListener {
@@ -537,18 +542,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             purchaseUserAdapter.recyclerTouchListener = object : IRecyclerTouchListener<IPurchaseObject> {
                 override fun onItemClick(data: IPurchaseObject, position: Int) {
                     val purchase = data as Purchase
-                    val thePreferences = ThePreferences()
-                    if (thePreferences.shouldShowThDialog()) {
-                        OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
-                            override fun onPositiveClick(materialDialog: MaterialDialog) {
-                                materialDialog.dismiss()
-                                thePreferences.disableTgDialog()
-                                callWantToBuy(purchase.id, false)
-                            }
-                        })
-                    } else {
-                        callWantToBuy(purchase.id, false)
-                    }
+                    var purchaseId = purchase.id
+
+                    getSwitcher()?.addTo(DealSellFragment::class.java, DealSellFragment.getBundle(purchaseId), false)
                 }
 
             }

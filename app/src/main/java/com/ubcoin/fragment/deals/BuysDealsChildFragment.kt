@@ -3,20 +3,20 @@ package com.ubcoin.fragment.deals
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.afollestad.materialdialogs.MaterialDialog
+import com.google.android.gms.common.util.CollectionUtils
 import com.ubcoin.R
-import com.ubcoin.TheApplication
-import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.BuysListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.market.DealPurchaseFragment
+import com.ubcoin.fragment.market.DealSellFragment
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.BuyerPurchaseLinkRequest
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
+import com.ubcoin.utils.MarketItemsSorterBySections
 import com.ubcoin.utils.ProfileHolder
-import com.ubcoin.view.OpenTelegramDialogManager
 
 /**
  * Created by Yuriy Aizenberg
@@ -66,6 +66,11 @@ class BuyDealsChildFragment : BaseFragment() {
 
         sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
             override fun onItemClick(data: DealItemWrapper, position: Int) {
+
+                var purchaseId = data.id
+
+                getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(purchaseId), false)
+                /*
                 val thePreferences = ThePreferences()
                 if (thePreferences.shouldShowThDialog()) {
                     OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
@@ -78,6 +83,7 @@ class BuyDealsChildFragment : BaseFragment() {
                 } else {
                     requestUrlAndOpenApp(data)
                 }
+                */
             }
         }
 
@@ -91,12 +97,12 @@ class BuyDealsChildFragment : BaseFragment() {
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
         showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(data.dealItem.id), object : SilentConsumer<TgLink> {
+        DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(data.item.id), object : SilentConsumer<TgLink> {
             override fun onConsume(t: TgLink) {
                 hideProgressDialog()
                 val fullUrl = t.url
                 if (fullUrl.isNotBlank()) {
-                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BuyDealsChildFragment, 18888)
+                    //TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BuyDealsChildFragment, 18888)
                 }
             }
 
@@ -144,6 +150,62 @@ class BuyDealsChildFragment : BaseFragment() {
 
         }
         DataProvider.getBuyersItems(LIMIT, currentPage, onSuccess, onError)
+    }
+
+    private fun prepareData(marketItems: List<MarketItem>): List<MarketItemMarker> {
+        if (CollectionUtils.isEmpty(marketItems)) return ArrayList()
+
+        val sortedList = MarketItemsSorterBySections.sort(marketItems)
+
+        if (sellsListAdapter.isEmpty()) {
+            val associatedMap = groupData(sortedList)
+            val toReturn = ArrayList<MarketItemMarker>()
+            for (entry in associatedMap) {
+                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
+                toReturn.addAll(entry.value)
+            }
+            return ArrayList(toReturn)
+        } else {
+            val lastItemInAdapter = sellsListAdapter.data[sellsListAdapter.data.size - 1]
+            val toReturn : MutableList<MarketItemMarker> = ArrayList<MarketItemMarker>().toMutableList()
+
+            val mutableList = sortedList.toMutableList()
+            val iterator = mutableList.iterator()
+            while (iterator.hasNext()) {
+                val next = iterator.next()
+                if ((lastItemInAdapter as MarketItem).status == next.status) {
+                    toReturn.add(next)
+                    iterator.remove()
+                } else {
+                    break
+                }
+            }
+            if (mutableList.isEmpty()) {
+                return ArrayList(toReturn)
+            }
+            val associatedMap = groupData(mutableList)
+            for (entry in associatedMap) {
+                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
+                toReturn.addAll(entry.value)
+            }
+            return ArrayList(toReturn)
+
+        }
+    }
+
+    private fun groupData(sortedList: List<MarketItem>): LinkedHashMap<Int, ArrayList<MarketItem>> {
+        val associatedMap = LinkedHashMap<Int, ArrayList<MarketItem>>()
+        sortedList.forEach {
+            val currentList: ArrayList<MarketItem>? =
+                    if (!associatedMap.containsKey(it.status!!.groupKey)) {
+                        associatedMap.put(it.status!!.groupKey, ArrayList())
+                        associatedMap[it.status!!.groupKey]
+                    } else {
+                        associatedMap[it.status!!.groupKey]
+                    }
+            currentList!!.add(it)
+        }
+        return associatedMap
     }
 
     private fun hideProgress() {

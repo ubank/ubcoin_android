@@ -2,6 +2,8 @@ package com.ubcoin.network
 
 import com.ubcoin.model.ConversionResponse
 import com.ubcoin.model.CryptoCurrency
+import com.ubcoin.model.ItemPurchaseDto
+import com.ubcoin.model.Purchase
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -104,6 +106,33 @@ interface Api {
 
     @GET("/api/purchases/seller")
     fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
+
+    @POST("/api/purchases/create")
+    fun createPurchase(@Body createProductRequest: ItemPurchaseDto): Observable<Purchase>
+
+    @POST("/api/items/buy")
+    fun buyItem(@Body createProductRequest: ItemPurchaseDto): Observable<Purchase>
+
+    @POST("/api/purchases/cancel/{id}")
+    fun cancelPurchase(@Path("id") id: String): Observable<Purchase>
+
+    @POST("/api/purchases/confirm/{id}")
+    fun confirmPurchase(@Path("id") id: String): Observable<Purchase>
+
+    @POST("/api/purchases/set-delivery-price/{id}")
+    fun setDeliveryPrice(@Path("id") id: String, @Body amount: Any): Observable<Purchase>
+
+    @POST("/api/purchases/confirm-delivery-price/{id}")
+    fun confirmDeliveryPrice(@Path("id") id: String): Observable<Purchase>
+
+    @POST("/api/purchases/start-delivery/{id}")
+    fun startDelivery(@Path("id") id: String): Observable<Purchase>
+
+    @POST("/api/purchases/with-delivery/{id}")
+    fun withDelivery(@Path("id") id: String): Observable<Purchase>
+
+    @GET("/api/purchases/status/{id}")
+    fun getPurchaseStatus(@Path("id") id: String): Observable<Purchase>
 
     @GET("/api/items/categories")
     fun getCategories(): Observable<List<Category>>

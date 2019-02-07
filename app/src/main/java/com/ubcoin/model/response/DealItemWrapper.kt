@@ -1,7 +1,6 @@
 package com.ubcoin.model.response
 
 import com.google.gson.annotations.SerializedName
-import com.ubcoin.model.PurchaseUser
 import java.io.Serializable
 
 /**
@@ -12,7 +11,8 @@ data class DealItemWrapper(
         val status: MarketItemStatus,
         val createdDate: String,
         @SerializedName("item")
-        val dealItem: DealItem,
-        val buyer: PurchaseUser,
-        val seller: PurchaseUser
+        val item: DealItem,
+        val buyer: User,
+        val seller: User,
+        val withDelivery: Boolean?
 ) : Serializable

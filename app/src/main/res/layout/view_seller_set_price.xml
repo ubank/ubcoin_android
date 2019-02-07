@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#919191"
+            android:textAllCaps="true"
+            android:text="@string/text.buyer_address" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#de000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:hint="@string/text.delivery_price"
+            android:imeOptions="actionNext"
+            android:digits="0123456789."
+            android:inputType="number"
+            android:lines="1"
+            android:textColorHighlight="@color/haveAccountColor"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="@color/haveAccountColor"
+            app:met_textColor="@color/inputTextColor"
+            app:met_textColorHint="@color/haveAccountColor" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12.3sp"
+        android:fontFamily="sans-serif"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="14dp"
+        android:textStyle="normal"
+        android:textColor="#202022"
+        android:text="@string/text.if_delivery_is_free_for_buyer_put_0" />
+
+    <Button
+        android:id="@+id/btnConfirmDeliveryPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/underlineColor"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/text.confirm_delivery_price"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+</LinearLayout>

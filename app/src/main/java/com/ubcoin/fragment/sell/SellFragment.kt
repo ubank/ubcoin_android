@@ -491,6 +491,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
         }
 
         var condition: ConditionType? = null
+        var location: Location? = null
         var fileUrl: String? = null
         if(categoryId.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
         {
@@ -505,8 +506,6 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 showSweetAlertDialog(R.string.error, R.string.text_incorrect_url)
                 return null
             }
-
-
         }
         else
         {
@@ -515,12 +514,12 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                 showSweetAlertDialog(R.string.error, R.string.text_condition_is_missing)
                 return null
             }
-        }
 
-        val location = SellCreateDataHolder.location
-        if (location == null || !location.isAddressPresented()) {
-            showSweetAlertDialog(R.string.error, R.string.err_location_missing)
-            return null
+            location = SellCreateDataHolder.location
+            if (location == null || !location.isAddressPresented()) {
+                showSweetAlertDialog(R.string.error, R.string.err_location_missing)
+                return null
+            }
         }
 
         if (!hasImages()) {

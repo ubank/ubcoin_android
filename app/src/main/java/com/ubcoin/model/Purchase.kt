@@ -1,6 +1,9 @@
 package com.ubcoin.model
 
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.PurchaseItemStatus
+import com.ubcoin.model.response.StatusDescription
+import com.ubcoin.model.response.User
 import java.io.Serializable
 
 /**
@@ -8,9 +11,14 @@ import java.io.Serializable
  */
 data class Purchase(
         val id: String,
-        val buyer: PurchaseUser,
-        val seller: PurchaseUser,
+        val buyer: User,
+        val seller: User,
         val status: PurchaseItemStatus?,
         val createdDate: String,
-        val updatedDate: String
+        val updatedDate: String,
+        val comment: String,
+        val statusDescriptions: List<StatusDescription>,
+        val item: MarketItem,
+        val withDelivery: Boolean,
+        val deliveryPrice: Double
 ) : IPurchaseObject, Serializable

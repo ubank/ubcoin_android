@@ -2,20 +2,12 @@ package com.ubcoin.view.deal_description
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.gms.maps.model.LatLng
-import com.ubcoin.GlideApp
 import com.ubcoin.R
-import com.ubcoin.adapter.ProgressAdapter
-import com.ubcoin.model.Progress
 import com.ubcoin.model.response.Location
-import com.ubcoin.model.response.User
 import com.ubcoin.utils.DistanceUtils
 
 class SellerLocationView: LinearLayout {

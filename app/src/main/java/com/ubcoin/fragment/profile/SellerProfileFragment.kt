@@ -164,7 +164,7 @@ class SellerProfileFragment : BaseFragment() {
     fun loadData() {
         if (isLoading || isEndOfLoading) return
 
-        currentPage++
+
 
         if (marketListAdapter!!.isEmpty()) {
             progressCenter.visibility = View.VISIBLE
@@ -188,6 +188,7 @@ class SellerProfileFragment : BaseFragment() {
                     llNoItems.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                 }
+                currentPage++
             }
 
         }

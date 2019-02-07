@@ -9,20 +9,19 @@ import android.widget.LinearLayout
 import com.ubcoin.R
 import com.ubcoin.adapter.ProgressAdapter
 import com.ubcoin.model.Progress
+import com.ubcoin.model.response.StatusDescription
 
 class ProgressView : LinearLayout {
-    private var progressList: List<Progress> = ArrayList()
+    private var progressList: List<StatusDescription> = ArrayList()
     private var selected = -1
+    private lateinit var progressAdapter: ProgressAdapter
     constructor(context: Context?) : super(context) {
         init(null)
     }
 
-    public fun setSelectedProgress(selected: Int){
-        this.selected = selected
-    }
-
-    public fun setProgressList(progressList: List<Progress>){
+    public fun setProgressList(progressList: List<StatusDescription>){
         this.progressList  = progressList
+        initView()
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
@@ -43,12 +42,17 @@ class ProgressView : LinearLayout {
 
         var rvProgress = findViewById<RecyclerView>(R.id.rvProgress)
 
-        var progressAdapter = ProgressAdapter(0, context!!)
+        progressAdapter = ProgressAdapter(context!!)
 
         var manager = LinearLayoutManager(context)
         rvProgress.layoutManager = manager
         rvProgress.adapter = progressAdapter
 
+
+    }
+
+    fun initView(){
+        progressAdapter.clear()
         progressAdapter.addData(progressList, selected)
     }
 }

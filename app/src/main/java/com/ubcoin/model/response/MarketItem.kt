@@ -10,6 +10,7 @@ import java.io.Serializable
 data class MarketItem(
         val id: String,
         val category: Category?,
+        val categoryId: String?,
         val user: User?,
         val description: String?,
         val images: List<String>?,

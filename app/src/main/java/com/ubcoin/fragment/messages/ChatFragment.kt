@@ -32,10 +32,11 @@ import com.pubnub.api.callbacks.PNCallback
 import com.pubnub.api.callbacks.SubscribeCallback
 import com.google.gson.JsonObject
 import com.pubnub.api.models.consumer.history.PNHistoryResult
+import com.ubcoin.model.response.DealItem
 import com.ubcoin.model.response.TgLinks
+import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import org.json.JSONObject
 import kotlin.collections.ArrayList
 
 
@@ -46,7 +47,10 @@ class ChatFragment : BaseFragment() {
     private lateinit var progressCenter: View
     private lateinit var progressBottom: View
 
-    lateinit var deal: DealItemWrapper
+    private lateinit var id: String
+    private lateinit var item: DealItem
+    private lateinit var user: User
+
     lateinit var pubnub: PubNub
     private var bottomSheet: BottomSheet? = null
     private var fromCamera = false
@@ -63,9 +67,11 @@ class ChatFragment : BaseFragment() {
 
     companion object {
 
-        fun getBundle(item: DealItemWrapper): Bundle {
+        fun getBundle(id: String, item: DealItem, user: User): Bundle {
             val bundle = Bundle()
-            bundle.putSerializable(DealItemWrapper::class.java.simpleName, item)
+            bundle.putString("id", id)
+            bundle.putSerializable(DealItem::class.java.simpleName, item)
+            bundle.putSerializable(User::class.java.simpleName, user)
             return bundle
         }
     }
@@ -80,7 +86,9 @@ class ChatFragment : BaseFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
 
-        deal = arguments?.getSerializable(DealItemWrapper::class.java.simpleName) as DealItemWrapper
+        id = arguments?.getString("id") as String
+        item = arguments?.getSerializable(DealItem::class.java.simpleName) as DealItem
+        user = arguments?.getSerializable(User::class.java.simpleName) as User
         etMessage = view.findViewById(R.id.etMessage)
 
         progressCenter = view.findViewById(R.id.progressCenter)
@@ -100,10 +108,7 @@ class ChatFragment : BaseFragment() {
         rvMessages.layoutManager = layoutManager
         rvMessages.adapter = chatMessageAdapter
 
-        channelName = deal.id
-        var user = deal.buyer
-        if(deal.buyer.id.equals(ProfileHolder.user!!.id))
-            user = deal.seller
+        channelName = id
 
         view.findViewById<TextView>(R.id.txtHeader)?.text = user.name
         rvMessages.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(layoutManager) {
@@ -119,16 +124,16 @@ class ChatFragment : BaseFragment() {
             progressBottom.visibility = View.VISIBLE
         }
 
-        GlideApp.with(context!!).load(deal.dealItem.images?.get(0))
+        GlideApp.with(context!!).load(item!!.images?.get(0))
                 .centerCrop()
                 .placeholder(R.drawable.img_profile_default)
                 .error(R.drawable.img_profile_default)
                 .into(view.findViewById<ImageView>(R.id.ivImage))
-        view.findViewById<TextView>(R.id.tvName).text = deal.dealItem.title
+        view.findViewById<TextView>(R.id.tvName).text = item!!.title
         view.findViewById<View>(R.id.rlPhoto).setOnClickListener {openPhotoDialog()}
         view.findViewById<View>(R.id.rlSend).setOnClickListener {send()}
         view.findViewById<View>(R.id.llItem).setOnClickListener {
-            //getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(deal.dealItem), true)
+            //getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(deal.item), true)
         }
 
 

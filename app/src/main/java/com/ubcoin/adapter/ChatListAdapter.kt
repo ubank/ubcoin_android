@@ -1,19 +1,14 @@
 package com.ubcoin.adapter
 
 import android.content.Context
-import android.service.autofill.UserData
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.google.android.gms.common.images.internal.ImageUtils
 import com.ubcoin.GlideApp
 import com.ubcoin.R
-import com.ubcoin.model.PurchaseUser
 import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.utils.ProfileHolder
-import com.ubcoin.view.rating.RatingBarView
 
 class ChatListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, ChatListAdapter.ViewHolder>(context) {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ChatListAdapter.ViewHolder {
@@ -22,10 +17,10 @@ class ChatListAdapter(context: Context) : BaseRecyclerAdapter<DealItemWrapper, C
 
     override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
         val deal: DealItemWrapper = getItem(p1)
-        //p0.tvName.text = deal.dealItem.title
-        p0.tvDescription.text = deal.dealItem.title
+        //p0.tvName.text = deal.item.title
+        p0.tvDescription.text = deal.item.title
 
-        GlideApp.with(context).load(deal.dealItem.images?.get(0))
+        GlideApp.with(context).load(deal.item.images?.get(0))
                 .centerCrop()
                 .placeholder(R.drawable.img_profile_default)
                 .error(R.drawable.img_profile_default)

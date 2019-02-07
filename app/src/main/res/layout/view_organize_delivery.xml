@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#8a202022"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:text="@string/text.if_you_cannot_meet_with_buyer" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnOrganizeDelivery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="14dp"
+        android:layout_marginLeft="14dp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:background="#fff"
+        android:textColor="@color/underlineColor"
+        android:text="@string/text.i_will_organize_delivery"/>
+
+</LinearLayout>

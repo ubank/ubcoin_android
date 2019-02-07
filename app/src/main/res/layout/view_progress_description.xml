@@ -10,7 +10,8 @@
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
         android:lineSpacingExtra="6sp"
@@ -26,14 +27,15 @@
         android:id="@+id/tvDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif"
         android:text="Seller will define price of delivery. You will get a notification about it. If you agree to pay it, it will be frozen on your wallet and seller starts delivery."
         android:textColor="#8a202022"
         android:textSize="14sp"
         android:textStyle="normal"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
@@ -50,12 +52,12 @@
 
     <Button
         android:id="@+id/btnConfirmFile"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
         android:background="@color/underlineColor"
         android:fontFamily="sans-serif-medium"
         android:text="@string/text.i_confirm_that_file_is_ok"
@@ -67,15 +69,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
 
-
     <Button
-        android:id="@+id/btnReceivedItem"
+        android:id="@+id/btnConfirmDeliveryStart"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
+        android:background="@color/underlineColor"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/text.confirm_start_of_delivery"
+        android:textAllCaps="true"
+        android:textColor="#fff"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <Button
+        android:id="@+id/btnReceivedItem"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
         android:background="@color/underlineColor"
         android:fontFamily="sans-serif-medium"
         android:text="@string/text.i_received_item"
@@ -86,5 +106,91 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <LinearLayout
+        android:id="@+id/llNewDeliveryPrice"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#919191"
+            android:textAllCaps="true"
+            android:text="@string/text.buyer_address" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:text="@string/text.connect_buyer_to_get_address"
+            android:textColor="#de000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="12sp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textColor="#919191"
+            android:textAllCaps="true"
+            android:text="@string/text.delivery_price" />
+
+        <LinearLayout
+            android:id="@+id/llNewPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textStyle="normal"
+                android:textColor="#de000000" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_check_green"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnConfirmNewDeliveryPrice"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@color/underlineColor"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/text.confirm_new_delivery_price"
+            android:textAllCaps="true"
+            android:textColor="#fff"
+            android:textStyle="normal" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

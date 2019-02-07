@@ -71,42 +71,31 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
     }
 
     private fun setupCorrectStatus(marketItem: MarketItem, vHolder: VHolder) {
-        vHolder.txtDealsItemStatus.visibility = View.INVISIBLE
-        vHolder.imgDealsSmallIcon.visibility = View.GONE
+        vHolder.txtDealsItemStatus.setTextColor(defaultStatusTextColor)
+
         when (marketItem.status) {
             MarketItemStatus.ACTIVE -> {
-                if (marketItem.purchases.isNotEmpty()) {
-                    vHolder.txtDealsItemStatus.visibility = View.VISIBLE
-                    vHolder.imgDealsSmallIcon.visibility = View.VISIBLE
-                    vHolder.txtDealsItemStatus.setTextColor(defaultStatusTextColor)
-                    vHolder.txtDealsItemStatus.text = context.getString(R.string.str_deals_active_buyers, marketItem.purchases.size.toString())
-                } else {
-                    vHolder.txtDealsItemStatus.text = null
-                }
             }
             MarketItemStatus.BLOCKED -> {
-                vHolder.txtDealsItemStatus.visibility = View.VISIBLE
                 vHolder.txtDealsItemStatus.setTextColor(blockedStatusTextColor)
-                vHolder.txtDealsItemStatus.text = context.getString(R.string.str_item_status_blocked)
             }
 //            MarketItemStatus.DEACTIVATED -> TODO()
             MarketItemStatus.RESERVED -> {
-                vHolder.txtDealsItemStatus.visibility = View.VISIBLE
-                vHolder.txtDealsItemStatus.setTextColor(defaultStatusTextColor)
-                if (marketItem.purchases.isNotEmpty()) {
-                    vHolder.txtDealsItemStatus.visibility = View.VISIBLE
-                    vHolder.txtDealsItemStatus.setTextColor(defaultStatusTextColor)
-                    vHolder.txtDealsItemStatus.text = context.getString(R.string.str_deals_confirmed_by, marketItem.purchases[0].buyer.name)
-                } else {
-                    vHolder.txtDealsItemStatus.text = context.getString(R.string.str_deals_confirmed_by, context.getString(R.string.empty))
-                }
             }
 //            MarketItemStatus.SOLD -> TODO()
             MarketItemStatus.SOLD, MarketItemStatus.DEACTIVATED, MarketItemStatus.CHECK, MarketItemStatus.CHECKING, null -> {
-                vHolder.txtDealsItemStatus.visibility = View.INVISIBLE
-                vHolder.imgDealsSmallIcon.visibility = View.INVISIBLE
             }
         }
+        if(marketItem.status == MarketItemStatus.ACTIVE) {
+            if(marketItem.categoryId.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef") && marketItem.purchases != null && marketItem.purchases.size > 0) {
+                vHolder.txtDealsItemStatus.text = context.getString(R.string.str_item_status_active_digital)
+            }
+            else {
+                vHolder.txtDealsItemStatus.text = context.getString(R.string.str_item_status_active_seller)
+            }
+        }
+        else
+            vHolder.txtDealsItemStatus.text = context.getString(marketItem.status!!.stringResourceId)
     }
 
     private fun bindMarketHeader(marketItemHeader: MarketItemHeader, vHolder: HeaderVHoler) {
@@ -126,7 +115,6 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
         val txtDealsItemPrice: TextView = findView(R.id.txtDealsItemPrice)
         val txtDealsItemName: TextView = findView(R.id.txtDealsItemName)
         val txtDealsItemStatus: TextView = findView(R.id.txtDealsItemStatus)
-        val imgDealsSmallIcon: ImageView = findView(R.id.imgDealsSmallIcon)
     }
 
     class HeaderVHoler(itemView: View) : AbsSellHolder(itemView) {

@@ -1,7 +1,9 @@
 package com.ubcoin.view.deal_description
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
@@ -13,8 +15,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
 import com.ubcoin.model.Currency
+import com.ubcoin.model.ItemPurchaseDto
 import com.ubcoin.model.response.Location
 import com.ubcoin.model.response.MarketItem
+import com.ubcoin.network.DataProvider
 import com.ubcoin.utils.*
 import com.ubcoin.utils.filters.FiltersHolder
 import com.ubcoin.view.filter.SelectableView
@@ -29,6 +33,13 @@ class PurchaseMainView: LinearLayout {
     private lateinit var btnConfirm: Button
     private lateinit var tvBalance: TextView
     private lateinit var tvETHCommision: TextView
+    var activity: Activity? = null
+
+    public fun setCreatePurchaseListener(listener: OnCreatePurchase){
+        this.listener = listener
+    }
+
+    var listener: OnCreatePurchase? = null
 
     var currency: Currency = Currency.UBC
 
@@ -91,6 +102,20 @@ class PurchaseMainView: LinearLayout {
                     tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH()
                     tvETHCommision.visibility = View.VISIBLE
                 }
+
+                var price = marketItem!!.price
+                var amount = ProfileHolder.balance?.effectiveAmount
+                if(currency == Currency.ETH) {
+                    price = marketItem!!.priceETH
+                    amount = ProfileHolder.balance?.effectiveAmountETH
+                }
+
+
+                if(amount == null || price == null || amount!! < price!!)
+                    tvBalance.setTextColor(context.resources.getColor(R.color.red))
+                else
+                    tvBalance.setTextColor(Color.parseColor("#403d45"))
+
             }
         }
         selectUBC.selectionCallback = function
@@ -99,6 +124,18 @@ class PurchaseMainView: LinearLayout {
         selectUBC.changeSelectionVisual(true)
 
         btnConfirm.setOnClickListener {
+
+            if(llAddressInput.visibility == View.VISIBLE) {
+                if (etAddress.text.toString() == null || etAddress.text.toString().length == 0) {
+                    if (activity != null) {
+                        activity?.run {
+                            MaterialDialog.Builder(this).title(R.string.error).content("Location address missing").build().show()
+                        }
+                    }
+                    return@setOnClickListener
+                }
+            }
+
             var price = marketItem!!.price
             var amount = ProfileHolder.balance?.effectiveAmount
             var text = context.getString(R.string.text_not_enough_ubc)
@@ -112,7 +149,7 @@ class PurchaseMainView: LinearLayout {
                 priceText = marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH"
             }
 
-            if(amount!! < price!!)
+            if(amount == null || price == null || amount!! < price!!)
             {
                 val materialDialog = MaterialDialog.Builder(context)
                         .content(text)
@@ -142,10 +179,29 @@ class PurchaseMainView: LinearLayout {
     }
 
     fun buyItem(){
-
+        if(listener != null)
+            listener!!.purchase(currency, etAddress.text.toString())
     }
 
     fun initView(){
         etItemPrice.setText((marketItem?.price ?: .0).moneyFormat() + " UBC / " + marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH")
+
+        var price = marketItem!!.price
+        var amount = ProfileHolder.balance?.effectiveAmount
+        if(currency == Currency.ETH) {
+            price = marketItem!!.priceETH
+            amount = ProfileHolder.balance?.effectiveAmountETH
+        }
+
+        if(amount != null) {
+            if (amount!! < price!!)
+                tvBalance.setTextColor(context.resources.getColor(R.color.red))
+            else
+                tvBalance.setTextColor(Color.parseColor("#403d45"))
+        }
+    }
+
+    interface OnCreatePurchase{
+        fun purchase(currency: Currency, comment: String)
     }
 }

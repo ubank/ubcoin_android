@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import com.ubcoin.model.CommissionAndConversionResponse
-import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.CryptoCurrency
+import com.ubcoin.model.*
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -192,6 +190,69 @@ object DataProvider {
     fun getBuyersItems(limit: Int, page: Int, onSuccess: Consumer<DealsListResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .getBuyersItems(limit, page)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun createPurchase(purchaseDto: ItemPurchaseDto, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .createPurchase(purchaseDto)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun buyItem(purchaseDto: ItemPurchaseDto, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .buyItem(purchaseDto)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun confirmPurchase(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .confirmPurchase(id)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun cancelPurchase(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .cancelPurchase(id)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun setDeliveryPrice(id: String, amount: Any, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .setDeliveryPrice(id, amount)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun confirmDeliveryPrice(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .confirmDeliveryPrice(id)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun startDelivery(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .startDelivery(id)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun withDelivery(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .withDelivery(id)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getPurchaseStatus(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getPurchaseStatus(id)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

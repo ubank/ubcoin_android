@@ -54,6 +54,23 @@ class ItemDescriptionView: LinearLayout {
                 .error(R.drawable.img_profile_default)
                 .into(ivImage)
         tvName.setText(marketItem?.title)
-        tvPrice.setText((marketItem?.price ?: .0).moneyFormat() + " UBC / " + marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH")
+
+        var priceUBC: String? = null
+        var priceETH: String? = null
+
+        var resText = ""
+
+        if(marketItem?.price != null) {
+            priceUBC = (marketItem?.price ?: .0).moneyFormat() + " UBC"
+            resText += priceUBC
+        }
+
+        if(marketItem?.priceETH != null) {
+            priceETH = (marketItem?.priceETH ?: .0).moneyRoundedFormatETH() + " ETH"
+            if(resText.length > 0) resText += " / "
+            resText += priceETH
+        }
+
+        tvPrice.setText(resText)
     }
 }

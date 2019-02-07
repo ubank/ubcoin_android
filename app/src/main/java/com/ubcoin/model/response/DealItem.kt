@@ -7,7 +7,7 @@ import java.io.Serializable
  */
 data class DealItem(
         val id: String,
-         val categoryId: String,
+        val categoryId: String,
         val title: String,
         val price: Double,
         val description: String,

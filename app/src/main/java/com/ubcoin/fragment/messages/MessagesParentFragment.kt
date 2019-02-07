@@ -9,12 +9,14 @@ import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
 import com.ubcoin.model.CryptoCurrency
+import com.ubcoin.model.response.DealItem
 import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.DealsListResponse
 import com.ubcoin.model.response.RelatedPurchasesResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
+import com.ubcoin.utils.ProfileHolder
 import kotlinx.android.synthetic.main.fragment_messages.*
 
 private const val LIMIT = 30
@@ -56,7 +58,10 @@ class MessagesParentFragment : FirstLineFragment() {
 
         chatListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
             override fun onItemClick(data: DealItemWrapper, position: Int) {
-                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(data), true)
+                var user = data.buyer
+                if(data.buyer.id.equals(ProfileHolder.user!!.id))
+                    user = data.seller
+                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(data.id, data.item, user), true)
             }
         }
 
@@ -67,9 +72,9 @@ class MessagesParentFragment : FirstLineFragment() {
         if (isLoading || isEndOfLoading) return
 
         if (chatListAdapter.isEmpty()) {
-            progressCenter?.visibility = View.VISIBLE
+            progressCenter.visibility = View.VISIBLE
         } else {
-            progressBottom?.visibility = View.VISIBLE
+            progressBottom.visibility = View.VISIBLE
         }
 
         val onSuccess = object : SilentConsumer<RelatedPurchasesResponse> {

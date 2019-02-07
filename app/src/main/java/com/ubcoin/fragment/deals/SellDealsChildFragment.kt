@@ -9,6 +9,7 @@ import com.ubcoin.R
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.market.DealSellFragment
 import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.fragment.market.UpdateMarketStateItemEvent
 import com.ubcoin.fragment.sell.MarketUpdateEvent
@@ -71,7 +72,10 @@ class SellDealsChildFragment : BaseFragment() {
 
         sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<MarketItemMarker> {
             override fun onItemClick(data: MarketItemMarker, position: Int) {
-                getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data as MarketItem), false)
+                if((data as MarketItem).purchases != null && (data as MarketItem).purchases.size > 0)
+                    getSwitcher()?.addTo(DealSellFragment::class.java, DealSellFragment.getBundle((data as MarketItem).purchases.get(0).id), false)
+                else
+                    getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data as MarketItem), false)
             }
         }
 
@@ -179,7 +183,7 @@ class SellDealsChildFragment : BaseFragment() {
             val associatedMap = groupData(sortedList)
             val toReturn = ArrayList<MarketItemMarker>()
             for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key).stringResourceId)))
+                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
                 toReturn.addAll(entry.value)
             }
             return ArrayList(toReturn)
@@ -203,7 +207,7 @@ class SellDealsChildFragment : BaseFragment() {
             }
             val associatedMap = groupData(mutableList)
             for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key).stringResourceId)))
+                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
                 toReturn.addAll(entry.value)
             }
             return ArrayList(toReturn)

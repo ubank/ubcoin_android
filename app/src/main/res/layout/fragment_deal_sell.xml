@@ -1,151 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/mainBackground"
     android:orientation="vertical">
 
-    <include layout="@layout/view_header_sell" />
-
-    <LinearLayout
-        android:id="@+id/llItem"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal"
-        android:background="#fff"
-        android:padding="10dp">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.CardView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="18dp">
+        <include
+            android:id="@+id/header"
+            layout="@layout/view_header_sell" />
 
-            <ImageView
-                android:id="@+id/ivImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </android.support.v7.widget.CardView>
-
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="6dp">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp">
 
             <LinearLayout
-                android:id="@+id/llDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/ivNext"
                 android:orientation="vertical">
-                <TextView
-                    android:id="@+id/tvName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:fontFamily="sans-serif"
-                    android:textStyle="normal"
-                    android:textColor="#403d45"
-                    android:text="Service App UI Kit"
-                    android:layout_centerVertical="true"/>
 
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="wrap_content"
+                <com.ubcoin.view.deal_description.ItemDescriptionView
+                    android:id="@+id/itemDescription"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.ubcoin.view.deal_description.ProgressDescriptionView
+                    android:id="@+id/progressDescription"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.ubcoin.view.deal_description.SellerSetPriceView
+                    android:id="@+id/sellerSetPrice"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.ubcoin.view.deal_description.UserProfileView
+                    android:id="@+id/userProfile"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif"
+                    android:paddingTop="8dp"/>
+
+                <Button
+                    android:id="@+id/btnChat"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:fontFamily="sans-serif-medium"
                     android:textStyle="normal"
-                    android:textColor="@color/haveAccountColor"
-                    android:text="56 000.00 UBC / 0.82 ETH"
-                    android:layout_centerVertical="true"/>
+                    android:background="#fff"
+                    android:textColor="@color/underlineColor"
+                    android:text="@string/text.chat_with_seller"/>
+
+                <com.ubcoin.view.deal_description.OrganizeDeliveryView
+                    android:id="@+id/organizeDelivery"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.ubcoin.view.deal_description.ProgressView
+                    android:id="@+id/progressView"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"/>
+
+                <Button
+                    android:id="@+id/btnReport"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:background="#fff"
+                    android:textColor="@color/itemStatusBlock"
+                    android:text="@string/text.report_problem"/>
+
+                <com.ubcoin.view.deal_description.PurchaseMainView
+                    android:id="@+id/purchaseMain"
+                    android:visibility="gone"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/btnCancelDeal"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="normal"
+                    android:background="#fff"
+                    android:textColor="@color/itemStatusBlock"
+                    android:text="@string/text.cancel_the_deal"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"/>
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_next"/>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp">
-
-        <include layout="@layout/view_seller_profile" />
+        </ScrollView>
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btnChat"
-        android:layout_width="match_parent"
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+        android:id="@+id/progressCenter"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAllCaps="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:background="#fff"
-        android:textColor="@color/underlineColor"
-        android:text="@string/text.chat_with_buyer"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:colors="@array/progressColors"
+        app:type="nexus_rotation_cross" />
 
-    <LinearLayout
-        android:id="@+id/llProgress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/haveAccountColor"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAllCaps="true"
-            android:text="@string/text.progress" />
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fff">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rvProgress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </android.support.v4.widget.NestedScrollView>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btnReport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:background="#fff"
-        android:textColor="@color/itemStatusBlock"
-        android:text="@string/text.report_problem"/>
-
-</LinearLayout>
+</RelativeLayout>

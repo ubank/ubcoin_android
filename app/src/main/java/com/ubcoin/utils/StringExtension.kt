@@ -5,8 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.text.TextUtils
 import com.nulabinc.zxcvbn.Zxcvbn
-import com.ubcoin.R
-import com.ubcoin.model.PurchaseUser
+import com.ubcoin.model.response.User
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.SimpleDateFormat
@@ -127,12 +126,12 @@ fun Double.bigMoneyFormat(): String {
     return format
 }
 
-fun PurchaseUser.getNickName() : String {
+fun User.getNickName() : String {
     if (TextUtils.isEmpty(name)) return ""
     return WordUtils.capitalizeFully(name).replace(" ", "")
 }
 
-fun PurchaseUser.getCapitalizedName() : String {
+fun User.getCapitalizedName() : String {
     if (TextUtils.isEmpty(name)) return ""
     return WordUtils.capitalizeFully(name)
 }
