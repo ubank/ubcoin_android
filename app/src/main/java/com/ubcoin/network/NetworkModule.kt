@@ -61,6 +61,12 @@ object NetworkModule {
                 .build()
     }
 
+    fun clientWithoutInterceptors(): OkHttpClient {
+        return OkHttpClient.Builder()
+                .connectionSpecs(listOf(createConnectionSpec(), ConnectionSpec.CLEARTEXT))
+                .build()
+    }
+
     private fun createConnectionSpec(): ConnectionSpec {
         return ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
                 .tlsVersions(TlsVersion.TLS_1_2, TlsVersion.TLS_1_0, TlsVersion.TLS_1_2)

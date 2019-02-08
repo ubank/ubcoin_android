@@ -107,6 +107,12 @@ dependencies {
         exclude group: "com.android.support"
         transitive = false
     }
+
+    implementation ('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'

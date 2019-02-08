@@ -14,6 +14,10 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.maps.model.LatLng
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
+import com.ubcoin.activity.BaseActivity
+import com.ubcoin.fragment.transactions.MyBalanceFragment
+import com.ubcoin.fragment.transactions.TopUpFragment
+import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.Currency
 import com.ubcoin.model.ItemPurchaseDto
 import com.ubcoin.model.response.Location
@@ -156,7 +160,18 @@ class PurchaseMainView: LinearLayout {
                         .title(context.getString(R.string.text_please_top_up_your_balance))
                         .positiveText(context.getString(R.string.text_ok))
                         .positiveColor(ContextCompat.getColor(context, R.color.greenMainColor))
-                        .onPositive { dialog, _ -> dialog.dismiss() }
+                        .onPositive { dialog, _ ->
+                            if (activity != null && activity is BaseActivity) {
+                                var a: BaseActivity = activity as BaseActivity
+
+                                var currencyType = CryptoCurrency.UBC
+                                if(currency == Currency.ETH)
+                                    currencyType = CryptoCurrency.ETH
+
+                                a.fragmentSwitcher?.addTo(MyBalanceFragment::class.java, MyBalanceFragment.getBundle(currencyType), true)
+                            }
+                                dialog.dismiss()
+                             }
                         .build()
                 materialDialog!!.show()
             }

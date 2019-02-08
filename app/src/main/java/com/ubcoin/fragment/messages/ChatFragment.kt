@@ -36,7 +36,15 @@ import com.ubcoin.model.response.DealItem
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
+import com.ubcoin.network.NetworkModule
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.preferences.ThePreferences
+import io.reactivex.Emitter
+import io.socket.client.IO
+import io.socket.client.Socket
+import okhttp3.OkHttpClient
+import java.security.cert.X509Certificate
+import javax.net.ssl.*
 import kotlin.collections.ArrayList
 
 
@@ -46,12 +54,12 @@ class ChatFragment : BaseFragment() {
     private lateinit var rvMessages: RecyclerView
     private lateinit var progressCenter: View
     private lateinit var progressBottom: View
+    var socket: Socket? = null
 
     private lateinit var id: String
     private lateinit var item: DealItem
     private lateinit var user: User
 
-    lateinit var pubnub: PubNub
     private var bottomSheet: BottomSheet? = null
     private var fromCamera = false
     var lastLoadedMessage: Long = -1
@@ -61,6 +69,12 @@ class ChatFragment : BaseFragment() {
     var historyLoaded : Boolean = false
     var loading : Boolean = false
     var limit = 10
+
+    val SEND_MESSAGE = "sendMessage"
+    val HISTORY = "history"
+    val TYPING = "typing"
+    val ENTER_ROOM = "enterRoom"
+    val LEAVE_ROOM = "leaveRoom"
 
     override fun getLayoutResId() = R.layout.fragment_chat
     override fun getHeaderIcon() = R.drawable.ic_close
@@ -94,11 +108,68 @@ class ChatFragment : BaseFragment() {
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
 
-        val pnConfiguration = PNConfiguration()
-        pnConfiguration.setSubscribeKey("sub-c-82df030e-f705-11e8-86f0-9a6b1c0db2e9")
-        pnConfiguration.setPublishKey("pub-c-b8846eaf-8b9b-471e-ae55-b98cf645212f")
-        pnConfiguration.setUuid(ProfileHolder.user!!.id)
-        pubnub = PubNub(pnConfiguration)
+        val socketUrl = "https://qa.ubcoin.io"
+        val hostnameVerifier = object : HostnameVerifier {
+            override fun verify(p0: String?, p1: SSLSession?): Boolean {
+                return true
+            }
+        }
+        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager{
+            override fun getAcceptedIssuers(): Array<X509Certificate?> {
+                return arrayOfNulls(0)
+            }
+
+            override fun checkClientTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+
+            }
+
+            override fun checkServerTrusted(chain: Array<java.security.cert.X509Certificate>, authType: String) {
+
+            }
+        })
+        val trustManager = trustAllCerts[0] as X509TrustManager
+
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, null)
+        val sslSocketFactory = sslContext.getSocketFactory()
+
+        val okHttpClient = OkHttpClient.Builder()
+                .hostnameVerifier(hostnameVerifier)
+                .sslSocketFactory(sslSocketFactory, trustManager)
+                .build()
+
+        val opts = IO.Options()
+        opts.callFactory = okHttpClient
+        opts.webSocketFactory = okHttpClient
+        socket = IO.socket(socketUrl, opts)
+        socket!!.on(Socket.EVENT_CONNECT, {
+            var k = 0
+            k++
+
+        }).on(SEND_MESSAGE, {
+            var k = 0
+            k++
+        }).on(HISTORY, {
+            var k = 0
+            k++
+        }).on(TYPING, {
+            var k = 0
+            k++
+        }).on(Socket.EVENT_DISCONNECT, {
+            var k = 0
+            k++
+        })
+
+        socket!!.connect()
+
+        val messageJsonObject = JsonObject()
+        messageJsonObject.addProperty("token", "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..-gofj4ux938dpFqzRDRAgw.T9DtglumDfp1MtZ_gLNGvrqzVf3nyv7JhDNneWiUhX96RpUb031TVdl6smmQ9aTS3bY8vHex4BdojP09Xy562FXqnm5zTFnmvgqT1lP-lN5S_tJy2M9XfiuFKD3FEJ7p.x0sraTD3X9sWHEnpqtp4zQ")
+        messageJsonObject.addProperty("purchaseId", "purchase131323")
+
+        socket!!.emit(ENTER_ROOM, messageJsonObject.toString(),  {
+            var k = 0
+            k++
+        })
 
         rvMessages = view.findViewById<RecyclerView>(R.id.rvChatMessages)
 
@@ -153,34 +224,7 @@ class ChatFragment : BaseFragment() {
             if(lastLoadedMessage > -1)
                 rev = true
 
-            pubnub.history()
-                    .channel(channelName)
-                    .count(limit)
-                    .reverse(rev)
-                    .includeTimetoken(true)
-                    .end(lastLoadedMessage)
-                    .async(object : PNCallback<PNHistoryResult>() {
-                        override fun onResponse(result: PNHistoryResult?, status: PNStatus?) {
-                            if (!status!!.isError) {
-                                for (item in result!!.messages.reversed()) {
-                                    addMessageFromJSON(item.entry.asJsonObject, item.timetoken, true)
-                                    lastLoadedMessage = item.timetoken - 1
-                                }
 
-                                if (result!!.messages.size < limit) {
-                                    historyLoaded = true
-                                    if (chatMessageAdapter.itemCount > 0) {
-                                        val previousDate = chatMessageAdapter.getItem(chatMessageAdapter.itemCount - 1).date!!
-                                        chatMessageAdapter.addData(createMessage(previousDate, "", ChatMessageType.Date))
-                                    }
-                                }
-                            }
-                            else
-                                Toast.makeText(context, getString(R.string.text_connection_problems), Toast.LENGTH_SHORT).show()
-
-                            endLoading()
-                        }
-                    })
         }
     }
 
@@ -266,24 +310,10 @@ class ChatFragment : BaseFragment() {
         messageJsonObject.addProperty("content", url)
         messageJsonObject.addProperty("publisher", ProfileHolder.user!!.id)
 
-        pubnub.publish()
-                .message(messageJsonObject)
-                .channel(channelName)
-                .async(object : PNCallback<PNPublishResult>() {
-                    override fun onResponse(result: PNPublishResult, status: PNStatus) {
-                        // handle publish result, status always present, result if successful
-                        // status.isError() to see if error happened
-                        if (!status.isError) {
-                            println("pub timetoken: " + result.timetoken!!)
-                        }
-                        else
-                        {
-                            Toast.makeText(context, getString(R.string.text_connection_problems), Toast.LENGTH_SHORT).show()
-                        }
-                        println("pub status code: " + status.statusCode)
-                        endLoading()
-                    }
-                })
+        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {
+            var k = 0
+            k++
+        })
     }
 
     fun send(){
@@ -299,55 +329,17 @@ class ChatFragment : BaseFragment() {
         messageJsonObject.addProperty("content", etMessage.text.toString())
         messageJsonObject.addProperty("publisher", ProfileHolder.user!!.id)
 
-        pubnub.publish()
-                .message(messageJsonObject)
-                .channel(channelName)
-                .async(object : PNCallback<PNPublishResult>() {
-                    override fun onResponse(result: PNPublishResult, status: PNStatus) {
-                        if (!status.isError) {
-                            println("pub timetoken: " + result.timetoken!!)
-                            etMessage.setText("")
-                        }
-                        else
-                        {
-                            Toast.makeText(context, getString(R.string.text_connection_problems), Toast.LENGTH_SHORT).show()
-                        }
-                        println("pub status code: " + status.statusCode)
-                        endLoading()
-                    }
-                })
+        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {
+            var k = 0
+            k++
+        })
     }
 
     fun initPubnub(){
         if(loading)
             return
         startLoading()
-        pubnub.addListener(object : SubscribeCallback() {
-            override fun status(pubnub: PubNub, status: PNStatus) {
-                var allOk = false
-                if (status.category == PNStatusCategory.PNUnexpectedDisconnectCategory) {
-                } else if (status.category == PNStatusCategory.PNConnectedCategory) {
-                    allOk = true
-                    endLoading()
 
-                    loadData()
-                }
-                if(!allOk)
-                    Toast.makeText(context, getString(R.string.text_connection_problems), Toast.LENGTH_SHORT).show()
-            }
-
-            override fun message(pubnub: PubNub, message: PNMessageResult) {
-                if (message.channel.equals(channelName)) {
-                    addMessageFromJSON(message.message!!.asJsonObject, message.timetoken, false)
-                }
-            }
-
-            override fun presence(pubnub: PubNub, presence: PNPresenceEventResult) {
-
-            }
-        })
-
-        pubnub.subscribe().channels(Arrays.asList(channelName)).execute()
     }
 
     fun addMessageFromJSON(message : JsonObject, timetoken : Long, history : Boolean)
@@ -428,7 +420,6 @@ class ChatFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        pubnub.unsubscribe()
     }
 
     fun startLoading(){
