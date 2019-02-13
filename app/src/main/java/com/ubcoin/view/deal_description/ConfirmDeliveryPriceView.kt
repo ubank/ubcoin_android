@@ -29,14 +29,14 @@ class ConfirmDeliveryPriceView: LinearLayout {
             field = value
             var currency = "UBC"
             tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat() + " UBC"
-            if(value?.item?.priceETH != null) {
-                currency == "ETH"
+            if(item?.currencyType == Currency.ETH) {
+                currency = "ETH"
                 tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH() + " ETH"
             }
 
             var price = item!!.deliveryPrice
             var amount = ProfileHolder.balance?.effectiveAmount
-            if(value?.item?.priceETH != null) {
+            if(item?.currencyType == Currency.ETH) {
                 amount = ProfileHolder.balance?.effectiveAmountETH
             }
 
@@ -85,7 +85,7 @@ class ConfirmDeliveryPriceView: LinearLayout {
             var text = context.getString(R.string.text_not_enough_ubc)
             var priceText = (price ?: .0).moneyFormat() + " UBC"
 
-            if(item?.item?.priceETH != null)
+            if(item?.currencyType == Currency.ETH)
             {
                 amount = ProfileHolder.balance?.effectiveAmountETH
                 text = context.getString(R.string.text_not_enough_eth)
@@ -112,7 +112,7 @@ class ConfirmDeliveryPriceView: LinearLayout {
                         .negativeText(context.getString(R.string.cancel))
                         .positiveColor(ContextCompat.getColor(context, R.color.greenMainColor))
                         .negativeColor(ContextCompat.getColor(context, R.color.greenMainColor))
-                        .onPositive { dialog, _ -> buyItem()
+                        .onPositive { dialog, _ -> buyItem(price)
                             dialog.dismiss() }
                         .onNegative { dialog, _ -> dialog.dismiss() }
                         .build()
@@ -122,11 +122,11 @@ class ConfirmDeliveryPriceView: LinearLayout {
     }
 
     interface OnButtonClickListener{
-        fun onConfirm()
+        fun onConfirm(price: Double)
     }
 
-    fun buyItem() {
+    fun buyItem(price: Double) {
         if(buttonClickListener != null)
-            buttonClickListener!!.onConfirm()
+            buttonClickListener!!.onConfirm(price)
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ubcoin.GlideApp
 import com.ubcoin.R
+import com.ubcoin.model.Currency
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.utils.moneyFormat
 import com.ubcoin.utils.moneyRoundedFormatETH
@@ -19,6 +20,13 @@ class ItemDescriptionView: LinearLayout {
             field = value
             initView()
         }
+
+    var currency: Currency? = null
+        set(value) {
+            field = value
+            initView()
+        }
+
     private lateinit var tvName: TextView
     private lateinit var tvPrice: TextView
     private lateinit var ivImage: ImageView
@@ -60,12 +68,12 @@ class ItemDescriptionView: LinearLayout {
 
         var resText = ""
 
-        if(marketItem?.price != null) {
+        if(marketItem?.price != null && (currency == null || currency == Currency.UBC)) {
             priceUBC = (marketItem?.price ?: .0).moneyFormat() + " UBC"
             resText += priceUBC
         }
 
-        if(marketItem?.priceETH != null) {
+        if(marketItem?.priceETH != null && (currency == null || currency == Currency.ETH)) {
             priceETH = (marketItem?.priceETH ?: .0).moneyRoundedFormatETH() + " ETH"
             if(resText.length > 0) resText += " / "
             resText += priceETH

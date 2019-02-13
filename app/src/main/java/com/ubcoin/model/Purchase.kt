@@ -20,5 +20,6 @@ data class Purchase(
         val statusDescriptions: List<StatusDescription>,
         val item: MarketItem,
         val withDelivery: Boolean,
-        val deliveryPrice: Double
+        val deliveryPrice: Double,
+        val currencyType: Currency
 ) : IPurchaseObject, Serializable

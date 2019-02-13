@@ -36,6 +36,16 @@ object NetworkModule {
         }
     }
 
+
+
+    public fun getChatUrl() : String {
+        return if (isDebug()) {
+            "https://qa.ubcoin.io"
+        } else {
+            "https://my.ubcoin.io"
+        }
+    }
+
     private fun retrofit(): Retrofit {
         return Retrofit.Builder()
                 .validateEagerly(true)
