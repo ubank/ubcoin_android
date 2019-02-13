@@ -35,8 +35,10 @@ class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransact
             date = Date()
         }
         vHolder.txtItemTransactionDate.text = date.toTransactionDate()
-        vHolder.txtItemTransactionAmount.text = """${if (transaction.amountUBC > .0) "+ " else ""}${transaction.amountUBC.moneyFormat()} $ubcPostfix"""
-        vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormatETH()} $ethPostfix"""
+        if(transaction.amountUBC != 0.0)
+            vHolder.txtItemTransactionAmount.text = """${if (transaction.amountUBC > .0) "+ " else ""}${transaction.amountUBC.moneyFormat()} $ubcPostfix"""
+        if(transaction.amountETH != 0.0)
+            vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormatETH()} $ethPostfix"""
         if (transaction.isPositive()) {
             vHolder.txtItemTransactionAmount.setTextColor(positiveColor)
         } else {

@@ -96,9 +96,14 @@ class DealPurchaseFragment : BaseFragment() {
         }
         confirmDeliveryPrice = view.findViewById(R.id.confirmDeliveryPrice)
         confirmDeliveryPrice.buttonClickListener = object: ConfirmDeliveryPriceView.OnButtonClickListener{
-            override fun onConfirm() {
+            override fun onConfirm(price: Double) {
                 progressCenter.visibility = View.VISIBLE
-                DataProvider.confirmDeliveryPrice(purchaseId!!, Consumer {
+
+
+                var map = HashMap<String,Double>()
+                map.put("amount", price)
+
+                DataProvider.confirmDeliveryPrice(purchaseId!!,map,  Consumer {
                     activity?.onBackPressed()
                 }, Consumer {
                     handleException(it)
@@ -160,11 +165,7 @@ class DealPurchaseFragment : BaseFragment() {
         btnChat = view.findViewById(R.id.btnChat)
         btnChat.setOnClickListener {
             if(purchase != null) {
-                var user = purchase!!.buyer
-                if (purchase!!.buyer.id.equals(ProfileHolder.user!!.id))
-                    user = purchase!!.seller
-                var dealItem = DealItem(marketItem!!.id, marketItem!!.categoryId!!, marketItem!!.title!!, marketItem!!.price!!, marketItem!!.description!!, marketItem!!.images)
-                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(purchase!!.id, dealItem, user), true)
+                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem!!.id, purchase!!.seller), true)
             }
         }
         progressView = view.findViewById(R.id.progressView)
@@ -270,6 +271,7 @@ class DealPurchaseFragment : BaseFragment() {
 
     fun enableItemDescription(){
         itemDescription.marketItem = marketItem
+        itemDescription.currency = purchase?.currencyType
         itemDescription.visibility = View.VISIBLE
     }
 

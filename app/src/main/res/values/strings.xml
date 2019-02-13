@@ -156,19 +156,9 @@
     <string name="str_status_blocked2">and edit your listing.</string>
     <string name="str_active_buyers">Active buyers</string>
     <string name="str_others">Others</string>
-
     <string name="str_item_status_active">Active</string>
-    <string name="str_item_status_active_seller">On market</string>
-    <string name="str_item_status_active_buyer_delivery">Waiting for delivery price to be defined by seller</string>
-    <string name="str_item_status_active_buyer_meet">Waiting for personal meeting</string>
-    <string name="str_item_status_active_digital">Waiting for link confirmation</string>
-
     <string name="str_item_status_deactivated">Deactivated</string>
     <string name="str_item_status_sold">Sold</string>
-    <string name="str_item_status_cancelled">Cancelled</string>
-    <string name="str_item_status_delivery">Delivery in process</string>
-    <string name="str_item_status_delivery_price_defined">Waiting for approval of delivery price by buyer</string>
-    <string name="str_item_status_delivery_price_confirmed">Waiting for start of delivery by seller</string>
     <string name="str_item_status_blocked">Blocked</string>
     <string name="str_item_status_reserved">Reserved</string>
     <string name="str_item_status_check">In moderation</string>
@@ -281,7 +271,7 @@
     <string name="text.i_received_item">I received item</string>
     <string name="text.delivery_address">Delivery address</string>
     <string name="text.after_you_book_description">After you book item, seller will define price of delivery to your address. Delivery price can be 0. If you don’t agree with delivery price, you will be able to cancel the deal and item price will return to your wallet.</string>
-    <string name="text.we_will_block_the_eth_or_ubc">We will block the ETH or UBC amount on your Ubcoin wallet. Seller will receive money only after you get the item in your hands.</string>
+    <string name="text.we_will_block_the_eth_or_ubc">We will block the ETH or UBC amount on your Ubcoin Market wallet. Seller will receive money only after you receive file and confirm that file is OK.</string>
     <string name="text.item_price">Item price</string>
     <string name="text.currency">Currency</string>
     <string name="text.confirm_in_ubc">Confirm in UBC</string>
@@ -295,13 +285,13 @@
     <string name="text.confirm_purchace">Confirm purchace?</string>
 
     <string name="text_delivery_active_purchase_title_seller">Item booked. Waiting for price of delivery to be defined by seller</string>
-    <string name="text.delivery_active_purchase_description_seller">Buyer\’s payment in ETH is blocked by Ubcoin. You will receive it after the item is delivered. Please find out delivery price to buyer address and write it below.\n\nIf buyer agrees to pay it, Ubcoin will block delivery price on buyer\'s wallet and you receive this money after item is delivered to buyer. If buyer does not agree, he will cancel the deal. </string>
+    <string name="text.delivery_active_purchase_description_seller">Buyer\’s payment is blocked by Ubcoin. You will receive it after the item is delivered. Please find out delivery price to buyer address and write it below.\n\nIf buyer agrees to pay it, Ubcoin will block delivery price on buyer\'s wallet and you receive this money after item is delivered to buyer. If buyer does not agree, he will cancel the deal. </string>
     <string name="text_delivery_active_purchase_title_buyer">Item booked. Waiting for price of delivery to be defined by seller</string>
     <string name="text.delivery_active_purchase_description_buyer">Seller will define price of delivery. You will get a notification about it. If you agree to pay it, it will be frozen on your wallet and seller starts delivery.</string>
 
-    <string name="text_active_purchase_title_seller">Item booked. Waiting for price of delivery to be defined by seller</string>
+    <string name="text_active_purchase_title_seller">Waiting for personal meeting</string>
     <string name="text.active_purchase_description_seller">Buyer chose personal meeting instead of delivery. After you meet with buyer and he confirms that he took item, you will receive payment on your wallet. Now money are blocked by Ubcoin on buyer’s wallet.</string>
-    <string name="text_active_purchase_title_buyer">Item booked. Waiting for transfer</string>
+    <string name="text_active_purchase_title_buyer">Waiting for personal meeting</string>
     <string name="text.active_purchase_description_buyer">After you meet with seller and take and check the item please confirm it with using the button below. Seller has not received the money yet.</string>
 
     <string name="text.delivery_price_defined_title_buyer">Price of delivery defined. Waiting for approval from buyer</string>
@@ -326,7 +316,7 @@
     <string name="text.confirmed_title_buyer">Item transferred</string>
     <string name="text.confirmed_title_seller">Item transferred</string>
     <string name="text.confirmed_description_buyer">Seller received the payment. Thank you for the purchase!</string>
-    <string name="text.confirmed_description_seller">Payment received! Thank you!</string>
+    <string name="text.confirmed_description_seller">You received payment! Thank you!</string>
 
     <string name="text.price_of_delivery_to_your_address">Price of delivery to your address</string>
     <string name="text_digital_active_purchase_title_buyer">Item price is frozen. Link to download file is sent to your email</string>
@@ -336,7 +326,7 @@
     <string name="text.digital_confirmed_title_buyer">Digital item is sold. Seller received payment</string>
     <string name="text.digital_confirmed_title_seller">Digital item is sold. Seller received payment</string>
     <string name="text.digital_confirmed_description_buyer">Thank you for the purchase! ATTENTION: Link (from email that we sent you) might become unavailable. Do not forget to download file on your device and save it!</string>
-    <string name="text.digital_confirmed_description_seller">Item price is blocked on buyer’s wallet. After buyer confirms that file is OK, you will receive payment.</string>
+    <string name="text.digital_confirmed_description_seller">You received payment. Thank you!</string>
     <string name="text.i_need_delivery">I need delivery</string>
     <string name="text.i_will_organize_delivery">I will organize delivery</string>
     <string name="text.if_you_cannot_meet_with_buyer">If you cannot meet with buyer personally and want to organise delivery, please press the button below. You will define price of delivery and seller will be asked to pay it. You may put 0 as delivery price.</string>
@@ -349,8 +339,19 @@
     <string name="text.price_is_missing">Price is missing</string>
     <string name="text.after_you_meet_with_seller">After you meet with seller and take and check the item please confirm it with using the button below. Seller has not received the money yet.</string>
     <string name="text.attention_we_take_comission_2_for_buying_in_eth">ATTENTION: We take comission 2% for buying in ETH.</string>
-    <string name="text.connect_buyer_to_get_address">Connect buyer via chat to get delivery address</string>
+    <string name="text.connect_buyer_to_get_address">Please contact buyer via chat to get his delivery address</string>
     <string name="text.new_price_equal_old">New price is equal to old price</string>
     <string name="str.not_active">NOT ACTIVE</string>
     <string name="text.choose_email_client">Choose email client</string>
+    <string name="text.if_you_cannot_meet">If you cannot meet with seller personally and want him to organise delivery, please press the button below. Seller will define price of delivery and you will be asked to pay it. Delivery price can be 0.</string>
+    <string name="text.please_contact_buyer">Please contact buyer via chat to get his delivery address</string>
+    <string name="str_item_status_active_seller">On market</string>
+    <string name="str_item_status_active_buyer_delivery">Waiting for delivery price to be defined by seller</string>
+    <string name="str_item_status_active_buyer_meet">Waiting for personal meeting</string>
+    <string name="str_item_status_active_digital">Waiting for link confirmation</string>
+    <string name="str_item_status_cancelled">Cancelled</string>
+    <string name="str_item_status_delivery">Delivery in process</string>
+    <string name="str_item_status_delivery_price_defined">Waiting for approval of delivery price by buyer</string>
+    <string name="str_item_status_delivery_price_confirmed">Waiting for start of delivery by seller</string>
+    <string name="we_will_block_the_eth_buy_descr">We will block the ETH or UBC amount on your Ubcoin wallet. Seller will receive money only after you get the item in your hands.</string>
 </resources>

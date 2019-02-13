@@ -10,6 +10,10 @@ import com.ubcoin.R
 import com.ubcoin.model.ChatMessage
 import com.ubcoin.model.ChatMessageType
 import java.text.SimpleDateFormat
+import android.support.v4.content.ContextCompat.startActivity
+import android.content.Intent
+import android.net.Uri
+
 
 class ChatMessageAdapter(context: Context) : BaseRecyclerAdapter<ChatMessage, ChatMessageAdapter.ViewHolder>(context) {
 
@@ -44,6 +48,11 @@ class ChatMessageAdapter(context: Context) : BaseRecyclerAdapter<ChatMessage, Ch
                     .placeholder(R.drawable.img_profile_default)
                     .error(R.drawable.img_profile_default)
                     .into(p0.ivImage)
+
+                p0.ivImage?.setOnClickListener {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(message.data))
+                    context.startActivity(browserIntent)
+                }
             }
             ChatMessageType.OpponentImage -> {
                 if(p0.ivImage != null)
@@ -52,6 +61,11 @@ class ChatMessageAdapter(context: Context) : BaseRecyclerAdapter<ChatMessage, Ch
                     .placeholder(R.drawable.img_profile_default)
                     .error(R.drawable.img_profile_default)
                     .into(p0.ivImage)
+
+                p0.ivImage?.setOnClickListener {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(message.data))
+                    context.startActivity(browserIntent)
+                }
             }
             ChatMessageType.MyMessage -> {p0.tvText?.text = message.data}
             ChatMessageType.OpponentMessage -> {p0.tvText?.text = message.data}

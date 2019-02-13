@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.rengwuxian.materialedittext.MaterialEditText
 import com.ubcoin.R
+import com.ubcoin.model.Currency
 import com.ubcoin.model.Purchase
 import com.ubcoin.model.response.PurchaseItemStatus
 
@@ -74,14 +75,15 @@ class SellerSetPriceView: ConstraintLayout {
     }
 
     fun initView() {
-        tvAddress.text = item?.comment
+        if(item?.comment != null && item?.comment!!.length > 0)
+            tvAddress.text = item?.comment
         if(item?.item?.price != null)
         {
             etPrice.setHint(R.string.hint_price_in_ubc)
             etPrice.hint = context.getString(R.string.hint_price_in_ubc)
         }
 
-        if(item?.item?.priceETH != null)
+        if(item?.currencyType == Currency.ETH)
         {
             etPrice.setHint(R.string.hint_price_in_eth)
             etPrice.hint = context.getString(R.string.hint_price_in_eth)

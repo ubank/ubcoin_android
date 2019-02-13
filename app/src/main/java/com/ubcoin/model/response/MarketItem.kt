@@ -28,7 +28,8 @@ data class MarketItem(
         val currency: String?,
         val purchases: List<Purchase>,
         val condition: String?,
-        val fileUrl: String?
+        val fileUrl: String?,
+        val statusDescription: String?
 ) : MarketItemMarker {
 
     fun isOwner() : Boolean {

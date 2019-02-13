@@ -3,19 +3,16 @@ package com.ubcoin.fragment.deals
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.google.android.gms.common.util.CollectionUtils
 import com.ubcoin.R
-import com.ubcoin.adapter.BuysListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
+import com.ubcoin.adapter.SellsListAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.DealPurchaseFragment
-import com.ubcoin.fragment.market.DealSellFragment
+import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.network.request.BuyerPurchaseLinkRequest
-import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
-import com.ubcoin.utils.MarketItemsSorterBySections
 import com.ubcoin.utils.ProfileHolder
 
 /**
@@ -26,7 +23,7 @@ private const val LIMIT = 30
 class BuyDealsChildFragment : BaseFragment() {
 
     private lateinit var llNoDeals: View
-    private lateinit var sellsListAdapter: BuysListAdapter
+    private lateinit var sellsListAdapter: SellsListAdapter
     private lateinit var recyclerView: RecyclerView
     private var progressCenter: View? = null
     private var progressBottom: View? = null
@@ -46,7 +43,7 @@ class BuyDealsChildFragment : BaseFragment() {
         progressBottom = view.findViewById(R.id.progressBottom)
         recyclerView = view.findViewById(R.id.rvDeals)
 
-        sellsListAdapter = BuysListAdapter(activity!!)
+        sellsListAdapter = SellsListAdapter(activity!!)
         sellsListAdapter.setHasStableIds(true)
 
         recyclerView.setHasFixedSize(true)
@@ -63,36 +60,14 @@ class BuyDealsChildFragment : BaseFragment() {
             recyclerView.visibility = View.GONE
         }
 
-
-        sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
-            override fun onItemClick(data: DealItemWrapper, position: Int) {
-
-                var purchaseId = data.id
-
-                getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(purchaseId), false)
-                /*
-                val thePreferences = ThePreferences()
-                if (thePreferences.shouldShowThDialog()) {
-                    OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
-                        override fun onPositiveClick(materialDialog: MaterialDialog) {
-                            materialDialog.dismiss()
-                            thePreferences.disableTgDialog()
-                            requestUrlAndOpenApp(data)
-                        }
-                    })
-                } else {
-                    requestUrlAndOpenApp(data)
-                }
-                */
+        sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<MarketItemMarker> {
+            override fun onItemClick(data: MarketItemMarker, position: Int) {
+                if((data as MarketItem).status != MarketItemStatus.ACTIVE && (data as MarketItem).purchases.size > 0)
+                    getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle((data as MarketItem).purchases.get(0).id), false)
+                else
+                    getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data as MarketItem), false)
             }
         }
-
-        recyclerView.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(linearLayoutManager) {
-            override fun onLoadMore() {
-                loadData()
-            }
-
-        })
     }
 
     fun requestUrlAndOpenApp(data: DealItemWrapper) {
@@ -115,24 +90,29 @@ class BuyDealsChildFragment : BaseFragment() {
     }
 
     fun loadData() {
-        if (isLoading || isEndOfLoading) return
-
-        currentPage++
-
         if (sellsListAdapter.isEmpty()) {
             progressCenter?.visibility = View.VISIBLE
         } else {
             progressBottom?.visibility = View.VISIBLE
         }
 
-        val onSuccess = object : SilentConsumer<DealsListResponse> {
-            override fun onConsume(t: DealsListResponse) {
-                val data = t.data
-                hideProgress()
-                if (data.size < LIMIT) {
-                    isEndOfLoading = true
+        val onSuccess = object : SilentConsumer<NewSellResponse> {
+            override fun onConsume(t: NewSellResponse) {
+
+                sellsListAdapter.clear()
+
+                if(t.active != null) {
+                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_item_status_active)))
+                    for (entry in t.active)
+                        sellsListAdapter.addData(entry)
                 }
-                sellsListAdapter.addData(data)
+
+                if(t.waste != null) {
+                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_not_active)))
+                    for (entry in t.waste)
+                        sellsListAdapter.addData(entry)
+                }
+
                 if (sellsListAdapter.isEmpty()) {
                     llNoDeals.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
@@ -140,8 +120,8 @@ class BuyDealsChildFragment : BaseFragment() {
                     llNoDeals.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                 }
+                hideProgress()
             }
-
         }
         val onError = object : SilentConsumer<Throwable> {
             override fun onConsume(t: Throwable) {
@@ -149,63 +129,8 @@ class BuyDealsChildFragment : BaseFragment() {
             }
 
         }
-        DataProvider.getBuyersItems(LIMIT, currentPage, onSuccess, onError)
-    }
 
-    private fun prepareData(marketItems: List<MarketItem>): List<MarketItemMarker> {
-        if (CollectionUtils.isEmpty(marketItems)) return ArrayList()
-
-        val sortedList = MarketItemsSorterBySections.sort(marketItems)
-
-        if (sellsListAdapter.isEmpty()) {
-            val associatedMap = groupData(sortedList)
-            val toReturn = ArrayList<MarketItemMarker>()
-            for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
-                toReturn.addAll(entry.value)
-            }
-            return ArrayList(toReturn)
-        } else {
-            val lastItemInAdapter = sellsListAdapter.data[sellsListAdapter.data.size - 1]
-            val toReturn : MutableList<MarketItemMarker> = ArrayList<MarketItemMarker>().toMutableList()
-
-            val mutableList = sortedList.toMutableList()
-            val iterator = mutableList.iterator()
-            while (iterator.hasNext()) {
-                val next = iterator.next()
-                if ((lastItemInAdapter as MarketItem).status == next.status) {
-                    toReturn.add(next)
-                    iterator.remove()
-                } else {
-                    break
-                }
-            }
-            if (mutableList.isEmpty()) {
-                return ArrayList(toReturn)
-            }
-            val associatedMap = groupData(mutableList)
-            for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
-                toReturn.addAll(entry.value)
-            }
-            return ArrayList(toReturn)
-
-        }
-    }
-
-    private fun groupData(sortedList: List<MarketItem>): LinkedHashMap<Int, ArrayList<MarketItem>> {
-        val associatedMap = LinkedHashMap<Int, ArrayList<MarketItem>>()
-        sortedList.forEach {
-            val currentList: ArrayList<MarketItem>? =
-                    if (!associatedMap.containsKey(it.status!!.groupKey)) {
-                        associatedMap.put(it.status!!.groupKey, ArrayList())
-                        associatedMap[it.status!!.groupKey]
-                    } else {
-                        associatedMap[it.status!!.groupKey]
-                    }
-            currentList!!.add(it)
-        }
-        return associatedMap
+        DataProvider.getItemsToBuy(onSuccess, onError)
     }
 
     private fun hideProgress() {

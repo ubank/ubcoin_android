@@ -14,8 +14,8 @@ enum class PurchaseItemStatus {
     ACTIVE,
     @SerializedName("CONFIRMED")
     CONFIRMED,
-    @SerializedName("CANCELED")
-    CANCELED,
+    @SerializedName("CANCELLED")
+    CANCELLED,
     @SerializedName("DELIVERY_PRICE_DEFINED")
     DELIVERY_PRICE_DEFINED,
     @SerializedName("DELIVERY_PRICE_CONFIRMED")

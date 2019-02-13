@@ -1,9 +1,6 @@
 package com.ubcoin.network
 
-import com.ubcoin.model.ConversionResponse
-import com.ubcoin.model.CryptoCurrency
-import com.ubcoin.model.ItemPurchaseDto
-import com.ubcoin.model.Purchase
+import com.ubcoin.model.*
 import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
@@ -17,6 +14,9 @@ import retrofit2.http.*
  * Created by Yuriy Aizenberg
  */
 interface Api {
+
+    @GET("/api/chats")
+    fun getChatList(@Header("Cookie") cookie: String): Observable<List<ChatItem>>
 
     @POST("/api/auth")
     fun login(@Body signIn: SignIn): Observable<ProfileCompleteResponse>
@@ -107,6 +107,12 @@ interface Api {
     @GET("/api/purchases/seller")
     fun getSellersItems(@Query("size") limit: Int, @Query("page") page: Int): Observable<MarketListResponse>
 
+    @GET("/api/items/to-buy")
+    fun getItemsToBuy(): Observable<NewSellResponse>
+
+    @GET("/api/items/to-sell")
+    fun getItemsToSell(): Observable<NewSellResponse>
+
     @POST("/api/purchases/create")
     fun createPurchase(@Body createProductRequest: ItemPurchaseDto): Observable<Purchase>
 
@@ -123,7 +129,7 @@ interface Api {
     fun setDeliveryPrice(@Path("id") id: String, @Body amount: Any): Observable<Purchase>
 
     @POST("/api/purchases/confirm-delivery-price/{id}")
-    fun confirmDeliveryPrice(@Path("id") id: String): Observable<Purchase>
+    fun confirmDeliveryPrice(@Path("id") id: String, @Body amount: Any): Observable<Purchase>
 
     @POST("/api/purchases/start-delivery/{id}")
     fun startDelivery(@Path("id") id: String): Observable<Purchase>

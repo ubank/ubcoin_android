@@ -137,6 +137,7 @@
             android:textColor="#403d45"/>
 
         <TextView
+            android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -145,7 +146,7 @@
             android:fontFamily="sans-serif"
             android:textStyle="normal"
             android:textColor="#919191"
-            android:text="@string/text.we_will_block_the_eth_or_ubc" />
+            android:text="@string/we_will_block_the_eth_buy_descr" />
 
     </LinearLayout>
 

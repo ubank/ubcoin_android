@@ -37,9 +37,10 @@ class PurchaseMainView: LinearLayout {
     private lateinit var btnConfirm: Button
     private lateinit var tvBalance: TextView
     private lateinit var tvETHCommision: TextView
+    private lateinit var tvDescription: TextView
     var activity: Activity? = null
 
-    public fun setCreatePurchaseListener(listener: OnCreatePurchase){
+    fun setCreatePurchaseListener(listener: OnCreatePurchase){
         this.listener = listener
     }
 
@@ -47,7 +48,7 @@ class PurchaseMainView: LinearLayout {
 
     var currency: Currency = Currency.UBC
 
-    public fun IsAddressInputEnabled(isEnabled: Boolean)
+    fun IsAddressInputEnabled(isEnabled: Boolean)
     {
         if(isEnabled)
             llAddressInput.visibility = View.VISIBLE
@@ -80,6 +81,7 @@ class PurchaseMainView: LinearLayout {
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        tvDescription = findViewById(R.id.tvDescription)
         llAddressInput = findViewById(R.id.llAddressInput)
         etAddress = findViewById(R.id.etAddress)
         etItemPrice = findViewById(R.id.etItemPrice)
@@ -110,7 +112,7 @@ class PurchaseMainView: LinearLayout {
                 var price = marketItem!!.price
                 var amount = ProfileHolder.balance?.effectiveAmount
                 if(currency == Currency.ETH) {
-                    price = marketItem!!.priceETH
+                    price = marketItem!!.priceETH!! * 1.02
                     amount = ProfileHolder.balance?.effectiveAmountETH
                 }
 
@@ -147,10 +149,10 @@ class PurchaseMainView: LinearLayout {
 
             if(currency == Currency.ETH)
             {
-                price = marketItem!!.priceETH
+                price = marketItem!!.priceETH!! * 1.02
                 amount = ProfileHolder.balance?.effectiveAmountETH
                 text = context.getString(R.string.text_not_enough_eth)
-                priceText = marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH"
+                priceText = price!!.moneyRoundedFormatETH() + " ETH"
             }
 
             if(amount == null || price == null || amount!! < price!!)
@@ -199,6 +201,11 @@ class PurchaseMainView: LinearLayout {
     }
 
     fun initView(){
+        if(marketItem!!.category!!.id.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef"))
+                tvDescription.text = context!!.getString(R.string.text_we_will_block_the_eth_or_ubc)
+            else
+                tvDescription.text = context!!.getString(R.string.we_will_block_the_eth_buy_descr)
+
         etItemPrice.setText((marketItem?.price ?: .0).moneyFormat() + " UBC / " + marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH")
 
         var price = marketItem!!.price

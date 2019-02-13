@@ -33,7 +33,8 @@
             android:textSize="14sp"
             android:fontFamily="sans-serif"
             android:textStyle="normal"
-            android:textColor="#de000000" />
+            android:textColor="#de000000"
+            android:text="@string/text.please_contact_buyer"/>
     </LinearLayout>
 
     <LinearLayout

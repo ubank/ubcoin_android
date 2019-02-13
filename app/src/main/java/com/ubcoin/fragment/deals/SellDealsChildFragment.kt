@@ -1,10 +1,8 @@
 package com.ubcoin.fragment.deals
 
-import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.google.android.gms.common.util.CollectionUtils
 import com.ubcoin.R
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.SellsListAdapter
@@ -16,12 +14,9 @@ import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
-import com.ubcoin.utils.MarketItemsSorterBySections
 import com.ubcoin.utils.ProfileHolder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
-import java.util.function.BiConsumer
 
 /**
  * Created by Yuriy Aizenberg
@@ -35,11 +30,6 @@ class SellDealsChildFragment : BaseFragment() {
     private lateinit var recyclerView: RecyclerView
     private var progressCenter: View? = null
     private var progressBottom: View? = null
-
-
-    private var isLoading = false
-    private var isEndOfLoading = false
-    private var currentPage = -1
 
     override fun getLayoutResId() = R.layout.fragment_deals_child
     override fun isFooterShow() = false
@@ -72,40 +62,39 @@ class SellDealsChildFragment : BaseFragment() {
 
         sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<MarketItemMarker> {
             override fun onItemClick(data: MarketItemMarker, position: Int) {
-                if((data as MarketItem).purchases != null && (data as MarketItem).purchases.size > 0)
+                if((data as MarketItem).status != MarketItemStatus.ACTIVE && (data as MarketItem).purchases.size > 0)
                     getSwitcher()?.addTo(DealSellFragment::class.java, DealSellFragment.getBundle((data as MarketItem).purchases.get(0).id), false)
                 else
                     getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data as MarketItem), false)
             }
         }
-
-        recyclerView.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(linearLayoutManager) {
-            override fun onLoadMore() {
-                loadData()
-            }
-        })
     }
 
 
     fun loadData() {
-        if (isLoading || isEndOfLoading) return
-
-        currentPage++
-
         if (sellsListAdapter.isEmpty()) {
             progressCenter?.visibility = View.VISIBLE
         } else {
             progressBottom?.visibility = View.VISIBLE
         }
 
-        val onSuccess = object : SilentConsumer<MarketListResponse> {
-            override fun onConsume(t: MarketListResponse) {
-                val data = t.data
-                hideProgress()
-                if (data.size < LIMIT) {
-                    isEndOfLoading = true
+        val onSuccess = object : SilentConsumer<NewSellResponse> {
+            override fun onConsume(t: NewSellResponse) {
+
+                sellsListAdapter.clear()
+
+                if(t.active != null) {
+                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_item_status_active)))
+                    for (entry in t.active)
+                        sellsListAdapter.addData(entry)
                 }
-                sellsListAdapter.addData(prepareData(t.data))
+
+                if(t.waste != null) {
+                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_not_active)))
+                    for (entry in t.waste)
+                        sellsListAdapter.addData(entry)
+                }
+
                 if (sellsListAdapter.isEmpty()) {
                     llNoDeals.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
@@ -113,8 +102,8 @@ class SellDealsChildFragment : BaseFragment() {
                     llNoDeals.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                 }
+                hideProgress()
             }
-
         }
         val onError = object : SilentConsumer<Throwable> {
             override fun onConsume(t: Throwable) {
@@ -123,7 +112,7 @@ class SellDealsChildFragment : BaseFragment() {
 
         }
 
-        DataProvider.getSellerItems(LIMIT, currentPage, onSuccess, onError)
+        DataProvider.getItemsToSell(onSuccess, onError)
     }
 
     override fun onResume() {
@@ -140,100 +129,18 @@ class SellDealsChildFragment : BaseFragment() {
 
     @Subscribe
     fun onMarketUpdate(marketUpdateEvent: MarketUpdateEvent) {
-        val arrayList = ArrayList<MarketItem>()
-        sellsListAdapter.data.forEach {
-            if (it is MarketItem) {
-                arrayList.add(it)
-            }
-        }
-        for ((index, datum) in arrayList.withIndex()) {
-            if (datum.id == marketUpdateEvent.marketItem.id) {
-                arrayList[index] = marketUpdateEvent.marketItem
-                break
-            }
-        }
-        sellsListAdapter.clear()
-        sellsListAdapter.addData(prepareData(arrayList))
+
     }
 
     @Subscribe
     fun onActivatedOrDeactivated(updateMarketStateItemEvent: UpdateMarketStateItemEvent) {
-        val arrayList = ArrayList<MarketItem>()
-        sellsListAdapter.data.forEach {
-            if (it is MarketItem) {
-                arrayList.add(it)
-            }
-        }
-        for (datum in arrayList) {
-            if (datum.id == updateMarketStateItemEvent.marketItem.id) {
-                datum.status = updateMarketStateItemEvent.marketItem.status
-                break
-            }
-        }
-        sellsListAdapter.clear()
-        sellsListAdapter.addData(prepareData(arrayList))
+
     }
 
-    private fun prepareData(marketItems: List<MarketItem>): List<MarketItemMarker> {
-        if (CollectionUtils.isEmpty(marketItems)) return ArrayList()
-
-        val sortedList = MarketItemsSorterBySections.sort(marketItems)
-
-        if (sellsListAdapter.isEmpty()) {
-            val associatedMap = groupData(sortedList)
-            val toReturn = ArrayList<MarketItemMarker>()
-            for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
-                toReturn.addAll(entry.value)
-            }
-            return ArrayList(toReturn)
-        } else {
-            val lastItemInAdapter = sellsListAdapter.data[sellsListAdapter.data.size - 1]
-            val toReturn : MutableList<MarketItemMarker> = ArrayList<MarketItemMarker>().toMutableList()
-
-            val mutableList = sortedList.toMutableList()
-            val iterator = mutableList.iterator()
-            while (iterator.hasNext()) {
-                val next = iterator.next()
-                if ((lastItemInAdapter as MarketItem).status == next.status) {
-                    toReturn.add(next)
-                    iterator.remove()
-                } else {
-                    break
-                }
-            }
-            if (mutableList.isEmpty()) {
-                return ArrayList(toReturn)
-            }
-            val associatedMap = groupData(mutableList)
-            for (entry in associatedMap) {
-                toReturn.add(MarketItemHeader(getString(MarketItemStatus.bySplitKey(entry.key))))
-                toReturn.addAll(entry.value)
-            }
-            return ArrayList(toReturn)
-
-        }
-    }
-
-    private fun groupData(sortedList: List<MarketItem>): LinkedHashMap<Int, ArrayList<MarketItem>> {
-        val associatedMap = LinkedHashMap<Int, ArrayList<MarketItem>>()
-        sortedList.forEach {
-            val currentList: ArrayList<MarketItem>? =
-                    if (!associatedMap.containsKey(it.status!!.groupKey)) {
-                        associatedMap.put(it.status!!.groupKey, ArrayList())
-                        associatedMap[it.status!!.groupKey]
-                    } else {
-                        associatedMap[it.status!!.groupKey]
-                    }
-            currentList!!.add(it)
-        }
-        return associatedMap
-    }
 
     private fun hideProgress() {
         hideProgressDialog()
         hideViewsQuietly(progressCenter, progressBottom)
-        isLoading = false
     }
 
     override fun handleException(t: Throwable) {

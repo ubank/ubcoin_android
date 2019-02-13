@@ -5,8 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.cocosw.bottomsheet.BottomSheet
 import com.ubcoin.GlideApp
 import com.ubcoin.R
@@ -14,58 +13,58 @@ import com.ubcoin.adapter.ChatMessageAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.model.ChatMessage
 import com.ubcoin.model.ChatMessageType
-import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
 import java.util.*
-import com.pubnub.api.PubNub
-import com.pubnub.api.PNConfiguration
 import kotlin.jvm.java
-import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult
-import com.pubnub.api.models.consumer.pubsub.PNMessageResult
-import com.pubnub.api.enums.PNStatusCategory
-import android.widget.EditText
-import android.widget.Toast
-import com.pubnub.api.models.consumer.PNStatus
-import com.pubnub.api.models.consumer.PNPublishResult
-import com.pubnub.api.callbacks.PNCallback
-import com.pubnub.api.callbacks.SubscribeCallback
 import com.google.gson.JsonObject
-import com.pubnub.api.models.consumer.history.PNHistoryResult
+import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.response.DealItem
+import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.TgLinks
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.NetworkModule
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.preferences.ThePreferences
-import io.reactivex.Emitter
+import com.ubcoin.utils.getDateWithServerTimeStamp
+import io.reactivex.functions.Consumer
 import io.socket.client.IO
 import io.socket.client.Socket
 import okhttp3.OkHttpClient
+import org.json.JSONArray
+import org.json.JSONObject
 import java.security.cert.X509Certificate
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import javax.net.ssl.*
 import kotlin.collections.ArrayList
 
 
 class ChatFragment : BaseFragment() {
 
+    private lateinit var rlPhoto: View
+    private lateinit var rlSend: View
+    private lateinit var tvName: TextView
+    private lateinit var txtHeader: TextView
     private lateinit var chatMessageAdapter: ChatMessageAdapter
     private lateinit var rvMessages: RecyclerView
     private lateinit var progressCenter: View
     private lateinit var progressBottom: View
+    private lateinit var llItem: LinearLayout
+    private lateinit var ivImage: ImageView
+    lateinit var etMessage : EditText
+    private var bottomSheet: BottomSheet? = null
+
     var socket: Socket? = null
 
-    private lateinit var id: String
-    private lateinit var item: DealItem
-    private lateinit var user: User
+    var itemId:String? = null
+    private lateinit var item: MarketItem
+    var opponent: User? = null
 
-    private var bottomSheet: BottomSheet? = null
+    private lateinit var layoutManager: LinearLayoutManager
     private var fromCamera = false
-    var lastLoadedMessage: Long = -1
-    var page = 0
-    lateinit var channelName : String
-    lateinit var etMessage : EditText
+    var lastLoadedMessageDate: String? = null
     var historyLoaded : Boolean = false
     var loading : Boolean = false
     var limit = 10
@@ -80,12 +79,10 @@ class ChatFragment : BaseFragment() {
     override fun getHeaderIcon() = R.drawable.ic_close
 
     companion object {
-
-        fun getBundle(id: String, item: DealItem, user: User): Bundle {
+        fun getBundle(itemId: String, opponent: User?): Bundle {
             val bundle = Bundle()
-            bundle.putString("id", id)
-            bundle.putSerializable(DealItem::class.java.simpleName, item)
-            bundle.putSerializable(User::class.java.simpleName, user)
+            bundle.putSerializable("itemId", itemId)
+            bundle.putSerializable("opponent", opponent)
             return bundle
         }
     }
@@ -100,15 +97,58 @@ class ChatFragment : BaseFragment() {
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
 
-        id = arguments?.getString("id") as String
-        item = arguments?.getSerializable(DealItem::class.java.simpleName) as DealItem
-        user = arguments?.getSerializable(User::class.java.simpleName) as User
-        etMessage = view.findViewById(R.id.etMessage)
+        itemId = arguments?.getString("itemId")
+        opponent = arguments?.getSerializable("opponent") as User?
 
+        etMessage = view.findViewById(R.id.etMessage)
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
+        llItem = view.findViewById(R.id.llItem)
+        txtHeader = view.findViewById(R.id.txtHeader)
+        tvName = view.findViewById(R.id.tvName)
+        rlPhoto = view.findViewById(R.id.rlPhoto)
+        rlSend = view.findViewById(R.id.rlSend)
+        ivImage = view.findViewById(R.id.ivImage)
 
-        val socketUrl = "https://qa.ubcoin.io"
+        rvMessages = view.findViewById<RecyclerView>(R.id.rvChatMessages)
+
+        chatMessageAdapter = ChatMessageAdapter(context!!)
+        layoutManager = LinearLayoutManager(activity)
+        layoutManager.reverseLayout = true
+        rvMessages.layoutManager = layoutManager
+        rvMessages.adapter = chatMessageAdapter
+
+        loadItem()
+    }
+
+    fun loadItem(){
+        startLoading()
+        DataProvider.getMarketItemById(itemId!!, Consumer {
+            item = it
+            initItem()
+            endLoading()
+        }, Consumer {
+            handleException(it)
+            endLoading()
+        })
+    }
+
+    fun initItem(){
+        GlideApp.with(context!!).load(item.images?.get(0))
+                .centerCrop()
+                .placeholder(R.drawable.img_profile_default)
+                .error(R.drawable.img_profile_default)
+                .into(ivImage)
+        tvName.text = item.title
+        llItem.setOnClickListener {
+            getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(item.id), true)
+        }
+        llItem.visibility = View.VISIBLE
+        initChat()
+    }
+
+    fun initChat(){
+        val socketUrl = NetworkModule.getChatUrl()
         val hostnameVerifier = object : HostnameVerifier {
             override fun verify(p0: String?, p1: SSLSession?): Boolean {
                 return true
@@ -142,75 +182,70 @@ class ChatFragment : BaseFragment() {
         opts.callFactory = okHttpClient
         opts.webSocketFactory = okHttpClient
         socket = IO.socket(socketUrl, opts)
-        socket!!.on(Socket.EVENT_CONNECT, {
-            var k = 0
-            k++
-
-        }).on(SEND_MESSAGE, {
-            var k = 0
-            k++
+        socket!!.on(SEND_MESSAGE, {
+            var jsonObj = it[0] as JSONObject
+            var userName = jsonObj.get("userName").toString()
+            if(!userName.equals("Server")) {
+                endLoading()
+                addMessageFromJSON(jsonObj.get("msg") as JSONObject, jsonObj.get("date").toString().getDateWithServerTimeStamp(), false)
+            }
+            else {
+                endLoading()
+                loadData()
+            }
         }).on(HISTORY, {
-            var k = 0
-            k++
-        }).on(TYPING, {
-            var k = 0
-            k++
-        }).on(Socket.EVENT_DISCONNECT, {
-            var k = 0
-            k++
+            var array = it[0] as JSONArray
+
+            for(i in 0..(array.length() - 1)) {
+                var jsonObj = array[i] as JSONObject
+                lastLoadedMessageDate = jsonObj.get("date").toString()
+                var str = jsonObj.get("msg").toString()
+                try {
+                    val obj = JSONObject(str)
+                    addMessageFromJSON(obj, jsonObj.get("date").toString().getDateWithServerTimeStamp(), true)
+
+                } catch (t: Throwable) {
+                }
+            }
+
+            if(array.length() < limit)
+            {
+                historyLoaded = true
+                if(lastLoadedMessageDate != null){
+                    rvMessages.post(Runnable {
+                        chatMessageAdapter.addData(createMessage(lastLoadedMessageDate!!.getDateWithServerTimeStamp(), "", ChatMessageType.Date))
+                    })
+                }
+            }
+
+            endLoading()
         })
 
-        socket!!.connect()
+        rlPhoto.setOnClickListener {openPhotoDialog()}
+        rlSend.setOnClickListener {send()}
 
-        val messageJsonObject = JsonObject()
-        messageJsonObject.addProperty("token", "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..-gofj4ux938dpFqzRDRAgw.T9DtglumDfp1MtZ_gLNGvrqzVf3nyv7JhDNneWiUhX96RpUb031TVdl6smmQ9aTS3bY8vHex4BdojP09Xy562FXqnm5zTFnmvgqT1lP-lN5S_tJy2M9XfiuFKD3FEJ7p.x0sraTD3X9sWHEnpqtp4zQ")
-        messageJsonObject.addProperty("purchaseId", "purchase131323")
-
-        socket!!.emit(ENTER_ROOM, messageJsonObject.toString(),  {
-            var k = 0
-            k++
-        })
-
-        rvMessages = view.findViewById<RecyclerView>(R.id.rvChatMessages)
-
-        chatMessageAdapter = ChatMessageAdapter(context!!)
-        val layoutManager = LinearLayoutManager(activity)
-        layoutManager.reverseLayout = true
-        rvMessages.layoutManager = layoutManager
-        rvMessages.adapter = chatMessageAdapter
-
-        channelName = id
-
-        view.findViewById<TextView>(R.id.txtHeader)?.text = user.name
+        txtHeader.text = opponent?.name
         rvMessages.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(layoutManager) {
             override fun onLoadMore() {
                 loadData()
             }
-
         })
-
-        if (chatMessageAdapter!!.isEmpty()) {
-            progressCenter.visibility = View.VISIBLE
-        } else {
-            progressBottom.visibility = View.VISIBLE
-        }
-
-        GlideApp.with(context!!).load(item!!.images?.get(0))
-                .centerCrop()
-                .placeholder(R.drawable.img_profile_default)
-                .error(R.drawable.img_profile_default)
-                .into(view.findViewById<ImageView>(R.id.ivImage))
-        view.findViewById<TextView>(R.id.tvName).text = item!!.title
-        view.findViewById<View>(R.id.rlPhoto).setOnClickListener {openPhotoDialog()}
-        view.findViewById<View>(R.id.rlSend).setOnClickListener {send()}
-        view.findViewById<View>(R.id.llItem).setOnClickListener {
-            //getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(deal.item), true)
-        }
-
 
         scrollToBottom()
 
-        initPubnub()
+        socket!!.connect()
+        startLoading()
+
+        val messageJsonObject = JSONObject()
+        messageJsonObject.put("token", ThePreferences().getToken())
+        messageJsonObject.put("itemId", item.id)
+
+        var array = JSONArray()
+        array.put(ProfileHolder.user!!.id)
+        array.put(opponent!!.id)
+        messageJsonObject.put("users", array)
+        socket!!.emit(ENTER_ROOM, messageJsonObject,  {
+        })
     }
 
     fun loadData() {
@@ -220,11 +255,13 @@ class ChatFragment : BaseFragment() {
                 return
             startLoading()
 
-            var rev = false
-            if(lastLoadedMessage > -1)
-                rev = true
+            val messageJsonObject = JSONObject()
+            if(lastLoadedMessageDate != null)
+                messageJsonObject.put("fromDate", lastLoadedMessageDate!!)
+            messageJsonObject.put("limit", limit)
 
-
+            socket!!.emit(HISTORY, messageJsonObject,  {
+            })
         }
     }
 
@@ -234,10 +271,6 @@ class ChatFragment : BaseFragment() {
         message.type = type
         message.data = data
         return message
-    }
-
-    override fun getHeaderText(): Int {
-        return super.getHeaderText()
     }
 
     fun openPhotoDialog() {
@@ -287,9 +320,14 @@ class ChatFragment : BaseFragment() {
         var imageUrls = ArrayList<String>()
         imageUrls.add(filePath)
 
+        activity?.runOnUiThread {
+            progressCenter.visibility = View.VISIBLE
+        }
+
         DataProvider.uploadFiles(imageUrls,
                 object : SilentConsumer<TgLinks> {
                     override fun onConsume(t: TgLinks) {
+                        activity?.runOnUiThread { hideViewsQuietly(progressCenter, progressBottom) }
                         sendImage(t.tgLinks.get(0).url)
                     }
                 },
@@ -305,15 +343,12 @@ class ChatFragment : BaseFragment() {
             return
         startLoading()
 
-        val messageJsonObject = JsonObject()
-        messageJsonObject.addProperty("type", "image")
-        messageJsonObject.addProperty("content", url)
-        messageJsonObject.addProperty("publisher", ProfileHolder.user!!.id)
+        val messageJsonObject = JSONObject()
+        messageJsonObject.put("type", "image")
+        messageJsonObject.put("content", url)
+        messageJsonObject.put("publisher", ProfileHolder.user!!.id)
 
-        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {
-            var k = 0
-            k++
-        })
+        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {})
     }
 
     fun send(){
@@ -324,53 +359,43 @@ class ChatFragment : BaseFragment() {
             return
         startLoading()
 
-        val messageJsonObject = JsonObject()
-        messageJsonObject.addProperty("type", "message")
-        messageJsonObject.addProperty("content", etMessage.text.toString())
-        messageJsonObject.addProperty("publisher", ProfileHolder.user!!.id)
+        val messageJsonObject = JSONObject()
+        messageJsonObject.put("type", "message")
+        messageJsonObject.put("content", etMessage.text.toString())
+        messageJsonObject.put("publisher", ProfileHolder.user!!.id)
 
-        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {
-            var k = 0
-            k++
-        })
+        etMessage.setText("")
+
+        socket!!.emit(SEND_MESSAGE, messageJsonObject,  {})
     }
 
-    fun initPubnub(){
-        if(loading)
-            return
-        startLoading()
-
-    }
-
-    fun addMessageFromJSON(message : JsonObject, timetoken : Long, history : Boolean)
+    fun addMessageFromJSON(message : JSONObject, time : Date, history : Boolean)
     {
         if(!message.has("publisher") || !message.has("type") || !message.has("content"))
             return
-        val content = message.get("content").asString
-        val type = message.get("type").asString
-        val publisher = message.get("publisher").asString
+        val content = message.get("content").toString()
+        val type = message.get("type").toString()
+        val publisher = message.get("publisher").toString()
 
         var chatMessageType: ChatMessageType? = null
 
-        if (publisher != null && type != null) {
-            when(type) {
-                "message" -> {
-                    if (publisher.equals(ProfileHolder.user!!.id))
-                        chatMessageType = ChatMessageType.MyMessage
-                    else
-                        chatMessageType = ChatMessageType.OpponentMessage
-                }
-
-                "image" -> {
-                    if (publisher.equals(ProfileHolder.user!!.id))
-                        chatMessageType = ChatMessageType.MyImage
-                    else
-                        chatMessageType = ChatMessageType.OpponentImage
-                }
+        when(type) {
+            "message" -> {
+                if (publisher.equals(ProfileHolder.user!!.id))
+                    chatMessageType = ChatMessageType.MyMessage
+                else
+                    chatMessageType = ChatMessageType.OpponentMessage
             }
-            if (chatMessageType != null)
-                addMessage(createMessage(Date(Math.ceil((timetoken.toDouble() / 10000)).toLong()), content, chatMessageType), history)
+
+            "image" -> {
+                if (publisher.equals(ProfileHolder.user!!.id))
+                    chatMessageType = ChatMessageType.MyImage
+                else
+                    chatMessageType = ChatMessageType.OpponentImage
+            }
         }
+        if (chatMessageType != null)
+            addMessage(createMessage(time, content, chatMessageType), history)
     }
 
     private fun checkAddDate(messageDate : Date, history : Boolean){
@@ -414,8 +439,7 @@ class ChatFragment : BaseFragment() {
     }
 
     private fun scrollToBottom() {
-        if(rvMessages != null)
-            rvMessages.post(Runnable { if(rvMessages != null) rvMessages.scrollToPosition(0) })
+        rvMessages.post(Runnable { if(rvMessages != null) rvMessages.scrollToPosition(0) })
     }
 
     override fun onDestroy() {
@@ -424,15 +448,16 @@ class ChatFragment : BaseFragment() {
 
     fun startLoading(){
         loading = true
-        if (chatMessageAdapter!!.isEmpty()) {
-            progressCenter.visibility = View.VISIBLE
-        } else {
-            progressBottom.visibility = View.VISIBLE
+        activity?.runOnUiThread {
+            if (chatMessageAdapter!!.isEmpty())
+                progressCenter.visibility = View.VISIBLE
+            else
+                progressBottom.visibility = View.VISIBLE
         }
     }
 
     fun endLoading(){
-        hideViewsQuietly(progressCenter, progressBottom)
+        activity?.runOnUiThread { hideViewsQuietly(progressCenter, progressBottom) }
         loading = false
     }
 }

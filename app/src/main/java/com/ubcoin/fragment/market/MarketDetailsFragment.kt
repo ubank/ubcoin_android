@@ -33,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
 import com.squareup.picasso.Picasso
 import com.ubcoin.GlideApp
 import com.ubcoin.R
@@ -41,6 +42,7 @@ import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
+import com.ubcoin.fragment.login.StartupFragment
 import com.ubcoin.fragment.messages.ChatFragment
 import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
@@ -72,6 +74,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
+    private lateinit var itemId: String
     private lateinit var marketItem: MarketItem
     private lateinit var sliderLayout: SliderLayout
     private lateinit var pageIndicator: PagerIndicator
@@ -130,6 +133,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var txtMarketItemStatus: TextView
     private lateinit var btnChat: Button
 
+    private lateinit var rlLoading: RelativeLayout
+
 
     private var itemPositionInList = -1
 
@@ -145,10 +150,29 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         fun getBundle(marketItem: MarketItem, position: Int): Bundle {
             val bundle = Bundle()
-            bundle.putSerializable(MarketItem::class.java.simpleName, marketItem)
+            bundle.putSerializable("id", marketItem.id)
             bundle.putInt("i", position)
             return bundle
         }
+
+        fun getBundle(id: String): Bundle {
+            val bundle = Bundle()
+            bundle.putSerializable("id", id)
+            bundle.putInt("i", -1)
+            return bundle
+        }
+    }
+
+    fun loadItem(){
+        rlLoading.visibility = View.VISIBLE
+        DataProvider.getMarketItemById(itemId, Consumer {
+            marketItem = it
+            installData()
+            rlLoading.visibility = View.GONE
+        }, Consumer {
+            handleException(it)
+            rlLoading.visibility = View.GONE
+        })
     }
 
     override fun isFooterShow(): Boolean {
@@ -162,8 +186,9 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     @SuppressLint("SetTextI18n")
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
-        marketItem = arguments?.getSerializable(MarketItem::class.java.simpleName) as MarketItem
+        itemId = arguments?.getString("id") as String
         itemPositionInList = arguments?.getInt("i", -1) ?: -1
+        rlLoading = view.findViewById(R.id.rlLoading)
         llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
         rvPurchases = view.findViewById(R.id.rvPurchases)
         tvCondition = view.findViewById(R.id.tvCondition)
@@ -236,18 +261,24 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
 
         })
         view.findViewById<View>(R.id.llHeaderLeftSimple).setOnClickListener { activity?.onBackPressed() }
+
+
+        mapView = view.findViewById(R.id.mapView)
+
+        run {
+            loadItem()
+        }
+    }
+
+    private fun installData() {
+        mapView.getMapAsync(this)
+
         if (marketItem.isOwner()) {
             hideFavorite()
         } else {
             setFavorite(marketItem.favorite)
         }
 
-        mapView = view.findViewById(R.id.mapView)
-        mapView.getMapAsync(this)
-        installData()
-    }
-
-    private fun installData() {
         val metrics = DisplayMetrics()
         activity!!.windowManager.defaultDisplay.getMetrics(metrics)
 
@@ -353,7 +384,10 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         btnBuy.setOnClickListener{
-            getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(marketItem), true)
+            if(ProfileHolder.isAuthorized())
+                getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(marketItem), true)
+            else
+                getSwitcher()?.addTo(StartupFragment::class.java)
         }
 
         rlSellerProfile.setOnClickListener{
@@ -361,33 +395,8 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         btnChat.setOnClickListener {
-            //var deal = DealItemWrapper(marketItem!!.id, MarketItemStatus.ACTIVE, marketItem!!.createdDate!!, DealItem(marketItem!!.id, marketItem!!.categoryId!!, marketItem!!.title!!, marketItem!!.price!!, marketItem!!.description!!, marketItem!!.images), User(), marketItem!!.user!!)
-            //getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(deal), true)
+            getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem.id, marketItem.user), true)
         }
-
-
-        /*
-        llWantToBuy.setOnClickListener {
-            if (!ProfileHolder.isAuthorized()) {
-                showNeedToRegistration()
-            } else {
-                val thePreferences = ThePreferences()
-                if (thePreferences.shouldShowThDialog()) {
-                    OpenTelegramDialogManager.showDialog(activity!!, object : OpenTelegramDialogManager.ITelegramDialogCallback {
-                        override fun onPositiveClick(materialDialog: MaterialDialog) {
-                            materialDialog.dismiss()
-                            thePreferences.disableTgDialog()
-                            callWantToBuy(user.id, true)
-                        }
-                    })
-                } else {
-                    callWantToBuy(user.id, true)
-                }
-            }
-
-        }
-        */
-
 
         val user = marketItem.user
         val avatarUrl = user?.avatarUrl
@@ -438,11 +447,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         if (marketItem.isOwner()) {
             rlBuy.visibility = View.GONE
             wantToBuyContainer.visibility = View.GONE
-            rvPurchases.visibility = View.VISIBLE
+            rvPurchases.visibility = View.GONE
             checkMarketItemStatus()
             setupPurchases()
         } else {
-            rlBuy.visibility = View.VISIBLE
+            if(marketItem.status == MarketItemStatus.ACTIVE)
+                rlBuy.visibility = View.VISIBLE
             wantToBuyContainer.visibility = View.VISIBLE
             rvPurchases.visibility = View.GONE
         }

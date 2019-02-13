@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:scaleType="center"
-
+        android:visibility="gone"
         app:backgroundTint="@android:color/white"
         android:src="@drawable/ic_baseline_favorite_green"
         app:borderWidth="0dp"
@@ -126,6 +126,7 @@
         android:layout_margin="10dp"
         android:scaleType="center"
 
+        android:visibility="gone"
         app:backgroundTint="@color/greenMainColor"
         android:src="@drawable/ic_baseline_favorite_white"
         app:borderWidth="0dp"
@@ -140,6 +141,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:fitsSystemWindows="true"
         android:layout_gravity="center_horizontal|bottom">
@@ -159,6 +161,22 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/sign_up_text_size"
             android:translationZ="2dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+            android:id="@+id/progressCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:colors="@array/progressColors"
+            app:type="nexus_rotation_cross" />
 
     </RelativeLayout>
 

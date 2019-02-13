@@ -30,6 +30,13 @@ object DataProvider {
 
     private var networkModule: NetworkModule = NetworkModule
 
+    fun getChatList(cookie:String, onSuccess: Consumer<List<ChatItem>>, onError: Consumer<Throwable>){
+        networkModule.api()
+                .getChatList(cookie)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun login(email: String, password: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .login(SignIn(email, password))
@@ -194,6 +201,20 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun getItemsToBuy(onSuccess: Consumer<NewSellResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getItemsToBuy()
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun getItemsToSell(onSuccess: Consumer<NewSellResponse>, onError: Consumer<Throwable>) {
+        networkModule.api()
+                .getItemsToSell()
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun createPurchase(purchaseDto: ItemPurchaseDto, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .createPurchase(purchaseDto)
@@ -229,9 +250,9 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun confirmDeliveryPrice(id: String, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
+    fun confirmDeliveryPrice(id: String, amount: Any, onSuccess: Consumer<Purchase>, onError: Consumer<Throwable>) {
         networkModule.api()
-                .confirmDeliveryPrice(id)
+                .confirmDeliveryPrice(id, amount)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

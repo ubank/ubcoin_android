@@ -145,11 +145,9 @@ class DealSellFragment : BaseFragment() {
         }
         btnChat = view.findViewById(R.id.btnChat)
         btnChat.setOnClickListener {
-            var user = purchase!!.buyer
-            if(purchase!!.buyer.id.equals(ProfileHolder.user!!.id))
-                user = purchase!!.seller
-            var dealItem = DealItem(marketItem!!.id, marketItem!!.categoryId!!, marketItem!!.title!!, marketItem!!.price!!, marketItem!!.description!!, marketItem!!.images)
-            getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(purchase!!.id, dealItem, user), true)
+            if(purchase != null) {
+                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem!!.id, purchase!!.buyer), true)
+            }
         }
         progressView = view.findViewById(R.id.progressView)
         btnReport = view.findViewById(R.id.btnReport)
@@ -239,6 +237,7 @@ class DealSellFragment : BaseFragment() {
 
     fun enableItemDescription(){
         itemDescription.marketItem = marketItem
+        itemDescription.currency = purchase?.currencyType
         itemDescription.visibility = View.VISIBLE
     }
 

@@ -8,6 +8,7 @@ import com.nulabinc.zxcvbn.Zxcvbn
 import com.ubcoin.model.response.User
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,19 @@ import java.util.regex.Pattern
 
 fun String.checkAsPassword(): Int = if (isEmpty()) -1 else Zxcvbn().measure(this).score
 
+fun String.getDateWithServerTimeStamp(): Date {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+            Locale.getDefault())
+    try {
+        var gmt = TimeZone.getTimeZone("GMT")
+        dateFormat.timeZone = gmt
+        var d =  dateFormat.parse(this)
+        return d
+
+    } catch (e: ParseException) {
+        return Date()
+    }
+}
 
 fun String.toDate(): Date? {
     return try {

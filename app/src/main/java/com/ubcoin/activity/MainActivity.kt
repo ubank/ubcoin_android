@@ -95,8 +95,12 @@ class MainActivity : BaseActivity() {
                             fragmentSwitcher?.clearBackStack()?.addTo(DealsParentFragment::class.java)
                         }
                         MenuItems.MESSAGES -> {
-                            menuBottomView.activate(menuItems)
-                            fragmentSwitcher?.clearBackStack()?.addTo(MessagesParentFragment::class.java)
+                            if (!ProfileHolder.isAuthorized()) {
+                                startSignIn()
+                            } else {
+                                menuBottomView.activate(menuItems)
+                                fragmentSwitcher?.clearBackStack()?.addTo(MessagesParentFragment::class.java)
+                            }
                         }
                         MenuItems.PROFILE -> {
                             if (!ProfileHolder.isAuthorized()) {

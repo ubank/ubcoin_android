@@ -17,7 +17,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="14dp"
             android:layout_marginRight="14dp"
-            android:text="@string/text.after_you_meet_with_seller" />
+            android:text="@string/text.if_you_cannot_meet" />
     </LinearLayout>
 
     <Button

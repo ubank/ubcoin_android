@@ -18,9 +18,6 @@ import com.ubcoin.R
 import com.ubcoin.model.Currency
 import com.ubcoin.model.Purchase
 import com.ubcoin.model.response.PurchaseItemStatus
-import com.ubcoin.utils.MaxValueInputFilter
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 class ProgressDescriptionView: ConstraintLayout {
 
@@ -67,8 +64,8 @@ class ProgressDescriptionView: ConstraintLayout {
         field = value
 
         var currency = "UBC"
-        if(value?.item?.priceETH != null)
-            currency == "ETH"
+        if(item?.currencyType == Currency.ETH)
+            currency = "ETH"
         newPrice = value!!.deliveryPrice
         tvPrice.text = newPrice.toString() + " " + currency
         if(value.comment != null && value.comment.length > 0)
@@ -124,8 +121,8 @@ class ProgressDescriptionView: ConstraintLayout {
                 }
 
                 var currency = "UBC"
-                if(item?.item?.priceETH != null)
-                    currency == "ETH"
+                if(item?.currencyType == Currency.ETH)
+                    currency = "ETH"
                 newPrice = value
                 tvPrice.text = newPrice.toString() + " " + currency
 
@@ -298,7 +295,7 @@ class ProgressDescriptionView: ConstraintLayout {
                 ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_check_green))
             }
 
-            PurchaseItemStatus.CANCELED -> {
+            PurchaseItemStatus.CANCELLED -> {
 
             }
         }

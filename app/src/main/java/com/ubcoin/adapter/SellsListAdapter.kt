@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.ubcoin.GlideApp
 import com.ubcoin.R
+import com.ubcoin.model.Currency
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MarketItemHeader
 import com.ubcoin.model.response.MarketItemMarker
@@ -16,6 +17,7 @@ import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.utils.CollectionExtensions
 import com.ubcoin.utils.WordUtils
 import com.ubcoin.utils.moneyFormat
+import com.ubcoin.utils.moneyFormatETH
 
 @Suppress("PrivatePropertyName")
 /**
@@ -66,36 +68,19 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
         }
         vHolder.txtDealsItemPrice.text = marketItem.title
         vHolder.txtDealsItemName.text = (marketItem.price?.moneyFormat() + " UBC")
+
+        if(marketItem.purchases != null && marketItem.purchases.size > 0)
+        {
+            if(marketItem.purchases.get(0).currencyType == Currency.ETH)
+                vHolder.txtDealsItemName.text = (marketItem.priceETH?.moneyFormatETH() + " ETH")
+        }
+
         setupCorrectStatus(marketItem, vHolder)
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, marketItem)
     }
 
     private fun setupCorrectStatus(marketItem: MarketItem, vHolder: VHolder) {
-        vHolder.txtDealsItemStatus.setTextColor(defaultStatusTextColor)
-
-        when (marketItem.status) {
-            MarketItemStatus.ACTIVE -> {
-            }
-            MarketItemStatus.BLOCKED -> {
-                vHolder.txtDealsItemStatus.setTextColor(blockedStatusTextColor)
-            }
-//            MarketItemStatus.DEACTIVATED -> TODO()
-            MarketItemStatus.RESERVED -> {
-            }
-//            MarketItemStatus.SOLD -> TODO()
-            MarketItemStatus.SOLD, MarketItemStatus.DEACTIVATED, MarketItemStatus.CHECK, MarketItemStatus.CHECKING, null -> {
-            }
-        }
-        if(marketItem.status == MarketItemStatus.ACTIVE) {
-            if(marketItem.categoryId.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef") && marketItem.purchases != null && marketItem.purchases.size > 0) {
-                vHolder.txtDealsItemStatus.text = context.getString(R.string.str_item_status_active_digital)
-            }
-            else {
-                vHolder.txtDealsItemStatus.text = context.getString(R.string.str_item_status_active_seller)
-            }
-        }
-        else
-            vHolder.txtDealsItemStatus.text = context.getString(marketItem.status!!.stringResourceId)
+        vHolder.txtDealsItemStatus.text = marketItem.statusDescription
     }
 
     private fun bindMarketHeader(marketItemHeader: MarketItemHeader, vHolder: HeaderVHoler) {

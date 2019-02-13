@@ -8,6 +8,7 @@ import com.ubcoin.adapter.ChatListAdapter
 import com.ubcoin.adapter.IRecyclerTouchListener
 import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
+import com.ubcoin.model.ChatItem
 import com.ubcoin.model.CryptoCurrency
 import com.ubcoin.model.response.DealItem
 import com.ubcoin.model.response.DealItemWrapper
@@ -15,6 +16,7 @@ import com.ubcoin.model.response.DealsListResponse
 import com.ubcoin.model.response.RelatedPurchasesResponse
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
 import kotlinx.android.synthetic.main.fragment_messages.*
@@ -50,18 +52,14 @@ class MessagesParentFragment : FirstLineFragment() {
 
         rvMessages.addOnScrollListener(object : EndlessRecyclerViewOnScrollListener(layoutManager) {
             override fun onLoadMore() {
-                loadData()
+                //loadData()
             }
-
         })
 
 
-        chatListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<DealItemWrapper> {
-            override fun onItemClick(data: DealItemWrapper, position: Int) {
-                var user = data.buyer
-                if(data.buyer.id.equals(ProfileHolder.user!!.id))
-                    user = data.seller
-                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(data.id, data.item, user), true)
+        chatListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<ChatItem> {
+            override fun onItemClick(data: ChatItem, position: Int) {
+                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(data.item!!.id, data.user), true)
             }
         }
 
@@ -77,14 +75,10 @@ class MessagesParentFragment : FirstLineFragment() {
             progressBottom.visibility = View.VISIBLE
         }
 
-        val onSuccess = object : SilentConsumer<RelatedPurchasesResponse> {
-            override fun onConsume(t: RelatedPurchasesResponse) {
-                val data = t.content
+        val onSuccess = object : SilentConsumer<List<ChatItem>> {
+            override fun onConsume(t: List<ChatItem>) {
                 hideProgress()
-                if (data.size < LIMIT) {
-                    isEndOfLoading = true
-                }
-                chatListAdapter.addData(data)
+                chatListAdapter.addData(t)
                 if (chatListAdapter.isEmpty()) {
                     llNoItems.visibility = View.VISIBLE
                     rvMessages.visibility = View.GONE
@@ -92,7 +86,6 @@ class MessagesParentFragment : FirstLineFragment() {
                     llNoItems.visibility = View.GONE
                     rvMessages.visibility = View.VISIBLE
                 }
-                currentPage++
             }
 
         }
@@ -102,7 +95,8 @@ class MessagesParentFragment : FirstLineFragment() {
             }
 
         }
-        DataProvider.getPurchases(LIMIT, currentPage, onSuccess, onError)
+        //DataProvider.getPurchases(LIMIT, currentPage, onSuccess, onError)
+        DataProvider.getChatList("accessToken=" + ThePreferences().getToken(), onSuccess, onError)
     }
 
     private fun hideProgress() {
