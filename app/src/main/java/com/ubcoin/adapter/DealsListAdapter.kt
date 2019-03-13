@@ -1,7 +1,6 @@
 package com.ubcoin.adapter
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,9 +12,7 @@ import com.ubcoin.model.Currency
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.response.MarketItemHeader
 import com.ubcoin.model.response.MarketItemMarker
-import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.utils.CollectionExtensions
-import com.ubcoin.utils.WordUtils
 import com.ubcoin.utils.moneyFormat
 import com.ubcoin.utils.moneyFormatETH
 
@@ -23,14 +20,10 @@ import com.ubcoin.utils.moneyFormatETH
 /**
  * Created by Yuriy Aizenberg
  */
-class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker, SellsListAdapter.AbsSellHolder>(context) {
+class DealsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker, DealsListAdapter.AbsSellHolder>(context) {
 
     private val TYPE_HEADER = 0
     private val TYPE_MARKET = 1
-
-    private val defaultStatusTextColor: Int = ContextCompat.getColor(context, R.color.haveAccountColor)
-    private val blockedStatusTextColor: Int = ContextCompat.getColor(context, R.color.itemStatusBlock)
-
 
     override fun onCreateViewHolder(p0: ViewGroup, viewType: Int): AbsSellHolder {
         return if (viewType == TYPE_HEADER) {
@@ -61,7 +54,6 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
                     .override(dimensionPixelSize, dimensionPixelSize)
                     .centerCrop()
                     .transform(RoundedCorners(10))
-                    .skipMemoryCache(true)
                     .placeholder(R.drawable.img_photo_placeholder)
                     .error(R.drawable.img_photo_placeholder)
                     .into(vHolder.imgDealsItemLogo)
@@ -69,11 +61,16 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
         vHolder.txtDealsItemPrice.text = marketItem.title
         vHolder.txtDealsItemName.text = (marketItem.price?.moneyFormat() + " UBC")
 
-        if(marketItem.purchases != null && marketItem.purchases.size > 0)
+        if(marketItem.activePurchase != null)
         {
-            if(marketItem.purchases.get(0).currencyType == Currency.ETH)
+            if(marketItem.activePurchase.currencyType == Currency.ETH)
                 vHolder.txtDealsItemName.text = (marketItem.priceETH?.moneyFormatETH() + " ETH")
         }
+
+        if(marketItem.hasAction())
+            vHolder.imgActive.visibility = View.VISIBLE
+        else
+            vHolder.imgActive.visibility = View.GONE
 
         setupCorrectStatus(marketItem, vHolder)
         bindTouchListener(vHolder.itemView, vHolder.adapterPosition, marketItem)
@@ -96,6 +93,7 @@ class SellsListAdapter(context: Context) : BaseRecyclerAdapter<MarketItemMarker,
     abstract class AbsSellHolder(itemView: View) : BaseRecyclerAdapter.VHolder(itemView)
 
     class VHolder(itemView: View) : AbsSellHolder(itemView) {
+        val imgActive: ImageView = findView(R.id.imgActive)
         val imgDealsItemLogo: ImageView = findView(R.id.imgDealsItemLogo)
         val txtDealsItemPrice: TextView = findView(R.id.txtDealsItemPrice)
         val txtDealsItemName: TextView = findView(R.id.txtDealsItemName)

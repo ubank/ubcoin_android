@@ -1,36 +1,35 @@
 package com.ubcoin.fragment.deals
 
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.ubcoin.R
 import com.ubcoin.adapter.IRecyclerTouchListener
-import com.ubcoin.adapter.SellsListAdapter
+import com.ubcoin.adapter.DealsListAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.market.DealPurchaseFragment
 import com.ubcoin.fragment.market.MarketDetailsFragment
 import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.network.request.BuyerPurchaseLinkRequest
 import com.ubcoin.utils.ProfileHolder
 
 /**
  * Created by Yuriy Aizenberg
  */
-private const val LIMIT = 30
 
-class BuyDealsChildFragment : BaseFragment() {
-
+class BuysDealsChildFragment : BaseFragment() {
     private lateinit var llNoDeals: View
-    private lateinit var sellsListAdapter: SellsListAdapter
+    private lateinit var dealsListAdapter: DealsListAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var srLayout: SwipeRefreshLayout
     private var progressCenter: View? = null
     private var progressBottom: View? = null
 
+    private var initialized = false
+
     private var isLoading = false
-    private var isEndOfLoading = false
-    private var currentPage = -1
 
     override fun getLayoutResId() = R.layout.fragment_deals_child
     override fun isFooterShow() = false
@@ -38,82 +37,71 @@ class BuyDealsChildFragment : BaseFragment() {
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
+        srLayout = view.findViewById(R.id.srLayout)
+        srLayout.setOnRefreshListener {
+            loadData()
+        }
         llNoDeals = view.findViewById<RecyclerView>(R.id.llNoDeals)
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
         recyclerView = view.findViewById(R.id.rvDeals)
 
-        sellsListAdapter = SellsListAdapter(activity!!)
-        sellsListAdapter.setHasStableIds(true)
+        dealsListAdapter = DealsListAdapter(activity!!)
+        dealsListAdapter.setHasStableIds(true)
 
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(activity)
         recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = sellsListAdapter
+        recyclerView.adapter = dealsListAdapter
 
         if (ProfileHolder.isAuthorized()) {
             llNoDeals.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
+            srLayout.visibility = View.VISIBLE
             loadData()
         } else {
             llNoDeals.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
+            srLayout.visibility = View.GONE
         }
 
-        sellsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<MarketItemMarker> {
+        dealsListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<MarketItemMarker> {
             override fun onItemClick(data: MarketItemMarker, position: Int) {
-                if((data as MarketItem).status != MarketItemStatus.ACTIVE && (data as MarketItem).purchases.size > 0)
-                    getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle((data as MarketItem).purchases.get(0).id), false)
+                if((data as MarketItem).purchaseDetailsCanBeOpened())
+                    getSwitcher()?.addTo(DealPurchaseFragment::class.java, DealPurchaseFragment.getBundle(data.activePurchase!!.id), false)
                 else
-                    getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data as MarketItem), false)
+                    getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(data), false)
             }
         }
     }
 
-    fun requestUrlAndOpenApp(data: DealItemWrapper) {
-        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-        DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(data.item.id), object : SilentConsumer<TgLink> {
-            override fun onConsume(t: TgLink) {
-                hideProgressDialog()
-                val fullUrl = t.url
-                if (fullUrl.isNotBlank()) {
-                    //TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@BuyDealsChildFragment, 18888)
-                }
-            }
-
-        }, object : SilentConsumer<Throwable> {
-            override fun onConsume(t: Throwable) {
-                handleException(t)
-            }
-
-        })
+    fun update() {
+        if(initialized) {
+            loadData()
+        }
     }
 
     fun loadData() {
-        if (sellsListAdapter.isEmpty()) {
-            progressCenter?.visibility = View.VISIBLE
-        } else {
-            progressBottom?.visibility = View.VISIBLE
-        }
+        if(isLoading)
+            return
+        showProgress(dealsListAdapter.isEmpty())
 
         val onSuccess = object : SilentConsumer<NewSellResponse> {
             override fun onConsume(t: NewSellResponse) {
 
-                sellsListAdapter.clear()
+                dealsListAdapter.clear()
 
-                if(t.active != null) {
-                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_item_status_active)))
+                if(t.active.isNotEmpty()) {
+                    dealsListAdapter.addData(MarketItemHeader(getString(R.string.str_item_status_active)))
                     for (entry in t.active)
-                        sellsListAdapter.addData(entry)
+                        dealsListAdapter.addData(entry)
                 }
 
-                if(t.waste != null) {
-                    sellsListAdapter.addData(MarketItemHeader(getString(R.string.str_not_active)))
+                if(t.waste.isNotEmpty()) {
+                    dealsListAdapter.addData(MarketItemHeader(getString(R.string.str_not_active)))
                     for (entry in t.waste)
-                        sellsListAdapter.addData(entry)
+                        dealsListAdapter.addData(entry)
                 }
 
-                if (sellsListAdapter.isEmpty()) {
+                if (dealsListAdapter.isEmpty()) {
                     llNoDeals.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 } else {
@@ -121,11 +109,15 @@ class BuyDealsChildFragment : BaseFragment() {
                     recyclerView.visibility = View.VISIBLE
                 }
                 hideProgress()
+                srLayout.isRefreshing = false
+                initialized = true
             }
         }
         val onError = object : SilentConsumer<Throwable> {
             override fun onConsume(t: Throwable) {
                 handleException(t)
+                srLayout.isRefreshing = false
+                initialized = true
             }
 
         }
@@ -133,8 +125,18 @@ class BuyDealsChildFragment : BaseFragment() {
         DataProvider.getItemsToBuy(onSuccess, onError)
     }
 
+    private fun showProgress(center: Boolean) {
+        isLoading = true
+        if (center) {
+            progressCenter?.visibility = View.VISIBLE
+        } else {
+            progressBottom?.visibility = View.VISIBLE
+        }
+
+        hideViewsQuietly(progressCenter, progressBottom)
+    }
+
     private fun hideProgress() {
-        hideProgressDialog()
         hideViewsQuietly(progressCenter, progressBottom)
         isLoading = false
     }
@@ -142,6 +144,12 @@ class BuyDealsChildFragment : BaseFragment() {
     override fun handleException(t: Throwable) {
         hideProgress()
         super.handleException(t)
+        initialized = true
     }
 
+    override fun subscribeOnDealUpdate(id: String) {
+        activity?.runOnUiThread {
+            loadData()
+        }
+    }
 }

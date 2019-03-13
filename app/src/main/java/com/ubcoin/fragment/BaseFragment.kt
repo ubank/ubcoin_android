@@ -27,6 +27,9 @@ import com.ubcoin.R
 import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.activity.BaseActivity
 import com.ubcoin.activity.IActivity
+import com.ubcoin.activity.MainActivity
+import com.ubcoin.model.ChatItem
+import com.ubcoin.model.event.MessagesUpdateWrapper
 import com.ubcoin.network.HttpRequestException
 import com.ubcoin.network.NetworkConnectivityException
 import com.ubcoin.network.RxUtils
@@ -38,6 +41,7 @@ import com.ubcoin.utils.collapse
 import com.ubcoin.utils.expand
 import com.ubcoin.view.menu.MenuBottomView
 import io.reactivex.Maybe
+import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
@@ -314,7 +318,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
                         if (errorCode == HTTP_UNAUTHORIZED) {
                             ThePreferences().setToken(null)
                             ThePreferences().clearProfile()
-                            ProfileHolder.user = null
+                            ProfileHolder.logout()
                             return
                         }
                     }
@@ -345,8 +349,7 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
     protected open fun onUnauthorized(httpRequestException: HttpRequestException) : Boolean {
         ThePreferences().clearProfile()
         ThePreferences().clearPrefs()
-        ProfileHolder.user = null
-        ProfileHolder.balance = null
+        ProfileHolder.logout()
         return false;
     }
 
@@ -429,4 +432,11 @@ abstract class BaseFragment : Fragment(), IFragmentBehaviorAware {
         }
     }
 
+    open fun subscribeOnMessageUpdate(messageUpdateWrapper: MessagesUpdateWrapper){
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
+    }
+
+    open fun subscribeOnDealUpdate(id: String){
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
+    }
 }

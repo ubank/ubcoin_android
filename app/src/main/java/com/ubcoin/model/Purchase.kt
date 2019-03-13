@@ -21,5 +21,6 @@ data class Purchase(
         val item: MarketItem,
         val withDelivery: Boolean,
         val deliveryPrice: Double,
-        val currencyType: Currency
+        val currencyType: Currency,
+        val needAction: Boolean?
 ) : IPurchaseObject, Serializable

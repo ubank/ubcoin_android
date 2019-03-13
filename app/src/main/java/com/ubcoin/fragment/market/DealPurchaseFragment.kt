@@ -16,11 +16,15 @@ import android.content.Intent
 import android.net.Uri
 import com.google.android.gms.maps.model.LatLng
 import com.ubcoin.TheApplication
+import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.messages.ChatFragment
 import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.model.Purchase
+import com.ubcoin.model.event.MarketItemBoughtEvent
 import com.ubcoin.model.response.*
 import com.ubcoin.utils.ProfileHolder
+import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
 
 
 class DealPurchaseFragment : BaseFragment() {
@@ -98,7 +102,6 @@ class DealPurchaseFragment : BaseFragment() {
         confirmDeliveryPrice.buttonClickListener = object: ConfirmDeliveryPriceView.OnButtonClickListener{
             override fun onConfirm(price: Double) {
                 progressCenter.visibility = View.VISIBLE
-
 
                 var map = HashMap<String,Double>()
                 map.put("amount", price)
@@ -199,6 +202,7 @@ class DealPurchaseFragment : BaseFragment() {
     }
 
     fun initView(){
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
         if(marketItem == null)
             return
         enableItemDescription()
@@ -298,6 +302,8 @@ class DealPurchaseFragment : BaseFragment() {
                     withDelivery = deliveryType.type.equals(DeliveryTypeView.DeliveryType.Delivery)
                 var purchase = ItemPurchaseDto(comment, currency.toString(), marketItem!!.id, "", withDelivery)
                 DataProvider.buyItem(purchase, Consumer {
+                    if(marketItem != null)
+                        EventBus.getDefault().post(MarketItemBoughtEvent(marketItem!!.id))
                     activity?.onBackPressed()
                     activity?.onBackPressed()
                     var purchaseId = it.id
@@ -313,6 +319,7 @@ class DealPurchaseFragment : BaseFragment() {
 
     fun enableProgressDescription(){
         if(purchaseStatus != null) {
+            progressDescription.item = purchase
             progressDescription.status = purchaseStatus
             progressDescription.isDigital = isDigital()
             progressDescription.isSeller = false
@@ -347,14 +354,51 @@ class DealPurchaseFragment : BaseFragment() {
             marketItem = it.item
             user = it.seller
             statusDescriptions = it.statusDescriptions
-            category = marketItem?.categoryId!!
+            category = marketItem?.category?.id!!
             purchaseStatus = it.status
-            isDelivery = it.withDelivery
-            initView()
+            if(purchaseStatus == PurchaseItemStatus.CANCELLED)
+                activity?.onBackPressed()
+            else {
+                isDelivery = it.withDelivery
+                initView()
+            }
             progressCenter.visibility = View.GONE
         }, Consumer {
             handleException(it)
             progressCenter.visibility = View.GONE
         })
+    }
+
+
+    fun hideViews(){
+        itemDescription.visibility = View.GONE
+        progressDescription.visibility = View.GONE
+        userProfile.visibility = View.GONE
+        btnChat.visibility = View.GONE
+        progressView.visibility = View.GONE
+        btnReport.visibility = View.GONE
+        btnCancelDeal.visibility = View.GONE
+        progressCenter.visibility = View.GONE
+
+        confirmDeliveryPrice.visibility = View.GONE
+        sellerLocation.visibility = View.GONE
+        deliveryType.visibility = View.GONE
+        llDigitalPurchaseDescription.visibility = View.GONE
+        needDelivery.visibility = View.GONE
+    }
+
+    override fun subscribeOnDealUpdate(id: String) {
+        super.subscribeOnDealUpdate(id)
+        activity?.runOnUiThread {
+            if (id.equals(purchaseId)) {
+                hideViews()
+                loadPurchase()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
     }
 }

@@ -13,6 +13,7 @@ import com.crashlytics.android.Crashlytics
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.maps.model.LatLng
+import com.onesignal.OneSignal
 import com.ubcoin.R
 import com.ubcoin.TheApplication
 import com.ubcoin.fragment.BaseFragment
@@ -26,9 +27,14 @@ import com.ubcoin.fragment.messages.MessagesParentFragment
 import com.ubcoin.fragment.profile.ProfileMainFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.SellFragment
+import com.ubcoin.model.ChatItem
+import com.ubcoin.model.event.DealsUpdateWrapper
+import com.ubcoin.model.event.MessagesUpdateWrapper
 import com.ubcoin.model.event.UserEventWrapper
 import com.ubcoin.model.response.MarketItemStatus
 import com.ubcoin.network.DataProvider
+import com.ubcoin.network.SilentConsumer
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.utils.gone
 import com.ubcoin.utils.visible
@@ -38,6 +44,7 @@ import com.ubcoin.view.menu.MenuSingleView
 import io.fabric.sdk.android.services.common.Crash
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_messages.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.lang.Exception
@@ -56,7 +63,6 @@ class MainActivity : BaseActivity() {
         const val KEY_REFRESH_AFTER_LOGIN = "KRAF"
     }
 
-
     private var mLocationRequest: LocationRequest? = null
 
     override fun getResourceId(): Int = R.layout.activity_main
@@ -68,6 +74,7 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
+
         fragmentSwitcher?.clearBackStack()?.addTo(MarketListFragment::class.java)
 //        menuBottomView.setIgnored(MenuItems.SIGN_IN) //Now signin can be selected
         menuBottomView.menuViewCallback = object : IMenuViewCallback {
@@ -292,5 +299,16 @@ class MainActivity : BaseActivity() {
     @Subscribe(sticky = true)
     fun subscribeOnUserEvent(userEventWrapper: UserEventWrapper) {
         checkProfileLoggedIn()
+        menuBottomView.setNeedsUpdate()
+    }
+
+    @Subscribe
+    fun subscribeOnMessageUpdate(messageUpdateWrapper: MessagesUpdateWrapper) {
+        (getCurrentFragment() as BaseFragment).subscribeOnMessageUpdate(messageUpdateWrapper)
+    }
+
+    @Subscribe
+    fun subscribeOnDealUpdate(dealUpdateWrapper: DealsUpdateWrapper) {
+        (getCurrentFragment() as BaseFragment).subscribeOnDealUpdate(dealUpdateWrapper.id)
     }
 }

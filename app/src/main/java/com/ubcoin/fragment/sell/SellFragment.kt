@@ -314,7 +314,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
     }
 
     private fun validateTgUser(createProductRequest: CreateProductRequest): Boolean {
-        val authorizedInTg = ProfileHolder.user!!.authorizedInTg ?: false
+        val authorizedInTg = ProfileHolder.getUser()!!.authorizedInTg ?: false
         if (!authorizedInTg) {
             showProgressDialog(R.string.loading, R.string.wait_please_message)
             DataProvider.getTgLink(object : SilentConsumer<TgLink> {
@@ -324,7 +324,7 @@ class SellFragment : FirstLineFragment(), IRecyclerTouchListener<SellImageModel>
                     if (t.user?.authorizedInTg != null) {
                         verified = t.user.authorizedInTg!!
                     }
-                    ProfileHolder.user!!.authorizedInTg = verified
+                    ProfileHolder.getUser()!!.authorizedInTg = verified
                     ProfileHolder.updateUser()
                     if (verified) {
                         loadImagesAndCreate(createProductRequest)

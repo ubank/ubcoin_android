@@ -10,8 +10,11 @@ import android.text.Html
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.maps.model.LatLng
+import com.onesignal.OneSignal
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import com.ubcoin.model.ChatItem
+import com.ubcoin.model.event.MessagesUpdateWrapper
 import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.NetworkModule
@@ -21,6 +24,8 @@ import com.ubcoin.utils.ProfileHolder
 import io.fabric.sdk.android.Fabric
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.CopyOnWriteArrayList
+import com.google.gson.Gson
+import com.ubcoin.model.event.DealsUpdateWrapper
 
 
 /**
@@ -80,7 +85,27 @@ class TheApplication : MultiDexApplication() {
         val build = Picasso.Builder(this).downloader(OkHttp3Downloader(NetworkModule.client())).build()
         Picasso.setSingletonInstance(build)
 
+        // OneSignal Initialization
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .setNotificationReceivedHandler {
+                    var obj = it.payload.additionalData
+                    if(obj.has(("activity"))){
+                        if(obj.get("activity").equals("chat")){
+                            val gson = Gson()
+                            val str = obj.get("data").toString()
+                            val item = gson.fromJson(str, ChatItem::class.java)
+                            EventBus.getDefault().post(MessagesUpdateWrapper(item, it))
+                        }
+                        if(obj.get("activity").equals("purchase")){
+                            EventBus.getDefault().post(DealsUpdateWrapper(obj.get("id").toString()))
+                        }
+                    }
+                }
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init()
 
+        OneSignal.clearOneSignalNotifications()
 
         installCrashlytics()
         val token = ThePreferences().getToken()
@@ -88,7 +113,7 @@ class TheApplication : MultiDexApplication() {
             DataProvider.profile(
                     object : SilentConsumer<User> {
                         override fun onConsume(t: User) {
-                            ProfileHolder.user = t
+                            ProfileHolder.setUser(t)
                         }
                     },
                     object : SilentConsumer<Throwable> {
@@ -168,7 +193,6 @@ class TheApplication : MultiDexApplication() {
         createChooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         activity.startActivity(createChooser)
     }
-
 
     companion object {
         lateinit var instance: TheApplication

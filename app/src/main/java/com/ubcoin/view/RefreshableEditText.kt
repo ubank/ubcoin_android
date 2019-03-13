@@ -40,7 +40,7 @@ class RefreshableEditText : ConstraintLayout {
         if (attrs == null) return
 
         materialEditText = findViewById(R.id.edtSellPrice)
-        findViewById<View>(R.id.touchContainer).setOnTouchListener { v, event ->
+        findViewById<View>(R.id.touchContainer).setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 refreshListener?.onViewClick()
             }

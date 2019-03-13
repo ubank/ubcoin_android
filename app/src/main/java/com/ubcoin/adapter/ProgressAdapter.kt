@@ -2,6 +2,7 @@ package com.ubcoin.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -35,21 +36,21 @@ class ProgressAdapter(context: Context) : BaseRecyclerAdapter<StatusDescription,
             p0.rlBottom.visibility = View.VISIBLE
 
         if(progress.selected) {
-            p0.rlTop.setBackgroundColor(context.resources.getColor(R.color.underlineColor))
-            p0.rlCenter.background = context.resources.getDrawable(R.drawable.green_circle)
+            p0.rlTop.setBackgroundColor(ContextCompat.getColor(context, R.color.underlineColor))
+            p0.rlCenter.background = ContextCompat.getDrawable(context, R.drawable.green_circle)
             p0.tvText.setTextColor(Color.parseColor("#403d45"))
             p0.tvDescription.setTextColor(Color.parseColor("#919191"))
         }
         else {
             p0.rlTop.setBackgroundColor(Color.parseColor("#18202022"))
-            p0.rlCenter.background = context.resources.getDrawable(R.drawable.gray_circle)
+            p0.rlCenter.background = ContextCompat.getDrawable(context, R.drawable.gray_circle)
             p0.tvText.setTextColor(Color.parseColor("#4c403d45"))
             p0.tvDescription.setTextColor(Color.parseColor("#4c919191"))
         }
 
         if(p1 < itemCount-1) {
             if (getItem(p1 + 1).selected)
-                p0.rlBottom.setBackgroundColor(context.resources.getColor(R.color.underlineColor))
+                p0.rlBottom.setBackgroundColor(ContextCompat.getColor(context, R.color.underlineColor))
             else
                 p0.rlBottom.setBackgroundColor(Color.parseColor("#18202022"))
         }

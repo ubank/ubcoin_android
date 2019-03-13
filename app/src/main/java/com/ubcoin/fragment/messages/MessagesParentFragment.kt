@@ -10,6 +10,7 @@ import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.transactions.MyBalanceFragment
 import com.ubcoin.model.ChatItem
 import com.ubcoin.model.CryptoCurrency
+import com.ubcoin.model.event.MessagesUpdateWrapper
 import com.ubcoin.model.response.DealItem
 import com.ubcoin.model.response.DealItemWrapper
 import com.ubcoin.model.response.DealsListResponse
@@ -19,7 +20,9 @@ import com.ubcoin.network.SilentConsumer
 import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.utils.EndlessRecyclerViewOnScrollListener
 import com.ubcoin.utils.ProfileHolder
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_messages.*
+import org.greenrobot.eventbus.Subscribe
 
 private const val LIMIT = 30
 
@@ -56,12 +59,15 @@ class MessagesParentFragment : FirstLineFragment() {
             }
         })
 
-
         chatListAdapter.recyclerTouchListener = object : IRecyclerTouchListener<ChatItem> {
             override fun onItemClick(data: ChatItem, position: Int) {
                 getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(data.item!!.id, data.user), true)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         loadData()
     }
@@ -78,6 +84,7 @@ class MessagesParentFragment : FirstLineFragment() {
         val onSuccess = object : SilentConsumer<List<ChatItem>> {
             override fun onConsume(t: List<ChatItem>) {
                 hideProgress()
+                chatListAdapter.clear()
                 chatListAdapter.addData(t)
                 if (chatListAdapter.isEmpty()) {
                     llNoItems.visibility = View.VISIBLE
@@ -113,5 +120,31 @@ class MessagesParentFragment : FirstLineFragment() {
     override fun onIconClick() {
         super.onIconClick()
         activity?.onBackPressed()
+    }
+
+    override fun subscribeOnMessageUpdate(messageUpdateWrapper: MessagesUpdateWrapper) {
+        super.subscribeOnMessageUpdate(messageUpdateWrapper)
+
+        activity?.runOnUiThread{
+            var chatItem = messageUpdateWrapper.chatItem
+            var found = false
+
+            var i = 0
+            for(item in chatListAdapter.data){
+                if(item.item!!.id.equals(chatItem!!.item!!.id) && item.user!!.id.equals(chatItem.user!!.id))
+                {
+                    found = true
+                    item.unreadCount = 1
+                    item.lastMessage = chatItem.lastMessage
+                    chatListAdapter.notifyItemChanged(i)
+                }
+                i++
+            }
+
+            if (!found) {
+                chatItem!!.unreadCount = 1
+                chatListAdapter.addData(chatItem!!, 0)
+            }
+        }
     }
 }

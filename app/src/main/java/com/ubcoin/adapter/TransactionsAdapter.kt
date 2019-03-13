@@ -19,10 +19,9 @@ import java.util.*
  */
 class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransaction, TransactionsAdapter.VHolder>(context) {
 
-    private val ubcPostfix: String = context.getString(R.string.ubc_postfix)
-    private val ethPostfix: String = context.getString(R.string.eth_postfix)
     private val positiveColor = ContextCompat.getColor(context, R.color.greenMainColor)
     private val negativeColor = ContextCompat.getColor(context, R.color.activeTabTextColor)
+    private val rejectedColor = ContextCompat.getColor(context, R.color.itemStatusBlock)
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): VHolder {
         return VHolder(inflate(R.layout.item_transaction, p0))
@@ -35,20 +34,26 @@ class TransactionsAdapter(context: Context) : BaseRecyclerAdapter<SingleTransact
             date = Date()
         }
         vHolder.txtItemTransactionDate.text = date.toTransactionDate()
-        if(transaction.amountUBC != 0.0)
-            vHolder.txtItemTransactionAmount.text = """${if (transaction.amountUBC > .0) "+ " else ""}${transaction.amountUBC.moneyFormat()} $ubcPostfix"""
-        if(transaction.amountETH != 0.0)
-            vHolder.txtItemTransactionAmount.text = """${if (transaction.amountETH > .0) "+ " else ""}${transaction.amountETH.moneyFormatETH()} $ethPostfix"""
-        if (transaction.isPositive()) {
+        vHolder.txtItemTransactionAmount.text = transaction.getStringValue(context)
+
+        if (transaction.isPositive())
             vHolder.txtItemTransactionAmount.setTextColor(positiveColor)
-        } else {
+        else
             vHolder.txtItemTransactionAmount.setTextColor(negativeColor)
-        }
-        if (transaction.isPending()) {
+
+        if (transaction.isRejected())
+            vHolder.txtItemTransactionAmount.setTextColor(rejectedColor)
+
+        if (transaction.isPending() || transaction.isRejected()) {
             vHolder.imgItemTransactionPending.visibility = View.VISIBLE
-        } else {
-            vHolder.imgItemTransactionPending.visibility = View.GONE
+
+            if (transaction.isRejected())
+                vHolder.imgItemTransactionPending.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_fail))
+            else
+                vHolder.imgItemTransactionPending.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_pend))
         }
+        else
+            vHolder.imgItemTransactionPending.visibility = View.GONE
     }
 
 

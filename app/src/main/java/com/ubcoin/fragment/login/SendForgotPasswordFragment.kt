@@ -121,7 +121,7 @@ class SendForgotPasswordFragment : BaseFragment() {
         return object : SilentConsumer<ProfileCompleteResponse> {
             override fun onConsume(t: ProfileCompleteResponse) {
                 hideProgressDialog()
-                ProfileHolder.user = t.user
+                ProfileHolder.setUser(t.user)
                 ThePreferences().setToken(t.accessToken)
                 activity?.run {
                     setResult(Activity.RESULT_OK)

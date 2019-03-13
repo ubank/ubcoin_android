@@ -33,14 +33,10 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
 import com.squareup.picasso.Picasso
 import com.ubcoin.GlideApp
 import com.ubcoin.R
 import com.ubcoin.TheApplication
-import com.ubcoin.preferences.ThePreferences
-import com.ubcoin.adapter.IRecyclerTouchListener
-import com.ubcoin.adapter.PurchaseUserAdapter
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.login.StartupFragment
 import com.ubcoin.fragment.messages.ChatFragment
@@ -48,18 +44,11 @@ import com.ubcoin.fragment.profile.SellerProfileFragment
 import com.ubcoin.fragment.sell.ActionsDialogManager
 import com.ubcoin.fragment.sell.MarketUpdateEvent
 import com.ubcoin.fragment.sell.SellFragment
-import com.ubcoin.model.FakePurchase
-import com.ubcoin.model.IPurchaseObject
-import com.ubcoin.model.Purchase
-import com.ubcoin.model.PurchaseContainer
 import com.ubcoin.model.response.*
 import com.ubcoin.model.ui.condition.ConditionType
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
-import com.ubcoin.network.request.BuyerPurchaseLinkRequest
-import com.ubcoin.network.request.SellerPurchaseLinkRequest
 import com.ubcoin.utils.*
-import com.ubcoin.view.OpenTelegramDialogManager
 import com.ubcoin.view.rating.RatingBarView
 import io.reactivex.functions.Consumer
 import org.greenrobot.eventbus.EventBus
@@ -90,8 +79,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var wantToBuyContainer: View
     private lateinit var btnBuy: Button
 
-    private lateinit var llPurchasesContainer: View
-    private lateinit var rvPurchases: RecyclerView
     private lateinit var rlBuy : RelativeLayout
 
     private lateinit var txtItemCategory: TextView
@@ -189,8 +176,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         itemId = arguments?.getString("id") as String
         itemPositionInList = arguments?.getInt("i", -1) ?: -1
         rlLoading = view.findViewById(R.id.rlLoading)
-        llPurchasesContainer = view.findViewById(R.id.llPurchasesContainer)
-        rvPurchases = view.findViewById(R.id.rvPurchases)
         tvCondition = view.findViewById(R.id.tvCondition)
         llCondition = view.findViewById(R.id.llCondition)
         rlBuy = view.findViewById(R.id.rlBuy)
@@ -276,7 +261,7 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         if (marketItem.isOwner()) {
             hideFavorite()
         } else {
-            setFavorite(marketItem.favorite)
+            setFavorite(marketItem.favorite!!)
         }
 
         val metrics = DisplayMetrics()
@@ -395,7 +380,10 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
 
         btnChat.setOnClickListener {
-            getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem.id, marketItem.user), true)
+            if(ProfileHolder.isAuthorized())
+                getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem.id, marketItem.user), true)
+            else
+                getSwitcher()?.addTo(StartupFragment::class.java)
         }
 
         val user = marketItem.user
@@ -447,18 +435,12 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         if (marketItem.isOwner()) {
             rlBuy.visibility = View.GONE
             wantToBuyContainer.visibility = View.GONE
-            rvPurchases.visibility = View.GONE
             checkMarketItemStatus()
-            setupPurchases()
         } else {
             if(marketItem.status == MarketItemStatus.ACTIVE)
                 rlBuy.visibility = View.VISIBLE
             wantToBuyContainer.visibility = View.VISIBLE
-            rvPurchases.visibility = View.GONE
         }
-
-
-
         setupActions()
     }
 
@@ -510,54 +492,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
             DataProvider.activate(marketItem.id, onSuccess, silentConsumer())
         } else {
             DataProvider.deactivate(marketItem.id, onSuccess, silentConsumer())
-        }
-    }
-
-    private fun setupPurchases() {
-        if (!CollectionUtils.isEmpty(marketItem.purchases)) {
-            val purchaseUserAdapter = PurchaseUserAdapter(activity!!)
-            purchaseUserAdapter.setHasStableIds(true)
-
-            rvPurchases.setHasFixedSize(true)
-            rvPurchases.layoutManager = LinearLayoutManager(activity!!)
-
-            rvPurchases.adapter = purchaseUserAdapter
-
-            val purchaseContainer = PurchaseContainer()
-
-            marketItem.purchases.forEach {
-                when (it.status) {
-                    PurchaseItemStatus.ACTIVE, PurchaseItemStatus.CREATED -> {
-                        purchaseContainer.activePurchases.add(it)
-                    }
-                    else -> {
-                        purchaseContainer.otherPurchases.add(it)
-                    }
-                }
-            }
-            val list = ArrayList<IPurchaseObject>()
-            if (purchaseContainer.shouldDivideByBlocks()) {
-                list.add(FakePurchase(getString(R.string.str_item_status_reserved)))
-                list.addAll(purchaseContainer.activePurchases)
-
-                list.add(FakePurchase(getString(R.string.str_others)))
-                list.addAll(purchaseContainer.otherPurchases)
-            } else {
-                list.addAll(purchaseContainer.activePurchases)
-                list.addAll(purchaseContainer.otherPurchases)
-            }
-            if (!list.isEmpty()) {
-                purchaseUserAdapter.addData(list)
-            }
-            purchaseUserAdapter.recyclerTouchListener = object : IRecyclerTouchListener<IPurchaseObject> {
-                override fun onItemClick(data: IPurchaseObject, position: Int) {
-                    val purchase = data as Purchase
-                    var purchaseId = purchase.id
-
-                    getSwitcher()?.addTo(DealSellFragment::class.java, DealSellFragment.getBundle(purchaseId), false)
-                }
-
-            }
         }
     }
 
@@ -743,32 +677,6 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-
-    private fun callWantToBuy(id: String, fromBuyer: Boolean) {
-        showProgressDialog(R.string.wait_please_title, R.string.wait_please_message)
-
-        val onSuccess = object : SilentConsumer<TgLink> {
-            override fun onConsume(t: TgLink) {
-                hideProgressDialog()
-                val fullUrl = t.url
-                if (fullUrl.isNotBlank()) {
-                    TheApplication.instance.openTelegramIntent(fullUrl, t.appUrl, this@MarketDetailsFragment, 17777)
-                }
-            }
-
-        }
-        val onError = Consumer<Throwable> {
-            handleException(it)
-        }
-
-        if (fromBuyer) {
-            DataProvider.discussFromBuyer(BuyerPurchaseLinkRequest(marketItem.id), onSuccess, onError)
-        } else {
-            DataProvider.discussFromSeller(SellerPurchaseLinkRequest(id), onSuccess, onError)
-        }
-
-    }
-
     private fun requestFavorite(favorite: Boolean) {
         if (isFavoriteProcessing.get()) return
         isFavoriteProcessing.set(true)
@@ -792,16 +700,16 @@ class MarketDetailsFragment : BaseFragment(), OnMapReadyCallback {
         return object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
                 hideProgressDialog()
-                marketItem.favorite = !marketItem.favorite
-                idForRemove = if (!marketItem.favorite) {
+                marketItem.favorite = !marketItem.favorite!!
+                idForRemove = if (!marketItem.favorite!!) {
                     marketItem.id
                 } else {
                     null
                 }
-                setFavorite(marketItem.favorite)
+                setFavorite(marketItem.favorite!!)
                 isFavoriteProcessing.set(false)
                 if (itemPositionInList != -1) {
-                    EventBus.getDefault().post(UpdateMarketItemEvent(position = itemPositionInList, isFavorite = marketItem.favorite))
+                    EventBus.getDefault().post(UpdateMarketItemEvent(position = itemPositionInList, isFavorite = marketItem.favorite!!))
                 }
             }
 

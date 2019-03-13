@@ -1,9 +1,10 @@
 package com.ubcoin.fragment.market
 
-import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import com.google.android.gms.maps.model.LatLng
@@ -17,6 +18,7 @@ import com.ubcoin.fragment.FirstLineFragment
 import com.ubcoin.fragment.filter.FiltersFragment
 import com.ubcoin.fragment.filter.SelectCategoryFilterFragment
 import com.ubcoin.fragment.sell.MarketUpdateEvent
+import com.ubcoin.model.event.MarketItemBoughtEvent
 import com.ubcoin.model.response.MarketItem
 import com.ubcoin.model.ui.*
 import com.ubcoin.model.ui.condition.ConditionType
@@ -30,6 +32,7 @@ import com.ubcoin.utils.visible
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
+import kotlinx.android.synthetic.main.view_header_market_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import retrofit2.Response
@@ -42,12 +45,14 @@ private const val LIMIT = 30
 
 class MarketListFragment : FirstLineFragment() {
 
+    private lateinit var srLayout: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var rvFiltersInMarketList: RecyclerView
     private lateinit var filterContainer: View
     private lateinit var progressCenter: View
     private lateinit var progressBottom: View
     private lateinit var llHeaderRight: View
+    private lateinit var searchView: SearchView
     private lateinit var llNoItems: View
     private var marketListAdapter: MarketListAdapter? = null
     private var filterAdapter: FilterItemsAdapter? = null
@@ -69,6 +74,43 @@ class MarketListFragment : FirstLineFragment() {
             fixedLocationLatLng = TheApplication.instance.copyCurrentLocation()
         }
 
+        srLayout = view.findViewById(R.id.srLayout)
+        srLayout.setOnRefreshListener {
+            currentPage = 0
+            loadData()
+        }
+        searchView = view.findViewById(R.id.searchView)
+        searchView.setOnCloseListener {
+            txtHeader.visibility = View.VISIBLE
+            currentPage = 0
+            loadData()
+            return@setOnCloseListener false
+        }
+
+        searchView.setOnFocusChangeListener{ v,b->
+            if(b)
+                txtHeader.visibility = View.GONE
+        }
+
+        searchView.setOnQueryTextFocusChangeListener{v,b->
+            if(b)
+                txtHeader.visibility = View.GONE
+        }
+
+        searchView.setOnQueryTextListener(
+            object: SearchView.OnQueryTextListener{
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    currentPage = 0
+                    loadData()
+                    return true
+                }
+            }
+        )
+
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
         llHeaderRight = view.findViewById(R.id.llHeaderRight)
@@ -80,7 +122,7 @@ class MarketListFragment : FirstLineFragment() {
         marketListAdapter?.favoriteListener = object : MarketListAdapter.IFavoriteListener {
             override fun onFavoriteTouch(data: MarketItem, position: Int) {
                 if (ProfileHolder.isAuthorized()) {
-                    processFavorite(data, position, !data.favorite)
+                    processFavorite(data, position, !data.favorite!!)
                 } else {
                     showNeedToRegistration()
                 }
@@ -146,7 +188,10 @@ class MarketListFragment : FirstLineFragment() {
     }
 
     private fun loadData() {
-        if (isLoading || isEndOfLoading) return
+        if (isLoading || (isEndOfLoading && currentPage > 0)) return
+
+        if(currentPage == 0)
+            marketListAdapter!!.clear()
 
         if (marketListAdapter!!.isEmpty()) {
             progressCenter.visibility = View.VISIBLE
@@ -166,7 +211,8 @@ class MarketListFragment : FirstLineFragment() {
         } else {
             categoriesIds = null
         }
-        currentDisposableLoader = DataProvider.getMarketList(LIMIT, currentPage,
+        var searchLine = searchView.query.toString()
+        currentDisposableLoader = DataProvider.getMarketList(searchLine, LIMIT, currentPage,
                 fixedLocationLatLng?.latitude, fixedLocationLatLng?.longitude,
                 categoriesIds,
                 FiltersHolder.getFilterObjectForList().maxPrice,
@@ -188,9 +234,11 @@ class MarketListFragment : FirstLineFragment() {
                     } else {
                         llNoItems.gone()
                     }
+                    srLayout.isRefreshing = false
                 },
                 Consumer {
                     handleException(it)
+                    srLayout.isRefreshing = false
                 })
     }
 
@@ -265,6 +313,22 @@ class MarketListFragment : FirstLineFragment() {
     fun onLatLngEvent(latLng: LatLng) {
         if (marketListAdapter != null) {
             marketListAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    @Subscribe
+    fun onItemBought(marketItemBoughtEvent: MarketItemBoughtEvent){
+        var id = marketItemBoughtEvent.itemId
+        for(i in 0 .. marketListAdapter!!.itemCount - 1)
+        {
+            if(marketListAdapter!!.getItem(i).id.equals(id))
+            {
+                recyclerView.run {
+                    marketListAdapter!!.data.removeAt(i)
+                    if (i == 0) {marketListAdapter?.notifyDataSetChanged()} else {marketListAdapter?.notifyItemRemoved(i)}
+                }
+                break
+            }
         }
     }
 
@@ -347,7 +411,7 @@ class MarketListFragment : FirstLineFragment() {
     private fun successConsumer(marketItem: MarketItem, position: Int): SilentConsumer<Response<Unit>> {
         return object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
-                marketItem.favorite = !marketItem.favorite
+                marketItem.favorite = !marketItem.favorite!!
                 try {
                     marketListAdapter?.notifyItemChanged(position)
                 } catch (e: Exception) {
@@ -371,7 +435,7 @@ class MarketListFragment : FirstLineFragment() {
     override fun getHeaderText() = R.string.app_name
 
     override fun onDestroyView() {
-        FiltersHolder.onDestroy()
+        //FiltersHolder.onDestroy()
         super.onDestroyView()
     }
 

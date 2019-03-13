@@ -1,9 +1,16 @@
 package com.ubcoin.view.menu
 
+import android.app.Application
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
+import com.onesignal.OneSignal
 import com.ubcoin.R
+import com.ubcoin.TheApplication
+import com.ubcoin.model.response.UpdatesStatusResponse
+import com.ubcoin.network.DataProvider
+import com.ubcoin.network.SilentConsumer
+import com.ubcoin.utils.ProfileHolder
 import kotlinx.android.synthetic.main.view_bottom_menu.view.*
 
 /**
@@ -14,6 +21,13 @@ class MenuBottomView : LinearLayout {
     var menuViewCallback: IMenuViewCallback? = null
     var activeMenuItem: MenuSingleView? = null
     var isExpanded = true
+    set(value) {
+        field = value
+        updateStatuses()
+    }
+
+    var needsUpdate = true
+
     private val ignored = ArrayList<MenuItems>()
 
     constructor(context: Context?) : super(context) {
@@ -49,6 +63,8 @@ class MenuBottomView : LinearLayout {
         menuItemSignIn.singleMenuCallback = iSingleMenuViewCallback
         menuItemDeals.hide()
 
+        if(needsUpdate)
+            updateStatuses()
     }
 
     fun activate(menuItem: MenuItems) {
@@ -109,5 +125,40 @@ class MenuBottomView : LinearLayout {
         activeMenuItem?.deactivate()
     }
 
+    fun setNeedsUpdate(){
+        needsUpdate = true
+        updateStatuses()
+    }
+
+    fun updateStatuses(){
+        if(!needsUpdate)
+            return
+
+        if(!ProfileHolder.isAuthorized())
+        {
+            menuItemMessages.setHasUpdates(false)
+            menuItemProfile.setHasUpdates(false)
+            OneSignal.clearOneSignalNotifications()
+            return
+        }
+
+        DataProvider.getUpdatesStatus(
+                object : SilentConsumer<UpdatesStatusResponse> {
+                    override fun onConsume(t: UpdatesStatusResponse) {
+                        needsUpdate = false
+                        menuItemMessages.setHasUpdates(t.unreadCount?:0 > 0)
+                        menuItemProfile.setHasUpdates(t.statusUpdatesCount?:0 > 0)
+
+                        if(t.unreadCount?:0 + (t.statusUpdatesCount?:0)  == 0)
+                            OneSignal.clearOneSignalNotifications()
+                    }
+                },
+                object : SilentConsumer<Throwable> {
+                    override fun onConsume(t: Throwable) {
+                        var k = 0
+
+                    }
+                })
+    }
 
 }

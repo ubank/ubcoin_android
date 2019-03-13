@@ -1,19 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="15dp"
     android:layout_marginBottom="1dp"
     android:background="#fff">
-    
+
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif"
+        android:lines="1"
+        android:textColor="@color/headerTextColor"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/cvImage"
+        app:layout_constraintEnd_toStartOf="@+id/imgActive"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif"
+        android:lines="1"
+        android:text="Old Macbook Pro 15 Late 2012"
+        android:textColor="@color/haveAccountColor"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif"
+        android:lines="1"
+        android:text="Jade Connors"
+        android:textColor="@color/headerTextColor"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toStartOf="@+id/tvDate"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toTopOf="@+id/cvImage" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="21 Jul"
+        android:textColor="@color/headerTextColor"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/tvName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvName" />
+
+    <ImageView
+        android:id="@+id/imgActive"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/note_1"
+        app:layout_constraintBottom_toBottomOf="@+id/tvMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
     <android.support.v7.widget.CardView
         android:id="@+id/cvImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:cardCornerRadius="5dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/ivItem"
@@ -22,60 +99,4 @@
 
     </android.support.v7.widget.CardView>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/cvImage"
-        android:layout_toStartOf="@id/tvDate"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_centerVertical="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/headerTextColor"
-            android:text="Jade Connors" />
-
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/haveAccountColor"
-            android:text="Old Macbook Pro 15 Late 2012" />
-
-        <TextView
-            android:id="@+id/tvMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif"
-            android:textStyle="normal"
-            android:textColor="@color/headerTextColor" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="normal"
-        android:textColor="@color/headerTextColor"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"/>
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

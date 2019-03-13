@@ -28,25 +28,27 @@ class ConfirmDeliveryPriceView: LinearLayout {
         set(value) {
             field = value
             var currency = "UBC"
-            tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat() + " UBC"
+            tvBalance.text = context.getString(R.string.text_your_balance) + " " + ProfileHolder.getUBCBalanceString() + " UBC"
+
+            tvDeliveryPrice.text = value!!.deliveryPrice.moneyFormat() + " " + currency
             if(item?.currencyType == Currency.ETH) {
                 currency = "ETH"
-                tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH() + " ETH"
+                tvBalance.text = context.getString(R.string.text_your_balance) + " " + ProfileHolder.getETHBalanceString() + " ETH"
+
+                tvDeliveryPrice.text = value!!.deliveryPrice.moneyFormatETH() + " " + currency
             }
 
-            var price = item!!.deliveryPrice
-            var amount = ProfileHolder.balance?.effectiveAmount
+            val price = item!!.deliveryPrice
+            var amount = ProfileHolder.getUBCBalance()
             if(item?.currencyType == Currency.ETH) {
-                amount = ProfileHolder.balance?.effectiveAmountETH
+                amount = ProfileHolder.getETHBalance()
             }
 
-            if(amount != null) {
-                if (amount!! < price!!)
-                    tvBalance.setTextColor(context.resources.getColor(R.color.red))
-                else
-                    tvBalance.setTextColor(Color.parseColor("#403d45"))
-            }
-            tvDeliveryPrice.text = value!!.deliveryPrice.toString() + " " + currency
+            if (amount < price)
+                tvBalance.setTextColor(ContextCompat.getColor(context, R.color.red))
+            else
+                tvBalance.setTextColor(Color.parseColor("#403d45"))
+
 
         }
 
@@ -81,18 +83,18 @@ class ConfirmDeliveryPriceView: LinearLayout {
         btnConfirm.setOnClickListener{
 
             var price = item!!.deliveryPrice
-            var amount = ProfileHolder.balance?.effectiveAmount
+            var amount = ProfileHolder.getUBCBalance()
             var text = context.getString(R.string.text_not_enough_ubc)
-            var priceText = (price ?: .0).moneyFormat() + " UBC"
+            var priceText = price.moneyFormat() + " UBC"
 
             if(item?.currencyType == Currency.ETH)
             {
-                amount = ProfileHolder.balance?.effectiveAmountETH
+                amount = ProfileHolder.getETHBalance()
                 text = context.getString(R.string.text_not_enough_eth)
                 priceText = price.moneyRoundedFormatETH() + " ETH"
             }
 
-            if(amount!! < price!!)
+            if(amount < price)
             {
                 val materialDialog = MaterialDialog.Builder(context)
                         .content(text)

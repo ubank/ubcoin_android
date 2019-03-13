@@ -3,6 +3,7 @@ package com.ubcoin.view.deal_description
 import android.annotation.SuppressLint
 import android.content.Context
 import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
@@ -86,20 +87,20 @@ class DeliveryTypeView : LinearLayout {
     fun initType(){
         if(type == DeliveryType.Meeting)
         {
-            clDelivery.background = context.resources.getDrawable(R.drawable.gray_border)
-            clMeeting.background = context.resources.getDrawable(R.drawable.green_border)
+            clDelivery.background = ContextCompat.getDrawable(context, R.drawable.gray_border)
+            clMeeting.background = ContextCompat.getDrawable(context, R.drawable.green_border)
 
-            rlDelivery.background = context.resources.getDrawable(R.drawable.gray_circle)
-            rlMeeting.background = context.resources.getDrawable(R.drawable.green_circle)
+            rlDelivery.background = ContextCompat.getDrawable(context, R.drawable.gray_circle)
+            rlMeeting.background = ContextCompat.getDrawable(context, R.drawable.green_circle)
             ivDelivery.visibility = View.GONE
             ivMeeting.visibility = View.VISIBLE
         }
         else
         {
-            clDelivery.background = context.resources.getDrawable(R.drawable.green_border)
-            clMeeting.background = context.resources.getDrawable(R.drawable.gray_border)
-            rlDelivery.background = context.resources.getDrawable(R.drawable.green_circle)
-            rlMeeting.background = context.resources.getDrawable(R.drawable.gray_circle)
+            clDelivery.background = ContextCompat.getDrawable(context, R.drawable.green_border)
+            clMeeting.background = ContextCompat.getDrawable(context, R.drawable.gray_border)
+            rlDelivery.background = ContextCompat.getDrawable(context, R.drawable.green_circle)
+            rlMeeting.background = ContextCompat.getDrawable(context, R.drawable.gray_circle)
             ivDelivery.visibility = View.VISIBLE
             ivMeeting.visibility = View.GONE
         }

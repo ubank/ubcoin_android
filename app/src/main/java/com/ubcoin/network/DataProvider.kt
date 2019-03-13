@@ -9,6 +9,7 @@ import com.ubcoin.model.response.*
 import com.ubcoin.model.response.base.IdResponse
 import com.ubcoin.model.response.profile.ProfileCompleteResponse
 import com.ubcoin.network.request.*
+import com.ubcoin.preferences.ThePreferences
 import com.ubcoin.utils.ProfileHolder
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -30,6 +31,20 @@ object DataProvider {
 
     private var networkModule: NetworkModule = NetworkModule
 
+    fun subscribePush(body:Any, onSuccess: Consumer<Any>, onError: Consumer<Throwable>){
+        networkModule.api()
+                .subscribePush(body)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
+    fun unsubscribePush(body:Any, onSuccess: Consumer<Any>, onError: Consumer<Throwable>){
+        networkModule.api()
+                .unsubscribePush(body)
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun getChatList(cookie:String, onSuccess: Consumer<List<ChatItem>>, onError: Consumer<Throwable>){
         networkModule.api()
                 .getChatList(cookie)
@@ -37,9 +52,21 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
+    fun getUpdatesStatus(onSuccess: Consumer<UpdatesStatusResponse>, onError: Consumer<Throwable>){
+        networkModule.api()
+                .getUpdatesStatus()
+                .compose(RxUtils.applyT())
+                .subscribe(onSuccess, onError)
+    }
+
     fun login(email: String, password: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api()
                 .login(SignIn(email, password))
+                .doOnNext {
+                    ThePreferences().setToken(it.accessToken)
+                    val myBalance = networkModule.api().balance().blockingSingle()
+                    ProfileHolder.setBalance(myBalance)
+                }
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -53,6 +80,11 @@ object DataProvider {
 
     fun confirmRegistrationEmail(email: String, code: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().confirmEmailRegistration(ConfirmEmailRegistration("REGISTRATION", email, code))
+                .doOnNext {
+                    ThePreferences().setToken(it.accessToken)
+                    val myBalance = networkModule.api().balance().blockingSingle()
+                    ProfileHolder.setBalance(myBalance)
+                }
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -71,6 +103,11 @@ object DataProvider {
 
     fun forgotChangePassword(email: String, code: String, value: String, onSuccess: Consumer<ProfileCompleteResponse>, onError: Consumer<Throwable>) {
         networkModule.api().changeForgotPassword(ChangeForgotPassword(email, value, "PASSWORD", code))
+                .doOnNext {
+                    ThePreferences().setToken(it.accessToken)
+                    val myBalance = networkModule.api().balance().blockingSingle()
+                    ProfileHolder.setBalance(myBalance)
+                }
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -87,8 +124,8 @@ object DataProvider {
                 .subscribe(onSuccess, onError)
     }
 
-    fun logout(onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
-        networkModule.api().logout()
+    fun logout(body:Any, onSuccess: Consumer<Response<Unit>>, onError: Consumer<Throwable>) {
+        networkModule.api().logout(body)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
@@ -97,13 +134,13 @@ object DataProvider {
         return networkModule.api().profile()
                 .doOnNext {
                     val myBalance = networkModule.api().balance().blockingSingle()
-                    ProfileHolder.balance = myBalance
+                    ProfileHolder.setBalance(myBalance)
                 }
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }
 
-    fun getMarketList(limit: Int, page: Int, latPoint: Double?, longPoint: Double?,
+    fun getMarketList(searchLine:String?, limit: Int, page: Int, latPoint: Double?, longPoint: Double?,
                       categories: List<String>?,
                       maxPrice: Double?,
                       maxDistance: Int?,
@@ -114,9 +151,9 @@ object DataProvider {
                       onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
         val marketList =
                 if (latPoint != null && longPoint != null) {
-                    networkModule.api().marketList(limit, page, latPoint, longPoint, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
+                    networkModule.api().marketList(searchLine, limit, page, latPoint, longPoint, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
                 } else {
-                    networkModule.api().marketList(limit, page, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
+                    networkModule.api().marketList(searchLine, limit, page, categories, maxPrice, maxDistance, sortByDate, sortByPrice, sortByDistance, condition)
                 }
         return marketList
                 .debounce(100, TimeUnit.MILLISECONDS)
@@ -126,13 +163,6 @@ object DataProvider {
 
     fun getFavoriteList(limit: Int, page: Int, onSuccess: Consumer<MarketListResponse>, onError: Consumer<Throwable>): Disposable {
         return networkModule.api().favorites(limit, page)
-                .compose(RxUtils.applyT())
-                .subscribe(onSuccess, onError)
-    }
-
-    fun getTgLink(itemId: String, onSuccess: Consumer<TgLink>, onError: Consumer<Throwable>): Disposable {
-        return networkModule.api()
-                .getTgLink(itemId)
                 .compose(RxUtils.applyT())
                 .subscribe(onSuccess, onError)
     }

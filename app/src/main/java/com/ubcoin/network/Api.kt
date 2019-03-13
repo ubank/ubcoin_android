@@ -15,6 +15,17 @@ import retrofit2.http.*
  */
 interface Api {
 
+    @EliminatedBody
+    @POST("/api/notify/push-subscribe")
+    fun subscribePush(@Body body: Any) : Observable<Response<Unit>>
+
+    @EliminatedBody
+    @POST("/api/notify/push-unsubscribe")
+    fun unsubscribePush(@Body body: Any) : Observable<Response<Unit>>
+
+    @GET("/api/items/updates")
+    fun getUpdatesStatus(): Observable<UpdatesStatusResponse>
+
     @GET("/api/chats")
     fun getChatList(@Header("Cookie") cookie: String): Observable<List<ChatItem>>
 
@@ -35,7 +46,7 @@ interface Api {
 
     @EliminatedBody
     @POST("/api/auth/logout")
-    fun logout(): Observable<Response<Unit>>
+    fun logout(@Body body: Any): Observable<Response<Unit>>
 
     @GET("/api/users/me")
     fun profile(): Observable<User>
@@ -52,6 +63,7 @@ interface Api {
 
     @GET("/api/items")
     fun marketList(
+            @Query("searchLine") searchLine: String?,
             @Query("size") limit: Int,
             @Query("page") page: Int,
             @Query("category") categories: List<String>?,
@@ -64,6 +76,7 @@ interface Api {
 
     @GET("/api/items")
     fun marketList(
+            @Query("searchLine") searchLine: String?,
             @Query("size") limit: Int,
             @Query("page") page: Int,
             @Query("latPoint") latPoint: Double,

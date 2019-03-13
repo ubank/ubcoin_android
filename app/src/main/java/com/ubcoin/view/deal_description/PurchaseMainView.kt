@@ -75,7 +75,7 @@ class PurchaseMainView: LinearLayout {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun init(attrs: AttributeSet?) {
+    private fun init(_attrs: AttributeSet?) {
         inflate(context, R.layout.view_purchase_main, this)
     }
 
@@ -90,35 +90,34 @@ class PurchaseMainView: LinearLayout {
         btnConfirm = findViewById(R.id.btnConfirm)
         tvBalance = findViewById(R.id.tvBalance)
         tvETHCommision = findViewById(R.id.tvETHCommision)
-        tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat()
+        tvBalance.text = context.getString(R.string.text_your_balance) + " " + ProfileHolder.getUBCBalance().moneyFormat()
 
-        val function = { _: SelectableView, arg: String, index: Int, isSelected: Boolean ->
+        val function = { _: SelectableView, _: String, index: Int, isSelected: Boolean ->
             if (isSelected) {
                 if(index == 0) {
                     currency = Currency.UBC
                     selectETH.changeSelectionVisual(false)
                     btnConfirm.text = context.getString(R.string.text_confirm_in_ubc)
-                    tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmount ?: .0).moneyFormat()
+                    tvBalance.text = context.getString(R.string.text_your_balance) + " " + ProfileHolder.getUBCBalance().moneyFormat()
                     tvETHCommision.visibility = View.GONE
                 }
                 else {
                     currency = Currency.ETH
                     selectUBC.changeSelectionVisual(false)
                     btnConfirm.text = context.getString(R.string.text_confirm_in_eth)
-                    tvBalance.text = context.getString(R.string.text_your_balance) + " " + (ProfileHolder.balance?.effectiveAmountETH ?: .0).moneyFormatETH()
+                    tvBalance.text = context.getString(R.string.text_your_balance) + " " + ProfileHolder.getETHBalance().moneyFormatETH()
                     tvETHCommision.visibility = View.VISIBLE
                 }
 
                 var price = marketItem!!.price
-                var amount = ProfileHolder.balance?.effectiveAmount
+                var amount = ProfileHolder.getUBCBalance()
                 if(currency == Currency.ETH) {
                     price = marketItem!!.priceETH!! * 1.02
-                    amount = ProfileHolder.balance?.effectiveAmountETH
+                    amount = ProfileHolder.getETHBalance()
                 }
 
-
-                if(amount == null || price == null || amount!! < price!!)
-                    tvBalance.setTextColor(context.resources.getColor(R.color.red))
+                if(price == null || amount < price)
+                    tvBalance.setTextColor(ContextCompat.getColor(context, R.color.red))
                 else
                     tvBalance.setTextColor(Color.parseColor("#403d45"))
 
@@ -132,7 +131,7 @@ class PurchaseMainView: LinearLayout {
         btnConfirm.setOnClickListener {
 
             if(llAddressInput.visibility == View.VISIBLE) {
-                if (etAddress.text.toString() == null || etAddress.text.toString().length == 0) {
+                if (etAddress.text.toString().isNullOrEmpty()) {
                     if (activity != null) {
                         activity?.run {
                             MaterialDialog.Builder(this).title(R.string.error).content("Location address missing").build().show()
@@ -143,19 +142,19 @@ class PurchaseMainView: LinearLayout {
             }
 
             var price = marketItem!!.price
-            var amount = ProfileHolder.balance?.effectiveAmount
+            var amount = ProfileHolder.getUBCBalance()
             var text = context.getString(R.string.text_not_enough_ubc)
             var priceText = (marketItem?.price ?: .0).moneyFormat() + " UBC"
 
             if(currency == Currency.ETH)
             {
                 price = marketItem!!.priceETH!! * 1.02
-                amount = ProfileHolder.balance?.effectiveAmountETH
+                amount = ProfileHolder.getETHBalance()
                 text = context.getString(R.string.text_not_enough_eth)
                 priceText = price!!.moneyRoundedFormatETH() + " ETH"
             }
 
-            if(amount == null || price == null || amount!! < price!!)
+            if( price == null || amount < price!!)
             {
                 val materialDialog = MaterialDialog.Builder(context)
                         .content(text)
@@ -209,18 +208,16 @@ class PurchaseMainView: LinearLayout {
         etItemPrice.setText((marketItem?.price ?: .0).moneyFormat() + " UBC / " + marketItem?.priceETH!!.moneyRoundedFormatETH() + " ETH")
 
         var price = marketItem!!.price
-        var amount = ProfileHolder.balance?.effectiveAmount
+        var amount = ProfileHolder.getUBCBalance()
         if(currency == Currency.ETH) {
             price = marketItem!!.priceETH
-            amount = ProfileHolder.balance?.effectiveAmountETH
+            amount = ProfileHolder.getETHBalance()
         }
 
-        if(amount != null) {
-            if (amount!! < price!!)
-                tvBalance.setTextColor(context.resources.getColor(R.color.red))
-            else
-                tvBalance.setTextColor(Color.parseColor("#403d45"))
-        }
+        if (amount < price!!)
+            tvBalance.setTextColor(ContextCompat.getColor(context, R.color.red))
+        else
+            tvBalance.setTextColor(Color.parseColor("#403d45"))
     }
 
     interface OnCreatePurchase{

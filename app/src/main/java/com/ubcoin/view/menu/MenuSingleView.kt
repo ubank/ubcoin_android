@@ -10,6 +10,12 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import com.ubcoin.R
+import com.ubcoin.model.ChatItem
+import com.ubcoin.model.response.UpdatesStatusResponse
+import com.ubcoin.network.DataProvider
+import com.ubcoin.network.SilentConsumer
+import com.ubcoin.preferences.ThePreferences
+import kotlinx.android.synthetic.main.fragment_messages.*
 import kotlinx.android.synthetic.main.view_menu_single_view.view.*
 
 @Suppress("MemberVisibilityCanBePrivate", "unused")
@@ -124,6 +130,17 @@ class MenuSingleView : RelativeLayout {
 
     fun hide() {
         toggleVisibility(false)
+    }
+
+    fun setHasUpdates(flag: Boolean) {
+        if(flag)
+            imgActive.visibility = View.VISIBLE
+        else
+            imgActive.visibility = View.GONE
+    }
+
+    fun getHasUpdates():Boolean{
+        return imgActive.visibility == View.VISIBLE
     }
 
     private fun toggleVisibility(isVisible: Boolean) {

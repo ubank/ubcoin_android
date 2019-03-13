@@ -18,6 +18,7 @@ import com.ubcoin.R
 import com.ubcoin.model.Currency
 import com.ubcoin.model.Purchase
 import com.ubcoin.model.response.PurchaseItemStatus
+import com.ubcoin.model.response.StatusDescription
 
 class ProgressDescriptionView: ConstraintLayout {
 
@@ -68,7 +69,7 @@ class ProgressDescriptionView: ConstraintLayout {
             currency = "ETH"
         newPrice = value!!.deliveryPrice
         tvPrice.text = newPrice.toString() + " " + currency
-        if(value.comment != null && value.comment.length > 0)
+        if(!value.comment.isNullOrEmpty())
             tvAddress.text = value.comment
     }
 
@@ -94,7 +95,7 @@ class ProgressDescriptionView: ConstraintLayout {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun init(attrs: AttributeSet?) {
+    private fun init(_attrs: AttributeSet?) {
         LinearLayout.inflate(context, R.layout.view_progress_description, this)
     }
 
@@ -184,12 +185,12 @@ class ProgressDescriptionView: ConstraintLayout {
                     if (isSeller) {
                         tvTitle.text = context.getString(R.string.text_digital_active_purchase_title_seller)
                         tvDescription.text = context.getString(R.string.text_digital_active_purchase_description_seller)
-                        ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                        ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                     }
                     else{
                         tvTitle.text = context.getString(R.string.text_digital_active_purchase_title_buyer)
                         tvDescription.text = context.getString(R.string.text_digital_active_purchase_description_buyer)
-                        ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                        ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                         btnConfirmFile.visibility = View.VISIBLE
                     }
                 }
@@ -198,24 +199,24 @@ class ProgressDescriptionView: ConstraintLayout {
                         if (isSeller) {
                             tvTitle.text = context.getString(R.string.text_delivery_active_purchase_title_seller)
                             tvDescription.text = context.getString(R.string.text_delivery_active_purchase_description_seller)
-                            ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                            ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                         }
                         else{
                             tvTitle.text = context.getString(R.string.text_delivery_active_purchase_title_buyer)
                             tvDescription.text = context.getString(R.string.text_delivery_active_purchase_description_buyer)
-                            ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                            ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                         }
                     }
                     else{
                         if (isSeller) {
                             tvTitle.text = context.getString(R.string.text_active_purchase_title_seller)
                             tvDescription.text = context.getString(R.string.text_active_purchase_description_seller)
-                            ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                            ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                         }
                         else{
                             tvTitle.text = context.getString(R.string.text_active_purchase_title_buyer)
                             tvDescription.text = context.getString(R.string.text_active_purchase_description_buyer)
-                            ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                            ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
                             btnReceivedItem.visibility = View.VISIBLE
                         }
                     }
@@ -232,7 +233,7 @@ class ProgressDescriptionView: ConstraintLayout {
                     tvTitle.text = context.getString(R.string.text_delivery_price_defined_title_buyer)
                     tvDescription.text = context.getString(R.string.text_delivery_price_defined_description_buyer)
                 }
-                ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_booked))
+                ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_booked))
             }
 
             PurchaseItemStatus.DELIVERY_PRICE_CONFIRMED -> {
@@ -245,7 +246,7 @@ class ProgressDescriptionView: ConstraintLayout {
                     tvTitle.text = context.getString(R.string.text_delivery_price_confirmed_title_buyer)
                     tvDescription.text = context.getString(R.string.text_delivery_price_confirmed_description_buyer)
                 }
-                ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_frozen))
+                ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_frozen))
             }
 
             PurchaseItemStatus.DELIVERY -> {
@@ -258,7 +259,7 @@ class ProgressDescriptionView: ConstraintLayout {
                     tvDescription.text = context.getString(R.string.text_delivery_description_buyer)
                     btnReceivedItem.visibility = View.VISIBLE
                 }
-                ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_status_process))
+                ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_status_process))
             }
 
             PurchaseItemStatus.CONFIRMED -> {
@@ -292,11 +293,27 @@ class ProgressDescriptionView: ConstraintLayout {
                         }
                     }
                 }
-                ivImage.setImageDrawable(context.resources.getDrawable(R.drawable.ic_check_green))
+                ivImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_check_green))
             }
 
             PurchaseItemStatus.CANCELLED -> {
 
+            }
+        }
+
+        if(item != null && item!!.statusDescriptions.isNotEmpty())
+        {
+            var sd: StatusDescription? = null
+
+            for(status in item!!.statusDescriptions)
+            {
+                if(status.selected)
+                    sd = status
+            }
+
+            if(sd != null){
+                tvTitle.setText(sd.title + " " + sd.description)
+                tvDescription.setText(sd.longDescription)
             }
         }
     }

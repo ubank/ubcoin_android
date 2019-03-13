@@ -13,6 +13,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.net.HttpURLConnection
+import java.util.*
 
 
 /**
@@ -100,8 +101,12 @@ object NetworkModule {
                         thePreferences.setToken(response.header(AUTH_HEADER))
                     }
                 } else {
+
+                    var d = Locale.getDefault().toString()
+
                     response = it.proceed(it.request().newBuilder()
                             .addHeader(AUTH_HEADER, thePreferences.getToken() ?: "")
+                            .addHeader("Accept-Language", Locale.getDefault().toString().substring(0,2))
                             .build())
                 }
                 val code = response.code()

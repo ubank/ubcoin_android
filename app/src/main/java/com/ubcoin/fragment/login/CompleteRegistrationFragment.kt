@@ -117,7 +117,7 @@ class CompleteRegistrationFragment : BaseFragment() {
                         hideProgressDialog()
                         ThePreferences().setToken(t.accessToken)
                         ThePreferences().setCurrentUser(t.user)
-                        ProfileHolder.user = t.user
+                        ProfileHolder.setUser(t.user)
                         getSwitcher()?.clearBackStack()?.addTo(EndRegistrationFragment::class.java)
                     }
                 },

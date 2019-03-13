@@ -78,7 +78,7 @@ class MarketListAdapter(context: Context) : BaseRecyclerAdapter<MarketItem, Mark
             vh.llFavoriteContainer.setOnClickListener { }
         } else {
             vh.imgFavorite.visibility = View.VISIBLE
-            vh.imgFavorite.setImageResource(if (item.favorite) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
+            vh.imgFavorite.setImageResource(if (item.favorite!!) R.drawable.ic_favorite_list_on else R.drawable.ic_favorite_list_off)
             vh.llFavoriteContainer.setOnClickListener {
                 favoriteListener?.onFavoriteTouch(item, vh.adapterPosition)
             }

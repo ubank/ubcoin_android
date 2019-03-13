@@ -3,24 +3,23 @@ package com.ubcoin.fragment.market
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
 import com.ubcoin.R
-import com.ubcoin.adapter.ProgressAdapter
+import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.BaseFragment
 import com.ubcoin.fragment.messages.ChatFragment
 import com.ubcoin.fragment.profile.SellerProfileFragment
-import com.ubcoin.model.Progress
 import com.ubcoin.model.Purchase
-import com.ubcoin.model.response.*
+import com.ubcoin.model.response.MarketItem
+import com.ubcoin.model.response.PurchaseItemStatus
+import com.ubcoin.model.response.StatusDescription
+import com.ubcoin.model.response.User
 import com.ubcoin.network.DataProvider
-import com.ubcoin.utils.ProfileHolder
 import com.ubcoin.view.deal_description.*
 import io.reactivex.functions.Consumer
+import kotlinx.android.synthetic.main.activity_main.*
 
 class DealSellFragment : BaseFragment() {
     private var marketItem: MarketItem? = null
@@ -55,7 +54,7 @@ class DealSellFragment : BaseFragment() {
         }
     }
 
-    fun isDigital(): Boolean{
+    fun isDigital(): Boolean {
         return category.equals("dc602e1f-80d2-af0d-9588-de6f1956f4ef")
     }
 
@@ -73,7 +72,7 @@ class DealSellFragment : BaseFragment() {
         purchaseId = arguments?.getString("purchaseId")
 
         organizeDelivery = view.findViewById(R.id.organizeDelivery)
-        organizeDelivery.buttonClickListener = object: OrganizeDeliveryView.OnButtonClickListener{
+        organizeDelivery.buttonClickListener = object : OrganizeDeliveryView.OnButtonClickListener {
             override fun onOrganizeDelivery() {
                 progressCenter.visibility = View.VISIBLE
                 DataProvider.withDelivery(purchaseId!!, Consumer {
@@ -86,11 +85,11 @@ class DealSellFragment : BaseFragment() {
         }
         sellerSetPrice = view.findViewById(R.id.sellerSetPrice)
         sellerSetPrice.activity = activity
-        sellerSetPrice.setClickListener(object: SellerSetPriceView.OnButtonClickListener{
+        sellerSetPrice.setClickListener(object : SellerSetPriceView.OnButtonClickListener {
             override fun onConfirmDeliveryPrice(price: Double) {
                 progressCenter.visibility = View.VISIBLE
 
-                var map = HashMap<String,Double>()
+                var map = HashMap<String, Double>()
                 map.put("amount", price)
 
                 DataProvider.setDeliveryPrice(purchaseId!!, map, Consumer {
@@ -107,7 +106,7 @@ class DealSellFragment : BaseFragment() {
         }
         progressDescription = view.findViewById(R.id.progressDescription)
         progressDescription.activity = activity
-        progressDescription.setClickListener(object: ProgressDescriptionView.OnButtonClickListener{
+        progressDescription.setClickListener(object : ProgressDescriptionView.OnButtonClickListener {
             override fun onConfirmDeliveryStart() {
                 progressCenter.visibility = View.VISIBLE
 
@@ -125,7 +124,7 @@ class DealSellFragment : BaseFragment() {
             override fun onConfirmNewDeliveryPrice(price: Double) {
                 progressCenter.visibility = View.VISIBLE
 
-                var map = HashMap<String,Double>()
+                var map = HashMap<String, Double>()
                 map.put("amount", price)
 
                 DataProvider.setDeliveryPrice(purchaseId!!, map, Consumer {
@@ -145,13 +144,13 @@ class DealSellFragment : BaseFragment() {
         }
         btnChat = view.findViewById(R.id.btnChat)
         btnChat.setOnClickListener {
-            if(purchase != null) {
+            if (purchase != null) {
                 getSwitcher()?.addTo(ChatFragment::class.java, ChatFragment.getBundle(marketItem!!.id, purchase!!.buyer), true)
             }
         }
         progressView = view.findViewById(R.id.progressView)
         btnReport = view.findViewById(R.id.btnReport)
-        btnReport.setOnClickListener{
+        btnReport.setOnClickListener {
             val testIntent = Intent(Intent.ACTION_VIEW)
             val data = Uri.parse("mailto:?subject=" + "" + "&body=" + "" + "&to=" + "support@ubcoin.io")
             testIntent.data = data
@@ -172,12 +171,13 @@ class DealSellFragment : BaseFragment() {
         loadPurchase()
     }
 
-    fun initView(){
-        if(marketItem == null)
+    fun initView() {
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
+        if (marketItem == null)
             return
         enableItemDescription()
 
-        when(purchaseStatus) {
+        when (purchaseStatus) {
             null -> {
                 if (!isDigital()) {
                 } else {
@@ -187,15 +187,13 @@ class DealSellFragment : BaseFragment() {
             }
 
             PurchaseItemStatus.ACTIVE -> {
-                if(isDigital())
+                if (isDigital())
                     btnReport.visibility = View.VISIBLE
                 else {
                     btnCancelDeal.visibility = View.VISIBLE
-                    if(!isDelivery)
-                    {
+                    if (!isDelivery) {
                         enableOrganizeDelivery()
-                    }
-                    else{
+                    } else {
                         enableSellerSetPrice()
                     }
                 }
@@ -206,7 +204,6 @@ class DealSellFragment : BaseFragment() {
 
             PurchaseItemStatus.DELIVERY_PRICE_DEFINED -> {
                 btnCancelDeal.visibility = View.VISIBLE
-                progressDescription.item = purchase
                 enableUserProfile()
                 enableChatButton()
             }
@@ -235,30 +232,31 @@ class DealSellFragment : BaseFragment() {
         enableProgressView()
     }
 
-    fun enableItemDescription(){
+    fun enableItemDescription() {
         itemDescription.marketItem = marketItem
         itemDescription.currency = purchase?.currencyType
         itemDescription.visibility = View.VISIBLE
     }
 
-    fun enableOrganizeDelivery(){
+    fun enableOrganizeDelivery() {
         organizeDelivery.visibility = View.VISIBLE
     }
 
-    fun enableProgressView(){
-        if(statusDescriptions.size > 0) {
+    fun enableProgressView() {
+        if (statusDescriptions.size > 0) {
             progressView.setProgressList(statusDescriptions)
             progressView.visibility = View.VISIBLE
         }
     }
 
-    fun enableSellerSetPrice(){
+    fun enableSellerSetPrice() {
         sellerSetPrice.item = purchase
         sellerSetPrice.visibility = View.VISIBLE
     }
 
-    fun enableProgressDescription(){
-        if(purchaseStatus != null) {
+    fun enableProgressDescription() {
+        if (purchaseStatus != null) {
+            progressDescription.item = purchase
             progressDescription.status = purchaseStatus
             progressDescription.isDigital = isDigital()
             progressDescription.isSeller = true
@@ -267,26 +265,30 @@ class DealSellFragment : BaseFragment() {
         }
     }
 
-    fun enableUserProfile(){
+    fun enableUserProfile() {
         userProfile.user = user
         userProfile.visibility = View.VISIBLE
     }
 
-    fun enableChatButton(){
+    fun enableChatButton() {
         btnChat.visibility = View.VISIBLE
     }
 
-    fun loadPurchase(){
+    fun loadPurchase() {
         progressCenter.visibility = View.VISIBLE
         DataProvider.getPurchaseStatus(purchaseId!!, Consumer {
             purchase = it
             marketItem = it.item
             user = it.buyer
             statusDescriptions = it.statusDescriptions
-            category = marketItem?.categoryId!!
+            category = marketItem?.category?.id!!
             purchaseStatus = it.status
-            isDelivery = it.withDelivery
-            initView()
+            if (purchaseStatus == PurchaseItemStatus.CANCELLED)
+                activity?.onBackPressed()
+            else {
+                isDelivery = it.withDelivery
+                initView()
+            }
             progressCenter.visibility = View.GONE
         }, Consumer {
             handleException(it)
@@ -294,4 +296,31 @@ class DealSellFragment : BaseFragment() {
         })
     }
 
+    fun hideViews() {
+        itemDescription.visibility = View.GONE
+        progressDescription.visibility = View.GONE
+        userProfile.visibility = View.GONE
+        btnChat.visibility = View.GONE
+        progressView.visibility = View.GONE
+        btnReport.visibility = View.GONE
+        btnCancelDeal.visibility = View.GONE
+        progressCenter.visibility = View.GONE
+        organizeDelivery.visibility = View.GONE
+        sellerSetPrice.visibility = View.GONE
+    }
+
+    override fun subscribeOnDealUpdate(id: String) {
+        super.subscribeOnDealUpdate(id)
+        activity?.runOnUiThread {
+            if (id.equals(purchaseId)) {
+                hideViews()
+                loadPurchase()
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
+    }
 }

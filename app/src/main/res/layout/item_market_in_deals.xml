@@ -1,76 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="1dp"
     android:background="@android:color/white">
 
-    <ImageView
-        android:id="@+id/imgDealsItemLogo"
-        android:layout_width="@dimen/marketInFavoriteHeightImage"
-        android:layout_height="@dimen/marketInFavoriteHeightImage"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="15dp"
-        android:scaleType="centerCrop" />
+    <android.support.v7.widget.CardView
+        android:id="@+id/cvImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:cardCornerRadius="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/imgDealsItemLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/txtDealsItemPrice"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marketInFavoriteMarginDiff"
-        android:layout_marginStart="@dimen/marketInFavoriteMarginDiff"
-        android:layout_marginEnd="@dimen/marketInFavoriteMarginDiff"
-        android:layout_marginBottom="10dp"
-        android:layout_toEndOf="@id/imgDealsItemLogo"
-        android:orientation="vertical">
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto_regular"
+        android:text="1 UBC"
+        android:textColor="@color/headerTextColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/imgActive"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toTopOf="@+id/cvImage" />
 
-        <TextView
-            android:id="@+id/txtDealsItemPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/roboto_regular"
-            android:textColor="@color/headerTextColor"
-            android:textSize="14sp" />
+    <TextView
+        android:id="@+id/txtDealsItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/roboto_regular"
+        android:maxLines="1"
+        android:text="Old Macbook Pro 15 Late 2012"
+        android:textColor="@color/headerTextColor"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toBottomOf="@+id/txtDealsItemPrice" />
 
-        <TextView
-            android:id="@+id/txtDealsItemName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:text="12345678"
-            android:maxLines="1"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/roboto_regular"
-            android:textColor="@color/headerTextColor"
-            android:textSize="14sp" />
-
-        <RelativeLayout
-            android:layout_marginEnd="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/txtDealsItemStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textColor="@color/haveAccountColor"
-                android:textSize="@dimen/user_agreement_text_size" />
-
-        </RelativeLayout>
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/txtDealsItemStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/haveAccountColor"
+        android:textSize="@dimen/user_agreement_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cvImage"
+        app:layout_constraintTop_toBottomOf="@+id/txtDealsItemName" />
 
     <ImageView
+        android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/camera_margin"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/ic_next" />
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/ic_next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/imgActive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/note_1"
+        app:layout_constraintBottom_toBottomOf="@+id/txtDealsItemPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtDealsItemPrice" />
+
+</android.support.constraint.ConstraintLayout>

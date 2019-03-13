@@ -57,7 +57,7 @@ class SellerSetPriceView: ConstraintLayout {
         etPrice = findViewById(R.id.etPrice)
         btnConfirmDeliveryPrice = findViewById(R.id.btnConfirmDeliveryPrice)
         btnConfirmDeliveryPrice.setOnClickListener{ if(buttonClickListener!= null) {
-            if (etPrice.text.toString() == null || etPrice.text.toString().length == 0) {
+            if (etPrice.text.toString().isNullOrEmpty()) {
                 if (activity != null) {
                     activity?.run {
                         MaterialDialog.Builder(this).title(R.string.error).content(getString(R.string.text_price_is_missing)).build().show()

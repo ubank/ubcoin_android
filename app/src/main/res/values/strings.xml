@@ -354,4 +354,6 @@
     <string name="str_item_status_delivery_price_defined">Waiting for approval of delivery price by buyer</string>
     <string name="str_item_status_delivery_price_confirmed">Waiting for start of delivery by seller</string>
     <string name="we_will_block_the_eth_buy_descr">We will block the ETH or UBC amount on your Ubcoin wallet. Seller will receive money only after you get the item in your hands.</string>
+    <string name="text.iam_looking_for">I\'m looking for...</string>
+    <string name="image">Image</string>
 </resources>

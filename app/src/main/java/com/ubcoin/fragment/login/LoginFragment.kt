@@ -136,7 +136,7 @@ class LoginFragment : BaseFragment() {
             override fun onConsume(t: ProfileCompleteResponse) {
                 hideProgressDialog()
                 ThePreferences().setToken(t.accessToken)
-                ProfileHolder.user = t.user
+                ProfileHolder.setUser(t.user)
                 activity?.run {
                     setResult(Activity.RESULT_OK)
                     val intent = Intent(this, MainActivity::class.java)

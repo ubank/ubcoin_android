@@ -1,6 +1,11 @@
 package com.ubcoin.fragment.messages
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.content.Context.NOTIFICATION_SERVICE
+import android.os.Build
 import android.os.Bundle
+import android.service.notification.NotificationListenerService
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateFormat
@@ -18,11 +23,13 @@ import com.ubcoin.utils.ProfileHolder
 import java.util.*
 import kotlin.jvm.java
 import com.google.gson.JsonObject
+import com.onesignal.NotificationExtenderService
+import com.onesignal.OneSignal
+import com.ubcoin.activity.MainActivity
 import com.ubcoin.fragment.market.MarketDetailsFragment
-import com.ubcoin.model.response.DealItem
-import com.ubcoin.model.response.MarketItem
-import com.ubcoin.model.response.TgLinks
-import com.ubcoin.model.response.User
+import com.ubcoin.model.ChatItem
+import com.ubcoin.model.event.MessagesUpdateWrapper
+import com.ubcoin.model.response.*
 import com.ubcoin.network.DataProvider
 import com.ubcoin.network.NetworkModule
 import com.ubcoin.network.SilentConsumer
@@ -31,6 +38,7 @@ import com.ubcoin.utils.getDateWithServerTimeStamp
 import io.reactivex.functions.Consumer
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.OkHttpClient
 import org.json.JSONArray
 import org.json.JSONObject
@@ -74,6 +82,7 @@ class ChatFragment : BaseFragment() {
     val TYPING = "typing"
     val ENTER_ROOM = "enterRoom"
     val LEAVE_ROOM = "leaveRoom"
+    val MESSAGE_READ = "messageRead"
 
     override fun getLayoutResId() = R.layout.fragment_chat
     override fun getHeaderIcon() = R.drawable.ic_close
@@ -141,7 +150,8 @@ class ChatFragment : BaseFragment() {
                 .into(ivImage)
         tvName.text = item.title
         llItem.setOnClickListener {
-            getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(item.id), true)
+            if(item.itemDetailsCanBeOpened())
+                getSwitcher()?.addTo(MarketDetailsFragment::class.java, MarketDetailsFragment.getBundle(item.id), true)
         }
         llItem.visibility = View.VISIBLE
         initChat()
@@ -188,6 +198,9 @@ class ChatFragment : BaseFragment() {
             if(!userName.equals("Server")) {
                 endLoading()
                 addMessageFromJSON(jsonObj.get("msg") as JSONObject, jsonObj.get("date").toString().getDateWithServerTimeStamp(), false)
+                val messageJsonObject = JSONObject()
+                messageJsonObject.put("messageId", jsonObj.get("id").toString())
+                socket!!.emit(MESSAGE_READ, messageJsonObject,  {})
             }
             else {
                 endLoading()
@@ -241,11 +254,14 @@ class ChatFragment : BaseFragment() {
         messageJsonObject.put("itemId", item.id)
 
         var array = JSONArray()
-        array.put(ProfileHolder.user!!.id)
+        array.put(ProfileHolder.getUserId())
         array.put(opponent!!.id)
         messageJsonObject.put("users", array)
         socket!!.emit(ENTER_ROOM, messageJsonObject,  {
         })
+
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
+        clearNotifications()
     }
 
     fun loadData() {
@@ -346,7 +362,7 @@ class ChatFragment : BaseFragment() {
         val messageJsonObject = JSONObject()
         messageJsonObject.put("type", "image")
         messageJsonObject.put("content", url)
-        messageJsonObject.put("publisher", ProfileHolder.user!!.id)
+        messageJsonObject.put("publisher", ProfileHolder.getUserId())
 
         socket!!.emit(SEND_MESSAGE, messageJsonObject,  {})
     }
@@ -362,7 +378,7 @@ class ChatFragment : BaseFragment() {
         val messageJsonObject = JSONObject()
         messageJsonObject.put("type", "message")
         messageJsonObject.put("content", etMessage.text.toString())
-        messageJsonObject.put("publisher", ProfileHolder.user!!.id)
+        messageJsonObject.put("publisher", ProfileHolder.getUserId())
 
         etMessage.setText("")
 
@@ -381,14 +397,14 @@ class ChatFragment : BaseFragment() {
 
         when(type) {
             "message" -> {
-                if (publisher.equals(ProfileHolder.user!!.id))
+                if (publisher.equals(ProfileHolder.getUserId()))
                     chatMessageType = ChatMessageType.MyMessage
                 else
                     chatMessageType = ChatMessageType.OpponentMessage
             }
 
             "image" -> {
-                if (publisher.equals(ProfileHolder.user!!.id))
+                if (publisher.equals(ProfileHolder.getUserId()))
                     chatMessageType = ChatMessageType.MyImage
                 else
                     chatMessageType = ChatMessageType.OpponentImage
@@ -444,12 +460,14 @@ class ChatFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        socket?.close()
+        (activity as MainActivity).menuBottomView.setNeedsUpdate()
     }
 
     fun startLoading(){
         loading = true
         activity?.runOnUiThread {
-            if (chatMessageAdapter!!.isEmpty())
+            if (chatMessageAdapter.isEmpty())
                 progressCenter.visibility = View.VISIBLE
             else
                 progressBottom.visibility = View.VISIBLE
@@ -459,5 +477,17 @@ class ChatFragment : BaseFragment() {
     fun endLoading(){
         activity?.runOnUiThread { hideViewsQuietly(progressCenter, progressBottom) }
         loading = false
+    }
+
+    private fun clearNotifications(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            var manager = activity!!.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            var n = manager.activeNotifications
+            var k = 0
+        }
+    }
+
+    override fun subscribeOnMessageUpdate(messageUpdateWrapper: MessagesUpdateWrapper) {
+        OneSignal.cancelNotification(messageUpdateWrapper.notification.androidNotificationId)
     }
 }

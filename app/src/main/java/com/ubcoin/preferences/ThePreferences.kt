@@ -12,6 +12,7 @@ import com.ubcoin.model.response.User
  */
 
 private const val KEY_TOKEN: String = "TOKEN"
+private const val KEY_ONESIGNAL_TOKEN: String = "ONESIGNAL_TOKEN"
 private const val KEY_CURRENT_USER: String = "CURR_USER"
 private const val KEY_CURRENT_USER_PREFS: String = "CURR_USER_PREFS"
 private const val KEY_SHOULD_OPEN_TH_DIALOG: String = "SHOW_TG_DIALOG"
@@ -49,6 +50,12 @@ class ThePreferences {
             null
         }
     }
+
+    fun setOneSignalToken(token: String?){
+        instance.edit().putString(KEY_ONESIGNAL_TOKEN, token).apply()
+    }
+
+    fun getOneSignalToken(): String? = instance.getString(KEY_ONESIGNAL_TOKEN, null)
 
     fun clearProfile() {
         instance.edit().putString(KEY_CURRENT_USER, null).apply()

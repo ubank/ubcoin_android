@@ -15,3 +15,9 @@ enum class ChatMessageType{
     OpponentImage,
     Date
 }
+
+class Message {
+    var type: ChatMessageType = ChatMessageType.MyMessage
+    var data: String = ""
+    var date: Date? = null
+}

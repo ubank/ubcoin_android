@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
 
@@ -9,15 +11,34 @@
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:layout_height="1dp" />
-
-    <ImageView
-        android:id="@+id/imgMenuItem"
-        android:src="@drawable/ic_favorite_active"
+    
+    <RelativeLayout
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignBottom="@id/anchor"
-        android:layout_marginBottom="@dimen/menu_mini_margin"
-        android:layout_height="wrap_content" />
+        android:layout_marginBottom="@dimen/menu_mini_margin">
+
+        <ImageView
+            android:id="@+id/imgMenuItem"
+            android:src="@drawable/ic_message_active"
+            android:layout_marginTop="4dp"
+            android:paddingRight="9dp"
+            android:paddingLeft="9dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/imgActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-14dp"
+            android:adjustViewBounds="false"
+            android:visibility="gone"
+            android:foregroundGravity="center"
+            android:layout_toEndOf="@id/imgMenuItem"
+            android:src="@drawable/note_1"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/txtMenuItem"

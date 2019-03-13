@@ -20,6 +20,7 @@ import com.ubcoin.network.DataProvider
 import com.ubcoin.network.SilentConsumer
 import com.ubcoin.utils.ImeDoneActionHandler
 import com.ubcoin.utils.ProfileHolder
+import com.ubcoin.utils.filters.FiltersHolder
 import com.ubcoin.view.menu.MenuBottomView
 import com.ubcoin.view.menu.MenuItems
 import retrofit2.Response
@@ -46,8 +47,8 @@ class ProfileSettingsFragment : BaseFragment() {
 
     override fun onViewInflated(view: View) {
         super.onViewInflated(view)
-        if (ProfileHolder.user != null) {
-            user = ProfileHolder.user!!
+        if (ProfileHolder.isAuthorized()) {
+            user = ProfileHolder.getUser()!!
         } else {
             activity?.onBackPressed()
             return
@@ -153,7 +154,7 @@ class ProfileSettingsFragment : BaseFragment() {
                     override fun onConsume(t: Response<Unit>) {
                         hideProgressDialog()
                         user.name = userName
-                        ProfileHolder.user = user
+                        ProfileHolder.setUser(user)
                         activity?.onBackPressed()
                     }
                 },
@@ -185,14 +186,18 @@ class ProfileSettingsFragment : BaseFragment() {
     private fun processLogout() {
 
         showProgressDialog(R.string.wait_please_title, R.string.logout)
-        DataProvider.logout(
+
+        var map = HashMap<String, String>()
+        map.put("playerId", ThePreferences().getOneSignalToken()?:"")
+        DataProvider.logout(map,
                 object : SilentConsumer<Response<Unit>> {
                     override fun onConsume(t: Response<Unit>) {
                         hideProgressDialog()
+                        ThePreferences().setOneSignalToken(null)
                         ThePreferences().clearProfile()
                         ThePreferences().clearPrefs()
-                        ProfileHolder.user = null
-                        ProfileHolder.balance = null
+                        ProfileHolder.logout()
+                        FiltersHolder.onDestroy()
                         //todo refactored
                         getSwitcher()?.clearBackStack()?.addTo(MarketListFragment::class.java)
                         ((activity as IActivity).getFooter() as MenuBottomView).activate(MenuItems.MARKET)
@@ -209,7 +214,6 @@ class ProfileSettingsFragment : BaseFragment() {
         hideProgressDialog()
         super.handleException(t)
     }
-
 
     override fun getLayoutResId() = R.layout.fragment_profile_details
 

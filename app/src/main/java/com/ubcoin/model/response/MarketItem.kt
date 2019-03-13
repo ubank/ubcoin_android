@@ -16,7 +16,7 @@ data class MarketItem(
         val images: List<String>?,
         val location: Location?,
         val createdDate: String?,
-        var favorite: Boolean,
+        var favorite: Boolean?,
         var status: MarketItemStatus?,
         val title: String?,
         val price: Double?,
@@ -26,14 +26,15 @@ data class MarketItem(
         val priceETH: Double?,
         val rateETH: Double?,
         val currency: String?,
-        val purchases: List<Purchase>,
+        private val purchases: List<Purchase>?,
         val condition: String?,
         val fileUrl: String?,
-        val statusDescription: String?
+        val statusDescription: String?,
+        val activePurchase: Purchase?
 ) : MarketItemMarker {
 
     fun isOwner() : Boolean {
-        return ProfileHolder.isAuthorized() && ProfileHolder.user!!.id.equals(user?.id)
+        return ProfileHolder.isAuthorized() && ProfileHolder.getUserId().equals(user?.id)
     }
 
     fun isPriceInCurrencyPresented() : Boolean {
@@ -44,5 +45,36 @@ data class MarketItem(
         return "MarketItem(id='$id', title=$title)"
     }
 
+    fun hasAction() : Boolean{
+        if(activePurchase == null)
+            return false
+        else
+            return activePurchase.needAction?:false
+    }
 
+    fun itemDetailsCanBeOpened(): Boolean{
+        if(isOwner())
+            return true
+        else{
+            if(status == MarketItemStatus.DEACTIVATED || status == MarketItemStatus.BLOCKED ||status == MarketItemStatus.CHECK || status == MarketItemStatus.CHECKING)
+                return false
+
+            if(status == MarketItemStatus.ACTIVE)
+                return true
+            else
+            {
+                if(activePurchase == null)
+                    return false
+                else
+                    return(activePurchase.status != PurchaseItemStatus.CANCELLED)
+            }
+        }
+    }
+
+    fun purchaseDetailsCanBeOpened(): Boolean{
+        if(activePurchase == null)
+            return false
+        else
+            return(activePurchase.status != PurchaseItemStatus.CANCELLED)
+    }
 }

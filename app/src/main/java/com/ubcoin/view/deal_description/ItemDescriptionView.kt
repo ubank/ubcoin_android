@@ -44,7 +44,7 @@ class ItemDescriptionView: LinearLayout {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun init(attrs: AttributeSet?) {
+    private fun init(_attrs: AttributeSet?) {
         inflate(context, R.layout.view_item_description, this)
     }
 
@@ -63,8 +63,8 @@ class ItemDescriptionView: LinearLayout {
                 .into(ivImage)
         tvName.setText(marketItem?.title)
 
-        var priceUBC: String? = null
-        var priceETH: String? = null
+        var priceUBC: String?
+        var priceETH: String?
 
         var resText = ""
 

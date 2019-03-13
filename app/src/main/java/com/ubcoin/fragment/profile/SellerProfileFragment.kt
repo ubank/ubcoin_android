@@ -87,7 +87,7 @@ class SellerProfileFragment : BaseFragment() {
         super.onViewInflated(view)
         user = arguments?.getSerializable(User::class.java.simpleName) as User
         txtProfileHeader = view.findViewById(R.id.txtProfileHeader)
-        txtProfileHeader!!.text = user!!.name!!
+        txtProfileHeader!!.text = user.name!!
         recyclerView = view.findViewById(R.id.rvMarketList)
         txtUserName = view.findViewById(R.id.txtUserName)
         tvLocation = view.findViewById(R.id.tvLocation)
@@ -96,13 +96,13 @@ class SellerProfileFragment : BaseFragment() {
         llHeaderRight = view.findViewById(R.id.llHeaderRight)
 
         llHeaderRight.setOnClickListener{
-            val shareUrl = user.name + " " + getString(R.string.text_on_ubicoin_market) + ": " + user.shareLink?:""
+            val shareUrl = user.name + " " + getString(R.string.text_on_ubicoin_market) + ": " + user.shareLink
             val message = "$shareUrl"
             TheApplication.instance.openShareIntent(message, activity!!)
         }
         txtUserName.text = user.name!!
         tvLocation.text = user.location
-        tvOnMarket.text = getString(R.string.text_on_market) + ": " + getDaysBetweenDate(user!!.createdDate!!).toRegisterDateFormat()
+        tvOnMarket.text = getString(R.string.text_on_market) + ": " + getDaysBetweenDate(user.createdDate!!).toRegisterDateFormat()
 
         progressCenter = view.findViewById(R.id.progressCenter)
         progressBottom = view.findViewById(R.id.progressBottom)
@@ -113,7 +113,7 @@ class SellerProfileFragment : BaseFragment() {
         marketListAdapter?.favoriteListener = object : MarketListAdapter.IFavoriteListener {
             override fun onFavoriteTouch(data: MarketItem, position: Int) {
                 if (ProfileHolder.isAuthorized()) {
-                    processFavorite(data, position, !data.favorite)
+                    processFavorite(data, position, !data.favorite!!)
                 } else {
                     showNeedToRegistration()
                 }
@@ -139,7 +139,7 @@ class SellerProfileFragment : BaseFragment() {
             itemAnimator = fadeInAnimator
         }
 
-        val avatarUrl = user?.avatarUrl
+        val avatarUrl = user.avatarUrl
         if (avatarUrl == null) {
             imgSellerProfile.setImageResource(R.drawable.img_profile_default)
         } else {
@@ -201,7 +201,7 @@ class SellerProfileFragment : BaseFragment() {
 
         }
 
-        DataProvider.getSellerMarketItemsList(user!!.id!!, LIMIT, currentPage, onSuccess, onError)
+        DataProvider.getSellerMarketItemsList(user.id!!, LIMIT, currentPage, onSuccess, onError)
     }
 
     private fun processFavorite(marketItem: MarketItem, position: Int, markAsFavorite: Boolean) {
@@ -217,7 +217,7 @@ class SellerProfileFragment : BaseFragment() {
     private fun successConsumer(marketItem: MarketItem, position: Int): SilentConsumer<Response<Unit>> {
         return object : SilentConsumer<Response<Unit>> {
             override fun onConsume(t: Response<Unit>) {
-                marketItem.favorite = !marketItem.favorite
+                marketItem.favorite = !marketItem.favorite!!
                 try {
                     marketListAdapter?.notifyItemChanged(position)
                 } catch (e: Exception) {
